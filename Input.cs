@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ namespace Mono_Ether
     static class Input
     {
         public static KeyboardState keyboardState, lastKeyboardState;
-        public static MouseState mouseState, lastMouseState;
+        public static MouseStateExtended mouseState, lastMouseState;
 
         public static Vector2 MousePosition { get { return new Vector2(mouseState.X, mouseState.Y); } }
 
@@ -20,7 +21,7 @@ namespace Mono_Ether
             lastMouseState = mouseState;
 
             keyboardState = Keyboard.GetState();
-            mouseState = Mouse.GetState();
+            mouseState = MouseExtended.GetState();
 
             // THIS IS DISABLED DURING TESTING
             // If player presses arrow keys, aim with keyboard

@@ -36,9 +36,12 @@ namespace Mono_Ether
             Art.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameStateManager.Instance.SetContent(Content);
-            //GameStateManager.Instance.AddScreen(new States.EtherRoot(GraphicsDevice));
-            GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.IntroWelcome(GraphicsDevice));
-            //GameStateManager.Instance.AddScreen(new States.MainMenu(GraphicsDevice));
+            // Game
+            //GameStateManager.Instance.AddScreen(new Ether.EtherRoot(GraphicsDevice));
+            // Intro:
+            //GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.IntroWelcome(GraphicsDevice));
+            // Main menu:
+            GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.MainMenu(GraphicsDevice));
         }
 
         protected override void UnloadContent()

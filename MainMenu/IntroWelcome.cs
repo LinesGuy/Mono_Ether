@@ -67,8 +67,10 @@ namespace Mono_Ether.MainMenu
             else if (frame > fadeInFrames + fadeOutFrames)
             {
                 // Change screen
-                //GameStateManager.Instance.ChangeScreen(new EtherRoot(_graphicsDevice)); // cut to game
-                GameStateManager.Instance.ChangeScreen(new MainMenu(_graphicsDevice)); // cut to mainmenu
+                // To game:
+                //GameStateManager.Instance.ChangeScreen(new Ether.EtherRoot(_graphicsDevice));
+                // To menu:
+                GameStateManager.Instance.ChangeScreen(new MainMenu(_graphicsDevice));
             }
             frame += 1;
         }
