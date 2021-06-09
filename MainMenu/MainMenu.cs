@@ -55,11 +55,15 @@ namespace Mono_Ether.MainMenu
 
             if (Input.mouseState.WasButtonJustDown(MouseButton.Left) && cookie.state == 0)
             {
+                // Move cookie slightly to left and shrink
                 cookie.state = 1;
                 tweener.TweenTo(cookie, a => a.position, new Vector2(GameRoot.ScreenSize.X / 3f, GameRoot.ScreenSize.Y / 2f), duration: 2)
                     .Easing(EasingFunctions.ExponentialOut);
                 tweener.TweenTo(cookie, a => a.baseScalar, 0.48f, duration: 2)
                     .Easing(EasingFunctions.ExponentialOut);
+
+                // Make buttons visible, move to right and grow
+
             }
 
             tweener.Update(gameTime.GetElapsedSeconds());
