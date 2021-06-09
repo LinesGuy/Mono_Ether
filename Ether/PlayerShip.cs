@@ -76,7 +76,7 @@ namespace Mono_Ether.Ether
             if (cooldownRemaining > 0)
                 cooldownRemaining--;
 
-            if (Input.WasMouseClicked("right"))
+            if (Input.mouseState.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Left))
             {
                 EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));
             }

@@ -25,39 +25,20 @@ namespace Mono_Ether.MainMenu
         public Texture2D image;
 
         public int state = 0;
-        public bool justClicked;
-        public bool cursorInCookie = false;
 
-        private readonly Tweener tweener = new Tweener();
+        
 
         public void Update(GameTime gameTime)
         {
             // Cookie bounce
             float offsetFrames = (float)frame + bounceOffset; // Float to skip casting to float later on
-            if (offsetFrames % totalBounceFrames < bounceInFrames)
-            {
-                // Grow
-                bounceScalar = MathUtil.Interpolate(0.94f, 1f, (offsetFrames % totalBounceFrames) / bounceInFrames);
-            }
-            else
-            {
-                // Shrink
-                bounceScalar = MathUtil.Interpolate(1f, 0.94f, (offsetFrames % totalBounceFrames - bounceInFrames) / bounceOutFrames);
-            }
 
-            // If cursor is within cookie...
-            float cookieWidth = image.Width * baseScalar * bounceScalar;
-            if (Vector2.DistanceSquared(position, Input.MousePosition) < cookieWidth * cookieWidth)
-            {
-                if (Input.WasMouseClicked("left"))
-                {
-                    tweener.TweenTo(this, a => a.position, new Vector2(GameRoot.ScreenSize.X / 3f, GameRoot.ScreenSize.Y / 2f), duration: 2)
-                        .Easing(EasingFunctions.ExponentialOut);
-                    tweener.TweenTo(this, a => a.baseScalar, 0.48f, duration: 2)
-                        .Easing(EasingFunctions.ExponentialOut);
-                }
-            }
-            tweener.Update(gameTime.GetElapsedSeconds());
+            if (offsetFrames % totalBounceFrames < bounceInFrames) // grow
+                bounceScalar = MathUtil.Interpolate(0.94f, 1f, (offsetFrames % totalBounceFrames) / bounceInFrames);
+            else  // shrink
+                bounceScalar = MathUtil.Interpolate(1f, 0.94f, (offsetFrames % totalBounceFrames - bounceInFrames) / bounceOutFrames);
+            
+            
 
             frame += 1;
         }

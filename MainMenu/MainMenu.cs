@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using MonoGame.Extended.Input;
 
 namespace Mono_Ether.MainMenu
 {
@@ -19,7 +20,7 @@ namespace Mono_Ether.MainMenu
         private const int fadeInFrames = 60;
         private float fadeTransparency = 1f;
         private Cookie cookie = new Cookie();
-        private readonly Tweener _tweener = new Tweener();
+        private readonly Tweener tweener = new Tweener();
 
         Song welcomeTrack;
         public MainMenu(GraphicsDevice graphicsDevice) : base(graphicsDevice)
@@ -51,6 +52,17 @@ namespace Mono_Ether.MainMenu
                 fadeTransparency = MathUtil.Interpolate(1f, 0f, (float)frame / fadeInFrames);
 
             cookie.Update(gameTime);
+
+            if (Input.mouseState.WasButtonJustDown(MouseButton.Left) && cookie.state == 0)
+            {
+                cookie.state = 1;
+                tweener.TweenTo(cookie, a => a.position, new Vector2(GameRoot.ScreenSize.X / 3f, GameRoot.ScreenSize.Y / 2f), duration: 2)
+                    .Easing(EasingFunctions.ExponentialOut);
+                tweener.TweenTo(cookie, a => a.baseScalar, 0.48f, duration: 2)
+                    .Easing(EasingFunctions.ExponentialOut);
+            }
+
+            tweener.Update(gameTime.GetElapsedSeconds());
 
             frame += 1;
         }

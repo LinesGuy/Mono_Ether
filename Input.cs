@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 namespace Mono_Ether
 {
     static class Input
@@ -33,20 +28,6 @@ namespace Mono_Ether
                 isAimingWithMouse = true;
             */
         }
-
-        public static bool WasMouseClicked(string button)
-        {
-            switch (button)
-            {
-                case "left":
-                    return lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed;
-                case "right":
-                    return lastMouseState.RightButton == ButtonState.Released && mouseState.RightButton == ButtonState.Pressed;
-                default:
-                    return false;
-            }
-        }
-
 
         // Check if key was just pressed
         public static bool WasKeyPressed(Keys key)
