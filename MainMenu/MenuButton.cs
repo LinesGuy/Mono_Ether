@@ -11,11 +11,19 @@ namespace Mono_Ether.MainMenu
         private Vector2 position;
         private string text;
         private Texture2D image;
-
-        public MenuButton(Vector2 _position, string _text)
+        public bool Visible;
+        public Vector2 Size
         {
-            this.position = _position;
-            this.text = _text;
+            get
+            {
+                return image == null ? Vector2.Zero : new Vector2(image.Width, image.Height);
+            }
+        }
+        public MenuButton(Vector2 position, string text)
+        {
+            this.position = position;
+            this.text = text;
+            this.Visible = false;
         }
 
         public void Update(GameTime gameTime)
@@ -25,7 +33,7 @@ namespace Mono_Ether.MainMenu
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
+            spriteBatch.Draw(image, position, null, Color.White, 0f, Size / 2f, 1f, 0, 0);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Mono_Ether.Ether
 
         private PlayerShip()
         {
-            image = Art.Player;
+            Image = Art.Player;
             // Position = GameRoot.ScreenSize / 2;
             Position = new Vector2(0, 0);
             Radius = 10;

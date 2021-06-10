@@ -12,7 +12,7 @@ namespace Mono_Ether.Ether
 
         public Bullet(Vector2 position, Vector2 velocity)
         {
-            image = Art.Bullet;
+            Image = Art.Bullet;
             Position = position;
             Velocity = velocity;
             Orientation = Velocity.ToAngle();
@@ -44,7 +44,7 @@ namespace Mono_Ether.Ether
 
         public Starburst(Vector2 position, Vector2 destination)
         {
-            image = Art.StarBurst;
+            Image = Art.StarBurst;
             Position = position;
             Velocity = Vector2.Normalize(destination - position) * bullet_speed;
             Orientation = Velocity.ToAngle();

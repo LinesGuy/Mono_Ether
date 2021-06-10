@@ -12,7 +12,7 @@ namespace Mono_Ether.Ether
 
         public Dummy()
         {
-            image = Art.Default;
+            Image = Art.Default;
             Position = new Vector2(rand.NextFloat(-640, 640), rand.NextFloat(-360, 360));
             Orientation = rand.NextFloat(0, 2 * (float)Math.PI);
             Radius = 8;

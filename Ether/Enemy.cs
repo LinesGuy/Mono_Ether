@@ -16,10 +16,10 @@ namespace Mono_Ether.Ether
 
         public Enemy(Texture2D image, Vector2 position)
         {
-            this.image = image;
+            this.Image = image;
             Position = position;
             Radius = image.Width / 2f;
-            color = Color.Transparent;
+            Color = Color.Transparent;
         }
 
         public override void Update()
@@ -32,7 +32,7 @@ namespace Mono_Ether.Ether
             else
             {
                 timeUntilStart--;
-                color = Color.White * (1 - timeUntilStart / 60f);
+                Color = Color.White * (1 - timeUntilStart / 60f);
             }
 
             Position += Velocity;
