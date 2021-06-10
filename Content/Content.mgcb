@@ -26,6 +26,12 @@
 /processorParam:Quality=Best
 /build:Samples/Gameplay/enemy_explosion.wav
 
+#begin Samples/Gameplay/player_death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/player_death.wav
+
 #begin Samples/Gameplay/player_shoot.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

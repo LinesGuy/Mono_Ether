@@ -44,8 +44,6 @@ namespace Mono_Ether.Ether
         public void WasShot()
         {
             IsExpired = true;
-            // Play enemy_explosion.wav
-            Art.enemy_explosion.CreateInstance().Play();
         }
 
         private void AddBehaviour(IEnumerable<int> behaviour)

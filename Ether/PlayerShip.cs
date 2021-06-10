@@ -93,6 +93,7 @@ namespace Mono_Ether.Ether
         public void Kill()
         {
             framesUntilRespawn = 60;
+            Art.player_death.CreateInstance().Play();
             EnemySpawner.Reset();
         }
     }
