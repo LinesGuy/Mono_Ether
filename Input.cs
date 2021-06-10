@@ -5,7 +5,7 @@ namespace Mono_Ether
 {
     static class Input
     {
-        public static KeyboardState keyboardState, lastKeyboardState;
+        public static KeyboardStateExtended keyboardState, lastKeyboardState;
         public static MouseStateExtended mouseState, lastMouseState;
 
         public static Vector2 MousePosition { get { return new Vector2(mouseState.X, mouseState.Y); } }
@@ -15,7 +15,7 @@ namespace Mono_Ether
             lastKeyboardState = keyboardState;
             lastMouseState = mouseState;
 
-            keyboardState = Keyboard.GetState();
+            keyboardState = KeyboardExtended.GetState();
             mouseState = MouseExtended.GetState();
 
             // THIS IS DISABLED DURING TESTING

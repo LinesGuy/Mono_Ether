@@ -71,6 +71,13 @@ namespace Mono_Ether.Ether
                 yield return 0;
             }
         }
+        /*IEnumerable<int> FollowPlayer(float acceleration = 1f)
+        {
+            while (true)
+            {
+                
+            }
+        }*/
 
         IEnumerable<int> MoveRandomly()
         {

@@ -61,7 +61,7 @@ namespace Mono_Ether.Ether
             if ((autofire ^ Input.mouseState.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
             {
                 // Play player_shoot SFX
-                Art.player_shoot.CreateInstance().Play();
+                Art.PlayerShoot.CreateInstance().Play();
                 cooldownRemaining = cooldownFrames;
                 float aimangle = aim.ToAngle();
                 int bulletCount = 3; 
@@ -93,7 +93,7 @@ namespace Mono_Ether.Ether
         public void Kill()
         {
             framesUntilRespawn = 60;
-            Art.player_death.CreateInstance().Play();
+            Art.PlayerDeath.CreateInstance().Play();
             EnemySpawner.Reset();
         }
     }

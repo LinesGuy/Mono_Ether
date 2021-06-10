@@ -19,17 +19,19 @@ namespace Mono_Ether
         public static Texture2D StarBurst { get; private set; }
         public static Texture2D Pointer { get; private set; }
         
-        public static SoundEffect player_shoot { get; private set; }
-        public static SoundEffect player_death { get; private set; }
-        public static SoundEffect enemy_explosion { get; private set; }
+        public static SoundEffect PlayerShoot { get; private set; }
+        public static SoundEffect PlayerDeath { get; private set; }
+        public static SoundEffect EnemyExplosion { get; private set; }
         public static SpriteFont DebugFont { get; private set; }
         // IntroWelcome
         public static Texture2D WelcomeText { get; private set; }
         // Main Menu
-        public static Texture2D playButton { get; private set; }
-        public static Texture2D settingsButton { get; private set; }
-        public static Texture2D creditsButton { get; private set; }
-        public static Texture2D exitButton { get; private set; }
+        public static Texture2D MenuPlayButton { get; private set; }
+        public static Texture2D MenuSettingsButton { get; private set; }
+        public static Texture2D MenuCreditsButton { get; private set; }
+        public static Texture2D MenuExitButton { get; private set; }
+        // Pause menu
+        public static Texture2D PauseExitButton { get; private set; }
         
 
         public static void Load(ContentManager content)
@@ -42,15 +44,15 @@ namespace Mono_Ether
             Bullet = content.Load<Texture2D>("Textures/Gameplay/Bullet");
             StarBurst = content.Load<Texture2D>("Textures/Gameplay/StarBurst");
             Pointer = content.Load<Texture2D>("Textures/Gameplay/Pointer");
-            player_shoot = content.Load<SoundEffect>("Samples/Gameplay/player_shoot");
-            player_death = content.Load<SoundEffect>("Samples/Gameplay/player_death");
-            enemy_explosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");
+            PlayerShoot = content.Load<SoundEffect>("Samples/Gameplay/player_shoot");
+            PlayerDeath = content.Load<SoundEffect>("Samples/Gameplay/player_death");
+            EnemyExplosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");
             DebugFont = content.Load<SpriteFont>("Fonts/DebugFont");
             WelcomeText = content.Load<Texture2D>("Textures/Intro/welcome_text");
-            playButton = content.Load<Texture2D>("Textures/Menu/play_button");
-            settingsButton = content.Load<Texture2D>("Textures/Menu/settings_button");
-            creditsButton = content.Load<Texture2D>("Textures/Menu/credits_button");
-            exitButton = content.Load<Texture2D>("Textures/Menu/exit_button");
+            MenuPlayButton = content.Load<Texture2D>("Textures/Menu/play_button");
+            MenuSettingsButton = content.Load<Texture2D>("Textures/Menu/settings_button");
+            MenuCreditsButton = content.Load<Texture2D>("Textures/Menu/credits_button");
+            MenuExitButton = content.Load<Texture2D>("Textures/Menu/exit_button");
         }
     }
 }

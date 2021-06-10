@@ -20,10 +20,10 @@ namespace Mono_Ether.MainMenu
         private float fadeTransparency = 1f;
         private readonly Cookie cookie = new Cookie();
         private readonly Tweener tweener = new Tweener();
-        private readonly MenuButton playButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.playButton);
-        private readonly MenuButton settingsButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.settingsButton);
-        private readonly MenuButton creditsButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.creditsButton);
-        private readonly MenuButton exitButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.exitButton);
+        private readonly MenuButton playButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.MenuPlayButton);
+        private readonly MenuButton settingsButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.MenuSettingsButton);
+        private readonly MenuButton creditsButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.MenuCreditsButton);
+        private readonly MenuButton exitButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.MenuExitButton);
 
         private Song welcomeTrack;
         public MainMenu(GraphicsDevice graphicsDevice) : base(graphicsDevice)

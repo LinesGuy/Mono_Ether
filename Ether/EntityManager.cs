@@ -95,7 +95,7 @@ namespace Mono_Ether.Ether
                         enemies[i].WasShot();
                         bullets[j].IsExpired = true;
                         // Play enemy_explosion.wav
-                        Art.enemy_explosion.CreateInstance().Play();
+                        Art.EnemyExplosion.CreateInstance().Play();
                     }
                 }
             }

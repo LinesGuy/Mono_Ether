@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Microsoft.Xna.Framework.Input;
 
 namespace Mono_Ether.Ether
 {
     public class EtherRoot : GameState
     {
-        //private SpriteBatch spriteBatch;
+        private bool paused = false;
         public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
         }
@@ -19,8 +20,6 @@ namespace Mono_Ether.Ether
         public override void Initialize()
         {
             EntityManager.Add(PlayerShip.Instance);
-            //for (int i = 0; i < 10; i++)
-            //EntityManager.Add(new Dummy());
         }
 
         public override void LoadContent(ContentManager content)
@@ -34,9 +33,18 @@ namespace Mono_Ether.Ether
 
         public override void Update(GameTime gameTime)
         {
-            EntityManager.Update();
-            Camera.Update();
-            EnemySpawner.Update();
+            // pause menu.update thingy here instead of this
+            if (Input.keyboardState.WasKeyJustDown(Keys.P))
+            {
+                paused = !paused;
+            }
+
+            if (!paused)
+            {
+                EntityManager.Update();
+                Camera.Update();
+                EnemySpawner.Update();
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -44,9 +52,9 @@ namespace Mono_Ether.Ether
             _graphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(spriteBatch);
-            Vector2 mouse_pos = Camera.world_to_screen_pos(Camera.mouse_world_coords());
+            Vector2 mousePos = Camera.world_to_screen_pos(Camera.mouse_world_coords());
             //spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
-            spriteBatch.Draw(Art.Pointer, mouse_pos - new Vector2(16, 16), Color.White);
+            spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
 
             // Debug texts
             spriteBatch.DrawString(Art.DebugFont, "Player pos: " + PlayerShip.Instance.Position.ToString(), new Vector2(0, 0), Color.White);
