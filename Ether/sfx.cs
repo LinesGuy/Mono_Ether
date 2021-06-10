@@ -8,8 +8,8 @@ namespace Mono_Ether.Ether
 {
     public static class sfx
     {
-        //public List<SoundEffect> soundEffects = new List<SoundEffect>();
+        private static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
-        //protected override 
+        //public void 
     }
 }

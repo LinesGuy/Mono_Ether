@@ -39,9 +39,9 @@ namespace Mono_Ether
             // Game
             //GameStateManager.Instance.AddScreen(new Ether.EtherRoot(GraphicsDevice));
             // Intro:
-            //GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.IntroWelcome(GraphicsDevice));
+            GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.IntroWelcome(GraphicsDevice));
             // Main menu:
-            GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.MainMenu(GraphicsDevice));
+            //GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.MainMenu(GraphicsDevice));
         }
 
         protected override void UnloadContent()

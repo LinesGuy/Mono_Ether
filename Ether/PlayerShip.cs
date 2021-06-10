@@ -60,6 +60,8 @@ namespace Mono_Ether.Ether
             var aim = Camera.GetAimDirection();
             if ((autofire ^ Input.mouseState.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
             {
+                // Play player_shoot SFX
+                Art.player_shoot.CreateInstance().Play();
                 cooldownRemaining = cooldownFrames;
                 float aimangle = aim.ToAngle();
                 int bulletCount = 3; 
@@ -76,7 +78,7 @@ namespace Mono_Ether.Ether
             if (cooldownRemaining > 0)
                 cooldownRemaining--;
 
-            if (Input.mouseState.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Left))
+            if (Input.mouseState.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
             {
                 EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));
             }

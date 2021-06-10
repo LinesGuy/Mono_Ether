@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,22 +9,25 @@ namespace Mono_Ether.MainMenu
 {
     public class MenuButton
     {
-        private Vector2 position;
-        private string text;
+        public Vector2 Position;
         private Texture2D image;
-        public bool Visible;
-        public Vector2 Size
+        private Vector2 Size
         {
             get
             {
                 return image == null ? Vector2.Zero : new Vector2(image.Width, image.Height);
             }
         }
-        public MenuButton(Vector2 position, string text)
+
+        public bool CursorInButton()
         {
-            this.position = position;
-            this.text = text;
-            this.Visible = false;
+            return new RectangleF(Position.X - Size.X / 2, Position.Y - Size.Y / 2, Size.X, Size.Y).Contains(
+                Input.mouseState.Position);
+        }
+        public MenuButton(Vector2 position, Texture2D image)
+        {
+            this.Position = position;
+            this.image = image;
         }
 
         public void Update(GameTime gameTime)
@@ -33,7 +37,7 @@ namespace Mono_Ether.MainMenu
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(image, position, null, Color.White, 0f, Size / 2f, 1f, 0, 0);
+            spriteBatch.Draw(image, Position, null, Color.White, 0f, Size / 2f, 1f, 0, 0);
         }
     }
 }

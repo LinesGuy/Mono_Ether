@@ -20,7 +20,7 @@ namespace Mono_Ether.MainMenu
         private const int fadeOutFrames = 8;
         
         private float welcomeTransparency = 0f;
-        private RectangleF welcomeRect = new RectangleF(GameRoot.ScreenSize.X / 2 - Art.welcomeText.Width / 4, GameRoot.ScreenSize.Y / 2 - Art.welcomeText.Height / 4, Art.welcomeText.Width / 2, 0);
+        private RectangleF welcomeRect = new RectangleF(GameRoot.ScreenSize.X / 2 - Art.WelcomeText.Width / 4, GameRoot.ScreenSize.Y / 2 - Art.WelcomeText.Height / 4, Art.WelcomeText.Width / 2, 0);
 
         Song welcomePiano;
         Song welcomeTrack;
@@ -79,7 +79,7 @@ namespace Mono_Ether.MainMenu
         {
             _graphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.Draw(Art.welcomeText, welcomeRect.ToRectangle(), null, Color.White * welcomeTransparency);
+            spriteBatch.Draw(Art.WelcomeText, welcomeRect.ToRectangle(), null, Color.White * welcomeTransparency);
             spriteBatch.End();
         }
     }

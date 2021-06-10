@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether
 {
@@ -17,9 +18,18 @@ namespace Mono_Ether
         public static Texture2D Bullet { get; private set; }
         public static Texture2D StarBurst { get; private set; }
         public static Texture2D Pointer { get; private set; }
+        
+        public static SoundEffect player_shoot { get; private set; }
+        public static SoundEffect enemy_explosion { get; private set; }
         public static SpriteFont DebugFont { get; private set; }
         // IntroWelcome
-        public static Texture2D welcomeText { get; private set; }
+        public static Texture2D WelcomeText { get; private set; }
+        // Main Menu
+        public static Texture2D playButton { get; private set; }
+        public static Texture2D settingsButton { get; private set; }
+        public static Texture2D creditsButton { get; private set; }
+        public static Texture2D exitButton { get; private set; }
+        
 
         public static void Load(ContentManager content)
         {
@@ -31,8 +41,14 @@ namespace Mono_Ether
             Bullet = content.Load<Texture2D>("Textures/Gameplay/Bullet");
             StarBurst = content.Load<Texture2D>("Textures/Gameplay/StarBurst");
             Pointer = content.Load<Texture2D>("Textures/Gameplay/Pointer");
+            player_shoot = content.Load<SoundEffect>("Samples/Gameplay/player_shoot");
+            enemy_explosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");
             DebugFont = content.Load<SpriteFont>("Fonts/DebugFont");
-            welcomeText = content.Load<Texture2D>("Textures/Intro/welcome_text");
+            WelcomeText = content.Load<Texture2D>("Textures/Intro/welcome_text");
+            playButton = content.Load<Texture2D>("Textures/Menu/play_button");
+            settingsButton = content.Load<Texture2D>("Textures/Menu/settings_button");
+            creditsButton = content.Load<Texture2D>("Textures/Menu/credits_button");
+            exitButton = content.Load<Texture2D>("Textures/Menu/exit_button");
         }
     }
 }
