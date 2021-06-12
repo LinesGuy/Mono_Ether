@@ -3,7 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
+using SharpDX.DirectWrite;
 
 namespace Mono_Ether.Ether
 {
@@ -12,22 +15,20 @@ namespace Mono_Ether.Ether
         private int timeUntilStart = 60;
         public bool IsActive { get { return timeUntilStart <= 0; } }
         private List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
-        private Random rand = new Random();
+        private readonly Random rand = new Random();
 
-        public Enemy(Texture2D image, Vector2 position)
+        private Enemy(Texture2D image, Vector2 position)
         {
             this.Image = image;
             Position = position;
             Radius = image.Width / 2f;
             Color = Color.Transparent;
         }
-
         public override void Update()
         {
             if (timeUntilStart <= 0)
             {
                 ApplyBehaviours();
-                //..
             }
             else
             {
@@ -36,21 +37,16 @@ namespace Mono_Ether.Ether
             }
 
             Position += Velocity;
-            // clamp (optional):
-            // Position = Vector2.Clamp(Position, Size / 2, GameRoot.ScreenSize - Size / 2);
             Velocity *= 0.8f;  // Friction
         }
-
         public void WasShot()
         {
             IsExpired = true;
         }
-
         private void AddBehaviour(IEnumerable<int> behaviour)
         {
             behaviours.Add(behaviour.GetEnumerator());
         }
-
         private void ApplyBehaviours()
         {
             for (int i = 0; i < behaviours.Count; i++)
@@ -59,7 +55,6 @@ namespace Mono_Ether.Ether
                     behaviours.RemoveAt(i--);
             }
         }
-
         IEnumerable<int> FollowPlayer(float acceleration = 1f)
         {
             while (true)
@@ -71,14 +66,43 @@ namespace Mono_Ether.Ether
                 yield return 0;
             }
         }
-        /*IEnumerable<int> FollowPlayer(float acceleration = 1f)
+
+        IEnumerable<int> FollowPlayerAStar(float acceleration = 1f)
         {
             while (true)
             {
-                
-            }
-        }*/
+                // If enemy is with Map.cellSize units (e.g 25 units) from the player, move straight towards the player
+                if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) <= Map.cellSize * Map.cellSize)
+                {
+                    Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
+                    if (Velocity != Vector2.Zero)
+                        Orientation = Velocity.ToAngle();
+                    yield return 0;
+                }
+                else // else, use AStar to move towards the player
+                {
+                    var path = Map.AStar(Position, PlayerShip.Instance.Position);
+                    // Instead of calculating a new path every frame or whatever, we will calculate a new path
+                    // every second (60 frames)
+                    // TODO: scale this for distance between enemy and player
+                    for (int i = 0; i < 60; i++)
+                    {
+                        // If enemy is at current target position, update target position
+                        if (Vector2.DistanceSquared(Position, path[0]) <= Map.cellSize * Map.cellSize)
+                            path.RemoveAt(0);
+                        // If path is empty, make a new path
+                        if (path.Count <= 0)
+                            break;
+                        // Move towards player
+                        Velocity += (path[0] - Position).ScaleTo(acceleration);
+                        if (Velocity != Vector2.Zero)
+                            Orientation = Velocity.ToAngle();
 
+                        yield return 0;
+                    }
+                }
+            }
+        }
         IEnumerable<int> MoveRandomly()
         {
             float direction = rand.NextFloat(0, MathHelper.TwoPi);
@@ -91,62 +115,37 @@ namespace Mono_Ether.Ether
                 {
                     Velocity += MathUtil.FromPolar(direction, 0.4f);
                     Orientation -= 0.01f;
-
-                    /*var bounds = GameRoot.Viewport.Bounds;
-                    bounds.Inflate(-image.Width, -image.Height);
-
-                    // If enemy is outside bounds, make it move away from edge
-                    if (!bounds.Contains(Position.ToPoint()))
-                        direction = (GameRoot.ScreenSize / 2 - Position).ToAngle() + rand.NextFloat(-MathHelper.PiOver2, MathHelper.PiOver2);*/
-
                     yield return 0;
                 }
             }
         }
-
-        // Enemies will move away from the player if they get too close
-        IEnumerable<int> Flee(float distance = 250f, float acceleration = 6f)
+        IEnumerable<int> AvoidPlayer(float distance = 250f, float acceleration = 6f)
         {
             while (true)
             {
                 if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) < distance * distance)
-                {
                     Velocity -= (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
-                    /*if (Velocity != Vector2.Zero)
-                        Orientation = Velocity.ToAngle();*/
-
-
-                }
                 yield return 0;
             }
         }
-
-        // Enemy will try to dodge bullets
         IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f)
         {
             while (true)
             {
                 foreach (var bullet in EntityManager.bullets)
-                {
                     if (Vector2.DistanceSquared(bullet.Position, Position) < distance * distance)
-                    {
                         Velocity -= (bullet.Position - Position).ScaleTo(acceleration);
-                    }
-                }
-                /*if (Velocity != Vector2.Zero)
-                    Orientation = Velocity.ToAngle();*/
                 yield return 0;
             }
         }
-
         public static Enemy CreateSeeker(Vector2 position)
         {
             var enemy = new Enemy(Art.Seeker, position);
-            enemy.AddBehaviour(enemy.FollowPlayer());
+            //enemy.AddBehaviour(enemy.FollowPlayer());
+            enemy.AddBehaviour(enemy.FollowPlayerAStar());
 
             return enemy;
         }
-
         public static Enemy CreateWanderer(Vector2 position)
         {
             var enemy = new Enemy(Art.Wanderer, position);
@@ -154,7 +153,6 @@ namespace Mono_Ether.Ether
             //enemy.AddBehaviour(enemy.SocialDistance());
             return enemy;
         }
-
         public void HandleCollision(Enemy other)
         {
             var delta = Position - other.Position;

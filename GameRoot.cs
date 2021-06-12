@@ -37,9 +37,9 @@ namespace Mono_Ether
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameStateManager.Instance.SetContent(Content);
             // Game
-            //GameStateManager.Instance.AddScreen(new Ether.EtherRoot(GraphicsDevice));
+            GameStateManager.Instance.AddScreen(new Ether.EtherRoot(GraphicsDevice));
             // Intro:
-            GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.IntroWelcome(GraphicsDevice));
+            //GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.IntroWelcome(GraphicsDevice));
             // Main menu:
             //GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.MainMenu(GraphicsDevice));
         }
