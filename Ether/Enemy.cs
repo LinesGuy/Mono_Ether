@@ -147,6 +147,7 @@ namespace Mono_Ether.Ether
             var enemy = new Enemy(Art.Wanderer, position);
             enemy.AddBehaviour(enemy.MoveRandomly());
             //enemy.AddBehaviour(enemy.SocialDistance());
+            enemy.AddBehaviour(enemy.DodgeBullets());
             return enemy;
         }
         public void HandleCollision(Enemy other)
