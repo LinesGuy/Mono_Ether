@@ -18,6 +18,7 @@ namespace Mono_Ether
         public static Texture2D Bullet { get; private set; }
         public static Texture2D StarBurst { get; private set; }
         public static Texture2D Pointer { get; private set; }
+        public static Texture2D LineParticle { get; private set; }
         
         public static SoundEffect PlayerShoot { get; private set; }
         public static SoundEffect PlayerDeath { get; private set; }
@@ -44,6 +45,7 @@ namespace Mono_Ether
             Bullet = content.Load<Texture2D>("Textures/Gameplay/Bullet");
             StarBurst = content.Load<Texture2D>("Textures/Gameplay/StarBurst");
             Pointer = content.Load<Texture2D>("Textures/Gameplay/Pointer");
+            LineParticle = content.Load<Texture2D>("Textures/Gameplay/Laser");
             PlayerShoot = content.Load<SoundEffect>("Samples/Gameplay/player_shoot");
             PlayerDeath = content.Load<SoundEffect>("Samples/Gameplay/player_death");
             EnemyExplosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");

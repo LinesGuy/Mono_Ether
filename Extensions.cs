@@ -18,6 +18,13 @@ namespace Mono_Ether
             return (float)rand.NextDouble() * (maxValue - minValue) + minValue;
         }
 
+        public static Vector2 NextVector2(this Random rand, float minLength, float maxLength)
+        {
+            double theta = rand.NextDouble() * 2 * Math.PI;
+            float length = rand.NextFloat(minLength, maxLength);
+            return new Vector2(length * (float) Math.Cos(theta), length * (float) Math.Sin(theta));
+        }
+
         public static Vector2 Rotate(this Vector2 vector, float radians)
         {
             Vector2 rotated;

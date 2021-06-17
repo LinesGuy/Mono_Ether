@@ -15,6 +15,7 @@ namespace Mono_Ether.Ether
         private bool paused = false;
 
         private Map map;
+        public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
         }
@@ -23,6 +24,7 @@ namespace Mono_Ether.Ether
         {
             map = new Map();
             EntityManager.Add(PlayerShip.Instance);
+            ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
         }
 
         public override void LoadContent(ContentManager content)
@@ -57,6 +59,7 @@ namespace Mono_Ether.Ether
                 EntityManager.Update();
                 Camera.Update();
                 EnemySpawner.Update();
+                ParticleManager.Update();
             }
         }
 
@@ -68,6 +71,9 @@ namespace Mono_Ether.Ether
             map.Draw(spriteBatch);
             
             EntityManager.Draw(spriteBatch);
+            
+            ParticleManager.Draw(spriteBatch);
+            
             Vector2 mousePos = Camera.world_to_screen_pos(Camera.mouse_world_coords());
             //spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
