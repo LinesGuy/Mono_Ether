@@ -72,7 +72,7 @@ namespace Mono_Ether.Ether
             while (true)
             {
                 // If enemy is with Map.cellSize units (e.g 25 units) from the player, move straight towards the player
-                if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) <= Map.cellSize * Map.cellSize)
+                if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) <= MyAStar.cellSize * MyAStar.cellSize)
                 {
                     Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
                     if (Velocity != Vector2.Zero)
@@ -81,14 +81,14 @@ namespace Mono_Ether.Ether
                 }
                 else // else, use AStar to move towards the player
                 {
-                    var path = Map.AStar(Position, PlayerShip.Instance.Position);
+                    var path = MyAStar.AStar(Position, PlayerShip.Instance.Position);
                     // Instead of calculating a new path every frame or whatever, we will calculate a new path
                     // every second (60 frames)
                     // TODO: scale this for distance between enemy and player
                     for (int i = 0; i < 60; i++)
                     {
                         // If enemy is at current target position, update target position
-                        if (Vector2.DistanceSquared(Position, path[0]) <= Map.cellSize * Map.cellSize)
+                        if (Vector2.DistanceSquared(Position, path[0]) <= MyAStar.cellSize * MyAStar.cellSize)
                             path.RemoveAt(0);
                         // If path is empty, make a new path
                         if (path.Count <= 0)

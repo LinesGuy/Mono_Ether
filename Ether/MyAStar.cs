@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace Mono_Ether.Ether
 {
@@ -22,7 +24,7 @@ namespace Mono_Ether.Ether
             this.f = 0;
         }
     }
-    public static class Map
+    public static class MyAStar
     {
         public static int cellSize = 50;
         public static List<Vector2> AStar(Vector2 start, Vector2 end)
@@ -146,6 +148,90 @@ namespace Mono_Ether.Ether
             }
             Debug.WriteLine("ENDING EARLY");
             return null;
+        }
+        
+        public static int[,] grid = new int[100, 100];
+        public static void draw(SpriteBatch spriteBatch)
+        {
+            
+        }
+    }
+
+    class Tiles
+    {
+        protected Texture2D texture;
+        public Vector2 position;
+        public int size;
+
+        private static ContentManager content;
+        public static ContentManager Content
+        {
+            protected get { return content;  }
+            set { content = value;  }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            var screenPos = Camera.world_to_screen_pos(position);
+            var scale = Camera.zoom * size / texture.Width;
+            //spriteBatch.Draw(texture, screenPos, null, Color.White, 0f, size / 2f, scale, 0f, 0f);
+            spriteBatch.Draw(texture, screenPos, null, Color.White, 0f, new Vector2(size) / 2f, scale, 0, 0);
+        }
+    }
+    
+    class CollisionTiles : Tiles
+    {
+        public CollisionTiles(int i, Vector2 position, int size)
+        {
+            texture = Content.Load<Texture2D>("Textures/tiles/tile" + i);
+            this.position = position;
+            this.size = size;
+        }
+    }
+
+    class Map
+    {
+        private List<CollisionTiles> collisionTiles = new List<CollisionTiles>();
+
+        public List<CollisionTiles> CollisionTiles
+        {
+            get { return collisionTiles; }
+        }
+
+        private int width, height;
+
+        public int Width
+        {
+            get { return width; }
+        }
+
+        public int Height
+        {
+            get { return height; }
+        }
+
+        public Map() { }
+
+        public void Generate(int[,] map, int size)
+        {
+            for (int x = 0; x < map.GetLength(1); x++)
+            {
+                for (int y = 0; y < map.GetLength(0); y++)
+                {
+                    int number = map[y, x];
+                    
+                    if (number > 0)
+                        collisionTiles.Add(new CollisionTiles(number, new Vector2(x * size + size / 2, y * size + size/2), size));
+                    width = (x + 1) * size;
+                    height = (y + 1) * size;
+                }
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (CollisionTiles tile in collisionTiles)
+                tile.Draw(spriteBatch);
         }
     }
 }

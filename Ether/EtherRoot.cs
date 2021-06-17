@@ -13,18 +13,31 @@ namespace Mono_Ether.Ether
     public class EtherRoot : GameState
     {
         private bool paused = false;
+
+        private Map map;
         public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
         }
 
         public override void Initialize()
         {
+            map = new Map();
             EntityManager.Add(PlayerShip.Instance);
         }
 
         public override void LoadContent(ContentManager content)
         {
             //Art.Load(content);
+            Tiles.Content = content;
+            
+            map.Generate(new int[,]
+            {
+                {0,0,0,1,1,1,1,1,1},
+                {0,0,1,2,2,2,2,2,2},
+                {0,1,2,2,3,3,3,3,3},
+                {1,2,2,3,3,3,3,3,3},
+                {2,2,3,3,3,3,3,3,3},
+            },64);
         }
 
         public override void UnloadContent()
@@ -50,7 +63,10 @@ namespace Mono_Ether.Ether
         public override void Draw(SpriteBatch spriteBatch)
         {
             _graphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
+            
+            map.Draw(spriteBatch);
+            
             EntityManager.Draw(spriteBatch);
             Vector2 mousePos = Camera.world_to_screen_pos(Camera.mouse_world_coords());
             //spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
