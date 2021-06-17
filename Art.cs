@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether
@@ -32,7 +29,7 @@ namespace Mono_Ether
         public static Texture2D MenuCreditsButton { get; private set; }
         public static Texture2D MenuExitButton { get; private set; }
         // Pause menu
-        public static Texture2D PauseExitButton { get; private set; }
+        //public static Texture2D PauseExitButton { get; private set; }
         
 
         public static void Load(ContentManager content)

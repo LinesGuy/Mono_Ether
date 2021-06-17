@@ -38,7 +38,7 @@ namespace Mono_Ether.MainMenu
         {
 
             welcomeTrack = content.Load<Song>("Tracks/welcome_track");
-            cookie.image = content.Load<Texture2D>("Textures/Menu/cookie");
+            cookie.Image = content.Load<Texture2D>("Textures/Menu/cookie");
             MediaPlayer.Volume = 1f;
             MediaPlayer.Play(welcomeTrack);
         }
@@ -56,7 +56,7 @@ namespace Mono_Ether.MainMenu
 
             cookie.Update(gameTime);
 
-            if (cookie.state == 1 && Input.mouseState.WasButtonJustDown(MouseButton.Left))
+            if (cookie.State == 1 && Input.mouseState.WasButtonJustDown(MouseButton.Left))
             {
                 // Check if any menu buttons were pressed
                 if (playButton.CursorInButton())
@@ -79,13 +79,13 @@ namespace Mono_Ether.MainMenu
                 }
             }
             
-            if (Input.mouseState.WasButtonJustDown(MouseButton.Left) && cookie.state == 0)
+            if (Input.mouseState.WasButtonJustDown(MouseButton.Left) && cookie.State == 0)
             {
                 // Move cookie slightly to left and shrink
-                cookie.state = 1;
-                tweener.TweenTo(cookie, a => a.position, new Vector2(GameRoot.ScreenSize.X * 0.3f, GameRoot.ScreenSize.Y * 0.5f), duration: 2)
+                cookie.State = 1;
+                tweener.TweenTo(cookie, a => a.Position, new Vector2(GameRoot.ScreenSize.X * 0.3f, GameRoot.ScreenSize.Y * 0.5f), duration: 2)
                     .Easing(EasingFunctions.ExponentialOut);
-                tweener.TweenTo(cookie, a => a.baseScalar, 0.6f, duration: 2)
+                tweener.TweenTo(cookie, a => Cookie.BaseScalar, 0.6f, duration: 2)
                     .Easing(EasingFunctions.ExponentialOut);
 
                 // Move buttons to right

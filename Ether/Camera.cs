@@ -1,37 +1,34 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.Ether
 {
     static class Camera
     {
-        public static Vector2 cameraPosition = new Vector2(0, 0);
-        public static float zoom = 1;
-        public static bool isLerping = true;
+        public static Vector2 CameraPosition = new Vector2(0, 0);
+        public static float Zoom = 1;
+        private static bool _isLerping = true;
         private static bool isAimingWithMouse = true;
-        public static Vector2 world_to_screen_pos(Vector2 world_position)
+        public static Vector2 world_to_screen_pos(Vector2 worldPosition)
         {
             // Scale
-            Vector2 position = (world_position - cameraPosition) * zoom + cameraPosition;
+            Vector2 position = (worldPosition - CameraPosition) * Zoom + CameraPosition;
             // Translate
-            position = position - cameraPosition;
+            position = position - CameraPosition;
             // Translate by half screen size
             position = position + GameRoot.ScreenSize / 2;
 
             return position;
         }
 
-        public static Vector2 screen_to_world_pos(Vector2 screen_pos)
+        private static Vector2 screen_to_world_pos(Vector2 screenPos)
         {
             // Translate by half screen size
-            Vector2 position = screen_pos - GameRoot.ScreenSize / 2;
+            Vector2 position = screenPos - GameRoot.ScreenSize / 2;
             // Translate
-            position = position + cameraPosition;
+            position = position + CameraPosition;
             //Scale
-            position = (position - cameraPosition) / zoom + cameraPosition;
+            position = (position - CameraPosition) / Zoom + CameraPosition;
 
             return position;
         }
@@ -50,35 +47,35 @@ namespace Mono_Ether.Ether
                 direction.Y += 1;
             if (direction != Vector2.Zero)
             {
-                isLerping = false;
-                direction *= 5 / zoom;
+                _isLerping = false;
+                direction *= 5 / Zoom;
                 move_relative(direction);
             }
 
             // Zoom (Q and E)
             if (Input.keyboardState.IsKeyDown(Keys.Q))
-                zoom /= 1.03f;
+                Zoom /= 1.03f;
             if (Input.keyboardState.IsKeyDown(Keys.E))
-                zoom *= 1.03f;
+                Zoom *= 1.03f;
 
             // Lerp
-            if (isLerping)
-                lerp(PlayerShip.Instance.Position);
+            if (_isLerping)
+                Lerp(PlayerShip.Instance.Position);
             else if (Input.keyboardState.IsKeyDown(Keys.C))
-                isLerping = true;  // Press 'c' to enable lerp
+                _isLerping = true;  // Press 'c' to enable lerp
 
         }
 
         private static void move_relative(Vector2 direction)
         {
-            cameraPosition += direction;
+            CameraPosition += direction;
         }
 
-        private static void lerp(Vector2 destination)
+        private static void Lerp(Vector2 destination)
         {
             // Lerps (moves) the camera towards a given destination
             float lerp_speed = 0.1f;  // Higher values (between 0 and 1) move towards destination faster
-            cameraPosition = (1 - lerp_speed) * cameraPosition + destination * lerp_speed;
+            CameraPosition = (1 - lerp_speed) * CameraPosition + destination * lerp_speed;
         }
 
         public static Vector2 mouse_world_coords()

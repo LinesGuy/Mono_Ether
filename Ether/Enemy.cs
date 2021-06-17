@@ -1,20 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using SharpDX.DirectWrite;
 
 namespace Mono_Ether.Ether
 {
     class Enemy : Entity
     {
         private int timeUntilStart = 60;
-        public bool IsActive { get { return timeUntilStart <= 0; } }
-        private List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
+        public bool IsActive => timeUntilStart <= 0;
+        private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
         private readonly Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position)
@@ -45,12 +40,12 @@ namespace Mono_Ether.Ether
 
             float hue1 = rand.NextFloat(0, 6);
             float hue2 = (hue1 + rand.NextFloat(0, 2)) % 6f;
-            Color color1 = ColorUtil.HSVToColor(hue1, 0.5f, 1);
-            Color color2 = ColorUtil.HSVToColor(hue2, 0.5f, 1);
+            Color color1 = ColorUtil.HsvToColor(hue1, 0.5f, 1);
+            Color color2 = ColorUtil.HsvToColor(hue2, 0.5f, 1);
 
-            for (int i = 0; i < 120; i++)
+            for (var i = 0; i < 120; i++)
             {
-                float speed = 18f * (1f - 1 / rand.NextFloat(1f, 10f));
+                var speed = 18f * (1f - 1 / rand.NextFloat(1f, 10f));
                 var state = new ParticleState()
                 {
                     Velocity = rand.NextVector2(speed, speed),
@@ -74,24 +69,12 @@ namespace Mono_Ether.Ether
                     behaviours.RemoveAt(i--);
             }
         }
-        IEnumerable<int> FollowPlayer(float acceleration = 1f)
-        {
-            while (true)
-            {
-                Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
-                if (Velocity != Vector2.Zero)
-                    Orientation = Velocity.ToAngle();
-
-                yield return 0;
-            }
-        }
-
         IEnumerable<int> FollowPlayerAStar(float acceleration = 1f)
         {
             while (true)
             {
                 // If enemy is with Map.cellSize units (e.g 25 units) from the player, move straight towards the player
-                if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) <= MyAStar.cellSize * MyAStar.cellSize)
+                if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) <= MyAStar.CellSize * MyAStar.CellSize)
                 {
                     Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
                     if (Velocity != Vector2.Zero)
@@ -107,7 +90,7 @@ namespace Mono_Ether.Ether
                     for (int i = 0; i < 60; i++)
                     {
                         // If enemy is at current target position, update target position
-                        if (Vector2.DistanceSquared(Position, path[0]) <= MyAStar.cellSize * MyAStar.cellSize)
+                        if (Vector2.DistanceSquared(Position, path[0]) <= MyAStar.CellSize * MyAStar.CellSize)
                             path.RemoveAt(0);
                         // If path is empty, make a new path
                         if (path.Count <= 0)
@@ -121,6 +104,7 @@ namespace Mono_Ether.Ether
                     }
                 }
             }
+            // ReSharper disable once IteratorNeverReturns
         }
         IEnumerable<int> MoveRandomly()
         {
@@ -137,25 +121,18 @@ namespace Mono_Ether.Ether
                     yield return 0;
                 }
             }
+            // ReSharper disable once IteratorNeverReturns
         }
-        IEnumerable<int> AvoidPlayer(float distance = 250f, float acceleration = 6f)
+        private IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f)
         {
             while (true)
             {
-                if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) < distance * distance)
-                    Velocity -= (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
-                yield return 0;
-            }
-        }
-        IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f)
-        {
-            while (true)
-            {
-                foreach (var bullet in EntityManager.bullets)
+                foreach (var bullet in EntityManager.Bullets)
                     if (Vector2.DistanceSquared(bullet.Position, Position) < distance * distance)
                         Velocity -= (bullet.Position - Position).ScaleTo(acceleration);
                 yield return 0;
             }
+            // ReSharper disable once IteratorNeverReturns
         }
         public static Enemy CreateSeeker(Vector2 position)
         {

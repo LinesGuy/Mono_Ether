@@ -1,6 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
-using SharpDX;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Mono_Ether.Ether

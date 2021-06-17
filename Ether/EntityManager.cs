@@ -1,65 +1,63 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Mono_Ether.Ether
 {
     static class EntityManager
     {
-        public static List<Entity> entities = new List<Entity>();
-        public static List<Enemy> enemies = new List<Enemy>();
-        public static List<Bullet> bullets = new List<Bullet>();
+        public static List<Entity> Entities = new List<Entity>();
+        public static List<Enemy> Enemies = new List<Enemy>();
+        public static List<Bullet> Bullets = new List<Bullet>();
 
-        static bool isUpdating;
-        static List<Entity> addedEntities = new List<Entity>();
+        static bool _isUpdating;
+        static readonly List<Entity> AddedEntities = new List<Entity>();
 
-        public static int Count { get { return entities.Count; } }
+        public static int Count => Entities.Count;
 
         public static void Add(Entity entity)
         {
-            if (!isUpdating)
+            if (!_isUpdating)
                 AddEntity(entity);
             else
-                addedEntities.Add(entity);
+                AddedEntities.Add(entity);
         }
 
         private static void AddEntity(Entity entity)
         {
-            entities.Add(entity);
-            if (entity is Bullet)
-                bullets.Add(entity as Bullet);
-            else if (entity is Enemy)
-                enemies.Add(entity as Enemy);
+            Entities.Add(entity);
+            if (entity is Bullet bullet)
+                Bullets.Add(bullet);
+            else if (entity is Enemy enemy)
+                Enemies.Add(enemy);
         }
 
         public static void Update()
         {
-            isUpdating = true;
+            _isUpdating = true;
 
             HandleCollisions();
 
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
                 entity.Update();
 
-            isUpdating = false;
+            _isUpdating = false;
 
-            foreach (var entity in addedEntities)
+            foreach (var entity in AddedEntities)
                 AddEntity(entity);
 
-            addedEntities.Clear();
+            AddedEntities.Clear();
 
             // Remove expired entities
-            entities = entities.Where(x => !x.IsExpired).ToList();
-            bullets = bullets.Where(x => !x.IsExpired).ToList();
-            enemies = enemies.Where(x => !x.IsExpired).ToList();
+            Entities = Entities.Where(x => !x.IsExpired).ToList();
+            Bullets = Bullets.Where(x => !x.IsExpired).ToList();
+            Enemies = Enemies.Where(x => !x.IsExpired).ToList();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
                 entity.Draw(spriteBatch);
         }
 
@@ -72,28 +70,28 @@ namespace Mono_Ether.Ether
         static void HandleCollisions()
         {
             // Handle collisions between enemies
-            for (int i = 0; i < enemies.Count; i++)
+            for (int i = 0; i < Enemies.Count; i++)
             {
-                for (int j = i + 1; j < enemies.Count; j++)
+                for (int j = i + 1; j < Enemies.Count; j++)
                 {
 
-                    if (IsColliding(enemies[i], enemies[j]))
+                    if (IsColliding(Enemies[i], Enemies[j]))
                     {
-                        enemies[i].HandleCollision(enemies[j]);
-                        enemies[j].HandleCollision(enemies[i]);
+                        Enemies[i].HandleCollision(Enemies[j]);
+                        Enemies[j].HandleCollision(Enemies[i]);
                     }
                 }
             }
 
             // Handle collisions between bullets and enemies
-            for (int i = 0; i < enemies.Count; i++)
+            for (var i = 0; i < Enemies.Count; i++)
             {
-                for (int j = 0; j < bullets.Count; j++)
+                foreach (var t in Bullets)
                 {
-                    if (IsColliding(enemies[i], bullets[j]))
+                    if (IsColliding(Enemies[i], t))
                     {
-                        enemies[i].WasShot();
-                        bullets[j].IsExpired = true;
+                        Enemies[i].WasShot();
+                        t.IsExpired = true;
                         // Play enemy_explosion.wav
                         Art.EnemyExplosion.CreateInstance().Play();
                     }
@@ -101,12 +99,12 @@ namespace Mono_Ether.Ether
             }
 
             // Handle collisions between the player and enemies
-            for (int i = 0; i < enemies.Count; i++)
+            for (int i = 0; i < Enemies.Count; i++)
             {
-                if (enemies[i].IsActive && IsColliding(PlayerShip.Instance, enemies[i]))
+                if (Enemies[i].IsActive && IsColliding(PlayerShip.Instance, Enemies[i]))
                 {
                     PlayerShip.Instance.Kill();
-                    enemies.ForEach(x => x.WasShot());
+                    Enemies.ForEach(x => x.WasShot());
                     break;
                 }
             }

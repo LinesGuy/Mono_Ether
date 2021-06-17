@@ -5,7 +5,7 @@ namespace Mono_Ether.Ether
 {
     static class ColorUtil
     {
-        public static Color HSVToColor(float h, float s, float v)
+        public static Color HsvToColor(float h, float s, float v)
         {
             if (h == 0 && s == 0)
                 return new Color(v, v, v);

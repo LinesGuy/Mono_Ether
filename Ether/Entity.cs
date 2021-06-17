@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.Ether
 {
@@ -25,7 +22,7 @@ namespace Mono_Ether.Ether
         {
             var screenPos = Camera.world_to_screen_pos(Position);
             //spriteBatch.Draw(image, screen_pos, null, color, Orientation + Camera.orientation, Size / 2f, Camera.zoom, 0, 0);
-            spriteBatch.Draw(Image, screenPos, null, Color, Orientation, Size / 2f, Camera.zoom, 0, 0);
+            spriteBatch.Draw(Image, screenPos, null, Color, Orientation, Size / 2f, Camera.Zoom, 0, 0);
         }
     }
 }

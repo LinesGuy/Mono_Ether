@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -11,22 +10,23 @@ namespace Mono_Ether.Ether
     {
         public Node Parent;
         public Vector2 Position;
-        public float g;
-        public float h;
-        public float f;
+        public float G;
+        public float H;
+        public float F;
 
         public Node(Node parent = null, Vector2 position = new Vector2())
         {
             this.Parent = parent;
             this.Position = position;
-            this.g = 0;
-            this.h = 0;
-            this.f = 0;
+            this.G = 0;
+            this.H = 0;
+            this.F = 0;
         }
     }
     public static class MyAStar
     {
-        public static int cellSize = 50;
+        public const int CellSize = 50;
+
         public static List<Vector2> AStar(Vector2 start, Vector2 end)
         {
             //start = new Vector2((int) start.X, (int) start.Y);
@@ -48,7 +48,7 @@ namespace Mono_Ether.Ether
                 int index = 0;
                 foreach (Node node in openList)
                 {
-                    if (node.f < currentNode.f)
+                    if (node.F < currentNode.F)
                     {
                         currentNode = node;
                         bestIndex = index;
@@ -61,11 +61,10 @@ namespace Mono_Ether.Ether
                 
                 // Check if found goal
                 //if (currentNode.Position == endNode.Position)
-                if (Vector2.DistanceSquared(currentNode.Position, endNode.Position) <= (cellSize * 1.5f) * (cellSize * 1.5f))
+                List<Vector2> path = new List<Vector2> {endNode.Position};
+                if (Vector2.DistanceSquared(currentNode.Position, endNode.Position) <= (CellSize * 1.5f) * (CellSize * 1.5f))
                 {
                     Debug.WriteLine($"found goal in iterations: {iterations}");
-                    List<Vector2> path = new List<Vector2>();
-                    path.Add(endNode.Position);
                     var current = currentNode;
                     while (current != null)
                     {
@@ -89,7 +88,7 @@ namespace Mono_Ether.Ether
                 };
                 foreach (var offset in offsets)
                 {
-                    Vector2 nodePosition = currentNode.Position + offset * cellSize;
+                    Vector2 nodePosition = currentNode.Position + offset * CellSize;
                     
                     // Here we check that we are within the bounds of the map
                     // TODO: check that we are within the bounds of the map
@@ -102,7 +101,7 @@ namespace Mono_Ether.Ether
                     {
                         if (nodePosition == closedNode.Position)
                         {
-                            if (closedNode.g > currentNode.g + 1)
+                            if (closedNode.G > currentNode.G + 1)
                                 closedList[index].Parent = currentNode;
                             found = true;
                             break;
@@ -123,9 +122,9 @@ namespace Mono_Ether.Ether
                 foreach (Node child in children)
                 {
                     // Create f, g, and h values
-                    child.g = currentNode.g + 1;
-                    child.h = Vector2.DistanceSquared(child.Position, endNode.Position);  // Length SQUARED
-                    child.f = child.g + child.h;
+                    child.G = currentNode.G + 1;
+                    child.H = Vector2.DistanceSquared(child.Position, endNode.Position);  // Length SQUARED
+                    child.F = child.G + child.H;
                     
                     bool appendChild = true;
                     // Child is already in the open list
@@ -135,7 +134,7 @@ namespace Mono_Ether.Ether
                         if (child.Position == node.Position)
                         {
                             appendChild = false;
-                            if (child.g < node.g)
+                            if (child.G < node.G)
                                 openList[index] = child;
                         }
                         index += 1;
@@ -150,8 +149,8 @@ namespace Mono_Ether.Ether
             return null;
         }
         
-        public static int[,] grid = new int[100, 100];
-        public static void draw(SpriteBatch spriteBatch)
+        public static int[,] Grid = new int[100, 100];
+        public static void Draw(SpriteBatch spriteBatch)
         {
             
         }
@@ -159,23 +158,18 @@ namespace Mono_Ether.Ether
 
     class Tiles
     {
-        protected Texture2D texture;
-        public Vector2 position;
-        public int size;
+        protected Texture2D Texture;
+        protected Vector2 Position;
+        public int Size { get; set; }
 
-        private static ContentManager content;
-        public static ContentManager Content
-        {
-            protected get { return content;  }
-            set { content = value;  }
-        }
+        public static ContentManager Content { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var screenPos = Camera.world_to_screen_pos(position);
-            var scale = Camera.zoom * size / texture.Width;
+            var screenPos = Camera.world_to_screen_pos(Position);
+            var scale = Camera.Zoom * Size / Texture.Width;
             //spriteBatch.Draw(texture, screenPos, null, Color.White, 0f, size / 2f, scale, 0f, 0f);
-            spriteBatch.Draw(texture, screenPos, null, Color.White, 0f, new Vector2(size) / 2f, scale, 0, 0);
+            spriteBatch.Draw(Texture, screenPos, null, Color.White, 0f, new Vector2(Size) / 2f, scale, 0, 0);
         }
     }
     
@@ -183,34 +177,23 @@ namespace Mono_Ether.Ether
     {
         public CollisionTiles(int i, Vector2 position, int size)
         {
-            texture = Content.Load<Texture2D>("Textures/tiles/tile" + i);
-            this.position = position;
-            this.size = size;
+            Texture = Content.Load<Texture2D>("Textures/tiles/tile" + i);
+            this.Position = position;
+            this.Size = size;
         }
     }
 
     class Map
     {
-        private List<CollisionTiles> collisionTiles = new List<CollisionTiles>();
+        private readonly List<CollisionTiles> collisionTiles = new List<CollisionTiles>();
 
-        public List<CollisionTiles> CollisionTiles
-        {
-            get { return collisionTiles; }
-        }
+        public List<CollisionTiles> CollisionTiles => collisionTiles;
 
         private int width, height;
 
-        public int Width
-        {
-            get { return width; }
-        }
+        public int Width => width;
 
-        public int Height
-        {
-            get { return height; }
-        }
-
-        public Map() { }
+        public int Height => height;
 
         public void Generate(int[,] map, int size)
         {

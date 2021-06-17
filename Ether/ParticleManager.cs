@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SharpDX.Direct3D9;
-using Sprite = MonoGame.Extended.Sprites.Sprite;
 
 namespace Mono_Ether.Ether
 {
@@ -131,7 +129,7 @@ namespace Mono_Ether.Ether
 
                 Vector2 origin = new Vector2(particle.Texture.Width / 2, particle.Texture.Height / 2);
                 var screenPos = Camera.world_to_screen_pos(particle.Position);
-                var scale = Camera.zoom * particle.Scale;
+                var scale = Camera.Zoom * particle.Scale;
                 spriteBatch.Draw(particle.Texture, screenPos, null, particle.Tint, particle.Orientation, origin, scale, 0, 0);
             }
         }

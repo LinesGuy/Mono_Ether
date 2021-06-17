@@ -1,14 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.Ether
 {
     class Bullet : Entity
     {
-        protected int age;
-        protected int lifespan;
+        private int age;
+        private readonly int lifespan;
 
         public Bullet(Vector2 position, Vector2 velocity)
         {
@@ -37,9 +35,9 @@ namespace Mono_Ether.Ether
 
     class Starburst : Entity
     {
-        protected int age;
-        protected int lifespan;
-        static Random rand = new Random();
+        private int age;
+        private readonly int lifespan;
+        static readonly Random Rand = new Random();
         static float bullet_speed = 15f;
 
         public Starburst(Vector2 position, Vector2 destination)
@@ -62,8 +60,8 @@ namespace Mono_Ether.Ether
                 IsExpired = true;
                 for (int i = 0; i < 30; i++)
                 {
-                    Vector2 bullet_velocity = MathUtil.FromPolar(rand.NextFloat((float)-Math.PI, (float)Math.PI), rand.NextFloat(8f, 16f));
-                    EntityManager.Add(new Bullet(Position, bullet_velocity));
+                    Vector2 bulletVelocity = MathUtil.FromPolar(Rand.NextFloat((float)-Math.PI, (float)Math.PI), Rand.NextFloat(8f, 16f));
+                    EntityManager.Add(new Bullet(Position, bulletVelocity));
                 }
 
             }
