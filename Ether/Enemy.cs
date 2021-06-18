@@ -85,8 +85,12 @@ namespace Mono_Ether.Ether
                 {
                     var path = MyAStar.AStar(Position, PlayerShip.Instance.Position);
                     // Instead of calculating a new path every frame or whatever, we will calculate a new path
-                    // every second (60 frames)
-                    // TODO: scale this for distance between enemy and player
+                    // based on how far the enemy is from the player:
+                    // - If the enemy is within 1000 units of the player, update the path every 30 frames
+                    // - If within 2500 units, update every 60 frames
+                    // - If within 5000 units, every 120 frames
+                    // - Otherwise, every 240 frames
+                    // TODO implement the above
                     for (int i = 0; i < 60; i++)
                     {
                         // If enemy is at current target position, update target position

@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.States
 {
@@ -32,7 +29,7 @@ namespace Mono_Ether.States
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _graphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             // Draw sprites
             spriteBatch.End();

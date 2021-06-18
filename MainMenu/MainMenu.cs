@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -56,13 +54,13 @@ namespace Mono_Ether.MainMenu
 
             cookie.Update(gameTime);
 
-            if (cookie.State == 1 && Input.mouseState.WasButtonJustDown(MouseButton.Left))
+            if (cookie.State == 1 && Input.Mouse.WasButtonJustDown(MouseButton.Left))
             {
                 // Check if any menu buttons were pressed
                 if (playButton.CursorInButton())
                 {
                     Debug.WriteLine("change screen to game");
-                    GameStateManager.Instance.ChangeScreen(new Ether.EtherRoot(_graphicsDevice));
+                    GameStateManager.Instance.ChangeScreen(new Ether.EtherRoot(GraphicsDevice));
                 }
                     
                 else if (settingsButton.CursorInButton())
@@ -79,7 +77,7 @@ namespace Mono_Ether.MainMenu
                 }
             }
             
-            if (Input.mouseState.WasButtonJustDown(MouseButton.Left) && cookie.State == 0)
+            if (Input.Mouse.WasButtonJustDown(MouseButton.Left) && cookie.State == 0)
             {
                 // Move cookie slightly to left and shrink
                 cookie.State = 1;
@@ -108,7 +106,7 @@ namespace Mono_Ether.MainMenu
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _graphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             playButton.Draw(spriteBatch);
             settingsButton.Draw(spriteBatch);

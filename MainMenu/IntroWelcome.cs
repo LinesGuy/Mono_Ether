@@ -4,26 +4,23 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using Mono_Ether.States;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.MainMenu
 {
     public class IntroWelcome : GameState
     {
         //private SpriteBatch spriteBatch;
-        private int frame = 0;
+        private int frame;
         
-        private const int fadeInFrames = 120;
-        private const int fastScaleFrames = 30;
-        private const int fadeOutFrames = 8;
-        
-        private float welcomeTransparency = 0f;
-        private RectangleF welcomeRect = new RectangleF(GameRoot.ScreenSize.X / 2 - Art.WelcomeText.Width / 4, GameRoot.ScreenSize.Y / 2 - Art.WelcomeText.Height / 4, Art.WelcomeText.Width / 2, 0);
+        private const int FadeInFrames = 120;
+        private const int FastScaleFrames = 30;
+        private const int FadeOutFrames = 8;
+
+        private float welcomeTransparency;
+        private RectangleF welcomeRect = new RectangleF(GameRoot.ScreenSize.X / 2 - Art.WelcomeText.Width / 4,
+            GameRoot.ScreenSize.Y / 2 - Art.WelcomeText.Height / 4, Art.WelcomeText.Width / 2, 0);
 
         Song welcomePiano;
-        Song welcomeTrack;
         public IntroWelcome(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
         }
@@ -49,35 +46,35 @@ namespace Mono_Ether.MainMenu
 
         public override void Update(GameTime gameTime)
         {
-            if (frame <= fastScaleFrames)
+            if (frame <= FastScaleFrames)
                 // Fast scale
                 welcomeRect.Inflate(0, 1.3f);
 
-            if (frame < fadeInFrames)
+            if (frame < FadeInFrames)
             {
                 // Fade in + slow scale
-                welcomeTransparency = MathUtil.Interpolate(0, 1, (float)frame / fadeInFrames);
+                welcomeTransparency = MathUtil.Interpolate(0, 1, (float)frame / FadeInFrames);
                 welcomeRect.Inflate(0.12f, 0.025f);
             }
-            else if (fadeInFrames <= frame && frame <= fadeInFrames + fadeOutFrames)
+            else if (FadeInFrames <= frame && frame <= FadeInFrames + FadeOutFrames)
             {
                 // Fade out
-                welcomeTransparency = MathUtil.Interpolate(1, 0, (float)(frame - fadeInFrames) / fadeOutFrames);
+                welcomeTransparency = MathUtil.Interpolate(1, 0, (float)(frame - FadeInFrames) / FadeOutFrames);
             }
-            else if (frame > fadeInFrames + fadeOutFrames)
+            else if (frame > FadeInFrames + FadeOutFrames)
             {
                 // Change screen
                 // To game:
                 //GameStateManager.Instance.ChangeScreen(new Ether.EtherRoot(_graphicsDevice));
                 // To menu:
-                GameStateManager.Instance.ChangeScreen(new MainMenu(_graphicsDevice));
+                GameStateManager.Instance.ChangeScreen(new MainMenu(GraphicsDevice));
             }
             frame += 1;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _graphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.Draw(Art.WelcomeText, welcomeRect.ToRectangle(), null, Color.White * welcomeTransparency);
             spriteBatch.End();

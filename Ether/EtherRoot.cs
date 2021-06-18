@@ -9,9 +9,9 @@ namespace Mono_Ether.Ether
     public class EtherRoot : GameState
     {
         private bool paused;
-
         private Map map;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
+        public static GameTime CurrentGameTime;
         public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
         }
@@ -51,8 +51,9 @@ namespace Mono_Ether.Ether
 
         public override void Update(GameTime gameTime)
         {
+            CurrentGameTime = gameTime;
             // pause menu.update thingy here instead of this
-            if (Input.keyboardState.WasKeyJustDown(Keys.P))
+            if (Input.Keyboard.WasKeyJustDown(Keys.P))
             {
                 paused = !paused;
             }
@@ -68,7 +69,7 @@ namespace Mono_Ether.Ether
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _graphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
             
             map.Draw(spriteBatch);

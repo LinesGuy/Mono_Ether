@@ -37,13 +37,13 @@ namespace Mono_Ether.Ether
         {
             // Freecam (disables lerp if used)
             Vector2 direction = Vector2.Zero;
-            if (Input.keyboardState.IsKeyDown(Keys.Left))
+            if (Input.Keyboard.IsKeyDown(Keys.Left))
                 direction.X -= 1;
-            if (Input.keyboardState.IsKeyDown(Keys.Right))
+            if (Input.Keyboard.IsKeyDown(Keys.Right))
                 direction.X += 1;
-            if (Input.keyboardState.IsKeyDown(Keys.Up))
+            if (Input.Keyboard.IsKeyDown(Keys.Up))
                 direction.Y -= 1;
-            if (Input.keyboardState.IsKeyDown(Keys.Down))
+            if (Input.Keyboard.IsKeyDown(Keys.Down))
                 direction.Y += 1;
             if (direction != Vector2.Zero)
             {
@@ -53,15 +53,15 @@ namespace Mono_Ether.Ether
             }
 
             // Zoom (Q and E)
-            if (Input.keyboardState.IsKeyDown(Keys.Q))
+            if (Input.Keyboard.IsKeyDown(Keys.Q))
                 Zoom /= 1.03f;
-            if (Input.keyboardState.IsKeyDown(Keys.E))
+            if (Input.Keyboard.IsKeyDown(Keys.E))
                 Zoom *= 1.03f;
 
             // Lerp
             if (_isLerping)
                 Lerp(PlayerShip.Instance.Position);
-            else if (Input.keyboardState.IsKeyDown(Keys.C))
+            else if (Input.Keyboard.IsKeyDown(Keys.C))
                 _isLerping = true;  // Press 'c' to enable lerp
 
         }
@@ -80,7 +80,7 @@ namespace Mono_Ether.Ether
 
         public static Vector2 mouse_world_coords()
         {
-            return screen_to_world_pos(Input.mouseState.Position.ToVector2());
+            return screen_to_world_pos(Input.Mouse.Position.ToVector2());
         }
         private static Vector2 GetMouseAimDirection()
         {
@@ -99,13 +99,13 @@ namespace Mono_Ether.Ether
 
             Vector2 direction = Vector2.Zero;
 
-            if (Input.keyboardState.IsKeyDown(Keys.Left))
+            if (Input.Keyboard.IsKeyDown(Keys.Left))
                 direction.X -= 1;
-            if (Input.keyboardState.IsKeyDown(Keys.Right))
+            if (Input.Keyboard.IsKeyDown(Keys.Right))
                 direction.X += 1;
-            if (Input.keyboardState.IsKeyDown(Keys.Up))
+            if (Input.Keyboard.IsKeyDown(Keys.Up))
                 direction.Y -= 1;
-            if (Input.keyboardState.IsKeyDown(Keys.Down))
+            if (Input.Keyboard.IsKeyDown(Keys.Down))
                 direction.Y += 1;
 
             // If no aim input, return zero, otherwise normalize direction

@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.MainMenu
 {
@@ -22,7 +19,7 @@ namespace Mono_Ether.MainMenu
         public bool CursorInButton()
         {
             return new RectangleF(Position.X - Size.X / 2, Position.Y - Size.Y / 2, Size.X, Size.Y).Contains(
-                Input.mouseState.Position);
+                Input.Mouse.Position);
         }
         public MenuButton(Vector2 position, Texture2D image)
         {

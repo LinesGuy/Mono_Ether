@@ -17,18 +17,12 @@ namespace Mono_Ether
         public GameRoot()
         {
             Instance = this;
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
+            graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 1280, PreferredBackBufferHeight = 720
+            };
             Content.RootDirectory = "Content";
             IsMouseVisible = false;
-        }
-
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
         }
 
         protected override void LoadContent()

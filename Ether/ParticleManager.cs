@@ -126,7 +126,7 @@ namespace Mono_Ether.Ether
             for (int i = 0; i < particleList.Count; i++)
             {
                 var particle = particleList[i];
-
+                
                 Vector2 origin = new Vector2(particle.Texture.Width / 2, particle.Texture.Height / 2);
                 var screenPos = Camera.world_to_screen_pos(particle.Position);
                 var scale = Camera.Zoom * particle.Scale;

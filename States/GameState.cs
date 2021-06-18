@@ -1,18 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.States
 {
     public abstract class GameState : IGameState
     {
-        protected GraphicsDevice _graphicsDevice;
-        public GameState(GraphicsDevice graphicsDevice)
+        protected readonly GraphicsDevice GraphicsDevice;
+
+        protected GameState(GraphicsDevice graphicsDevice)
         {
-            _graphicsDevice = graphicsDevice;
+            GraphicsDevice = graphicsDevice;
         }
         public abstract void Initialize();
         public abstract void LoadContent(ContentManager content);

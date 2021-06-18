@@ -2,24 +2,15 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
+using MonoGame.Extended;
 
 namespace Mono_Ether.Ether
 {
     class PlayerShip : Entity
     {
-        private static PlayerShip instance;
-        public static PlayerShip Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new PlayerShip();
-                return instance;
-            }
-        }
+        private static PlayerShip _instance;
+        public static PlayerShip Instance => _instance ??= new PlayerShip();
 
         private PlayerShip()
         {
@@ -29,13 +20,13 @@ namespace Mono_Ether.Ether
             Radius = 10;
         }
 
-        const int cooldownFrames = 6;
-        int cooldownRemaining = 0;
-        static Random rand = new Random();
-        bool autofire = false;  // If true, hold left click to stop fire
-        int framesUntilRespawn = 0;
+        const int CooldownFrames = 6;
+        int cooldownRemaining;
+        static readonly Random Rand = new Random();
+        private readonly bool autoFire = false;  // If true, hold left click to stop fire
+        int framesUntilRespawn;
 
-        public bool IsDead { get { return framesUntilRespawn > 0; } }
+        public bool IsDead => framesUntilRespawn > 0;
 
         public override void Update()
         {
@@ -55,22 +46,55 @@ namespace Mono_Ether.Ether
             // Change orientation if velocity is non-zero:
             if (Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
+            
+            // Exhaust fire
+            if (Velocity.LengthSquared() > 0.1f)
+            {
+                Orientation = Velocity.ToAngle();
+                double t = EtherRoot.CurrentGameTime.TotalGameTime.TotalSeconds;
+                Vector2 baseVel = Velocity.ScaleTo(-3);
+                Vector2 perpVel = new Vector2(baseVel.Y, -baseVel.X) * (0.6f * (float) Math.Sin(t * 10));
+                Color sideColor = new Color(200, 38, 9);   // Deep red
+                Color midColor = new Color(255, 187, 30);  // Orange-yellow
+                Vector2 pos = Position + MathUtil.FromPolar(Orientation, -25);
+                const float alpha = 0.7f;
+                
+                // Middle particle stream
+                Vector2 velMid = baseVel + Rand.NextVector2(0, 1);
+                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+                    new ParticleState(velMid, ParticleType.Enemy));
+                EtherRoot.ParticleManager.CreateParticle(Art.Glow, pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
+                    new ParticleState(velMid, ParticleType.Enemy));
+                
+                // Side particle streams
+                Vector2 vel1 = baseVel + perpVel + Rand.NextVector2(0, 0.3f);
+                Vector2 vel2 = baseVel - perpVel + Rand.NextVector2(0, 0.3f);
+                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+                    new ParticleState(vel1, ParticleType.Enemy));
+                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+                    new ParticleState(vel2, ParticleType.Enemy));
+                EtherRoot.ParticleManager.CreateParticle(Art.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+                    new ParticleState(vel1, ParticleType.Enemy));
+                EtherRoot.ParticleManager.CreateParticle(Art.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+                    new ParticleState(vel2, ParticleType.Enemy));
+                
+            }
 
-            // Shooty
+            // Shoot
             var aim = Camera.GetAimDirection();
-            if ((autofire ^ Input.mouseState.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
+            if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
             {
                 // Play player_shoot SFX
                 Art.PlayerShoot.CreateInstance().Play();
-                cooldownRemaining = cooldownFrames;
-                float aimangle = aim.ToAngle();
-                int bulletCount = 3; 
-                for (int i = 0; i < bulletCount; i++)
+                cooldownRemaining = CooldownFrames;
+                var aimangle = aim.ToAngle();
+                const int bulletCount = 3; 
+                for (var i = 0; i < bulletCount; i++)
                 {
-                    float randomSpread = rand.NextFloat(-0.04f, 0.04f) + rand.NextFloat(-0.04f, 0.04f);
-                    float offsetAngle = aimangle + MathUtil.Interpolate(-.2f, .2f, (float)i / (bulletCount - 0.999f));
-                    Vector2 offset = MathUtil.FromPolar(offsetAngle, rand.NextFloat(15f, 40f));
-                    Vector2 vel = MathUtil.FromPolar(aimangle + randomSpread, 18f);
+                    var randomSpread = Rand.NextFloat(-0.04f, 0.04f) + Rand.NextFloat(-0.04f, 0.04f);
+                    var offsetAngle = aimangle + MathUtil.Interpolate(-.2f, .2f, i / (bulletCount - 0.999f));
+                    var offset = MathUtil.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
+                    var vel = MathUtil.FromPolar(aimangle + randomSpread, 18f);
                     EntityManager.Add(new Bullet(Position + offset, vel));
                 }
             }
@@ -78,7 +102,7 @@ namespace Mono_Ether.Ether
             if (cooldownRemaining > 0)
                 cooldownRemaining--;
 
-            if (Input.mouseState.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
+            if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
             {
                 EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));
             }
@@ -94,6 +118,19 @@ namespace Mono_Ether.Ether
         {
             framesUntilRespawn = 60;
             Art.PlayerDeath.CreateInstance().Play();
+
+            for (int i = 0; i < 1200; i++)
+            {
+                float speed = 18f * (1f - 1 / Rand.NextFloat(1f, 10f));
+                Color color = Color.Lerp(Color.White, Color.Yellow, Rand.NextFloat(0, 1));
+                var state = new ParticleState()
+                {
+                    Velocity = Rand.NextVector2(speed, speed),
+                    Type = ParticleType.None,
+                    LengthMultiplier = 1
+                };
+                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
+            }
             EnemySpawner.Reset();
         }
     }

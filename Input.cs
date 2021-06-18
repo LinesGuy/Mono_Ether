@@ -5,47 +5,27 @@ namespace Mono_Ether
 {
     static class Input
     {
-        public static KeyboardStateExtended keyboardState, lastKeyboardState;
-        public static MouseStateExtended mouseState, lastMouseState;
+        public static KeyboardStateExtended Keyboard;
+        public static MouseStateExtended Mouse;
 
-        public static Vector2 MousePosition { get { return new Vector2(mouseState.X, mouseState.Y); } }
+        public static Vector2 MousePosition { get { return new Vector2(Mouse.X, Mouse.Y); } }
 
         public static void Update()
         {
-            lastKeyboardState = keyboardState;
-            lastMouseState = mouseState;
-
-            keyboardState = KeyboardExtended.GetState();
-            mouseState = MouseExtended.GetState();
-
-            // THIS IS DISABLED DURING TESTING
-            // If player presses arrow keys, aim with keyboard
-            // If player moves mouse, aim with mose
-            /*
-            if (new[] { Keys.Left, Keys.Right, Keys.Up, Keys.Down }.Any(x => keyboardState.IsKeyDown(x)))
-                isAimingWithMouse = false;
-            else if (MousePosition != new Vector2(lastMouseState.X, lastMouseState.Y))
-                isAimingWithMouse = true;
-            */
+            Keyboard = KeyboardExtended.GetState();
+            Mouse = MouseExtended.GetState();
         }
-
-        // Check if key was just pressed
-        public static bool WasKeyPressed(Keys key)
-        {
-            return lastKeyboardState.IsKeyUp(key) && keyboardState.IsKeyDown(key);
-        }
-
         public static Vector2 GetMovementDirection()
         {
             Vector2 direction = Vector2.Zero;
 
-            if (keyboardState.IsKeyDown(Keys.A))
+            if (Keyboard.IsKeyDown(Keys.A))
                 direction.X -= 1;
-            if (keyboardState.IsKeyDown(Keys.D))
+            if (Keyboard.IsKeyDown(Keys.D))
                 direction.X += 1;
-            if (keyboardState.IsKeyDown(Keys.W))
+            if (Keyboard.IsKeyDown(Keys.W))
                 direction.Y -= 1;
-            if (keyboardState.IsKeyDown(Keys.S))
+            if (Keyboard.IsKeyDown(Keys.S))
                 direction.Y += 1;
 
             if (direction.LengthSquared() > 1)
