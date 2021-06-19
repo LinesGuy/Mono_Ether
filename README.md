@@ -1,4 +1,2 @@
 # Mono_Ether
-my computer science project
-
-xdddddddddddddddddddddddddddddddddd
+project for my college computer science coursework
