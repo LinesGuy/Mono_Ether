@@ -26,4 +26,7 @@
   <ItemGroup>
     <Folder Include="States\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="global.json" />
+  </ItemGroup>
 </Project>
