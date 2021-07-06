@@ -99,13 +99,16 @@ namespace Mono_Ether.Ether
             }
 
             // Handle collisions between the player and enemies
-            for (int i = 0; i < Enemies.Count; i++)
+            if (PlayerShip.Instance.GodMode == false)
             {
-                if (Enemies[i].IsActive && IsColliding(PlayerShip.Instance, Enemies[i]))
+                for (int i = 0; i < Enemies.Count; i++)
                 {
-                    PlayerShip.Instance.Kill();
-                    Enemies.ForEach(x => x.WasShot());
-                    break;
+                    if (Enemies[i].IsActive && IsColliding(PlayerShip.Instance, Enemies[i]))
+                    {
+                        PlayerShip.Instance.Kill();
+                        Enemies.ForEach(x => x.WasShot());
+                        break;
+                    }
                 }
             }
         }

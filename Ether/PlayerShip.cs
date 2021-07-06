@@ -11,7 +11,7 @@ namespace Mono_Ether.Ether
     {
         private static PlayerShip _instance;
         public static PlayerShip Instance => _instance ??= new PlayerShip();
-
+        public bool GodMode = false;  // If true, player can't die
         private PlayerShip()
         {
             Image = Art.Player;
@@ -30,6 +30,10 @@ namespace Mono_Ether.Ether
 
         public override void Update()
         {
+            // Press G to toggle GodMode (for debugging purposes)
+            if (Input.Keyboard.WasKeyJustDown(Keys.G))
+                GodMode = !GodMode;
+            
             // Do nothing if dead
             if (IsDead)
             {

@@ -30,7 +30,7 @@ namespace Mono_Ether.Ether
             
             map.Generate(new[,]
             {
-                {0,0,0,0,1,1,1,1,1,0,0,0},
+                {4,0,0,0,1,1,1,1,1,0,0,4},
                 {0,0,0,1,3,3,3,3,3,1,0,0},
                 {0,1,1,2,3,3,3,2,2,2,1,0},
                 {1,3,3,2,3,3,2,3,3,3,3,1},
@@ -41,7 +41,7 @@ namespace Mono_Ether.Ether
                 {0,2,2,2,3,3,3,3,3,2,0,0},
                 {0,0,0,2,3,2,2,2,3,2,0,0},
                 {0,0,0,2,3,2,0,2,3,2,0,0},
-                {0,0,0,2,2,2,0,2,2,2,0,0},
+                {4,0,0,2,2,2,0,2,2,2,0,4},
             },64);
         }
 
@@ -85,7 +85,8 @@ namespace Mono_Ether.Ether
             // Debug texts
             spriteBatch.DrawString(Art.DebugFont, "Player pos: " + PlayerShip.Instance.Position.ToString(), new Vector2(0, 0), Color.White);
             spriteBatch.DrawString(Art.DebugFont, "Camera pos: " + Camera.CameraPosition.ToString(), new Vector2(0, 30), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "Cursor pos: " + Camera.mouse_world_coords().ToString(), new Vector2(0, 60), Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "Cursor world pos: " + Camera.mouse_world_coords().ToString(), new Vector2(0, 60), Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "Cursor map pos: " + map.WorldToMap(Camera.mouse_world_coords()).ToString(), new Vector2(0, 90), Color.White);
             spriteBatch.End();
         }
     }
