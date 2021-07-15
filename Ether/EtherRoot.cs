@@ -44,11 +44,13 @@ namespace Mono_Ether.Ether
             {
                 paused = !paused;
             }
-
+            
+            Camera.Update();
+            
             if (!paused)
             {
                 EntityManager.Update();
-                Camera.Update();
+                
                 EnemySpawner.Update();
                 ParticleManager.Update();
             }
