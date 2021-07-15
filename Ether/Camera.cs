@@ -21,7 +21,7 @@ namespace Mono_Ether.Ether
             return position;
         }
 
-        private static Vector2 screen_to_world_pos(Vector2 screenPos)
+        public static Vector2 screen_to_world_pos(Vector2 screenPos)
         {
             // Translate by half screen size
             Vector2 position = screenPos - GameRoot.ScreenSize / 2;

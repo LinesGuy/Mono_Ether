@@ -29,8 +29,7 @@ namespace Mono_Ether.Ether
 
         public static List<Vector2> AStar(Vector2 start, Vector2 end)
         {
-            //start = new Vector2((int) start.X, (int) start.Y);
-            //end = new Vector2((int) end.X, (int) end.Y);
+            //start = EtherRoot.MyMap.WorldToNearestTile(start);
             List<Node> openList = new List<Node> { new Node(position: start) };
             Node endNode = new Node(position: end);
             List<Node> closedList = new List<Node>();
@@ -41,7 +40,7 @@ namespace Mono_Ether.Ether
                 iterations += 1;
                 if (iterations % 300 == 0)
                     Debug.WriteLine($"Current iterations: {iterations}");
-                //Debug.WriteLine("iterations=" + iterations.ToString());
+                
                 // Get current node
                 Node currentNode = openList[0];
                 int bestIndex = 0;
@@ -112,7 +111,8 @@ namespace Mono_Ether.Ether
                         continue;
                     
                     // Here we check the terrain is walkable
-                    // TODO: check the terrain is walkable
+                    // TODO xd
+                    //if EtherRoot.MyMap.WorldToTile(nodePosition)
     
                     // Create and append new node
                     Node newNode = new Node(parent: currentNode, position: nodePosition);

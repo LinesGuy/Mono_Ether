@@ -28,5 +28,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="global.json" />
+    <None Update="Content\TileMapData\susMap.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\TileMapData\bigMap.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
