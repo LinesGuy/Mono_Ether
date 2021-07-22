@@ -29,7 +29,10 @@ namespace Mono_Ether.Ether
                 i++;
             }
         }
-
+        public Vector2 WorldtoMap(Vector2 worldPos)
+        {
+            return Vector2.Floor(worldPos / 64f);
+        }
         public Vector2 MapToWorld(Vector2 mapPos)
         {
             return mapPos * 64; //TODO: get texture size and replace this with it
@@ -40,23 +43,16 @@ namespace Mono_Ether.Ether
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            /*
-            Instead of iterating over every tile in the
-            2d array, we only iterate over tiles that
-            are visible by the camera (taking position
-            and scaling into account), this significantly
-            improves drawing performance, especially when
-            zoomed in.
-            */
+            /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
+            camera (taking position and scaling into account), this significantly improves drawing performance,
+            especially when zoomed in. */
             var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / 64f));
             var endCol = Math.Min(Size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / 64f));
             var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / 64f));
             var endRow = Math.Min(Size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
-            //for (int col = 0; col < Grid.GetLength(0); col++) // DRAW EVERY COLUMN
-            for (int col = startCol; col < endCol; col++) // DRAW VISIBLE COLUMNS
+            for (int col = startCol; col < endCol; col++)
             {
-                //for (int row = 0; row < Grid.GetLength(1); row++) // DRAW EVERY ROW
-                for (int row = startRow; row < endRow; row++) // DRAW VSIBILE ROWS
+                for (int row = startRow; row < endRow; row++)
                 {
                     var cell = Grid[col, row];
                     Texture2D texture;
@@ -83,6 +79,9 @@ namespace Mono_Ether.Ether
                     spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
                 }
             }
+            // draw nearest tiles (debug)
+            var cursorTile = MapToScreen(WorldtoMap(Camera.mouse_world_coords()));
+            spriteBatch.Draw(Art.Pixel, cursorTile, null, Color.Red, 0f, Vector2.Zero, Camera.Zoom * 5f, 0, 0);
         }
     }
 /*
