@@ -29,6 +29,13 @@ namespace Mono_Ether.Ether
                 i++;
             }
         }
+
+        public int GetTile(Vector2 mapPos)
+        {
+            if (mapPos.X < 0 || mapPos.X >= Size.X || mapPos.Y < 0 || mapPos.Y >= Size.Y)
+                return -1;
+            return Grid[(int)mapPos.Y, (int)mapPos.X];
+        }
         public Vector2 WorldtoMap(Vector2 worldPos)
         {
             return Vector2.Floor(worldPos / 64f);
@@ -40,6 +47,22 @@ namespace Mono_Ether.Ether
         public Vector2 MapToScreen(Vector2 mapPos)
         {
             return Camera.world_to_screen_pos(MapToWorld(mapPos));
+        }
+
+        public List<Vector2> WorldToMapFourTiles(Vector2 worldPos)
+        {
+            List<Vector2> result = new List<Vector2>();
+            var topLeft = Vector2.Floor(worldPos / 64f); 
+            List<Vector2> offsets = new List<Vector2>
+            {
+                new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 0), new Vector2(1, 1)
+            };
+            foreach (var offset in offsets)
+            {
+                result.Add(topLeft + offset);
+            }
+
+            return result;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -56,8 +79,7 @@ namespace Mono_Ether.Ether
                 {
                     var cell = Grid[col, row];
                     Texture2D texture;
-                    // Get texture based on texture ID
-                    switch (cell)
+                    switch (cell) // Get texture based on TextureID
                     {
                         case 1:
                             texture = Art.tileGrass;
@@ -74,14 +96,16 @@ namespace Mono_Ether.Ether
                         default:
                             continue;
                     }
-
                     var position = MapToScreen(new Vector2(row, col));
                     spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
                 }
             }
             // draw nearest tiles (debug)
-            var cursorTile = MapToScreen(WorldtoMap(Camera.mouse_world_coords()));
-            spriteBatch.Draw(Art.Pixel, cursorTile, null, Color.Red, 0f, Vector2.Zero, Camera.Zoom * 5f, 0, 0);
+            foreach (var tileCoords in WorldToMapFourTiles(Camera.mouse_world_coords()))
+            {
+                var screenCoords = MapToScreen(tileCoords);
+                spriteBatch.Draw(Art.Pixel, screenCoords, null, Color.Red, 0f, Vector2.Zero, Camera.Zoom * 5f, 0, 0);
+            }
         }
     }
 /*

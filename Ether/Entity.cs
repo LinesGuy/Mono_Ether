@@ -24,5 +24,10 @@ namespace Mono_Ether.Ether
             //spriteBatch.Draw(image, screen_pos, null, color, Orientation + Camera.orientation, Size / 2f, Camera.zoom, 0, 0);
             spriteBatch.Draw(Image, screenPos, null, Color, Orientation, Size / 2f, Camera.Zoom, 0, 0);
         }
+
+        public void HandleTileCollisions()
+        {
+            
+        }
     }
 }
