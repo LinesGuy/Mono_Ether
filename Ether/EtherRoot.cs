@@ -9,7 +9,7 @@ namespace Mono_Ether.Ether
     public class EtherRoot : GameState
     {
         private bool paused;
-        public static Map MyMap;
+        //public static Map MyMap;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
         public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice)
@@ -18,7 +18,7 @@ namespace Mono_Ether.Ether
 
         public override void Initialize()
         {
-            MyMap = new Map();
+            //MyMap = new Map();
             EntityManager.Add(PlayerShip.Instance);
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
         }
@@ -28,7 +28,7 @@ namespace Mono_Ether.Ether
             //Art.Load(content);
             //Tiles.Content = content;
 
-            MyMap.LoadFromFile("susMap.txt", new Vector2(12, 12));
+            Map.LoadFromFile("susMap.txt", new Vector2(12, 12));
             //MyMap.LoadFromFile("bigMap.txt", new Vector2(256, 256));
         }
 
@@ -55,13 +55,12 @@ namespace Mono_Ether.Ether
                 ParticleManager.Update();
             }
         }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
             
-            MyMap.Draw(spriteBatch);
+            Map.Draw(spriteBatch);
 
             EntityManager.Draw(spriteBatch);
             
@@ -77,7 +76,7 @@ namespace Mono_Ether.Ether
             spriteBatch.DrawString(Art.DebugFont, "Cursor world pos: " + Camera.mouse_world_coords().ToString(), new Vector2(0, 60), Color.White);
             if (paused) 
                 spriteBatch.DrawString(Art.DebugFont, "GAME PAUSED", new Vector2(0, 90), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "TILE: " + MyMap.GetTile(MyMap.WorldtoMap(Camera.mouse_world_coords())), new Vector2(0, 120), Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "TILE: " + Map.GetTile(Map.WorldtoMap(Camera.mouse_world_coords())), new Vector2(0, 120), Color.White);
             spriteBatch.End();
         }
     }

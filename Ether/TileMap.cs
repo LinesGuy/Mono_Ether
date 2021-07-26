@@ -8,48 +8,39 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Mono_Ether.Ether
 {
-    public class Map
+     static class Map
     {
-        private int[,] Grid;
-        private Vector2 Size;
-        public void LoadFromFile(string filename, Vector2 size)
+        private static int[,] _grid;
+        private static Vector2 _size;
+        public static void LoadFromFile(string filename, Vector2 size)
         {
-            Size = size;
+            _size = size;
             string lines = System.IO.File.ReadAllText(@"Content/TileMapData/" + filename);
             int i = 0, j = 0;
-            Grid = new int[(int)size.X, (int)size.Y];
+            _grid = new int[(int)size.X, (int)size.Y];
             foreach (var row in lines.Split('\n'))
             {
                 j = 0;
                 foreach (var col in row.Trim().Split(','))
                 {
-                    Grid[i, j] = int.Parse(col.Trim());
+                    _grid[i, j] = int.Parse(col.Trim());
                     j++;
                 }
                 i++;
             }
         }
 
-        public int GetTile(Vector2 mapPos)
+        public static int GetTile(Vector2 mapPos)
         {
-            if (mapPos.X < 0 || mapPos.X >= Size.X || mapPos.Y < 0 || mapPos.Y >= Size.Y)
+            if (mapPos.X < 0 || mapPos.X >= _size.X || mapPos.Y < 0 || mapPos.Y >= _size.Y)
                 return -1;
-            return Grid[(int)mapPos.Y, (int)mapPos.X];
+            return _grid[(int)mapPos.Y, (int)mapPos.X];
         }
-        public Vector2 WorldtoMap(Vector2 worldPos)
-        {
-            return Vector2.Floor(worldPos / 64f);
-        }
-        public Vector2 MapToWorld(Vector2 mapPos)
-        {
-            return mapPos * 64; //TODO: get texture size and replace this with it
-        }
-        public Vector2 MapToScreen(Vector2 mapPos)
-        {
-            return Camera.world_to_screen_pos(MapToWorld(mapPos));
-        }
+        public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
+        public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it
+        public static Vector2 MapToScreen(Vector2 mapPos) => Camera.world_to_screen_pos(MapToWorld(mapPos));
 
-        public List<Vector2> WorldToMapFourTiles(Vector2 worldPos)
+        public static List<Vector2> WorldToMapFourTiles(Vector2 worldPos)
         {
             List<Vector2> result = new List<Vector2>();
             var topLeft = Vector2.Floor(worldPos / 64f); 
@@ -64,20 +55,20 @@ namespace Mono_Ether.Ether
 
             return result;
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public static void Draw(SpriteBatch spriteBatch)
         {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
             var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / 64f));
-            var endCol = Math.Min(Size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / 64f));
+            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / 64f));
             var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / 64f));
-            var endRow = Math.Min(Size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
+            var endRow = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
             for (int col = startCol; col < endCol; col++)
             {
                 for (int row = startRow; row < endRow; row++)
                 {
-                    var cell = Grid[col, row];
+                    var cell = _grid[col, row];
                     Texture2D texture;
                     switch (cell) // Get texture based on TextureID
                     {
