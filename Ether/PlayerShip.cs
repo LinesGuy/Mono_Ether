@@ -33,14 +33,12 @@ namespace Mono_Ether.Ether
             // Press G to toggle GodMode (for debugging purposes)
             if (Input.Keyboard.WasKeyJustDown(Keys.G))
                 GodMode = !GodMode;
-            
             // Do nothing if dead
             if (IsDead)
             {
                 framesUntilRespawn--;
                 return;
             }
-
             // Movement
             const float acceleration = 5;
             Velocity += acceleration * Input.GetMovementDirection();  // Normalised direction vector

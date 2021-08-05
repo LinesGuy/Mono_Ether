@@ -30,11 +30,17 @@ namespace Mono_Ether.Ether
             }
         }
 
-        public static int GetTile(Vector2 mapPos)
+        public static int GetTileFromMap(Vector2 mapPos)
         {
             if (mapPos.X < 0 || mapPos.X >= _size.X || mapPos.Y < 0 || mapPos.Y >= _size.Y)
                 return -1;
             return _grid[(int)mapPos.Y, (int)mapPos.X];
+        }
+
+        public static int GetTileFromWorld(Vector2 worldPos)
+        {
+            var mapPos = WorldtoMap(worldPos);
+            return GetTileFromMap(mapPos);
         }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it

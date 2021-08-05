@@ -111,9 +111,9 @@ namespace Mono_Ether.Ether
                         continue;
                     
                     // Here we check the terrain is walkable
-                    // TODO xd
-                    //if EtherRoot.MyMap.WorldToTile(nodePosition)
-    
+                    if (Map.GetTileFromWorld(nodePosition) > 0)
+                        continue;
+
                     // Create and append new node
                     Node newNode = new Node(parent: currentNode, position: nodePosition);
                     children.Add(newNode);

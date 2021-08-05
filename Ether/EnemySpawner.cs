@@ -37,9 +37,9 @@ namespace Mono_Ether.Ether
                 pos = new Vector2(_rand.NextFloat(playerPos.X - 500, playerPos.X + 500), _rand.NextFloat(playerPos.Y - 500, playerPos.Y + 500));
                 Debug.WriteLine(pos);
                 if (Vector2.DistanceSquared(pos, PlayerShip.Instance.Position) < 250 * 250) Debug.WriteLine("check one fail");
-                if (Map.GetTile(Map.WorldtoMap(pos)) > 0) Debug.WriteLine("check two fail");
+                if (Map.GetTileFromMap(Map.WorldtoMap(pos)) > 0) Debug.WriteLine("check two fail");
             }
-            while (Vector2.DistanceSquared(pos, PlayerShip.Instance.Position) < 250 * 250 || Map.GetTile(Map.WorldtoMap(pos)) > 0);
+            while (Vector2.DistanceSquared(pos, PlayerShip.Instance.Position) < 250 * 250 || Map.GetTileFromMap(Map.WorldtoMap(pos)) > 0);
 
             return pos;
         }
