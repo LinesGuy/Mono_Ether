@@ -5,6 +5,9 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input;
+using System.IO;
 
 namespace Mono_Ether.Ether
 {
@@ -12,11 +15,13 @@ namespace Mono_Ether.Ether
     {
         public Vector2 pos;
         public int TileId;
+        public int CollisionValue;
         public Boolean[] Walls = new Boolean[4];
         public Tile(Vector2 mapPos, int tileId, int collisionValue)
         {
             this.pos = mapPos;
             this.TileId = tileId;
+            this.CollisionValue = collisionValue;
             if (collisionValue >= 8)
             {
                 collisionValue -= 8;
@@ -60,9 +65,13 @@ namespace Mono_Ether.Ether
             }
             var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
             spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+            if (EtherRoot.Instance.paused)
+            {
+                // Draw collision thingies
+            }
         }
     }
-     static class Map
+    static class Map
     {
         private static Tile[,] _grid;
         private static Vector2 _size;
@@ -100,42 +109,21 @@ namespace Mono_Ether.Ether
             var mapPos = WorldtoMap(worldPos);
             return GetTileFromMap(mapPos);
         }
-
-        public static Vector2 GetValidMovement(Vector2 worldPos, Vector2 velocity)
-        {
-            return worldPos;
-        }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it
         public static Vector2 MapToScreen(Vector2 mapPos) => Camera.world_to_screen_pos(MapToWorld(mapPos));
-
-        /*public static List<Vector2> WorldToMapFourTiles(Vector2 worldPos)
-        {
-            List<Vector2> result = new List<Vector2>();
-            var topLeft = Vector2.Floor(worldPos / 64f); 
-            List<Vector2> offsets = new List<Vector2>
-            {
-                new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 0), new Vector2(1, 1)
-            };
-            foreach (var offset in offsets)
-            {
-                result.Add(topLeft + offset);
-            }
-
-            return result;
-        }*/
         public static void Draw(SpriteBatch spriteBatch)
         {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
             var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / 64f));
-            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / 64f));
+            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
             var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / 64f));
-            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
-            for (int col = startCol; col < endCol; col++)
+            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / 64f));
+            for (int row = startRow; row < endRow; row++)
             {
-                for (int row = startRow; row < endRow; row++)
+                for (int col = startCol; col < endCol; col++)
                 {
                     var cell = _grid[col, row];
                     cell.draw(spriteBatch);
@@ -145,72 +133,26 @@ namespace Mono_Ether.Ether
             var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / 64f));
             spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 128), 0f, Vector2.Zero, Camera.Zoom * 64f, 0, 0);
         }
-    }
-/*
-    public class Tiles
-    {
-        protected Texture2D Texture;
-        protected Vector2 Position;
-        protected int Size { get; set; }
 
-        public static ContentManager Content { get; set; }
-
-        public Vector2 Middle => Position + new Vector2(Size) / 2f;
-        public void Draw(SpriteBatch spriteBatch)
+        public static void Update()
         {
-            var screenPos = Camera.world_to_screen_pos(Position);
-            var scale = Camera.Zoom * Size / Texture.Width;
-            spriteBatch.Draw(Texture, screenPos, null, Color.White, 0f, Vector2.Zero, scale, 0, 0);
-            spriteBatch.Draw(Art.Pixel, screenPos, Color.White);
-        }
-    }
-    
-    public class CollisionTiles : Tiles
-    {
-        public CollisionTiles(int i, Vector2 position, int size)
-        {
-            Texture = Content.Load<Texture2D>("Textures/tiles/tile" + i);
-            this.Position = position;
-            this.Size = size;
-        }
-    }
-
-    public class Map
-    {
-        private readonly List<CollisionTiles> collisionTiles = new List<CollisionTiles>();
-        public List<CollisionTiles> CollisionTiles => collisionTiles;
-        private int width, height;
-        public int Width => width;
-        public int Height => height;
-        private static int _size;
-        public void Generate(int[,] map, int size)
-        {
-            _size = size;
-            for (int x = 0; x < map.GetLength(1); x++)
+            if (Input.Keyboard.WasKeyJustDown(Keys.R))
             {
-                for (int y = 0; y < map.GetLength(0); y++)
+                Debug.WriteLine("asdf");
+                List<string> lines = new List<string>();
+                for (int row = 0; row < _size.Y; row++)
                 {
-                    int number = map[y, x];
-                    
-                    if (number > 0)
-                        collisionTiles.Add(new CollisionTiles(number, new Vector2(x * size, y * size), size));
-                    width = (x + 1) * size;
-                    height = (y + 1) * size;
+                    string line = "";
+                    for (int col = 0; col < _size.X; col++)
+                    {
+                        var cell = _grid[col, row];
+                        line += $"{cell.TileId}/{cell.CollisionValue},";
+                    }
+                    line = line.Remove(line.Length - 1);
+                    lines.Add(line);
                 }
+                File.WriteAllLines(@"Content/TileMapData/" + "susMap3.txt", lines.ToArray());
             }
         }
-
-        public Vector2 WorldToTile(Vector2 worldPos) => Vector2.Floor(worldPos / _size);
-        public Vector2 WorldToNearestTile(Vector2 worldPos) => TileToWorld(WorldToTile(worldPos)) + new Vector2(_size) / 2f;
-        public Vector2 TileToWorld(Vector2 mapPos) =>  mapPos * _size;
-            public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (CollisionTiles tile in collisionTiles)
-                tile.Draw(spriteBatch);
-            
-            // DRAW NEAREST TILE FROM CURSOR
-            spriteBatch.Draw(Art.Wanderer, Camera.world_to_screen_pos(TileToWorld(WorldToTile(Camera.mouse_world_coords()))), null, Color.Green, 0f, Art.Wanderer.Size() / 2f, Camera.Zoom, SpriteEffects.None, 0);
-        }
     }
-    */
 }

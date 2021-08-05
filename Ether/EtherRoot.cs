@@ -8,7 +8,8 @@ namespace Mono_Ether.Ether
 {
     public class EtherRoot : GameState
     {
-        private bool paused;
+        public static EtherRoot Instance { get; private set; }
+        public bool paused;
         //public static Map MyMap;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
@@ -18,6 +19,7 @@ namespace Mono_Ether.Ether
 
         public override void Initialize()
         {
+            Instance = this;
             //MyMap = new Map();
             EntityManager.Add(PlayerShip.Instance);
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
@@ -47,6 +49,7 @@ namespace Mono_Ether.Ether
             }
             
             Camera.Update();
+            Map.Update();
             
             if (!paused)
             {
