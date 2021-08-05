@@ -15,13 +15,11 @@ namespace Mono_Ether.Ether
     {
         public Vector2 pos;
         public int TileId;
-        public int CollisionValue;
         public Boolean[] Walls = new Boolean[4];
         public Tile(Vector2 mapPos, int tileId, int collisionValue)
         {
             this.pos = mapPos;
             this.TileId = tileId;
-            this.CollisionValue = collisionValue;
             if (collisionValue >= 8)
             {
                 collisionValue -= 8;
@@ -67,7 +65,10 @@ namespace Mono_Ether.Ether
             spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
             if (EtherRoot.Instance.paused)
             {
-                // Draw collision thingies
+                if (Walls[0]) spriteBatch.Draw(Art.collisionLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[1]) spriteBatch.Draw(Art.collisionUp, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[2]) spriteBatch.Draw(Art.collisionRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[3]) spriteBatch.Draw(Art.collisionDown, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
             }
         }
     }
@@ -78,7 +79,7 @@ namespace Mono_Ether.Ether
         public static void LoadFromFile(string filename, Vector2 size)
         {
             _size = size;
-            string lines = System.IO.File.ReadAllText(@"Content/TileMapData/" + filename);
+            string lines = File.ReadAllText(@"Content/TileMapData/" + filename);
             int i = 0, j = 0;
             _grid = new Tile[(int)size.X, (int)size.Y];
             foreach (var row in lines.Split('\n'))
@@ -131,28 +132,40 @@ namespace Mono_Ether.Ether
             }
             // draw nearest tiles (debug)
             var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / 64f));
-            spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 128), 0f, Vector2.Zero, Camera.Zoom * 64f, 0, 0);
+            spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * 64f, 0, 0);
         }
 
         public static void Update()
         {
-            if (Input.Keyboard.WasKeyJustDown(Keys.R))
+            if (EtherRoot.Instance.paused)
             {
-                Debug.WriteLine("asdf");
-                List<string> lines = new List<string>();
-                for (int row = 0; row < _size.Y; row++)
+                // Press 'R' to save map
+                if (Input.Keyboard.WasKeyJustDown(Keys.R))
                 {
-                    string line = "";
-                    for (int col = 0; col < _size.X; col++)
+                    string filename = "susMap3.txt";
+                    Debug.WriteLine("Wrote to Content/TileMapData/" + filename);
+                    List<string> lines = new List<string>();
+                    for (int row = 0; row < _size.Y; row++)
                     {
-                        var cell = _grid[col, row];
-                        line += $"{cell.TileId}/{cell.CollisionValue},";
+                        string line = "";
+                        for (int col = 0; col < _size.X; col++)
+                        {
+                            var cell = _grid[col, row];
+                            var CollisionValue = 0;
+                            if (cell.Walls[0]) CollisionValue += 1;
+                            if (cell.Walls[1]) CollisionValue += 2;
+                            if (cell.Walls[2]) CollisionValue += 4;
+                            if (cell.Walls[3]) CollisionValue += 8;
+                            line += $"{cell.TileId}/{CollisionValue},";
+                        }
+                        line = line.Remove(line.Length - 1);
+                        lines.Add(line);
                     }
-                    line = line.Remove(line.Length - 1);
-                    lines.Add(line);
+                    File.WriteAllLines(@"Content/TileMapData/" + filename, lines.ToArray());
                 }
-                File.WriteAllLines(@"Content/TileMapData/" + "susMap3.txt", lines.ToArray());
+
             }
+            
         }
     }
 }

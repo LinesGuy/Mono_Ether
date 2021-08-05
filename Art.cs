@@ -37,7 +37,12 @@ namespace Mono_Ether
         public static Texture2D tileDirt { get; private set; }
         public static Texture2D tileStone { get; private set; }
         public static Texture2D tileSus { get; private set; }
-        
+        public static Texture2D collisionLeft { get; private set; }
+        public static Texture2D collisionUp { get; private set; }
+        public static Texture2D collisionRight { get; private set; }
+        public static Texture2D collisionDown { get; private set; }
+
+
 
         public static void Load(ContentManager content)
         {
@@ -64,6 +69,10 @@ namespace Mono_Ether
             tileDirt = content.Load<Texture2D>("Textures/tiles/tile2");
             tileStone = content.Load<Texture2D>("Textures/tiles/tile3");
             tileSus = content.Load<Texture2D>("Textures/tiles/tile4");
+            collisionLeft = content.Load<Texture2D>("Textures/tiles/collisionLeft");
+            collisionUp = content.Load<Texture2D>("Textures/tiles/collisionUp");
+            collisionRight = content.Load<Texture2D>("Textures/tiles/collisionRight");
+            collisionDown = content.Load<Texture2D>("Textures/tiles/collisionDown");
         }
     }
 }
