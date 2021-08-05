@@ -8,22 +8,79 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Mono_Ether.Ether
 {
+    public class Tile
+    {
+        public Vector2 pos;
+        public int TileId;
+        public Boolean[] Walls = new Boolean[4];
+        public Tile(Vector2 mapPos, int tileId, int collisionValue)
+        {
+            this.pos = mapPos;
+            this.TileId = tileId;
+            if (collisionValue >= 8)
+            {
+                collisionValue -= 8;
+                Walls[3] = true;
+            }
+            if (collisionValue >= 4)
+            {
+                collisionValue -= 4;
+                Walls[2] = true;
+            }
+            if (collisionValue >= 2)
+            {
+                collisionValue -= 2;
+                Walls[1] = true;
+            }
+            if (collisionValue >= 1)
+            {
+                Walls[0] = true;
+            }
+        }
+
+        public void draw(SpriteBatch spriteBatch)
+        {
+            Texture2D texture;
+            switch (TileId) // Get texture based on TextureID
+            {
+                case 1:
+                    texture = Art.tileGrass;
+                    break;
+                case 2:
+                    texture = Art.tileDirt;
+                    break;
+                case 3:
+                    texture = Art.tileStone;
+                    break;
+                case 4:
+                    texture = Art.tileSus;
+                    break;
+                default:
+                    return;
+            }
+            var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
+            spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+        }
+    }
      static class Map
     {
-        private static int[,] _grid;
+        private static Tile[,] _grid;
         private static Vector2 _size;
         public static void LoadFromFile(string filename, Vector2 size)
         {
             _size = size;
             string lines = System.IO.File.ReadAllText(@"Content/TileMapData/" + filename);
             int i = 0, j = 0;
-            _grid = new int[(int)size.X, (int)size.Y];
+            _grid = new Tile[(int)size.X, (int)size.Y];
             foreach (var row in lines.Split('\n'))
             {
                 j = 0;
                 foreach (var col in row.Trim().Split(','))
                 {
-                    _grid[i, j] = int.Parse(col.Trim());
+                    var tileData = col.Split('/');
+                    var id = int.Parse(tileData[0]);
+                    var collisionValue = int.Parse(tileData[1]);
+                    _grid[j, i] = new Tile(new Vector2(j, i), id, collisionValue);
                     j++;
                 }
                 i++;
@@ -32,9 +89,10 @@ namespace Mono_Ether.Ether
 
         public static int GetTileFromMap(Vector2 mapPos)
         {
-            if (mapPos.X < 0 || mapPos.X >= _size.X || mapPos.Y < 0 || mapPos.Y >= _size.Y)
+            var (x, y) = mapPos;
+            if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
                 return -1;
-            return _grid[(int)mapPos.Y, (int)mapPos.X];
+            return _grid[(int)x, (int)y].TileId;
         }
 
         public static int GetTileFromWorld(Vector2 worldPos)
@@ -42,11 +100,16 @@ namespace Mono_Ether.Ether
             var mapPos = WorldtoMap(worldPos);
             return GetTileFromMap(mapPos);
         }
+
+        public static Vector2 GetValidMovement(Vector2 worldPos, Vector2 velocity)
+        {
+            return worldPos;
+        }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it
         public static Vector2 MapToScreen(Vector2 mapPos) => Camera.world_to_screen_pos(MapToWorld(mapPos));
 
-        public static List<Vector2> WorldToMapFourTiles(Vector2 worldPos)
+        /*public static List<Vector2> WorldToMapFourTiles(Vector2 worldPos)
         {
             List<Vector2> result = new List<Vector2>();
             var topLeft = Vector2.Floor(worldPos / 64f); 
@@ -60,49 +123,27 @@ namespace Mono_Ether.Ether
             }
 
             return result;
-        }
+        }*/
         public static void Draw(SpriteBatch spriteBatch)
         {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
-            var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / 64f));
+            var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / 64f));
             var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / 64f));
-            var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / 64f));
-            var endRow = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
+            var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / 64f));
+            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
             for (int col = startCol; col < endCol; col++)
             {
                 for (int row = startRow; row < endRow; row++)
                 {
                     var cell = _grid[col, row];
-                    Texture2D texture;
-                    switch (cell) // Get texture based on TextureID
-                    {
-                        case 1:
-                            texture = Art.tileGrass;
-                            break;
-                        case 2:
-                            texture = Art.tileDirt;
-                            break;
-                        case 3:
-                            texture = Art.tileStone;
-                            break;
-                        case 4:
-                            texture = Art.tileSus;
-                            break;
-                        default:
-                            continue;
-                    }
-                    var position = MapToScreen(new Vector2(row, col));
-                    spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                    cell.draw(spriteBatch);
                 }
             }
             // draw nearest tiles (debug)
-            foreach (var tileCoords in WorldToMapFourTiles(Camera.mouse_world_coords()))
-            {
-                var screenCoords = MapToScreen(tileCoords);
-                spriteBatch.Draw(Art.Pixel, screenCoords, null, Color.Red, 0f, Vector2.Zero, Camera.Zoom * 5f, 0, 0);
-            }
+            var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / 64f));
+            spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 128), 0f, Vector2.Zero, Camera.Zoom * 64f, 0, 0);
         }
     }
 /*

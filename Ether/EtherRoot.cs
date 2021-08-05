@@ -28,7 +28,8 @@ namespace Mono_Ether.Ether
             //Art.Load(content);
             //Tiles.Content = content;
 
-            Map.LoadFromFile("susMap.txt", new Vector2(12, 12));
+            //Map.LoadFromFile("susMap.txt", new Vector2(12, 12));
+            Map.LoadFromFile("susMap2.txt", new Vector2(3, 2));
             //MyMap.LoadFromFile("bigMap.txt", new Vector2(256, 256));
         }
 

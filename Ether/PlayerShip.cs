@@ -44,7 +44,6 @@ namespace Mono_Ether.Ether
             Velocity += acceleration * Input.GetMovementDirection();  // Normalised direction vector
             Velocity = Velocity / 1.5f;  // Friction
             Position += Velocity;
-            // Position = Vector2.Clamp(Position, Size / 2, GameRoot.ScreenSize - Size / 2);
             // Change orientation if velocity is non-zero:
             if (Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();

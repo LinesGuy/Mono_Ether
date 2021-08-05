@@ -81,8 +81,14 @@ namespace Mono_Ether.Ether
                         Orientation = Velocity.ToAngle();
                     yield return 0;
                 }
-                else // else, use AStar to move towards the player
+                else if (Map.GetTileFromWorld(PlayerShip.Instance.Position) > 0)
                 {
+                    // Player is on a solid tile, A* will fail so do nothing.
+                    yield return 0;
+                }
+                else 
+                {
+                    // Use A* to move towards the player
                     var path = MyAStar.AStar(Position, PlayerShip.Instance.Position);
                     // Instead of calculating a new path every frame or whatever, we will calculate a new path
                     // based on how far the enemy is from the player:
