@@ -110,6 +110,14 @@ namespace Mono_Ether.Ether
             var mapPos = WorldtoMap(worldPos);
             return GetTileFromMap(mapPos);
         }
+
+        public static void SetTileId(Vector2 mapPos, int id)
+        {
+            var (x, y) = mapPos;
+            if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
+                return;
+            _grid[(int)x, (int)y].TileId = id;
+        }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it
         public static Vector2 MapToScreen(Vector2 mapPos) => Camera.world_to_screen_pos(MapToWorld(mapPos));
@@ -139,6 +147,7 @@ namespace Mono_Ether.Ether
         {
             if (EtherRoot.Instance.paused)
             {
+                // Paused = map editor mode
                 // Press 'R' to save map
                 if (Input.Keyboard.WasKeyJustDown(Keys.R))
                 {
@@ -164,6 +173,8 @@ namespace Mono_Ether.Ether
                     File.WriteAllLines(@"Content/TileMapData/" + filename, lines.ToArray());
                 }
 
+                if (Input.Keyboard.WasKeyJustDown(Keys.D1))
+                    SetTileId(WorldtoMap(Camera.mouse_world_coords()), 1);
             }
             
         }
