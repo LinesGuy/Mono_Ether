@@ -82,30 +82,33 @@ namespace Mono_Ether.Ether
             }
 
             // Shoot
-            var aim = Camera.GetAimDirection();
-            if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
+            if (!EtherRoot.Instance.editorMode)
             {
-                // Play player_shoot SFX
-                Art.PlayerShoot.CreateInstance().Play();
-                cooldownRemaining = CooldownFrames;
-                var aimangle = aim.ToAngle();
-                const int bulletCount = 3; 
-                for (var i = 0; i < bulletCount; i++)
+                var aim = Camera.GetAimDirection();
+                if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
                 {
-                    var randomSpread = Rand.NextFloat(-0.04f, 0.04f) + Rand.NextFloat(-0.04f, 0.04f);
-                    var offsetAngle = aimangle + MathUtil.Interpolate(-.2f, .2f, i / (bulletCount - 0.999f));
-                    var offset = MathUtil.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
-                    var vel = MathUtil.FromPolar(aimangle + randomSpread, 18f);
-                    EntityManager.Add(new Bullet(Position + offset, vel));
+                    // Play player_shoot SFX
+                    Art.PlayerShoot.CreateInstance().Play();
+                    cooldownRemaining = CooldownFrames;
+                    var aimangle = aim.ToAngle();
+                    const int bulletCount = 3;
+                    for (var i = 0; i < bulletCount; i++)
+                    {
+                        var randomSpread = Rand.NextFloat(-0.04f, 0.04f) + Rand.NextFloat(-0.04f, 0.04f);
+                        var offsetAngle = aimangle + MathUtil.Interpolate(-.2f, .2f, i / (bulletCount - 0.999f));
+                        var offset = MathUtil.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
+                        var vel = MathUtil.FromPolar(aimangle + randomSpread, 18f);
+                        EntityManager.Add(new Bullet(Position + offset, vel));
+                    }
                 }
-            }
 
-            if (cooldownRemaining > 0)
-                cooldownRemaining--;
+                if (cooldownRemaining > 0)
+                    cooldownRemaining--;
 
-            if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
-            {
-                EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));
+                if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
+                {
+                    EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));
+                }
             }
         }
 

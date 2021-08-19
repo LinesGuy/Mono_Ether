@@ -1,6 +1,6 @@
 ﻿namespace Mono_Ether.Ether
 {
-    public class PauseMenu
+    public static class PauseMenu
     {
         
     }

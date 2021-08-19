@@ -8,10 +8,10 @@ namespace Mono_Ether.Ether
     {
         static Random _rand = new Random();
         static float _inverseSpawnChance = 60;
-        static bool _enabled = true;
+        public static bool enabled = true;
         public static void Update()
         {
-            if (!_enabled)
+            if (!enabled)
                 return;
 
             if (!PlayerShip.Instance.IsDead && EntityManager.Count < 200)

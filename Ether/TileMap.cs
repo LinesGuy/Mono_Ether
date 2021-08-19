@@ -138,9 +138,13 @@ namespace Mono_Ether.Ether
                     cell.draw(spriteBatch);
                 }
             }
-            // draw nearest tiles (debug)
-            var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / 64f));
-            spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * 64f, 0, 0);
+            // Draw tile cursor is in if in editor mode
+            if (EtherRoot.Instance.editorMode)
+            {
+                var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / 64f));
+                spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * 64f, 0, 0);
+            }
+            
         }
 
         public static void Update()
