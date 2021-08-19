@@ -8,7 +8,7 @@ namespace Mono_Ether.Ether
     {
         static Random _rand = new Random();
         static float _inverseSpawnChance = 60;
-        public static bool enabled = true;
+        public static bool enabled = false; // DISABLED BY DEFAULT FOR DEBUGGING
         public static void Update()
         {
             if (!enabled)

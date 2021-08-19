@@ -111,12 +111,18 @@ namespace Mono_Ether.Ether
             return GetTileFromMap(mapPos);
         }
 
-        public static void SetTileId(Vector2 mapPos, int id)
+        public static void SetTile(Vector2 mapPos, int id = -1, int collisionValue = -1)
         {
             var (x, y) = mapPos;
             if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
                 return;
-            _grid[(int)x, (int)y].TileId = id;
+            if (id != -1)
+                _grid[(int)x, (int)y].TileId = id;
+            if (collisionValue != -1)
+            {
+                var oldTile = _grid[(int)x, (int)y];
+                _grid[(int)x, (int)y] = new Tile(oldTile.pos, oldTile.TileId, collisionValue);
+            }
         }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it
@@ -149,7 +155,7 @@ namespace Mono_Ether.Ether
 
         public static void Update()
         {
-            if (EtherRoot.Instance.paused)
+            if (EtherRoot.Instance.editorMode)
             {
                 // Paused = map editor mode
                 // Press 'R' to save map
@@ -178,7 +184,13 @@ namespace Mono_Ether.Ether
                 }
 
                 if (Input.Keyboard.WasKeyJustDown(Keys.D1))
-                    SetTileId(WorldtoMap(Camera.mouse_world_coords()), 1);
+                    SetTile(WorldtoMap(Camera.mouse_world_coords()), 1);
+                else if (Input.Keyboard.WasKeyJustDown(Keys.D2))
+                    SetTile(WorldtoMap(Camera.mouse_world_coords()), 2);
+                else if(Input.Keyboard.WasKeyJustDown(Keys.D3))
+                    SetTile(WorldtoMap(Camera.mouse_world_coords()), 3);
+                else if (Input.Keyboard.WasKeyJustDown(Keys.D4))
+                    SetTile(WorldtoMap(Camera.mouse_world_coords()), 4);
             }
             
         }

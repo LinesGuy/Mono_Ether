@@ -10,7 +10,7 @@ namespace Mono_Ether.Ether
     {
         public static EtherRoot Instance { get; private set; }
         public bool paused;
-        public bool editorMode;
+        public bool editorMode = true; // ENABLED BY DEFAULT FOR DEBUG
         //public static Map MyMap;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
