@@ -23,6 +23,7 @@ namespace Mono_Ether.Ether
             //MyMap = new Map();
             EntityManager.Add(PlayerShip.Instance);
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
+            Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = 0.1f;
         }
 
         public override void LoadContent(ContentManager content)
