@@ -63,7 +63,7 @@ namespace Mono_Ether.Ether
             }
             var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
             spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-            if (EtherRoot.Instance.paused)
+            if (EtherRoot.Instance.editorMode)
             {
                 if (Walls[0]) spriteBatch.Draw(Art.collisionLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
                 if (Walls[1]) spriteBatch.Draw(Art.collisionUp, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
@@ -117,6 +117,13 @@ namespace Mono_Ether.Ether
             if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
                 return;
             _grid[(int)x, (int)y].TileId = id;
+        }
+        public static void ToggleCellWall(Vector2 mapPos, int wallId)
+        {
+            var (x, y) = mapPos;
+            if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
+                return;
+            _grid[(int)x, (int)y].Walls[wallId] = !_grid[(int)x, (int)y].Walls[wallId];
         }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it
@@ -181,13 +188,19 @@ namespace Mono_Ether.Ether
                     SetTile(tileCoords, 1);
                 else if (Input.Keyboard.WasKeyJustDown(Keys.D2))
                     SetTile(tileCoords, 2);
-                else if(Input.Keyboard.WasKeyJustDown(Keys.D3))
+                else if (Input.Keyboard.WasKeyJustDown(Keys.D3))
                     SetTile(tileCoords, 3);
                 else if (Input.Keyboard.WasKeyJustDown(Keys.D4))
                     SetTile(tileCoords, 4);
                 // Toggle cell walls
-                /*else if (Input.Keyboard.WasKeyJustDown(Keys.I))
-                    SetTile(tileCoords, -1, );*/
+                else if (Input.Keyboard.WasKeyJustDown(Keys.J)) // Left
+                    ToggleCellWall(tileCoords, 0);
+                else if (Input.Keyboard.WasKeyJustDown(Keys.I)) // Up
+                    ToggleCellWall(tileCoords, 1);
+                else if (Input.Keyboard.WasKeyJustDown(Keys.L)) // Right
+                    ToggleCellWall(tileCoords, 2);
+                else if (Input.Keyboard.WasKeyJustDown(Keys.K)) // Down
+                    ToggleCellWall(tileCoords, 3);
             }
             
         }
