@@ -129,8 +129,9 @@ namespace Mono_Ether.Ether
                     bool appendChild = true;
                     // Child is already in the open list
                     index = 0;
-                    foreach (Node node in openList)
+                    for (int i = 0; i < openList.Count; i++)
                     {
+                        Node node = openList[i];
                         if (child.Position == node.Position)
                         {
                             appendChild = false;

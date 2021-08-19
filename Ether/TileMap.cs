@@ -184,14 +184,16 @@ namespace Mono_Ether.Ether
                 }
                 var tileCoords = WorldtoMap(Camera.mouse_world_coords());
                 // Set Tile ID
-                if (Input.Keyboard.WasKeyJustDown(Keys.D1))
+                if (Input.Keyboard.IsKeyDown(Keys.D1))
                     SetTile(tileCoords, 1);
-                else if (Input.Keyboard.WasKeyJustDown(Keys.D2))
+                else if (Input.Keyboard.IsKeyDown(Keys.D2))
                     SetTile(tileCoords, 2);
-                else if (Input.Keyboard.WasKeyJustDown(Keys.D3))
+                else if (Input.Keyboard.IsKeyDown(Keys.D3))
                     SetTile(tileCoords, 3);
-                else if (Input.Keyboard.WasKeyJustDown(Keys.D4))
+                else if (Input.Keyboard.IsKeyDown(Keys.D4))
                     SetTile(tileCoords, 4);
+                else if (Input.Keyboard.IsKeyDown(Keys.D0))
+                    SetTile(tileCoords, 0);
                 // Toggle cell walls
                 else if (Input.Keyboard.WasKeyJustDown(Keys.J)) // Left
                     ToggleCellWall(tileCoords, 0);
