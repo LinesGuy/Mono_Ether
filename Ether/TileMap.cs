@@ -74,8 +74,10 @@ namespace Mono_Ether.Ether
     }
     static class Map
     {
+        public const float cellSize = 64f;
         private static Tile[,] _grid;
-        private static Vector2 _size;
+        public static Vector2 _size;
+        private static int SelectedId = 1; // Currently selected Tile ID for editor mode
         public static void LoadFromFile(string filename, Vector2 size)
         {
             _size = size;
@@ -84,6 +86,7 @@ namespace Mono_Ether.Ether
             _grid = new Tile[(int)size.X, (int)size.Y];
             foreach (var row in lines.Split('\n'))
             {
+                if (row.Length == 0) continue;
                 j = 0;
                 foreach (var col in row.Trim().Split(','))
                 {
@@ -125,18 +128,18 @@ namespace Mono_Ether.Ether
                 return;
             _grid[(int)x, (int)y].Walls[wallId] = !_grid[(int)x, (int)y].Walls[wallId];
         }
-        public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / 64f);
-        public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * 64; //TODO: get texture size and replace this with it
+        public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / cellSize);
+        public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * cellSize;
         public static Vector2 MapToScreen(Vector2 mapPos) => Camera.world_to_screen_pos(MapToWorld(mapPos));
         public static void Draw(SpriteBatch spriteBatch)
         {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
-            var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / 64f));
-            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / 64f));
-            var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / 64f));
-            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / 64f));
+            var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / cellSize));
+            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / cellSize));
+            var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / cellSize));
+            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / cellSize));
             for (int row = startRow; row < endRow; row++)
             {
                 for (int col = startCol; col < endCol; col++)
@@ -148,8 +151,8 @@ namespace Mono_Ether.Ether
             // Draw tile cursor is in if in editor mode
             if (EtherRoot.Instance.editorMode)
             {
-                var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / 64f));
-                spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * 64f, 0, 0);
+                var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / cellSize));
+                spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
             }
             
         }
@@ -185,17 +188,18 @@ namespace Mono_Ether.Ether
                 var tileCoords = WorldtoMap(Camera.mouse_world_coords());
                 // Set Tile ID
                 if (Input.Keyboard.IsKeyDown(Keys.D1))
-                    SetTile(tileCoords, 1);
+                    SelectedId = 1;
+                    
                 else if (Input.Keyboard.IsKeyDown(Keys.D2))
-                    SetTile(tileCoords, 2);
+                    SelectedId = 2;
                 else if (Input.Keyboard.IsKeyDown(Keys.D3))
-                    SetTile(tileCoords, 3);
+                    SelectedId = 3;
                 else if (Input.Keyboard.IsKeyDown(Keys.D4))
-                    SetTile(tileCoords, 4);
+                    SelectedId = 4;
                 else if (Input.Keyboard.IsKeyDown(Keys.D0))
-                    SetTile(tileCoords, 0);
+                    SelectedId = 0;
                 // Toggle cell walls
-                else if (Input.Keyboard.WasKeyJustDown(Keys.J)) // Left
+                if (Input.Keyboard.WasKeyJustDown(Keys.J)) // Left
                     ToggleCellWall(tileCoords, 0);
                 else if (Input.Keyboard.WasKeyJustDown(Keys.I)) // Up
                     ToggleCellWall(tileCoords, 1);
@@ -203,8 +207,12 @@ namespace Mono_Ether.Ether
                     ToggleCellWall(tileCoords, 2);
                 else if (Input.Keyboard.WasKeyJustDown(Keys.K)) // Down
                     ToggleCellWall(tileCoords, 3);
+
+                if (Input.Mouse.IsButtonDown(MouseButton.Left)) // Place last placed tile ID at cursor
+                    SetTile(tileCoords, SelectedId);
+                if (Input.Mouse.IsButtonDown(MouseButton.Right)) // Delete tile at cursor
+                    SetTile(tileCoords, 0);
             }
-            
         }
     }
 }
