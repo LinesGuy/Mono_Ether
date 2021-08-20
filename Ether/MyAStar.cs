@@ -25,11 +25,10 @@ namespace Mono_Ether.Ether
     }
     public static class MyAStar
     {
-        public const int CellSize = 50;
+        public const float CellSize = Map.cellSize;
 
         public static List<Vector2> AStar(Vector2 start, Vector2 end)
         {
-            //start = EtherRoot.MyMap.WorldToNearestTile(start);
             List<Node> openList = new List<Node> { new Node(position: start) };
             Node endNode = new Node(position: end);
             List<Node> closedList = new List<Node>();
@@ -38,8 +37,16 @@ namespace Mono_Ether.Ether
             while (openList.Count > 0)
             {
                 iterations += 1;
-                if (iterations % 300 == 0)
+                if (iterations % 50 == 0)
+                {
                     Debug.WriteLine($"Current iterations: {iterations}");
+                }
+                    
+                if (iterations >= 250)
+                {
+                    Debug.WriteLine("250 ITERATIONS, ENDING EARLY");
+                    return null;
+                }    
                 
                 // Get current node
                 Node currentNode = openList[0];
@@ -59,7 +66,6 @@ namespace Mono_Ether.Ether
                 closedList.Add(currentNode);
                 
                 // Check if found goal
-                //if (currentNode.Position == endNode.Position)
                 List<Vector2> path = new List<Vector2> {endNode.Position};
                 if (Vector2.DistanceSquared(currentNode.Position, endNode.Position) <= (CellSize * 1.5f) * (CellSize * 1.5f))
                 {
@@ -146,7 +152,7 @@ namespace Mono_Ether.Ether
                         openList.Add(child);
                 }
             }
-            Debug.WriteLine("ENDING EARLY");
+            Debug.WriteLine("NO PATH FOUND ENDING EARLY");
             return null;
         }
         

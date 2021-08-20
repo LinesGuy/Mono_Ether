@@ -99,6 +99,11 @@ namespace Mono_Ether.Ether
                     // TODO implement the above
                     for (int i = 0; i < 60; i++)
                     {
+                        if (path is null)
+                        {
+                            yield return 0;
+                            continue;
+                        }
                         // If enemy is at current target position, update target position
                         if (Vector2.DistanceSquared(Position, path[0]) <= MyAStar.CellSize * MyAStar.CellSize)
                             path.RemoveAt(0);
