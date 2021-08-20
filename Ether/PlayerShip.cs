@@ -12,12 +12,14 @@ namespace Mono_Ether.Ether
         private static PlayerShip _instance;
         public static PlayerShip Instance => _instance ??= new PlayerShip();
         public bool GodMode = false;  // If true, player can't die
+        public int lives;
         private PlayerShip()
         {
             Image = Art.Player;
             // Position = GameRoot.ScreenSize / 2;
             Position = new Vector2(0, 0);
             Radius = 10;
+            lives = 3;
         }
 
         const int CooldownFrames = 6;
