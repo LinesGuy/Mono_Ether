@@ -81,7 +81,7 @@ namespace Mono_Ether.Ether
                         Orientation = Velocity.ToAngle();
                     yield return 0;
                 }
-                else if (Map.GetTileFromWorld(PlayerShip.Instance.Position) > 0)
+                else if (Map.GetTileFromWorld(PlayerShip.Instance.Position).TileId > 0)
                 {
                     // Player is on a solid tile, A* will fail so do nothing.
                     yield return 0;
@@ -170,6 +170,10 @@ namespace Mono_Ether.Ether
             var delta = Position - other.Position;
             Velocity += 10 * delta / (delta.LengthSquared() + 1);
             // ^ Push current enemy away from other enemy. The closer they are, the harder the push.
+        }
+        public void HandleTilemapCollision()
+        {
+
         }
     }
 }

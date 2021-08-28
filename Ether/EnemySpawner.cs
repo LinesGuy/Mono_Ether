@@ -46,7 +46,7 @@ namespace Mono_Ether.Ether
                 remainingAttempts -= 1;
             }
             while ((Vector2.DistanceSquared(pos, PlayerShip.Instance.Position) < 250 * 250
-                   || Map.GetTileFromMap(Map.WorldtoMap(pos)) > 0
+                   || Map.GetTileFromMap(Map.WorldtoMap(pos)).TileId > 0
                    || pos.X < 0 || pos.Y < 0 || pos.X > Map._size.X * Map.cellSize || pos.Y > Map._size.Y * Map.cellSize)
                    && remainingAttempts > 0);
             if (remainingAttempts == 0)

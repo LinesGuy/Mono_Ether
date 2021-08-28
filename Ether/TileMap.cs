@@ -100,15 +100,15 @@ namespace Mono_Ether.Ether
             }
         }
 
-        public static int GetTileFromMap(Vector2 mapPos)
+        public static Tile GetTileFromMap(Vector2 mapPos)
         {
             var (x, y) = mapPos;
             if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
-                return -1;
-            return _grid[(int)x, (int)y].TileId;
+                return new Tile(Vector2.Zero, -1, 0);
+            return _grid[(int)x, (int)y];
         }
 
-        public static int GetTileFromWorld(Vector2 worldPos)
+        public static Tile GetTileFromWorld(Vector2 worldPos)
         {
             var mapPos = WorldtoMap(worldPos);
             return GetTileFromMap(mapPos);

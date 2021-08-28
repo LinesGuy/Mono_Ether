@@ -93,7 +93,7 @@ namespace Mono_Ether.Ether
             spriteBatch.DrawString(Art.DebugFont, "Cursor world pos: " + Camera.mouse_world_coords().ToString(), new Vector2(0, 60), Color.White);
             if (editorMode) 
                 spriteBatch.DrawString(Art.DebugFont, "EDITOR MODE", new Vector2(0, 90), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "TILE: " + Map.GetTileFromMap(Map.WorldtoMap(Camera.mouse_world_coords())), new Vector2(0, 120), Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "TILE: " + Map.GetTileFromMap(Map.WorldtoMap(Camera.mouse_world_coords())).TileId, new Vector2(0, 120), Color.White);
             spriteBatch.End();
         }
     }

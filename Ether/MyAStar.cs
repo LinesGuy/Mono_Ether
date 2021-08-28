@@ -117,7 +117,7 @@ namespace Mono_Ether.Ether
                         continue;
                     
                     // Here we check the terrain is walkable
-                    if (Map.GetTileFromWorld(nodePosition) > 0)
+                    if (Map.GetTileFromWorld(nodePosition).TileId > 0)
                         continue;
 
                     // Create and append new node
