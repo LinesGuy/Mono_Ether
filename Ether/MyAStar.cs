@@ -29,6 +29,8 @@ namespace Mono_Ether.Ether
 
         public static List<Vector2> AStar(Vector2 start, Vector2 end)
         {
+            start = new Vector2((int)(start.X / Map.cellSize) * Map.cellSize + Map.cellSize / 2f, (int)(start.Y / Map.cellSize) * Map.cellSize + Map.cellSize / 2f);
+
             List<Node> openList = new List<Node> { new Node(position: start) };
             Node endNode = new Node(position: end);
             List<Node> closedList = new List<Node>();

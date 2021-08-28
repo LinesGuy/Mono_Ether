@@ -73,7 +73,7 @@ namespace Mono_Ether.Ether
         {
             while (true)
             {
-                // If enemy is with Map.cellSize units (e.g 25 units) from the player, move straight towards the player
+                // If enemy is with Map.cellSize units from the player, move straight towards the player
                 if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) <= MyAStar.CellSize * MyAStar.CellSize)
                 {
                     Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
@@ -105,7 +105,7 @@ namespace Mono_Ether.Ether
                             continue;
                         }
                         // If enemy is at current target position, update target position
-                        if (Vector2.DistanceSquared(Position, path[0]) <= MyAStar.CellSize * MyAStar.CellSize)
+                        if (Vector2.DistanceSquared(Position, path[0]) <= Math.Pow(MyAStar.CellSize * 0.8f, 2))
                             path.RemoveAt(0);
                         // If path is empty, make a new path
                         if (path.Count <= 0)
@@ -170,10 +170,6 @@ namespace Mono_Ether.Ether
             var delta = Position - other.Position;
             Velocity += 10 * delta / (delta.LengthSquared() + 1);
             // ^ Push current enemy away from other enemy. The closer they are, the harder the push.
-        }
-        public void HandleTilemapCollision()
-        {
-
         }
     }
 }

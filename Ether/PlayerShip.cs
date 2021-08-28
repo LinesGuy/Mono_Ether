@@ -49,7 +49,9 @@ namespace Mono_Ether.Ether
             // Change orientation if velocity is non-zero:
             if (Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
-            
+
+            HandleTilemapCollision();
+
             // Exhaust fire
             if (Velocity.LengthSquared() > 0.1f)
             {

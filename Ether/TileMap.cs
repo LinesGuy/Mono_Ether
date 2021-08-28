@@ -15,30 +15,11 @@ namespace Mono_Ether.Ether
     {
         public Vector2 pos;
         public int TileId;
-        public Boolean[] Walls = new Boolean[4];
-        public Tile(Vector2 mapPos, int tileId, int collisionValue)
+        public Boolean[] Walls = new Boolean[8];
+        public Tile(Vector2 mapPos, int tileId)
         {
             this.pos = mapPos;
             this.TileId = tileId;
-            if (collisionValue >= 8)
-            {
-                collisionValue -= 8;
-                Walls[3] = true;
-            }
-            if (collisionValue >= 4)
-            {
-                collisionValue -= 4;
-                Walls[2] = true;
-            }
-            if (collisionValue >= 2)
-            {
-                collisionValue -= 2;
-                Walls[1] = true;
-            }
-            if (collisionValue >= 1)
-            {
-                Walls[0] = true;
-            }
         }
 
         public void draw(SpriteBatch spriteBatch)
@@ -71,6 +52,15 @@ namespace Mono_Ether.Ether
                 if (Walls[3]) spriteBatch.Draw(Art.collisionDown, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
             }
         }
+
+        public Vector2 TopLeft { get => pos * Map.cellSize; }
+        public Vector2 Top { get => new Vector2(TopLeft.X + Map.cellSize / 2f, TopLeft.Y); }
+        public Vector2 TopRight { get => new Vector2(TopLeft.X + Map.cellSize, TopLeft.Y); }
+        public Vector2 Right { get => new Vector2(TopLeft.X + Map.cellSize, TopLeft.Y + Map.cellSize / 2f); }
+        public Vector2 BottomRight { get => new Vector2(TopLeft.X + Map.cellSize, TopLeft.Y + Map.cellSize); }
+        public Vector2 Bottom { get => new Vector2(TopLeft.X + Map.cellSize / 2f, TopLeft.Y + Map.cellSize); }
+        public Vector2 BottomLeft { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize); }
+        public Vector2 Left { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize / 2f); }
     }
     static class Map
     {
@@ -90,13 +80,34 @@ namespace Mono_Ether.Ether
                 j = 0;
                 foreach (var col in row.Trim().Split(','))
                 {
-                    var tileData = col.Split('/');
-                    var id = int.Parse(tileData[0]);
-                    var collisionValue = int.Parse(tileData[1]);
-                    _grid[j, i] = new Tile(new Vector2(j, i), id, collisionValue);
+                    //var tileData = col.Split('/');
+                    //var id = int.Parse(tileData[0]);
+                    //var collisionValue = int.Parse(tileData[1]);
+                    var id = int.Parse(col);
+                    _grid[j, i] = new Tile(new Vector2(j, i), id);
                     j++;
                 }
                 i++;
+            }
+            // Create collision data
+            foreach (var tile in _grid)
+            {
+                if (Map.GetTileFromMap(new Vector2(tile.pos.X - 1, tile.pos.Y)).TileId <= 0)
+                    tile.Walls[0] = true; // Left
+                if (Map.GetTileFromMap(new Vector2(tile.pos.X, tile.pos.Y - 1)).TileId <= 0)
+                    tile.Walls[1] = true; // Top
+                if (Map.GetTileFromMap(new Vector2(tile.pos.X + 1, tile.pos.Y)).TileId <= 0)
+                    tile.Walls[2] = true; // Right
+                if (Map.GetTileFromMap(new Vector2(tile.pos.X, tile.pos.Y + 1)).TileId <= 0)
+                    tile.Walls[3] = true; // Down
+                if (!tile.Walls[0] && !tile.Walls[1])
+                    tile.Walls[4] = true; // Top left
+                if (!tile.Walls[1] && !tile.Walls[2])
+                    tile.Walls[5] = true; // Top right
+                if (!tile.Walls[2] && !tile.Walls[3])
+                    tile.Walls[6] = true; // Bottom right
+                if (!tile.Walls[3] && !tile.Walls[0])
+                    tile.Walls[7] = true; // Bottom left
             }
         }
 
@@ -104,7 +115,7 @@ namespace Mono_Ether.Ether
         {
             var (x, y) = mapPos;
             if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
-                return new Tile(Vector2.Zero, -1, 0);
+                return new Tile(Vector2.Zero, -1);
             return _grid[(int)x, (int)y];
         }
 
@@ -173,12 +184,7 @@ namespace Mono_Ether.Ether
                         for (int col = 0; col < _size.X; col++)
                         {
                             var cell = _grid[col, row];
-                            var CollisionValue = 0;
-                            if (cell.Walls[0]) CollisionValue += 1;
-                            if (cell.Walls[1]) CollisionValue += 2;
-                            if (cell.Walls[2]) CollisionValue += 4;
-                            if (cell.Walls[3]) CollisionValue += 8;
-                            line += $"{cell.TileId}/{CollisionValue},";
+                            line += $"{cell.TileId},";
                         }
                         line = line.Remove(line.Length - 1);
                         lines.Add(line);
