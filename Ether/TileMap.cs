@@ -68,6 +68,9 @@ namespace Mono_Ether.Ether
 
         public void updateWalls()
         {
+            Walls = new Boolean[8]; // Set all walls to False (temp)
+            System.Diagnostics.Debug.WriteLine(pos.ToString());
+            // Update wall values based on surrounding tiles
             if (Map.GetTileFromMap(new Vector2(pos.X - 1, pos.Y)).TileId <= 0)
                 Walls[0] = true; // Left
             if (Map.GetTileFromMap(new Vector2(pos.X, pos.Y - 1)).TileId <= 0)
@@ -85,16 +88,34 @@ namespace Mono_Ether.Ether
             if (!Walls[3] && !Walls[0])
                 Walls[7] = true; // Bottom left
         }
+        public void updateNeighbouringWalls()
+        {
+            // Updates this tile's walls and all 8 surrounding tile's walls
+            List<Vector2> offsets = new List<Vector2>
+            {
+                new Vector2(-1, -1), new Vector2(0, -1), new Vector2(1, -1),
+                new Vector2(-1,  0), new Vector2(0,  0), new Vector2(1,  0),
+                new Vector2(-1,  1), new Vector2(0,  1), new Vector2(1,  1)
+            };
+            foreach (var offset in offsets)
+            {
+                Vector2 offsetPos = pos + offset;
+                if (offsetPos.X < 0 || offsetPos.Y < 0 || offsetPos.X >= Map._size.X || offsetPos.Y >= Map._size.Y)
+                    continue;
+                Map._grid[(int)offsetPos.X, (int)offsetPos.Y].updateWalls();
+            }
+        }
     }
     static class Map
     {
         public const float cellSize = 64f;
-        private static Tile[,] _grid;
+        public static Tile[,] _grid;
         public static Vector2 _size;
         private static int SelectedId = 1; // Currently selected Tile ID for editor mode
         public static void LoadFromFile(string filename, Vector2 size)
         {
             _size = size;
+            // Load TileId's from TileMapData to _grid
             string lines = File.ReadAllText(@"Content/TileMapData/" + filename);
             int i = 0, j = 0;
             _grid = new Tile[(int)size.X, (int)size.Y];
@@ -104,16 +125,13 @@ namespace Mono_Ether.Ether
                 j = 0;
                 foreach (var col in row.Trim().Split(','))
                 {
-                    //var tileData = col.Split('/');
-                    //var id = int.Parse(tileData[0]);
-                    //var collisionValue = int.Parse(tileData[1]);
                     var id = int.Parse(col);
                     _grid[j, i] = new Tile(new Vector2(j, i), id);
                     j++;
                 }
                 i++;
             }
-            // Create collision data
+            // Create tile collision data
             foreach (var tile in _grid)
             {
                 tile.updateWalls();
@@ -132,21 +150,6 @@ namespace Mono_Ether.Ether
         {
             var mapPos = WorldtoMap(worldPos);
             return GetTileFromMap(mapPos);
-        }
-
-        public static void SetTile(Vector2 mapPos, int id = -1)
-        {
-            var (x, y) = mapPos;
-            if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
-                return;
-            _grid[(int)x, (int)y].TileId = id;
-        }
-        public static void ToggleCellWall(Vector2 mapPos, int wallId)
-        {
-            var (x, y) = mapPos;
-            if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
-                return;
-            _grid[(int)x, (int)y].Walls[wallId] = !_grid[(int)x, (int)y].Walls[wallId];
         }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / cellSize);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * cellSize;
@@ -200,11 +203,10 @@ namespace Mono_Ether.Ether
                     }
                     File.WriteAllLines(@"Content/TileMapData/" + filename, lines.ToArray());
                 }
-                var tileCoords = WorldtoMap(Camera.mouse_world_coords());
+                var tile = GetTileFromWorld(Camera.mouse_world_coords());
                 // Set Tile ID
                 if (Input.Keyboard.IsKeyDown(Keys.D1))
                     SelectedId = 1;
-                    
                 else if (Input.Keyboard.IsKeyDown(Keys.D2))
                     SelectedId = 2;
                 else if (Input.Keyboard.IsKeyDown(Keys.D3))
@@ -215,18 +217,25 @@ namespace Mono_Ether.Ether
                     SelectedId = 0;
                 // Toggle cell walls
                 if (Input.Keyboard.WasKeyJustDown(Keys.J)) // Left
-                    ToggleCellWall(tileCoords, 0);
+                    tile.Walls[0] = !tile.Walls[0];
                 else if (Input.Keyboard.WasKeyJustDown(Keys.I)) // Up
-                    ToggleCellWall(tileCoords, 1);
+                    tile.Walls[1] = !tile.Walls[1];
                 else if (Input.Keyboard.WasKeyJustDown(Keys.L)) // Right
-                    ToggleCellWall(tileCoords, 2);
+                    tile.Walls[2] = !tile.Walls[2];
                 else if (Input.Keyboard.WasKeyJustDown(Keys.K)) // Down
-                    ToggleCellWall(tileCoords, 3);
+                    tile.Walls[3] = !tile.Walls[3];
 
                 if (Input.Mouse.IsButtonDown(MouseButton.Left)) // Place last placed tile ID at cursor
-                    SetTile(tileCoords, SelectedId);
+                {
+                    tile.TileId = SelectedId;
+                    tile.updateNeighbouringWalls();
+                }
+
                 if (Input.Mouse.IsButtonDown(MouseButton.Right)) // Delete tile at cursor
-                    SetTile(tileCoords, 0);
+                {
+                    tile.TileId = 0;
+                    tile.updateNeighbouringWalls();
+                }
             }
         }
     }

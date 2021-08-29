@@ -68,7 +68,7 @@ namespace Mono_Ether.Ether
             else if (particle.State.Type == ParticleType.Enemy)
                 vel *= 0.94f;
             else
-                vel *= 0.96f + Math.Abs(pos.X) % 0.04f; // rand.Next() isn't thread-safe, so use the position for pseudo-randomness.
+                vel *= 0.96f + Math.Abs(pos.X) % 0.04f; // use the position for pseudo-randomness.
             particle.State.Velocity = vel;
         }
     }

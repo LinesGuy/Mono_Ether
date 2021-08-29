@@ -94,6 +94,7 @@ namespace Mono_Ether.Ether
             if (editorMode) 
                 spriteBatch.DrawString(Art.DebugFont, "EDITOR MODE", new Vector2(0, 90), Color.White);
             spriteBatch.DrawString(Art.DebugFont, "TILE: " + Map.GetTileFromMap(Map.WorldtoMap(Camera.mouse_world_coords())).TileId, new Vector2(0, 120), Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "TILEPOS: " + Map.GetTileFromMap(Map.WorldtoMap(Camera.mouse_world_coords())).pos, new Vector2(0, 150), Color.White);
             spriteBatch.End();
         }
     }
