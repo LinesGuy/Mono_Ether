@@ -61,6 +61,26 @@ namespace Mono_Ether.Ether
         public Vector2 Bottom { get => new Vector2(TopLeft.X + Map.cellSize / 2f, TopLeft.Y + Map.cellSize); }
         public Vector2 BottomLeft { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize); }
         public Vector2 Left { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize / 2f); }
+
+        public void updateWalls()
+        {
+            if (Map.GetTileFromMap(new Vector2(pos.X - 1, pos.Y)).TileId <= 0)
+                Walls[0] = true; // Left
+            if (Map.GetTileFromMap(new Vector2(pos.X, pos.Y - 1)).TileId <= 0)
+                Walls[1] = true; // Top
+            if (Map.GetTileFromMap(new Vector2(pos.X + 1, pos.Y)).TileId <= 0)
+                Walls[2] = true; // Right
+            if (Map.GetTileFromMap(new Vector2(pos.X, pos.Y + 1)).TileId <= 0)
+                Walls[3] = true; // Down
+            if (!Walls[0] && !Walls[1])
+                Walls[4] = true; // Top left
+            if (!Walls[1] && !Walls[2])
+                Walls[5] = true; // Top right
+            if (!Walls[2] && !Walls[3])
+                Walls[6] = true; // Bottom right
+            if (!Walls[3] && !Walls[0])
+                Walls[7] = true; // Bottom left
+        }
     }
     static class Map
     {
@@ -92,22 +112,7 @@ namespace Mono_Ether.Ether
             // Create collision data
             foreach (var tile in _grid)
             {
-                if (Map.GetTileFromMap(new Vector2(tile.pos.X - 1, tile.pos.Y)).TileId <= 0)
-                    tile.Walls[0] = true; // Left
-                if (Map.GetTileFromMap(new Vector2(tile.pos.X, tile.pos.Y - 1)).TileId <= 0)
-                    tile.Walls[1] = true; // Top
-                if (Map.GetTileFromMap(new Vector2(tile.pos.X + 1, tile.pos.Y)).TileId <= 0)
-                    tile.Walls[2] = true; // Right
-                if (Map.GetTileFromMap(new Vector2(tile.pos.X, tile.pos.Y + 1)).TileId <= 0)
-                    tile.Walls[3] = true; // Down
-                if (!tile.Walls[0] && !tile.Walls[1])
-                    tile.Walls[4] = true; // Top left
-                if (!tile.Walls[1] && !tile.Walls[2])
-                    tile.Walls[5] = true; // Top right
-                if (!tile.Walls[2] && !tile.Walls[3])
-                    tile.Walls[6] = true; // Bottom right
-                if (!tile.Walls[3] && !tile.Walls[0])
-                    tile.Walls[7] = true; // Bottom left
+                tile.updateWalls();
             }
         }
 
