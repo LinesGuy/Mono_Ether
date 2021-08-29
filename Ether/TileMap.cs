@@ -50,6 +50,10 @@ namespace Mono_Ether.Ether
                 if (Walls[1]) spriteBatch.Draw(Art.collisionUp, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
                 if (Walls[2]) spriteBatch.Draw(Art.collisionRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
                 if (Walls[3]) spriteBatch.Draw(Art.collisionDown, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[4]) spriteBatch.Draw(Art.collisionTopLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[5]) spriteBatch.Draw(Art.collisionTopRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[6]) spriteBatch.Draw(Art.collisionBottomRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[7]) spriteBatch.Draw(Art.collisionBottomLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
             }
         }
 

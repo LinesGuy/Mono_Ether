@@ -41,6 +41,10 @@ namespace Mono_Ether
         public static Texture2D collisionUp { get; private set; }
         public static Texture2D collisionRight { get; private set; }
         public static Texture2D collisionDown { get; private set; }
+        public static Texture2D collisionTopLeft { get; private set; }
+        public static Texture2D collisionTopRight { get; private set; }
+        public static Texture2D collisionBottomRight { get; private set; }
+        public static Texture2D collisionBottomLeft { get; private set; }
 
 
 
@@ -73,6 +77,10 @@ namespace Mono_Ether
             collisionUp = content.Load<Texture2D>("Textures/tiles/collisionUp");
             collisionRight = content.Load<Texture2D>("Textures/tiles/collisionRight");
             collisionDown = content.Load<Texture2D>("Textures/tiles/collisionDown");
+            collisionTopLeft = content.Load<Texture2D>("Textures/tiles/collisionTopLeft");
+            collisionTopRight = content.Load<Texture2D>("Textures/tiles/collisionTopRight");
+            collisionBottomRight = content.Load<Texture2D>("Textures/tiles/collisionBottomRight");
+            collisionBottomLeft = content.Load<Texture2D>("Textures/tiles/collisionBottomLeft");
         }
     }
 }
