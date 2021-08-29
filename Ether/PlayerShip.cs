@@ -126,6 +126,7 @@ namespace Mono_Ether.Ether
         {
             framesUntilRespawn = 60;
             Art.PlayerDeath.CreateInstance().Play();
+            lives -= 1;
 
             for (int i = 0; i < 1200; i++)
             {
