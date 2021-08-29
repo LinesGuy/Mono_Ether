@@ -69,7 +69,6 @@ namespace Mono_Ether.Ether
         public void updateWalls()
         {
             Walls = new Boolean[8]; // Set all walls to False (temp)
-            System.Diagnostics.Debug.WriteLine(pos.ToString());
             // Update wall values based on surrounding tiles
             if (Map.GetTileFromMap(new Vector2(pos.X - 1, pos.Y)).TileId <= 0)
                 Walls[0] = true; // Left
