@@ -10,6 +10,7 @@ namespace Mono_Ether.Ether
         public static List<Entity> Entities = new List<Entity>();
         public static List<Enemy> Enemies = new List<Enemy>();
         public static List<Bullet> Bullets = new List<Bullet>();
+        public static List<PowerPack> PowerPacks = new List<PowerPack>();
 
         static bool _isUpdating;
         static readonly List<Entity> AddedEntities = new List<Entity>();
