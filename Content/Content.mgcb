@@ -170,6 +170,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/Pointer.png
 
+#begin Textures/Gameplay/PowerShootSpeedIncrease.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/PowerShootSpeedIncrease.png
+
 #begin Textures/Gameplay/Seeker.png
 /importer:TextureImporter
 /processor:TextureProcessor
