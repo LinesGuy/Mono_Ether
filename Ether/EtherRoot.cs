@@ -44,7 +44,7 @@ namespace Mono_Ether.Ether
         public override void Update(GameTime gameTime)
         {
             CurrentGameTime = gameTime;
-            // pause menu.update thingy here instead of this
+            // P to toggle Editor Mode
             if (Input.Keyboard.WasKeyJustDown(Keys.P))
             {
                 if (editorMode)
@@ -60,14 +60,20 @@ namespace Mono_Ether.Ether
                 }
                     
             }
-            
+            // Esc to toggle pause
+            if (Input.Keyboard.WasKeyJustDown(Keys.Escape))
+                paused = !paused;
+
             Camera.Update();
             Map.Update();
             
-            if (!paused)
+            if (paused)
+            {
+                //PauseMenu.Update();
+            }
+            else
             {
                 EntityManager.Update();
-                
                 EnemySpawner.Update();
                 ParticleManager.Update();
             }
@@ -76,20 +82,27 @@ namespace Mono_Ether.Ether
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
-            
+
             Map.Draw(spriteBatch);
 
             EntityManager.Draw(spriteBatch);
-            
             ParticleManager.Draw(spriteBatch);
             
             Vector2 mousePos = Camera.world_to_screen_pos(Camera.mouse_world_coords());
             //spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
 
+            spriteBatch.End();
+            // No BlendState.Additive from here
+            spriteBatch.Begin();
+            if (paused)
+                PauseMenu.Draw(spriteBatch);
+
             // Debug texts
             spriteBatch.DrawString(Art.DebugFont, "Player pos: " + PlayerShip.Instance.Position.ToString(), new Vector2(0, 0), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "Camera pos: " + Camera.CameraPosition.ToString(), new Vector2(0, 30), Color.White);
+            //spriteBatch.DrawString(Art.DebugFont, "Camera pos: " + Camera.CameraPosition.ToString(), new Vector2(0, 30), Color.White);
+            if (paused)
+                spriteBatch.DrawString(Art.DebugFont, "PAUSED", new Vector2(0, 30), Color.White);
             spriteBatch.DrawString(Art.DebugFont, "Cursor world pos: " + Camera.mouse_world_coords().ToString(), new Vector2(0, 60), Color.White);
             if (editorMode) 
                 spriteBatch.DrawString(Art.DebugFont, "EDITOR MODE", new Vector2(0, 90), Color.White);

@@ -111,13 +111,12 @@ namespace Mono_Ether.Ether
                     }
                 }
             }
-
             // Handle collisions between walls and enemies + the player
             for (var i = 0; i < Enemies.Count; i++)
-            {
                 Enemies[i].HandleTilemapCollision();
-                //PlayerShip.Instance.HandleTilemapCollision();
-            }
+            // Same as above but for bullets
+            for (var i = 0; i < Bullets.Count; i++)
+                Bullets[i].HandleTilemapCollision();
         }
     }
 }
