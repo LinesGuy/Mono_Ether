@@ -26,7 +26,7 @@ namespace Mono_Ether.Ether
             spriteBatch.Draw(Image, screenPos, null, Color, Orientation, Size / 2f, Camera.Zoom, 0, 0);
         }
 
-        public virtual void HandleTilemapCollision()
+        public void HandleTilemapCollision()
         {
             var tile = Map.GetTileFromWorld(Position);
 
