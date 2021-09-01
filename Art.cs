@@ -48,6 +48,7 @@ namespace Mono_Ether
         public static Texture2D pauseBg { get; private set; }
         public static Texture2D pauseExit { get; private set; }
         public static Texture2D pauseResume { get; private set; }
+        public static Texture2D PowerShootSpeedIncrease { get; private set; }
         public static void Load(ContentManager content)
         {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
@@ -84,6 +85,7 @@ namespace Mono_Ether
             pauseBg = content.Load<Texture2D>("Textures/GamePause/pause_bg");
             pauseExit = content.Load<Texture2D>("Textures/GamePause/exit_button");
             pauseResume = content.Load<Texture2D>("Textures/GamePause/resume_button");
+            PowerShootSpeedIncrease = content.Load<Texture2D>("Textures/GamePlay/PowerShootSpeedIncrease");
         }
     }
 }
