@@ -7,7 +7,7 @@ namespace Mono_Ether.Ether
     {
         private int age;
         private readonly int lifespan;
-
+        private readonly Random rand = new Random();
         public Bullet(Vector2 position, Vector2 velocity)
         {
             Image = Art.Bullet;
@@ -30,6 +30,36 @@ namespace Mono_Ether.Ether
             age += 1;
             if (age > lifespan)
                 IsExpired = true;
+        }
+
+        public override void HandleTilemapCollision()
+        {
+            var tile = Map.GetTileFromWorld(Position);
+            if (tile.TileId > 0)
+            {
+                IsExpired = true;
+
+                float hue1 = rand.NextFloat(0, 6);
+                float hue2 = (hue1 + rand.NextFloat(0, 2)) % 6f;
+                Color color1 = ColorUtil.HsvToColor(hue1, 0.5f, 1);
+                Color color2 = ColorUtil.HsvToColor(hue2, 0.5f, 1);
+
+                for (var i = 0; i < 20; i++)
+                {
+                    var speed = 7f * (1f - 1 / rand.NextFloat(1f, 10f));
+                    var state = new ParticleState()
+                    {
+                        Velocity = rand.NextVector2(speed, speed),
+                        Type = ParticleType.Enemy,
+                        LengthMultiplier = 1f
+                    };
+
+                    //Color color = Color.Lerp(color1, color2, rand.NextFloat(0, 1));
+                    Color color = new Color(235, 222, 77);
+                    EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
+                }
+            }
+                
         }
     }
 
@@ -55,10 +85,11 @@ namespace Mono_Ether.Ether
             Position += Velocity;
             Orientation += 0.3f;
             age += 1;
-            if (age >= lifespan)
+            if (age > lifespan || Map.GetTileFromWorld(Position).TileId > 0)
             {
+                Position -= Velocity;
                 IsExpired = true;
-                for (int i = 0; i < 30; i++)
+                for (int i = 0; i < 50; i++)
                 {
                     Vector2 bulletVelocity = MathUtil.FromPolar(Rand.NextFloat((float)-Math.PI, (float)Math.PI), Rand.NextFloat(8f, 16f));
                     EntityManager.Add(new Bullet(Position, bulletVelocity));
