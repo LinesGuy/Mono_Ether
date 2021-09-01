@@ -124,14 +124,23 @@ namespace Mono_Ether.Ether
         IEnumerable<int> MoveRandomly()
         {
             float direction = rand.NextFloat(0, MathHelper.TwoPi);
+            Vector2 acceleration = MathUtil.FromPolar(direction, 0.4f);
+            Vector2 lastPos = Position;
             while (true)
             {
-                direction += rand.NextFloat(-0.1f, 0.1f);
-                direction = MathHelper.WrapAngle(direction);
+                if (Math.Abs(Position.X - lastPos.X) < 0.001)
+                    acceleration.X = -acceleration.X;
+                if (Math.Abs(Position.Y - lastPos.Y) < 0.001)
+                    acceleration.Y = -acceleration.Y;
+
+                lastPos = Position;
+                
+                //direction += rand.NextFloat(-0.1f, 0.1f);
+                acceleration.Rotate(rand.NextFloat(-0.1f, 0.1f));
 
                 for (int i = 0; i < 6; i++)
                 {
-                    Velocity += MathUtil.FromPolar(direction, 0.4f);
+                    Velocity += acceleration;
                     Orientation -= 0.01f;
                     yield return 0;
                 }
