@@ -9,8 +9,8 @@ namespace Mono_Ether.Ether
     public class EtherRoot : GameState
     {
         public static EtherRoot Instance { get; private set; }
-        public bool paused;
-        public bool editorMode = true; // ENABLED BY DEFAULT FOR DEBUG
+        public bool paused = false;
+        public bool editorMode = false;
         //public static Map MyMap;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
@@ -50,12 +50,15 @@ namespace Mono_Ether.Ether
                 if (editorMode)
                 {
                     EnemySpawner.enabled = true;
+                    PowerPackSpawner.enabled = true;
                     editorMode = false;
                 }
                 else
                 {
                     EntityManager.Enemies.ForEach(x => x.IsExpired = true);
                     EnemySpawner.enabled = false;
+                    EntityManager.PowerPacks.ForEach(x => x.IsExpired = true);
+                    PowerPackSpawner.enabled = false;
                     editorMode = true;
                 }
                     
@@ -97,18 +100,7 @@ namespace Mono_Ether.Ether
             spriteBatch.Begin();
             if (paused)
                 PauseMenu.Draw(spriteBatch);
-
-            // Debug texts
-            spriteBatch.DrawString(Art.DebugFont, "Player pos: " + PlayerShip.Instance.Position.ToString(), new Vector2(0, 0), Color.White);
-            //spriteBatch.DrawString(Art.DebugFont, "Camera pos: " + Camera.CameraPosition.ToString(), new Vector2(0, 30), Color.White);
-            if (paused)
-                spriteBatch.DrawString(Art.DebugFont, "PAUSED", new Vector2(0, 30), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "Cursor world pos: " + Camera.mouse_world_coords().ToString(), new Vector2(0, 60), Color.White);
-            if (editorMode) 
-                spriteBatch.DrawString(Art.DebugFont, "EDITOR MODE", new Vector2(0, 90), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "Cursor tile ID: " + Map.GetTileFromMap(Map.WorldtoMap(Camera.mouse_world_coords())).TileId, new Vector2(0, 120), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "Cursor Tile pos: " + Map.GetTileFromMap(Map.WorldtoMap(Camera.mouse_world_coords())).pos, new Vector2(0, 150), Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "Player Lives: " + PlayerShip.Instance.lives.ToString(), new Vector2(0, 180), Color.White);
+            Hud.Draw(spriteBatch);
             spriteBatch.End();
         }
     }
