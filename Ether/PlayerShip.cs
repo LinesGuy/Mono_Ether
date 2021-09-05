@@ -93,7 +93,6 @@ namespace Mono_Ether.Ether
                 var aim = Camera.GetAimDirection();
                 if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
                 {
-                    // Play player_shoot SFX
                     Art.PlayerShoot.CreateInstance().Play();
                     cooldownRemaining = CooldownFrames;
                     var aimangle = aim.ToAngle();
@@ -104,7 +103,12 @@ namespace Mono_Ether.Ether
                         var offsetAngle = aimangle + MathUtil.Interpolate(-.2f, .2f, i / (bulletCount - 0.999f));
                         var offset = MathUtil.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
                         var vel = MathUtil.FromPolar(aimangle + randomSpread, 18f);
-                        EntityManager.Add(new Bullet(Position + offset, vel));
+                        Color bulletColor;
+                        if (ShootSpeedIncreaseFramesRemaining > 0)
+                            bulletColor = new Color(3, 252, 252);
+                        else
+                            bulletColor = new Color(239, 247, 74);
+                        EntityManager.Add(new Bullet(Position + offset, vel, bulletColor));
                     }
                 }
 
@@ -118,9 +122,6 @@ namespace Mono_Ether.Ether
                     }
                 }
                     
-
-
-
                 if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
                 {
                     EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));

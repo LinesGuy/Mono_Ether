@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Mono_Ether.Ether
@@ -8,7 +9,7 @@ namespace Mono_Ether.Ether
         private int age;
         private readonly int lifespan;
         private readonly Random rand = new Random();
-        public Bullet(Vector2 position, Vector2 velocity)
+        public Bullet(Vector2 position, Vector2 velocity, Color color)
         {
             Image = Art.Bullet;
             Position = position;
@@ -17,15 +18,12 @@ namespace Mono_Ether.Ether
             Radius = 8;
             age = 0;
             lifespan = 120;  // Frames
+            Color = color;
         }
 
         public override void Update()
         {
-            /*if (Velocity.LengthSquared() > 0)
-                Orientation = Velocity.ToAngle();*/
-
             Position += Velocity;
-
             // Delete bullets after a certain time
             age += 1;
             if (age > lifespan)
@@ -86,7 +84,7 @@ namespace Mono_Ether.Ether
                 for (int i = 0; i < 50; i++)
                 {
                     Vector2 bulletVelocity = MathUtil.FromPolar(Rand.NextFloat((float)-Math.PI, (float)Math.PI), Rand.NextFloat(8f, 16f));
-                    EntityManager.Add(new Bullet(Position, bulletVelocity));
+                    EntityManager.Add(new Bullet(Position, bulletVelocity, new Color(128, 128, 0)));
                 }
 
             }
