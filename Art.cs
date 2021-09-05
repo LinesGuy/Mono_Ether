@@ -49,7 +49,11 @@ namespace Mono_Ether
         public static Texture2D pauseExit { get; private set; }
         public static Texture2D pauseResume { get; private set; }
         public static Texture2D PowerShootSpeedIncrease { get; private set; }
+        public static Texture2D PowerShootSpeedDecrease { get; private set; }
+        public static Texture2D PowerMoveSpeedIncrease { get; private set; }
+        public static Texture2D PowerMoveSpeedDecrease { get; private set; }
         public static SoundEffect PowerPackPickup { get; private set; }
+        public static SoundEffect PowerPackPickupBad { get; private set; }
         public static void Load(ContentManager content)
         {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
@@ -87,7 +91,11 @@ namespace Mono_Ether
             pauseExit = content.Load<Texture2D>("Textures/GamePause/exit_button");
             pauseResume = content.Load<Texture2D>("Textures/GamePause/resume_button");
             PowerShootSpeedIncrease = content.Load<Texture2D>("Textures/GamePlay/PowerShootSpeedIncrease");
+            PowerShootSpeedDecrease = content.Load<Texture2D>("Textures/GamePlay/PowerShootSpeedDecrease");
+            PowerMoveSpeedIncrease = content.Load<Texture2D>("Textures/GamePlay/PowerMoveSpeedIncrease");
+            PowerMoveSpeedDecrease = content.Load<Texture2D>("Textures/GamePlay/PowerMoveSpeedDecrease");
             PowerPackPickup = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickup");
+            PowerPackPickupBad = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickupBad");
         }
     }
 }
