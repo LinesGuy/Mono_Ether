@@ -71,7 +71,7 @@ namespace Mono_Ether.Ether
                 List<Vector2> path = new List<Vector2> {endNode.Position};
                 if (Vector2.DistanceSquared(currentNode.Position, endNode.Position) <= (CellSize * 1.5f) * (CellSize * 1.5f))
                 {
-                    Debug.WriteLine($"found goal in iterations: {iterations}");
+                    //Debug.WriteLine($"found goal in iterations: {iterations}");
                     var current = currentNode;
                     while (current != null)
                     {
