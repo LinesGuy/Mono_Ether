@@ -34,7 +34,7 @@ namespace Mono_Ether.Ether
                 _inverseSpawnChance -= 0.005f;
         }
 
-        private static Vector2 GetSpawnPosition()
+        public static Vector2 GetSpawnPosition()
         {
             // If returns Vector2.Zero, could not find valid spawn position
             Vector2 pos;
@@ -51,7 +51,7 @@ namespace Mono_Ether.Ether
                    && remainingAttempts > 0);
             if (remainingAttempts == 0)
             {
-                Debug.WriteLine("Could not spawn enemy after 10 attempts, skipping");
+                Debug.WriteLine("Could not find spawn position after 10 attempts, skipping");
                 return Vector2.Zero;
             }
             return pos;

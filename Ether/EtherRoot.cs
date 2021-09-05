@@ -75,6 +75,7 @@ namespace Mono_Ether.Ether
             {
                 EntityManager.Update();
                 EnemySpawner.Update();
+                PowerPackSpawner.Update();
                 ParticleManager.Update();
             }
         }
@@ -89,7 +90,6 @@ namespace Mono_Ether.Ether
             ParticleManager.Draw(spriteBatch);
             
             Vector2 mousePos = Camera.world_to_screen_pos(Camera.mouse_world_coords());
-            //spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
 
             spriteBatch.End();

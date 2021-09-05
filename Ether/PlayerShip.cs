@@ -28,6 +28,8 @@ namespace Mono_Ether.Ether
         private readonly bool autoFire = false;  // If true, hold left click to stop fire
         int framesUntilRespawn;
 
+        // PowerPack stuffs
+        public int ShootSpeedIncreaseFramesRemaining = 0;
         public bool IsDead => framesUntilRespawn > 0;
 
         public override void Update()
@@ -107,7 +109,17 @@ namespace Mono_Ether.Ether
                 }
 
                 if (cooldownRemaining > 0)
+                {
                     cooldownRemaining--;
+                    if (ShootSpeedIncreaseFramesRemaining > 0)
+                    {
+                        ShootSpeedIncreaseFramesRemaining--;
+                        cooldownRemaining--;
+                    }
+                }
+                    
+
+
 
                 if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
                 {
@@ -141,6 +153,19 @@ namespace Mono_Ether.Ether
                 EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
             }
             EnemySpawner.Reset();
+        }
+
+        public void ApplyPowerPack(string powerPackType)
+        {
+            switch (powerPackType)
+            {
+                case "ShootSpeedIncrease":
+                    ShootSpeedIncreaseFramesRemaining = 600;
+                    break;
+                default:
+                    Debug.WriteLine("!!! PlayerShip.cs ApplyPowerPack() unhandled powerPackType");
+                    break;
+            }
         }
     }
 }

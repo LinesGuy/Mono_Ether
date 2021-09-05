@@ -39,11 +39,6 @@ namespace Mono_Ether.Ether
             {
                 IsExpired = true;
 
-                float hue1 = rand.NextFloat(0, 6);
-                float hue2 = (hue1 + rand.NextFloat(0, 2)) % 6f;
-                Color color1 = ColorUtil.HsvToColor(hue1, 0.5f, 1);
-                Color color2 = ColorUtil.HsvToColor(hue2, 0.5f, 1);
-
                 for (var i = 0; i < 20; i++)
                 {
                     var speed = 7f * (1f - 1 / rand.NextFloat(1f, 10f));
@@ -54,7 +49,6 @@ namespace Mono_Ether.Ether
                         LengthMultiplier = 1f
                     };
 
-                    //Color color = Color.Lerp(color1, color2, rand.NextFloat(0, 1));
                     Color color = new Color(235, 222, 77);
                     EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
                 }

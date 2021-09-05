@@ -32,6 +32,8 @@ namespace Mono_Ether.Ether
                 Bullets.Add(bullet);
             else if (entity is Enemy enemy)
                 Enemies.Add(enemy);
+            else if (entity is PowerPack powerPack)
+                PowerPacks.Add(powerPack);
         }
 
         public static void Update()
@@ -54,6 +56,7 @@ namespace Mono_Ether.Ether
             Entities = Entities.Where(x => !x.IsExpired).ToList();
             Bullets = Bullets.Where(x => !x.IsExpired).ToList();
             Enemies = Enemies.Where(x => !x.IsExpired).ToList();
+            PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -118,6 +121,15 @@ namespace Mono_Ether.Ether
             // Same as above but for bullets
             for (var i = 0; i < Bullets.Count; i++)
                 Bullets[i].HandleTilemapCollision();
+
+            // Handle collisions between powerpacks and the player
+            for (var i = 0; i < PowerPacks.Count; i++)
+                if (IsColliding(PowerPacks[i], PlayerShip.Instance))
+                {
+                    PowerPacks[i].WasPickedUp();
+                    PlayerShip.Instance.ApplyPowerPack(PowerPacks[i].PowerType);
+                    PowerPacks[i].IsExpired = true;
+                }
         }
     }
 }
