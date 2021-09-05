@@ -127,7 +127,7 @@ namespace Mono_Ether.Ether
                 if (IsColliding(PowerPacks[i], PlayerShip.Instance))
                 {
                     PowerPacks[i].WasPickedUp();
-                    PlayerShip.Instance.ApplyPowerPack(PowerPacks[i].PowerType);
+                    PlayerShip.Instance.activePowerPacks.Add(PowerPacks[i]);
                     PowerPacks[i].IsExpired = true;
                 }
         }

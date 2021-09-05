@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
-using MonoGame.Extended;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Mono_Ether.Ether
 {
@@ -28,8 +29,7 @@ namespace Mono_Ether.Ether
         private readonly bool autoFire = false;  // If true, hold left click to stop fire
         int framesUntilRespawn;
 
-        // PowerPack stuffs
-        public int ShootSpeedIncreaseFramesRemaining = 0;
+        public List<PowerPack> activePowerPacks = new List<PowerPack>();
         public bool IsDead => framesUntilRespawn > 0;
 
         public override void Update()
@@ -44,7 +44,15 @@ namespace Mono_Ether.Ether
                 return;
             }
             // Movement
-            const float acceleration = 5;
+            float acceleration = 5;
+            foreach(var power in activePowerPacks)
+            {
+                if (power.PowerType == "MoveSpeedIncrease")
+                    acceleration *= 1.3f;
+                else if (power.PowerType == "MoveSpeedDecrease")
+                    acceleration /= 1.3f;
+            }
+
             Velocity += acceleration * Input.GetMovementDirection();  // Normalised direction vector
             Velocity = Velocity / 1.5f;  // Friction
             Position += Velocity;
@@ -94,7 +102,16 @@ namespace Mono_Ether.Ether
                 if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0)
                 {
                     Art.PlayerShoot.CreateInstance().Play();
-                    cooldownRemaining = CooldownFrames;
+
+                    float cooldownRemainingMultiplier = 1f;
+                    foreach(var power in activePowerPacks)
+                    {
+                        if (power.PowerType == "ShootSpeedIncrease")
+                            cooldownRemainingMultiplier /= 1.3f;
+                        else if (power.PowerType == "ShootSpeedDecrease")
+                            cooldownRemainingMultiplier *= 1.3f;
+                    }
+                    cooldownRemaining = (int)((float)CooldownFrames * cooldownRemainingMultiplier);
                     var aimangle = aim.ToAngle();
                     const int bulletCount = 3;
                     for (var i = 0; i < bulletCount; i++)
@@ -104,29 +121,32 @@ namespace Mono_Ether.Ether
                         var offset = MathUtil.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
                         var vel = MathUtil.FromPolar(aimangle + randomSpread, 18f);
                         Color bulletColor;
-                        if (ShootSpeedIncreaseFramesRemaining > 0)
-                            bulletColor = new Color(3, 252, 252);
+                        if (cooldownRemainingMultiplier < 1f)
+                            bulletColor = new Color(3, 252, 252); // Baby blue
+                        else if (cooldownRemainingMultiplier > 1f)
+                            bulletColor = new Color(252, 123, 3); // Orange
                         else
-                            bulletColor = new Color(239, 247, 74);
+                            bulletColor = new Color(239, 247, 74); // Yellow
                         EntityManager.Add(new Bullet(Position + offset, vel, bulletColor));
                     }
                 }
 
                 if (cooldownRemaining > 0)
-                {
                     cooldownRemaining--;
-                    if (ShootSpeedIncreaseFramesRemaining > 0)
-                    {
-                        ShootSpeedIncreaseFramesRemaining--;
-                        cooldownRemaining--;
-                    }
-                }
                     
                 if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
                 {
                     EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));
                 }
             }
+
+            foreach (var powerPack in activePowerPacks)
+            {
+                powerPack.framesRemaining--;
+                if (powerPack.framesRemaining <= 0)
+                    powerPack.isExpended = true;
+            }
+            activePowerPacks = activePowerPacks.Where(x => !x.isExpended).ToList();   
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -141,6 +161,8 @@ namespace Mono_Ether.Ether
             Art.PlayerDeath.CreateInstance().Play();
             lives -= 1;
 
+            activePowerPacks = new List<PowerPack>();
+
             for (int i = 0; i < 1200; i++)
             {
                 float speed = 18f * (1f - 1 / Rand.NextFloat(1f, 10f));
@@ -154,19 +176,6 @@ namespace Mono_Ether.Ether
                 EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
             }
             EnemySpawner.Reset();
-        }
-
-        public void ApplyPowerPack(string powerPackType)
-        {
-            switch (powerPackType)
-            {
-                case "ShootSpeedIncrease":
-                    ShootSpeedIncreaseFramesRemaining = 600;
-                    break;
-                default:
-                    Debug.WriteLine("!!! PlayerShip.cs ApplyPowerPack() unhandled powerPackType");
-                    break;
-            }
         }
     }
 }
