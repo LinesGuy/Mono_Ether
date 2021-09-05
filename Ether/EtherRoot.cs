@@ -11,7 +11,6 @@ namespace Mono_Ether.Ether
         public static EtherRoot Instance { get; private set; }
         public bool paused = false;
         public bool editorMode = false;
-        //public static Map MyMap;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
         public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice)
@@ -21,7 +20,6 @@ namespace Mono_Ether.Ether
         public override void Initialize()
         {
             Instance = this;
-            //MyMap = new Map();
             EntityManager.Add(PlayerShip.Instance);
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
             Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = 0.1f;
@@ -29,9 +27,6 @@ namespace Mono_Ether.Ether
 
         public override void LoadContent(ContentManager content)
         {
-            //Art.Load(content);
-            //Tiles.Content = content;
-
             //Map.LoadFromFile("susMap.txt", new Vector2(12, 12));
             Map.LoadFromFile("susMap3.txt", new Vector2(64, 64));
             //MyMap.LoadFromFile("bigMap.txt", new Vector2(256, 256));
