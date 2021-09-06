@@ -24,9 +24,6 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="States\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="global.json" />
     <None Update="Content\TileMapData\susMap.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

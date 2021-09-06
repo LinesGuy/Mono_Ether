@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mono_Ether.MainMenu
+namespace Mono_Ether.MainMenuOld
 {
     public class Cookie
     {

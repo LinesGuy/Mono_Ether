@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using Mono_Ether.States;
 
-namespace Mono_Ether.MainMenu
+namespace Mono_Ether.MainMenuOld
 {
     public class IntroWelcome : GameState
     {

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 
-namespace Mono_Ether.MainMenu
+namespace Mono_Ether.MainMenuOld
 {
     public class MenuButton
     {

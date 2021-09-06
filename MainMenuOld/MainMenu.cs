@@ -8,7 +8,7 @@ using MonoGame.Extended.Tweening;
 using Mono_Ether.States;
 using MonoGame.Extended.Input;
 
-namespace Mono_Ether.MainMenu
+namespace Mono_Ether.MainMenuOld
 {
     public class MainMenu : GameState
     {
