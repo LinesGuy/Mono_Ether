@@ -9,7 +9,6 @@ namespace Mono_Ether.Ether
         {
             // Debug texts
             spriteBatch.DrawString(Art.DebugFont, "Player pos: " + PlayerShip.Instance.Position.ToString(), new Vector2(0, 0), Color.White);
-            //spriteBatch.DrawString(Art.DebugFont, "Camera pos: " + Camera.CameraPosition.ToString(), new Vector2(0, 30), Color.White);
             if (EtherRoot.Instance.paused)
                 spriteBatch.DrawString(Art.DebugFont, "PAUSED", new Vector2(0, 30), Color.White);
             spriteBatch.DrawString(Art.DebugFont, "Cursor world pos: " + Camera.mouse_world_coords().ToString(), new Vector2(0, 60), Color.White);

@@ -30,13 +30,6 @@ namespace Mono_Ether
         {
             Art.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            // Game
-            //GameStateManager.Instance.AddScreen(new Ether.EtherRoot(GraphicsDevice));
-            // Intro:
-            //GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.IntroWelcome(GraphicsDevice));
-            // Main menu OLD:
-            //GameStateManager.Instance.AddScreen(new Mono_Ether.MainMenu.MainMenu(GraphicsDevice));
-            //screenStack.Push(new MainMenu.TitleScreen(GraphicsDevice));
             screenStack.Push(new Ether.EtherRoot(GraphicsDevice));
             screenStack.Peek().Initialize();
             screenStack.Peek().LoadContent(Content);
@@ -45,23 +38,18 @@ namespace Mono_Ether
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
-            //GameStateManager.Instance.UnloadContent();
-            //base.UnloadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
             Input.Update();
-            //GameStateManager.Instance.Update(gameTime);
             screenStack.Peek().Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(Color.CornflowerBlue);
             screenStack.Peek().Draw(spriteBatch);
-            //GameStateManager.Instance.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }

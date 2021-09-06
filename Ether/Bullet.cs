@@ -17,14 +17,14 @@ namespace Mono_Ether.Ether
             Orientation = Velocity.ToAngle();
             Radius = 8;
             age = 0;
-            lifespan = 120;  // Frames
+            lifespan = 120;  // Bullet will disappear after two seconds if it doesn't hit something
             Color = color;
         }
 
         public override void Update()
         {
             Position += Velocity;
-            // Delete bullets after a certain time
+            // Delete bullets after a certain time:
             age += 1;
             if (age > lifespan)
                 IsExpired = true;

@@ -8,7 +8,6 @@ namespace Mono_Ether
     static class Art
     {
         public static Texture2D Pixel { get; private set; }
-        // EtherRoot
         public static Texture2D Default { get; private set; }
         public static Texture2D Player { get; private set; }
         public static Texture2D Seeker { get; private set; }
@@ -23,16 +22,11 @@ namespace Mono_Ether
         public static SoundEffect PlayerDeath { get; private set; }
         public static SoundEffect EnemyExplosion { get; private set; }
         public static SpriteFont DebugFont { get; private set; }
-        // IntroWelcome
         public static Texture2D WelcomeText { get; private set; }
-        // Main Menu
         public static Texture2D MenuPlayButton { get; private set; }
         public static Texture2D MenuSettingsButton { get; private set; }
         public static Texture2D MenuCreditsButton { get; private set; }
         public static Texture2D MenuExitButton { get; private set; }
-        // Pause menu
-        //public static Texture2D PauseExitButton { get; private set; }
-        // Tilemap
         public static Texture2D tileGrass { get; private set; }
         public static Texture2D tileDirt { get; private set; }
         public static Texture2D tileStone { get; private set; }

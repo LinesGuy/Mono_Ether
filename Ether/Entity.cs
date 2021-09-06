@@ -93,52 +93,6 @@ namespace Mono_Ether.Ether
                 Position.Y = destination.Y;
 
             return; 
-            /*
-            // Check if we are still inside a tile
-            tile = Map.GetTileFromWorld(Position);
-            if (tile.TileId <= 0)
-                return;
-
-            // At this point we are still inside a tile so we perform a second iteration
-            // TODO: The following code is almost identical to the above code, there must be same way to eliminate the redundancy
-            Vector2 blockedDestination = destination;
-            topLeft = tile.pos * Map.cellSize;
-
-            left = new Vector2(topLeft.X, topLeft.Y + Map.cellSize / 2f);
-            up = new Vector2(topLeft.X + Map.cellSize / 2f, topLeft.Y);
-            right = new Vector2(topLeft.X + Map.cellSize, topLeft.Y + Map.cellSize / 2f);
-            down = new Vector2(topLeft.X + Map.cellSize / 2f, topLeft.Y + Map.cellSize);
-
-            // Find any valid destination wall
-            if (tile.Walls[0] && left != blockedDestination)
-                destination = left;
-            else if (tile.Walls[1] && up != blockedDestination)
-                destination = up;
-            else if (tile.Walls[2] && right != blockedDestination)
-                destination = right;
-            else
-                destination = down;
-
-            // Now find nearest destination wall
-            if (Vector2.DistanceSquared(Position, left) < Vector2.DistanceSquared(Position, destination) && left != blockedDestination)
-                destination = left;
-            if (Vector2.DistanceSquared(Position, up) < Vector2.DistanceSquared(Position, destination) && up != blockedDestination)
-                destination = up;
-            if (Vector2.DistanceSquared(Position, right) < Vector2.DistanceSquared(Position, destination) && right != blockedDestination)
-                destination = right;
-            if (Vector2.DistanceSquared(Position, down) < Vector2.DistanceSquared(Position, destination) && down != blockedDestination)
-                destination = down;
-
-            // Now move entity to said destination wall
-            if (destination == left)
-                Position.X = destination.X - 0.001f;
-            else if (destination == up)
-                Position.Y = destination.Y - 0.001f;
-            else if (destination == right)
-                Position.X = destination.X;
-            else
-                Position.Y = destination.Y;
-            */
         }
     }
 }

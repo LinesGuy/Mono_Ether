@@ -119,7 +119,6 @@ namespace Mono_Ether.Ether
                     }
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
         }
         IEnumerable<int> MoveRandomly()
         {
@@ -135,7 +134,6 @@ namespace Mono_Ether.Ether
 
                 lastPos = Position;
                 
-                //direction += rand.NextFloat(-0.1f, 0.1f);
                 acceleration.Rotate(rand.NextFloat(-0.1f, 0.1f));
 
                 for (int i = 0; i < 6; i++)
@@ -145,7 +143,6 @@ namespace Mono_Ether.Ether
                     yield return 0;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
         }
         private IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f)
         {
@@ -156,12 +153,10 @@ namespace Mono_Ether.Ether
                         Velocity -= (bullet.Position - Position).ScaleTo(acceleration);
                 yield return 0;
             }
-            // ReSharper disable once IteratorNeverReturns
         }
         public static Enemy CreateSeeker(Vector2 position)
         {
             var enemy = new Enemy(Art.Seeker, position);
-            //enemy.AddBehaviour(enemy.FollowPlayer());
             enemy.AddBehaviour(enemy.FollowPlayerAStar());
 
             return enemy;
@@ -170,7 +165,6 @@ namespace Mono_Ether.Ether
         {
             var enemy = new Enemy(Art.Wanderer, position);
             enemy.AddBehaviour(enemy.MoveRandomly());
-            //enemy.AddBehaviour(enemy.SocialDistance());
             enemy.AddBehaviour(enemy.DodgeBullets());
             return enemy;
         }

@@ -65,7 +65,7 @@ namespace Mono_Ether.Ether
             
             if (paused)
             {
-                //PauseMenu.Update();
+                //PauseMenu.Update(); // TODO
             }
             else
             {

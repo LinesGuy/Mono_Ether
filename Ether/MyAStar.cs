@@ -71,7 +71,6 @@ namespace Mono_Ether.Ether
                 List<Vector2> path = new List<Vector2> {endNode.Position};
                 if (Vector2.DistanceSquared(currentNode.Position, endNode.Position) <= (CellSize * 1.5f) * (CellSize * 1.5f))
                 {
-                    //Debug.WriteLine($"found goal in iterations: {iterations}");
                     var current = currentNode;
                     while (current != null)
                     {
@@ -96,10 +95,8 @@ namespace Mono_Ether.Ether
                 foreach (var offset in offsets)
                 {
                     Vector2 nodePosition = currentNode.Position + offset * CellSize;
-                    
-                    // Here we check that we are within the bounds of the map
-                    // TODO: check that we are within the bounds of the map
-                    // xd
+
+                    // TODO: check that we are within the bounds of the map, optional?
                     
                     // Check if this node is in the closed list
                     index = 0;
