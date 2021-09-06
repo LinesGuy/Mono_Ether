@@ -27,9 +27,7 @@ namespace Mono_Ether.Ether
 
         public override void LoadContent(ContentManager content)
         {
-            //Map.LoadFromFile("susMap.txt", new Vector2(12, 12));
-            Map.LoadFromFile("susMap3.txt", new Vector2(64, 64));
-            //MyMap.LoadFromFile("bigMap.txt", new Vector2(256, 256));
+            Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
         }
 
         public override void UnloadContent()
