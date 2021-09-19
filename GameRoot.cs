@@ -13,8 +13,9 @@ namespace Mono_Ether
         public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
 
         private GraphicsDeviceManager graphics;
+        public GraphicsDevice graphicsasdfasdfasdf;
         private SpriteBatch spriteBatch;
-        private Stack<GameState> screenStack = new Stack<GameState>();
+        public Stack<GameState> screenStack = new Stack<GameState>();
         public GameRoot()
         {
             Instance = this;
@@ -23,16 +24,16 @@ namespace Mono_Ether
                 PreferredBackBufferWidth = 1280, PreferredBackBufferHeight = 720
             };
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
         }
 
         protected override void LoadContent()
         {
+            graphicsasdfasdfasdf = GraphicsDevice;
             Art.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            screenStack.Push(new Ether.EtherRoot(GraphicsDevice));
-            screenStack.Peek().Initialize();
-            screenStack.Peek().LoadContent(Content);
+            //screenStack.Push(new Ether.EtherRoot(GraphicsDevice));
+            AddScreen(new MainMenu.TitleScreen(GraphicsDevice));
         }
 
         protected override void UnloadContent()
@@ -51,6 +52,21 @@ namespace Mono_Ether
         {
             screenStack.Peek().Draw(spriteBatch);
             base.Draw(gameTime);
+        }
+
+        public void AddScreen(GameState screen)
+        {
+            screenStack.Push(screen);
+            screenStack.Peek().Initialize();
+            screenStack.Peek().LoadContent(Content);
+        }
+        public void RemoveScreen()
+        {
+            screenStack.Pop();
+            if (screenStack.Count == 0)
+            {
+                Exit();
+            }
         }
     }
 }
