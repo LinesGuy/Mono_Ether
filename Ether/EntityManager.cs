@@ -3,10 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mono_Ether.Ether
-{
-    static class EntityManager
-    {
+namespace Mono_Ether.Ether {
+    static class EntityManager {
         public static List<Entity> Entities = new List<Entity>();
         public static List<Enemy> Enemies = new List<Enemy>();
         public static List<Bullet> Bullets = new List<Bullet>();
@@ -17,16 +15,14 @@ namespace Mono_Ether.Ether
 
         public static int Count => Entities.Count;
 
-        public static void Add(Entity entity)
-        {
+        public static void Add(Entity entity) {
             if (!_isUpdating)
                 AddEntity(entity);
             else
                 AddedEntities.Add(entity);
         }
 
-        private static void AddEntity(Entity entity)
-        {
+        private static void AddEntity(Entity entity) {
             Entities.Add(entity);
             if (entity is Bullet bullet)
                 Bullets.Add(bullet);
@@ -36,8 +32,7 @@ namespace Mono_Ether.Ether
                 PowerPacks.Add(powerPack);
         }
 
-        public static void Update()
-        {
+        public static void Update() {
             _isUpdating = true;
 
             HandleCollisions();
@@ -59,28 +54,22 @@ namespace Mono_Ether.Ether
             PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
-        {
+        public static void Draw(SpriteBatch spriteBatch) {
             foreach (var entity in Entities)
                 entity.Draw(spriteBatch);
         }
 
-        private static bool IsColliding(Entity a, Entity b)
-        {
+        private static bool IsColliding(Entity a, Entity b) {
             float radius = a.Radius + b.Radius;
             return !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < radius * radius;
         }
 
-        static void HandleCollisions()
-        {
+        static void HandleCollisions() {
             // Handle collisions between enemies
-            for (int i = 0; i < Enemies.Count; i++)
-            {
-                for (int j = i + 1; j < Enemies.Count; j++)
-                {
+            for (int i = 0; i < Enemies.Count; i++) {
+                for (int j = i + 1; j < Enemies.Count; j++) {
 
-                    if (IsColliding(Enemies[i], Enemies[j]))
-                    {
+                    if (IsColliding(Enemies[i], Enemies[j])) {
                         Enemies[i].HandleCollision(Enemies[j]);
                         Enemies[j].HandleCollision(Enemies[i]);
                     }
@@ -88,12 +77,9 @@ namespace Mono_Ether.Ether
             }
 
             // Handle collisions between bullets and enemies
-            for (var i = 0; i < Enemies.Count; i++)
-            {
-                foreach (var t in Bullets)
-                {
-                    if (IsColliding(Enemies[i], t))
-                    {
+            for (var i = 0; i < Enemies.Count; i++) {
+                foreach (var t in Bullets) {
+                    if (IsColliding(Enemies[i], t)) {
                         Enemies[i].WasShot();
                         t.IsExpired = true;
                         // Play enemy_explosion.wav
@@ -103,12 +89,9 @@ namespace Mono_Ether.Ether
             }
 
             // Handle collisions between the player and enemies
-            if (PlayerShip.Instance.GodMode == false)
-            {
-                for (int i = 0; i < Enemies.Count; i++)
-                {
-                    if (Enemies[i].IsActive && IsColliding(PlayerShip.Instance, Enemies[i]))
-                    {
+            if (PlayerShip.Instance.GodMode == false) {
+                for (int i = 0; i < Enemies.Count; i++) {
+                    if (Enemies[i].IsActive && IsColliding(PlayerShip.Instance, Enemies[i])) {
                         PlayerShip.Instance.Kill();
                         Enemies.ForEach(x => x.WasShot());
                         break;
@@ -124,8 +107,7 @@ namespace Mono_Ether.Ether
 
             // Handle collisions between powerpacks and the player
             for (var i = 0; i < PowerPacks.Count; i++)
-                if (IsColliding(PowerPacks[i], PlayerShip.Instance))
-                {
+                if (IsColliding(PowerPacks[i], PlayerShip.Instance)) {
                     PowerPacks[i].WasPickedUp();
                     PlayerShip.Instance.activePowerPacks.Add(PowerPacks[i]);
                     PowerPacks[i].IsExpired = true;

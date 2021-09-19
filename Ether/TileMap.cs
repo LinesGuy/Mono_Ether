@@ -9,21 +9,17 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using System.IO;
 
-namespace Mono_Ether.Ether
-{
-    public class Tile
-    {
+namespace Mono_Ether.Ether {
+    public class Tile {
         public Vector2 pos;
         public int TileId;
         public Boolean[] Walls = new Boolean[8];
-        public Tile(Vector2 mapPos, int tileId)
-        {
+        public Tile(Vector2 mapPos, int tileId) {
             this.pos = mapPos;
             this.TileId = tileId;
         }
 
-        public void draw(SpriteBatch spriteBatch)
-        {
+        public void draw(SpriteBatch spriteBatch) {
             Texture2D texture;
             switch (TileId) // Get texture based on TextureID
             {
@@ -44,8 +40,7 @@ namespace Mono_Ether.Ether
             }
             var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
             spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-            if (EtherRoot.Instance.editorMode)
-            {
+            if (EtherRoot.Instance.editorMode) {
                 if (Walls[0]) spriteBatch.Draw(Art.collisionLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
                 if (Walls[1]) spriteBatch.Draw(Art.collisionUp, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
                 if (Walls[2]) spriteBatch.Draw(Art.collisionRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
@@ -66,8 +61,7 @@ namespace Mono_Ether.Ether
         public Vector2 BottomLeft { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize); }
         public Vector2 Left { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize / 2f); }
 
-        public void updateWalls()
-        {
+        public void updateWalls() {
             Walls = new Boolean[8]; // Set all walls to False (temp)
             // Update wall values based on surrounding tiles
             if (Map.GetTileFromMap(new Vector2(pos.X - 1, pos.Y)).TileId <= 0)
@@ -87,8 +81,7 @@ namespace Mono_Ether.Ether
             if (!Walls[3] && !Walls[0])
                 Walls[7] = true; // Bottom left
         }
-        public void updateNeighbouringWalls()
-        {
+        public void updateNeighbouringWalls() {
             // Updates this tile's walls and all 8 surrounding tile's walls
             List<Vector2> offsets = new List<Vector2>
             {
@@ -96,8 +89,7 @@ namespace Mono_Ether.Ether
                 new Vector2(-1,  0), new Vector2(0,  0), new Vector2(1,  0),
                 new Vector2(-1,  1), new Vector2(0,  1), new Vector2(1,  1)
             };
-            foreach (var offset in offsets)
-            {
+            foreach (var offset in offsets) {
                 Vector2 offsetPos = pos + offset;
                 if (offsetPos.X < 0 || offsetPos.Y < 0 || offsetPos.X >= Map._size.X || offsetPos.Y >= Map._size.Y)
                     continue;
@@ -105,25 +97,21 @@ namespace Mono_Ether.Ether
             }
         }
     }
-    static class Map
-    {
+    static class Map {
         public const float cellSize = 64f;
         public static Tile[,] _grid;
         public static Vector2 _size;
         private static int SelectedId = 1; // Currently selected Tile ID for editor mode
-        public static void LoadFromFile(string filename, Vector2 size)
-        {
+        public static void LoadFromFile(string filename, Vector2 size) {
             _size = size;
             // Load TileId's from TileMapData to _grid
             string lines = File.ReadAllText(@"Content/TileMapData/" + filename);
             int i = 0, j = 0;
             _grid = new Tile[(int)size.X, (int)size.Y];
-            foreach (var row in lines.Split('\n'))
-            {
+            foreach (var row in lines.Split('\n')) {
                 if (row.Length == 0) continue;
                 j = 0;
-                foreach (var col in row.Trim().Split(','))
-                {
+                foreach (var col in row.Trim().Split(',')) {
                     var id = int.Parse(col);
                     _grid[j, i] = new Tile(new Vector2(j, i), id);
                     j++;
@@ -131,30 +119,26 @@ namespace Mono_Ether.Ether
                 i++;
             }
             // Create tile collision data
-            foreach (var tile in _grid)
-            {
+            foreach (var tile in _grid) {
                 tile.updateWalls();
             }
         }
 
-        public static Tile GetTileFromMap(Vector2 mapPos)
-        {
+        public static Tile GetTileFromMap(Vector2 mapPos) {
             var (x, y) = mapPos;
             if (x < 0 || x >= _size.X || y < 0 || y >= _size.Y)
                 return new Tile(Vector2.Zero, -1);
             return _grid[(int)x, (int)y];
         }
 
-        public static Tile GetTileFromWorld(Vector2 worldPos)
-        {
+        public static Tile GetTileFromWorld(Vector2 worldPos) {
             var mapPos = WorldtoMap(worldPos);
             return GetTileFromMap(mapPos);
         }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / cellSize);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * cellSize;
         public static Vector2 MapToScreen(Vector2 mapPos) => Camera.world_to_screen_pos(MapToWorld(mapPos));
-        public static void Draw(SpriteBatch spriteBatch)
-        {
+        public static void Draw(SpriteBatch spriteBatch) {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
@@ -162,38 +146,30 @@ namespace Mono_Ether.Ether
             var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / cellSize));
             var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / cellSize));
             var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / cellSize));
-            for (int row = startRow; row < endRow; row++)
-            {
-                for (int col = startCol; col < endCol; col++)
-                {
+            for (int row = startRow; row < endRow; row++) {
+                for (int col = startCol; col < endCol; col++) {
                     var cell = _grid[col, row];
                     cell.draw(spriteBatch);
                 }
             }
             // Draw tile cursor is in if in editor mode
-            if (EtherRoot.Instance.editorMode)
-            {
+            if (EtherRoot.Instance.editorMode) {
                 var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / cellSize));
                 spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
             }
-            
+
         }
 
-        public static void Update()
-        {
-            if (EtherRoot.Instance.editorMode)
-            {
+        public static void Update() {
+            if (EtherRoot.Instance.editorMode) {
                 // Press 'R' to save map
-                if (Input.Keyboard.WasKeyJustDown(Keys.R))
-                {
+                if (Input.Keyboard.WasKeyJustDown(Keys.R)) {
                     string filename = "susMap3.txt";
                     Debug.WriteLine("Wrote to Content/TileMapData/" + filename);
                     List<string> lines = new List<string>();
-                    for (int row = 0; row < _size.Y; row++)
-                    {
+                    for (int row = 0; row < _size.Y; row++) {
                         string line = "";
-                        for (int col = 0; col < _size.X; col++)
-                        {
+                        for (int col = 0; col < _size.X; col++) {
                             var cell = _grid[col, row];
                             line += $"{cell.TileId},";
                         }

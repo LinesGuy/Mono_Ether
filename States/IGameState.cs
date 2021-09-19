@@ -2,10 +2,8 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mono_Ether.States
-{
-    interface IGameState
-    {
+namespace Mono_Ether.States {
+    interface IGameState {
         // Initialize game settings
         void Initialize();
 

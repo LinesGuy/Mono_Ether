@@ -3,10 +3,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Mono_Ether.States
-{
-    public class GameStateManager
-    {
+namespace Mono_Ether.States {
+    public class GameStateManager {
         // Instance of game state manager
         private static GameStateManager _instance;
 
@@ -15,15 +13,12 @@ namespace Mono_Ether.States
 
         private ContentManager _content;
         // Sets content manager
-        public void SetContent(ContentManager content)
-        {
+        public void SetContent(ContentManager content) {
             _content = content;
         }
 
-        public static GameStateManager Instance
-        {
-            get
-            {
+        public static GameStateManager Instance {
+            get {
                 if (_instance == null)
                     _instance = new GameStateManager();
                 return _instance;
@@ -31,8 +26,7 @@ namespace Mono_Ether.States
         }
 
         // Add new screen to stack
-        public void AddScreen(GameState screen)
-        {
+        public void AddScreen(GameState screen) {
             // Add screen to stack
             _screens.Push(screen);
             // Initialize screen
@@ -42,10 +36,8 @@ namespace Mono_Ether.States
                 _screens.Peek().LoadContent(_content);
         }
 
-        public void RemoveScreen()
-        {
-            if (_screens.Count > 0)
-            {
+        public void RemoveScreen() {
+            if (_screens.Count > 0) {
                 var screen = _screens.Peek();
                 _screens.Pop();
 
@@ -53,36 +45,30 @@ namespace Mono_Ether.States
         }
 
         // Clear all screens from the stack
-        public void ClearScreens()
-        {
-            while (_screens.Count > 0)
-            {
+        public void ClearScreens() {
+            while (_screens.Count > 0) {
                 _screens.Pop();
             }
         }
 
-        public void ChangeScreen(GameState screen)
-        {
+        public void ChangeScreen(GameState screen) {
             ClearScreens();
             AddScreen(screen);
         }
 
         // Update the top screen
-        public void Update(GameTime gameTime)
-        {
+        public void Update(GameTime gameTime) {
             if (_screens.Count > 0)
                 _screens.Peek().Update(gameTime);
         }
 
         // Render top screen
-        public void Draw(SpriteBatch spriteBatch)
-        {
+        public void Draw(SpriteBatch spriteBatch) {
             if (_screens.Count > 0)
                 _screens.Peek().Draw(spriteBatch);
         }
 
-        public void UnloadContent()
-        {
+        public void UnloadContent() {
             foreach (GameState state in _screens)
                 state.UnloadContent();
         }

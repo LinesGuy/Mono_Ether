@@ -2,14 +2,11 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mono_Ether.States
-{
-    public abstract class GameState : IGameState
-    {
+namespace Mono_Ether.States {
+    public abstract class GameState : IGameState {
         protected readonly GraphicsDevice GraphicsDevice;
 
-        protected GameState(GraphicsDevice graphicsDevice)
-        {
+        protected GameState(GraphicsDevice graphicsDevice) {
             GraphicsDevice = graphicsDevice;
         }
         public abstract void Initialize();

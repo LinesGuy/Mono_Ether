@@ -3,10 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
 
-namespace Mono_Ether.Ether
-{
-    class PowerPack : Entity
-    {
+namespace Mono_Ether.Ether {
+    class PowerPack : Entity {
         private int timeUntilStart = 60;
         public bool IsActive => timeUntilStart <= 0;
         public string PowerType;
@@ -17,8 +15,7 @@ namespace Mono_Ether.Ether
         public bool isExpended; // When the player uses up the power
         public bool isGood; // true = speed increase etc, false = speed decrease etc
         private readonly Random rand = new Random();
-        public PowerPack(Texture2D image, Vector2 position, string powerType, int duration)
-        {
+        public PowerPack(Texture2D image, Vector2 position, string powerType, int duration) {
             Image = image;
             Position = position;
             Radius = image.Width / 2f;
@@ -37,11 +34,9 @@ namespace Mono_Ether.Ether
 
         }
 
-        public override void Update()
-        {
+        public override void Update() {
             // Fade-in powerup on spawn
-            if (timeUntilStart > 0)
-            {
+            if (timeUntilStart > 0) {
                 timeUntilStart--;
                 Color = Color.White * (1 - timeUntilStart / 60f);
             }
@@ -51,17 +46,14 @@ namespace Mono_Ether.Ether
                 IsExpired = true;
         }
 
-        public void WasPickedUp()
-        {
+        public void WasPickedUp() {
             if (isGood)
                 Art.PowerPackPickup.CreateInstance().Play();
             else
                 Art.PowerPackPickupBad.CreateInstance().Play();
-            for (var i = 0; i < 50; i++)
-            {
+            for (var i = 0; i < 50; i++) {
                 var speed = 30f * (1f - 1 / rand.NextFloat(1f, 10f));
-                var state = new ParticleState()
-                {
+                var state = new ParticleState() {
                     Velocity = rand.NextVector2(speed, speed),
                     Type = ParticleType.Enemy,
                     LengthMultiplier = 1f
@@ -73,19 +65,16 @@ namespace Mono_Ether.Ether
             }
         }
     }
-    static class PowerPackSpawner
-    {
+    static class PowerPackSpawner {
         static Random _rand = new Random();
         static float _inverseSpawnChance = 50;
         public static bool enabled = true;
         private const int numTypes = 4;
-        public static void Update()
-        {
+        public static void Update() {
             if (!enabled)
                 return;
 
-            if (!PlayerShip.Instance.IsDead && EntityManager.PowerPacks.Count < 3)
-            {
+            if (!PlayerShip.Instance.IsDead && EntityManager.PowerPacks.Count < 3) {
                 if (_rand.Next((int)_inverseSpawnChance) != 0)
                     return;
                 var pos = EnemySpawner.GetSpawnPosition(2500f, 20);
@@ -93,8 +82,7 @@ namespace Mono_Ether.Ether
                     return;
 
                 int powerTypeInt = _rand.Next(0, numTypes);
-                switch (powerTypeInt)
-                {
+                switch (powerTypeInt) {
                     case (0): // ShootSpeedIncrease
                         EntityManager.Add(new PowerPack(Art.PowerShootSpeedIncrease, pos, "ShootSpeedIncrease", 300));
                         break;

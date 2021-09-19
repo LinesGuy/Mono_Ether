@@ -8,10 +8,8 @@ using MonoGame.Extended.Tweening;
 using Mono_Ether.States;
 using MonoGame.Extended.Input;
 
-namespace Mono_Ether.MainMenuOld
-{
-    public class MainMenu : GameState
-    {
+namespace Mono_Ether.MainMenuOld {
+    public class MainMenu : GameState {
         private int frame;
 
         private const int FadeInFrames = 60;
@@ -24,16 +22,14 @@ namespace Mono_Ether.MainMenuOld
         private readonly MenuButton exitButton = new MenuButton(GameRoot.ScreenSize / 2f, Art.MenuExitButton);
 
         private Song welcomeTrack;
-        public MainMenu(GraphicsDevice graphicsDevice) : base(graphicsDevice)
-        {
+        public MainMenu(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
 
-        public override void Initialize()
-        {
+        public override void Initialize() {
         }
 
-        public override void LoadContent(ContentManager content)
-        {
+
+        public override void LoadContent(ContentManager content) {
 
             welcomeTrack = content.Load<Song>("Tracks/welcome_track");
             cookie.Image = content.Load<Texture2D>("Textures/Menu/cookie");
@@ -41,44 +37,32 @@ namespace Mono_Ether.MainMenuOld
             MediaPlayer.Play(welcomeTrack);
         }
 
-        public override void UnloadContent()
-        {
-            
+        public override void UnloadContent() {
+
         }
 
-        public override void Update(GameTime gameTime)
-        {
+        public override void Update(GameTime gameTime) {
             // White fade-in
             if (frame < FadeInFrames)
                 fadeTransparency = MathUtil.Interpolate(1f, 0f, (float)frame / FadeInFrames);
 
             cookie.Update(gameTime);
 
-            if (cookie.State == 1 && Input.Mouse.WasButtonJustDown(MouseButton.Left))
-            {
+            if (cookie.State == 1 && Input.Mouse.WasButtonJustDown(MouseButton.Left)) {
                 // Check if any menu buttons were pressed
-                if (playButton.CursorInButton())
-                {
+                if (playButton.CursorInButton()) {
                     Debug.WriteLine("change screen to game");
                     GameStateManager.Instance.ChangeScreen(new Ether.EtherRoot(GraphicsDevice));
-                }
-                    
-                else if (settingsButton.CursorInButton())
-                {
+                } else if (settingsButton.CursorInButton()) {
                     Debug.WriteLine("change screen to settings");
-                }
-                else if (creditsButton.CursorInButton())
-                {
+                } else if (creditsButton.CursorInButton()) {
                     Debug.WriteLine("change screen to credits");
-                }
-                else if (exitButton.CursorInButton())
-                {
+                } else if (exitButton.CursorInButton()) {
                     Debug.WriteLine("change screen to exit");
                 }
             }
-            
-            if (Input.Mouse.WasButtonJustDown(MouseButton.Left) && cookie.State == 0)
-            {
+
+            if (Input.Mouse.WasButtonJustDown(MouseButton.Left) && cookie.State == 0) {
                 // Move cookie slightly to left and shrink
                 cookie.State = 1;
                 tweener.TweenTo(cookie, a => a.Position, new Vector2(GameRoot.ScreenSize.X * 0.3f, GameRoot.ScreenSize.Y * 0.5f), duration: 2)
@@ -96,7 +80,7 @@ namespace Mono_Ether.MainMenuOld
                 tweener.TweenTo(exitButton, a => a.Position, new Vector2(GameRoot.ScreenSize.X * 0.55f, GameRoot.ScreenSize.Y * 0.8f), duration: 2)
                     .Easing(EasingFunctions.ExponentialOut);
             }
-            
+
             playButton.Update(gameTime);
 
             tweener.Update(gameTime.GetElapsedSeconds());
@@ -104,15 +88,14 @@ namespace Mono_Ether.MainMenuOld
             frame += 1;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
+        public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             playButton.Draw(spriteBatch);
             settingsButton.Draw(spriteBatch);
             creditsButton.Draw(spriteBatch);
             exitButton.Draw(spriteBatch);
-            
+
             cookie.Draw(spriteBatch);
             // Fade in
             spriteBatch.Draw(Art.Pixel, new RectangleF(0, 0, GameRoot.ScreenSize.X, GameRoot.ScreenSize.Y).ToRectangle(), Color.White * fadeTransparency);

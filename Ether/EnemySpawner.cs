@@ -2,20 +2,16 @@
 using System;
 using System.Diagnostics;
 
-namespace Mono_Ether.Ether
-{
-    static class EnemySpawner
-    {
+namespace Mono_Ether.Ether {
+    static class EnemySpawner {
         static Random _rand = new Random();
         static float _inverseSpawnChance = 60;
         public static bool enabled = true;
-        public static void Update()
-        {
+        public static void Update() {
             if (!enabled)
                 return;
 
-            if (!PlayerShip.Instance.IsDead && EntityManager.Count < 200)
-            {
+            if (!PlayerShip.Instance.IsDead && EntityManager.Count < 200) {
                 if (_rand.Next((int)_inverseSpawnChance) != 0)
                     return;
 
@@ -34,14 +30,12 @@ namespace Mono_Ether.Ether
                 _inverseSpawnChance -= 0.005f;
         }
 
-        public static Vector2 GetSpawnPosition(float radius = 500f, int attempts = 10)
-        {
+        public static Vector2 GetSpawnPosition(float radius = 500f, int attempts = 10) {
             // If returns Vector2.Zero, could not find valid spawn position
             Vector2 pos;
             Vector2 playerPos = PlayerShip.Instance.Position;
             int remainingAttempts = attempts;
-            do
-            {
+            do {
                 pos = new Vector2(_rand.NextFloat(playerPos.X - radius, playerPos.X + radius), _rand.NextFloat(playerPos.Y - radius, playerPos.Y + radius));
                 remainingAttempts -= 1;
             }
@@ -49,16 +43,14 @@ namespace Mono_Ether.Ether
                    || Map.GetTileFromMap(Map.WorldtoMap(pos)).TileId > 0
                    || pos.X < 0 || pos.Y < 0 || pos.X > Map._size.X * Map.cellSize || pos.Y > Map._size.Y * Map.cellSize)
                    && remainingAttempts > 0);
-            if (remainingAttempts == 0)
-            {
+            if (remainingAttempts == 0) {
                 Debug.WriteLine($"Could not find spawn position after {attempts} attempts, skipping");
                 return Vector2.Zero;
             }
             return pos;
         }
 
-        public static void Reset()
-        {
+        public static void Reset() {
             _inverseSpawnChance = 60;
         }
     }

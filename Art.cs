@@ -3,10 +3,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 
-namespace Mono_Ether
-{
-    static class Art
-    {
+namespace Mono_Ether {
+    static class Art {
         public static Texture2D Pixel { get; private set; }
         public static Texture2D Default { get; private set; }
         public static Texture2D Player { get; private set; }
@@ -17,7 +15,7 @@ namespace Mono_Ether
         public static Texture2D Pointer { get; private set; }
         public static Texture2D LineParticle { get; private set; }
         public static Texture2D Glow { get; private set; }
-        
+
         public static SoundEffect PlayerShoot { get; private set; }
         public static SoundEffect PlayerDeath { get; private set; }
         public static SoundEffect EnemyExplosion { get; private set; }
@@ -49,8 +47,7 @@ namespace Mono_Ether
         public static Texture2D PowerMoveSpeedDecrease { get; private set; }
         public static SoundEffect PowerPackPickup { get; private set; }
         public static SoundEffect PowerPackPickupBad { get; private set; }
-        public static void Load(ContentManager content)
-        {
+        public static void Load(ContentManager content) {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
             Player = content.Load<Texture2D>("Textures/Gameplay/Player");

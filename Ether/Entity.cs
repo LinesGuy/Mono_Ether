@@ -2,10 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Mono_Ether.Ether
-{
-    internal abstract class Entity
-    {
+namespace Mono_Ether.Ether {
+    internal abstract class Entity {
         protected Texture2D Image = Art.Default;  // Tint of image
         protected Color Color = Color.White;
 
@@ -19,14 +17,12 @@ namespace Mono_Ether.Ether
 
         public abstract void Update();
 
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
+        public virtual void Draw(SpriteBatch spriteBatch) {
             var screenPos = Camera.world_to_screen_pos(Position);
             spriteBatch.Draw(Image, screenPos, null, Color, Orientation, Size / 2f, Camera.Zoom, 0, 0);
         }
 
-        public virtual void HandleTilemapCollision()
-        {
+        public virtual void HandleTilemapCollision() {
             var tile = Map.GetTileFromWorld(Position);
 
             // Return if entity is not in a solid tile
@@ -44,8 +40,7 @@ namespace Mono_Ether.Ether
             Vector2 destination; // The destination wall that the entity will be moved to
 
             // Check for rare corner exception
-            if (tile.Walls[4] || tile.Walls[5] || tile.Walls[6] || tile.Walls[7])
-            {
+            if (tile.Walls[4] || tile.Walls[5] || tile.Walls[6] || tile.Walls[7]) {
                 if (tile.Walls[4])
                     destination = tile.TopLeft;
                 else if (tile.Walls[5])
@@ -55,8 +50,7 @@ namespace Mono_Ether.Ether
                 else
                     destination = tile.BottomLeft;
 
-                if (Vector2.DistanceSquared(Position, destination) < (Map.cellSize / 2f) * (Map.cellSize / 2f))
-                {
+                if (Vector2.DistanceSquared(Position, destination) < (Map.cellSize / 2f) * (Map.cellSize / 2f)) {
                     Position = destination;
                     return;
                 }
@@ -92,7 +86,7 @@ namespace Mono_Ether.Ether
             else
                 Position.Y = destination.Y;
 
-            return; 
+            return;
         }
     }
 }
