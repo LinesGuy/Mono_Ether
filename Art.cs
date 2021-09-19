@@ -27,6 +27,7 @@ namespace Mono_Ether
         public static Texture2D MenuSettingsButton { get; private set; }
         public static Texture2D MenuCreditsButton { get; private set; }
         public static Texture2D MenuExitButton { get; private set; }
+        public static Texture2D MenuBackButton { get; private set; }
         public static Texture2D tileGrass { get; private set; }
         public static Texture2D tileDirt { get; private set; }
         public static Texture2D tileStone { get; private set; }
@@ -69,6 +70,7 @@ namespace Mono_Ether
             MenuSettingsButton = content.Load<Texture2D>("Textures/Menu/settings_button");
             MenuCreditsButton = content.Load<Texture2D>("Textures/Menu/credits_button");
             MenuExitButton = content.Load<Texture2D>("Textures/Menu/exit_button");
+            MenuBackButton = content.Load<Texture2D>("Textures/Menu/back_button");
             tileGrass = content.Load<Texture2D>("Textures/tiles/tile1");
             tileDirt = content.Load<Texture2D>("Textures/tiles/tile2");
             tileStone = content.Load<Texture2D>("Textures/tiles/tile3");
