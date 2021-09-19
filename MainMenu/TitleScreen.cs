@@ -9,17 +9,21 @@ namespace Mono_Ether.MainMenu
 {
     public class TitleScreen : States.GameState
     {
-        private int foobar = 0;
+        private MenuButtonManager menuButtonManager;
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
         }
         public override void Initialize()
         {
-
+            menuButtonManager = new MenuButtonManager();
+            menuButtonManager.Add("play");
+            menuButtonManager.Add("settings");
+            menuButtonManager.Add("credits");
+            menuButtonManager.Add("exit");
         }
         public override void LoadContent(ContentManager content)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         public override void UnloadContent()
         {
@@ -27,14 +31,32 @@ namespace Mono_Ether.MainMenu
         }
         public override void Update(GameTime gameTime)
         {
-            foobar++;
+            var clickedButton = menuButtonManager.getClickedButton();
+            switch (clickedButton)
+            {
+                case "play":
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    break;
+                case "credits":
+                    GameRoot.Instance.AddScreen(new MainMenu.CreditsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    break;
+                case "settings":
+                    GameRoot.Instance.AddScreen(new MainMenu.SettingsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    break;
+                case "exit":
+                    GameRoot.Instance.RemoveScreen();
+                    break;
+                default:
+                    break;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Art.DebugFont, $"xd + {foobar}", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "welcome to ether", Vector2.Zero, Color.White);
+            menuButtonManager.Draw(spriteBatch);
             spriteBatch.End();
         }
     }
