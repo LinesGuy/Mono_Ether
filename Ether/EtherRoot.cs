@@ -24,6 +24,7 @@ namespace Mono_Ether.Ether {
 
         public override void LoadContent(ContentManager content) {
             Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
+            BackgroundParticleManager.Populate(Map._size * Map.cellSize, 1024);
         }
 
         public override void UnloadContent() {
@@ -52,6 +53,7 @@ namespace Mono_Ether.Ether {
 
             Camera.Update();
             Map.Update();
+            BackgroundParticleManager.Update();
 
             if (paused) {
                 PauseMenu.Update();
@@ -67,7 +69,7 @@ namespace Mono_Ether.Ether {
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
 
             Map.Draw(spriteBatch);
-
+            BackgroundParticleManager.Draw(spriteBatch);
             EntityManager.Draw(spriteBatch);
             ParticleManager.Draw(spriteBatch);
 

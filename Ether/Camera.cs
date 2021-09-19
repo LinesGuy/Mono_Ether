@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 
 namespace Mono_Ether.Ether {
     static class Camera {
@@ -57,7 +58,6 @@ namespace Mono_Ether.Ether {
                 Lerp(PlayerShip.Instance.Position);
             else if (Input.Keyboard.IsKeyDown(Keys.C))
                 _isLerping = true;  // Press 'c' to enable lerp
-
         }
 
         private static void move_relative(Vector2 direction) {

@@ -47,6 +47,7 @@ namespace Mono_Ether {
         public static Texture2D PowerMoveSpeedDecrease { get; private set; }
         public static SoundEffect PowerPackPickup { get; private set; }
         public static SoundEffect PowerPackPickupBad { get; private set; }
+        public static Texture2D BackgroundParticle { get; private set; }
         public static void Load(ContentManager content) {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
@@ -89,6 +90,8 @@ namespace Mono_Ether {
             PowerMoveSpeedDecrease = content.Load<Texture2D>("Textures/GamePlay/PowerMoveSpeedDecrease");
             PowerPackPickup = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickup");
             PowerPackPickupBad = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickupBad");
+            BackgroundParticle = content.Load<Texture2D>("Textures/GamePlay/BackgroundParticle");
         }
     }
 }
+
