@@ -21,7 +21,7 @@ namespace Mono_Ether.MainMenu {
             throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
-            var clickedButton = menuButtonManager.getClickedButton();
+            var clickedButton = buttonManager.getClickedButton();
             if (clickedButton == "back")
                 GameRoot.Instance.RemoveScreen();
         }
@@ -30,7 +30,7 @@ namespace Mono_Ether.MainMenu {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.DrawString(Art.DebugFont, $"there are none", Vector2.Zero, Color.White);
-            menuButtonManager.Draw(spriteBatch);
+            buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }
     }

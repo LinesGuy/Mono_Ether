@@ -24,7 +24,7 @@ namespace Mono_Ether.Ether {
 
         public override void LoadContent(ContentManager content) {
             Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
-            BackgroundParticleManager.Populate(Map._size * Map.cellSize, 1024);
+            BackgroundParticleManager.Populate(Map._size * Map.cellSize, 256);
         }
 
         public override void UnloadContent() {

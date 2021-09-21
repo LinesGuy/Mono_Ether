@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -42,6 +43,7 @@ namespace Mono_Ether.Ether {
             for (int i = 0; i < num; i++) {
                 Particles.Add(new BackgroundParticle(size));
             }
+            Particles = Particles.Where(x => !(Map.GetTileFromWorld(x.Pos).TileId > 0)).ToList();
         }
         public static void Update() {
             foreach (var particle in Particles) {

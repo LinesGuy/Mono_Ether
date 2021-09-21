@@ -24,17 +24,16 @@ namespace Mono_Ether.MainMenu {
             throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
-            var clickedButton = menuButtonManager.getClickedButton();
+            var clickedButton = buttonManager.getClickedButton();
             switch (clickedButton) {
                 case "play":
-                    //GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
-                    GameRoot.Instance.AddScreen(new LevelSelection.LevelSelectionScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new LevelSelectionScreen(GameRoot.Instance.graphicsasdfasdfasdf));
                     break;
                 case "credits":
-                    GameRoot.Instance.AddScreen(new MainMenu.CreditsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new CreditsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
                     break;
                 case "settings":
-                    GameRoot.Instance.AddScreen(new MainMenu.SettingsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new SettingsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
                     break;
                 case "exit":
                     GameRoot.Instance.RemoveScreen();
@@ -45,10 +44,10 @@ namespace Mono_Ether.MainMenu {
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             spriteBatch.DrawString(Art.DebugFont, "welcome to ether", Vector2.Zero, Color.White);
-            menuButtonManager.Draw(spriteBatch);
+            buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }
     }
