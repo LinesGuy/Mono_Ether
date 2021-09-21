@@ -51,17 +51,19 @@ namespace Mono_Ether.Ether {
             if (Input.Keyboard.WasKeyJustDown(Keys.Escape))
                 paused = !paused;
 
-            Camera.Update();
+            
             Map.Update();
-            BackgroundParticleManager.Update();
+            
 
             if (paused) {
                 PauseMenu.Update();
             } else {
+                Camera.Update();
                 EntityManager.Update();
                 EnemySpawner.Update();
                 PowerPackSpawner.Update();
                 ParticleManager.Update();
+                BackgroundParticleManager.Update();
             }
         }
         public override void Draw(SpriteBatch spriteBatch) {
