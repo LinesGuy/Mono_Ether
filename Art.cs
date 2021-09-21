@@ -15,17 +15,17 @@ namespace Mono_Ether {
         public static Texture2D Pointer { get; private set; }
         public static Texture2D LineParticle { get; private set; }
         public static Texture2D Glow { get; private set; }
-
         public static SoundEffect PlayerShoot { get; private set; }
         public static SoundEffect PlayerDeath { get; private set; }
         public static SoundEffect EnemyExplosion { get; private set; }
         public static SpriteFont DebugFont { get; private set; }
         public static Texture2D WelcomeText { get; private set; }
-        public static Texture2D MenuPlayButton { get; private set; }
+        /*public static Texture2D MenuPlayButton { get; private set; }
         public static Texture2D MenuSettingsButton { get; private set; }
         public static Texture2D MenuCreditsButton { get; private set; }
         public static Texture2D MenuExitButton { get; private set; }
-        public static Texture2D MenuBackButton { get; private set; }
+        public static Texture2D MenuBackButton { get; private set; }*/
+        public static Texture2D MenuButtonBlank { get; private set; }
         public static Texture2D tileGrass { get; private set; }
         public static Texture2D tileDirt { get; private set; }
         public static Texture2D tileStone { get; private set; }
@@ -64,11 +64,12 @@ namespace Mono_Ether {
             EnemyExplosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");
             DebugFont = content.Load<SpriteFont>("Fonts/DebugFont");
             WelcomeText = content.Load<Texture2D>("Textures/Intro/welcome_text");
-            MenuPlayButton = content.Load<Texture2D>("Textures/Menu/play_button");
+            /*MenuPlayButton = content.Load<Texture2D>("Textures/Menu/play_button");
             MenuSettingsButton = content.Load<Texture2D>("Textures/Menu/settings_button");
             MenuCreditsButton = content.Load<Texture2D>("Textures/Menu/credits_button");
             MenuExitButton = content.Load<Texture2D>("Textures/Menu/exit_button");
-            MenuBackButton = content.Load<Texture2D>("Textures/Menu/back_button");
+            MenuBackButton = content.Load<Texture2D>("Textures/Menu/back_button");*/
+            MenuButtonBlank = content.Load<Texture2D>("Textures/Menu/menu_button_blank");
             tileGrass = content.Load<Texture2D>("Textures/tiles/tile1");
             tileDirt = content.Load<Texture2D>("Textures/tiles/tile2");
             tileStone = content.Load<Texture2D>("Textures/tiles/tile3");

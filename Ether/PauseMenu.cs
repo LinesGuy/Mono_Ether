@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether.Ether {
     public static class PauseMenu {
-        private static MenuButtonManager buttonManager = new MenuButtonManager();
+        private static ButtonManager buttonManager = new ButtonManager();
         public static void Initialize() {
             buttonManager.Add("pauseExit", new Vector2(320, 600));
             buttonManager.Add("pauseResume", new Vector2(940, 600));

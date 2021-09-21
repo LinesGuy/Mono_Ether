@@ -7,12 +7,12 @@ using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class CreditsScreen : States.GameState {
-        private MenuButtonManager menuButtonManager;
+        private ButtonManager buttonManager;
         public CreditsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
-            menuButtonManager = new MenuButtonManager();
-            menuButtonManager.Add("back");
+            buttonManager = new ButtonManager();
+            buttonManager.Add("back");
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
@@ -21,7 +21,7 @@ namespace Mono_Ether.MainMenu {
             throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
-            var clickedButton = menuButtonManager.getClickedButton();
+            var clickedButton = buttonManager.getClickedButton();
             if (clickedButton == "back")
                 GameRoot.Instance.RemoveScreen();
         }
@@ -30,7 +30,7 @@ namespace Mono_Ether.MainMenu {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.DrawString(Art.DebugFont, "everything by me", Vector2.Zero, Color.White);
-            menuButtonManager.Draw(spriteBatch);
+            buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }
     }

@@ -338,6 +338,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/exit_button.png
 
+#begin Textures/Menu/menu_button_blank.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Menu/menu_button_blank.png
+
 #begin Textures/Menu/pixel.png
 /importer:TextureImporter
 /processor:TextureProcessor
