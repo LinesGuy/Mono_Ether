@@ -7,11 +7,11 @@ using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class TitleScreen : States.GameState {
-        private MenuButtonManager menuButtonManager;
+        private MyButtonManager menuButtonManager;
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
-            menuButtonManager = new MenuButtonManager();
+            menuButtonManager = new MyButtonManager();
             menuButtonManager.Add("play");
             menuButtonManager.Add("settings");
             menuButtonManager.Add("credits");
@@ -27,7 +27,8 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = menuButtonManager.getClickedButton();
             switch (clickedButton) {
                 case "play":
-                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    //GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new LevelSelection.LevelSelectionScreen(GameRoot.Instance.graphicsasdfasdfasdf));
                     break;
                 case "credits":
                     GameRoot.Instance.AddScreen(new MainMenu.CreditsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
