@@ -7,11 +7,11 @@ using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class SettingsScreen : States.GameState {
-        private MenuButtonManager menuButtonManager;
+        private MyButtonManager menuButtonManager;
         public SettingsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
-            menuButtonManager = new MenuButtonManager();
+            menuButtonManager = new MyButtonManager();
             menuButtonManager.Add("back");
         }
         public override void LoadContent(ContentManager content) {

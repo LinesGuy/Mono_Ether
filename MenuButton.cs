@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Mono_Ether {
     public class MenuButton {
-        Vector2 Pos;
+        public Vector2 Pos;
         public string Name;
         Rectangle Rect;
         Texture2D texture;
@@ -39,7 +39,7 @@ namespace Mono_Ether {
         }
     }
 
-    public class MenuButtonManager {
+    public class MyButtonManager {
         public List<MenuButton> Buttons = new List<MenuButton>();
 
         public void Add(string name) {
