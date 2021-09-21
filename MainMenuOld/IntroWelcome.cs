@@ -27,8 +27,6 @@ namespace Mono_Ether.MainMenuOld {
 
         public override void LoadContent(ContentManager content) {
             welcomePiano = content.Load<Song>("Samples/Intro/welcome_piano");
-
-            //welcomePiano = content.Load<Song>("Tracks/Deceit");
             MediaPlayer.Volume = 0.3f;
             MediaPlayer.Play(welcomePiano);
         }
