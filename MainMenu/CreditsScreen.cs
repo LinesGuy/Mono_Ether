@@ -7,12 +7,12 @@ using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class CreditsScreen : States.GameState {
-        private MyButtonManager menuButtonManager;
+        private ButtonManager buttonManager;
         public CreditsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
-            menuButtonManager = new MyButtonManager();
-            menuButtonManager.Add("back");
+            buttonManager = new ButtonManager();
+            buttonManager.Add("back");
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();

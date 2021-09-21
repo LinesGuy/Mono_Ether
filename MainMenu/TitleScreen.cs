@@ -7,15 +7,15 @@ using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class TitleScreen : States.GameState {
-        private MyButtonManager menuButtonManager;
+        private ButtonManager buttonManager;
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
-            menuButtonManager = new MyButtonManager();
-            menuButtonManager.Add("play");
-            menuButtonManager.Add("settings");
-            menuButtonManager.Add("credits");
-            menuButtonManager.Add("exit");
+            buttonManager = new ButtonManager();
+            buttonManager.Add("play");
+            buttonManager.Add("settings");
+            buttonManager.Add("credits");
+            buttonManager.Add("exit");
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
