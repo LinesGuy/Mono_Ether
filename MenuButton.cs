@@ -12,7 +12,7 @@ namespace Mono_Ether {
         public string Text;
         protected Rectangle Rect;
         protected Texture2D Texture;
-        protected Color FontColor;
+        protected Color FontColor = Color.Black;
 
         /*public MenuButton(Vector2 pos,  string text) {
             Pos = pos - texture.Size() / 2f;
@@ -27,18 +27,19 @@ namespace Mono_Ether {
         }
         public virtual void DrawText(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), FontColor, 0f, Vector2.Zero, 2f, 0, 0);
+            //spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), FontColor, 0f, Vector2.Zero, 2f, 0, 0);
+            spriteBatch.DrawString(Art.DebugFont, Text, new Vector2(100, 100), FontColor, 0f, Vector2.Zero, 2f, 0, 0);
+            var asdf = Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text);
         }
     }
-    class MainMenuButton : Button
+    class MenuButton : Button
     {
-        public MainMenuButton(Vector2 pos, string text)
+        public MenuButton(Vector2 pos, string text)
         {
             Texture = Art.MenuButtonBlank;
             Text = text;
             Pos = pos - Texture.Size() / 2f;
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
-            FontColor = Color.Black;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -54,16 +55,30 @@ namespace Mono_Ether {
             }
         }
     }
+    class LevelButton : Button
+    {
+        public float offset;
+        public LevelButton(int index, string text)
+        {
+            Texture = Art.MenuButtonBlank;
+            Text = text;
+            offset = 0f;
+            Pos = new Vector2((float)(GameRoot.ScreenSize.X - Math.Cos(index + offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(index + offset) * GameRoot.ScreenSize.Y / 2f));
+        }
+    }
     class ButtonManager {
-        public List<MainMenuButton> Buttons = new List<MainMenuButton>();
+        public List<Button> Buttons = new List<Button>();
 
         public void Add(string name) {
-            Buttons.Add(new MainMenuButton(new Vector2(GameRoot.ScreenSize.X / 2f, (Buttons.Count + 1) * 150), name));
+            Buttons.Add(new MenuButton(new Vector2(GameRoot.ScreenSize.X / 2f, (Buttons.Count + 1) * 150), name));
         }
         public void Add(string name, Vector2 pos) {
-            Buttons.Add(new MainMenuButton(pos, name));
+            Buttons.Add(new MenuButton(pos, name));
         }
-
+        public void AddButton(Button button)
+        {
+            Buttons.Add(button);
+        }
         public string getClickedButton() {
             if (Input.Mouse.WasButtonJustDown(MouseButton.Left))
                 foreach (var button in Buttons)

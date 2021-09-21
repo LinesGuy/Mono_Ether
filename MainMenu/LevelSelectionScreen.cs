@@ -3,19 +3,18 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Mono_Ether.MainMenu {
-    public class TitleScreen : States.GameState {
+    public class LevelSelectionScreen : States.GameState {
         private ButtonManager buttonManager;
-        public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
+        public LevelSelectionScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
             buttonManager = new ButtonManager();
-            buttonManager.Add("play");
-            buttonManager.Add("settings");
-            buttonManager.Add("credits");
-            buttonManager.Add("exit");
+            buttonManager.AddButton(new LevelButton(0, "Level one"));
+            buttonManager.AddButton(new LevelButton(1, "Level two"));
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
@@ -26,27 +25,19 @@ namespace Mono_Ether.MainMenu {
         public override void Update(GameTime gameTime) {
             var clickedButton = buttonManager.getClickedButton();
             switch (clickedButton) {
-                case "play":
-                    GameRoot.Instance.AddScreen(new LevelSelectionScreen(GameRoot.Instance.graphicsasdfasdfasdf));
-                    break;
-                case "credits":
-                    GameRoot.Instance.AddScreen(new CreditsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
-                    break;
-                case "settings":
-                    GameRoot.Instance.AddScreen(new SettingsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
-                    break;
-                case "exit":
-                    GameRoot.Instance.RemoveScreen();
-                    break;
-                default:
+                case "asdf":
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     break;
             }
+            //if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                foreach (LevelButton button in buttonManager.Buttons)
+                    button.offset += 0.1f;
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Art.DebugFont, "welcome to ether", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "levels xd", Vector2.Zero, Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }
