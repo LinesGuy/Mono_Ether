@@ -27,8 +27,7 @@ namespace Mono_Ether {
         }
         public virtual void DrawText(SpriteBatch spriteBatch)
         {
-            //spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), FontColor, 0f, Vector2.Zero, 2f, 0, 0);
-            spriteBatch.DrawString(Art.DebugFont, Text, new Vector2(100, 100), FontColor, 0f, Vector2.Zero, 2f, 0, 0);
+            spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), FontColor, 0f, Vector2.Zero, 2f, 0, 0);
             var asdf = Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text);
         }
     }
