@@ -53,13 +53,13 @@ namespace Mono_Ether {
     }
     class LevelButton : Button
     {
-        public int Index;
+        public float Offset;
         public LevelButton(int index, string text)
         {
             Texture = Art.MenuButtonBlank;
             Text = text;
-            Index = index;
-            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(index / 3f) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(index / 3f) * GameRoot.ScreenSize.Y / 2f));
+            Offset = index / 2f;
+            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 2f));
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
             ActiveButtonColor = Color.Green;
             InactiveButtonColor = Color.White;
@@ -69,8 +69,26 @@ namespace Mono_Ether {
 
         public override void Update()
         {
-            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(Index / 3f + offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Index / 3f + offset) * GameRoot.ScreenSize.Y / 2f));
+            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 2f));
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+            {
+                Offset -= 0.05f;
+                if (Offset < 0f)
+                    Offset += 2f * MathF.PI;
+            }
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+            {
+                Offset += 0.05f;
+                if (Offset > 2f * MathF.PI)
+                    Offset -= 2f * MathF.PI;
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (Offset < MathF.PI / 2f || Offset > 1.5f * MathF.PI)
+                base.Draw(spriteBatch);
         }
     }
     class ButtonManager {

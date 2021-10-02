@@ -13,9 +13,9 @@ namespace Mono_Ether.MainMenu {
         }
         public override void Initialize() {
             buttonManager = new ButtonManager();
-            buttonManager.AddButton(new LevelButton(0, "0"));
-            buttonManager.AddButton(new LevelButton(1, "1"));
-            buttonManager.AddButton(new LevelButton(2, "2"));
+            buttonManager.AddButton(new LevelButton(0, "Testing stage"));
+            buttonManager.AddButton(new LevelButton(1, "Tutorial"));
+            buttonManager.AddButton(new LevelButton(2, "Level one"));
             buttonManager.AddButton(new LevelButton(3, "3"));
             buttonManager.AddButton(new LevelButton(4, "4"));
             buttonManager.AddButton(new LevelButton(5, "5"));
@@ -23,9 +23,6 @@ namespace Mono_Ether.MainMenu {
             buttonManager.AddButton(new LevelButton(7, "7"));
             buttonManager.AddButton(new LevelButton(8, "8"));
             buttonManager.AddButton(new LevelButton(9, "9"));
-            buttonManager.AddButton(new LevelButton(10, "10"));
-            buttonManager.AddButton(new LevelButton(11, "11"));
-            buttonManager.AddButton(new LevelButton(12, "12"));
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
@@ -37,8 +34,14 @@ namespace Mono_Ether.MainMenu {
             buttonManager.Update();
             var clickedButton = buttonManager.getClickedButton();
             switch (clickedButton) {
-                case "asdf":
+                case "Testing stage":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    break;
+                case "Tutorial":
+                    break;
+                case "Level one":
+                    break;
+                default:
                     break;
             }
         }
