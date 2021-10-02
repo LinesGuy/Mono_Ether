@@ -53,6 +53,7 @@ namespace Mono_Ether {
             screenStack.Peek().LoadContent(Content);
         }
         public void RemoveScreen() {
+            screenStack.Peek().UnloadContent();
             screenStack.Pop();
             if (screenStack.Count == 0) {
                 Exit();

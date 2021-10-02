@@ -25,6 +25,7 @@ namespace Mono_Ether.Ether {
         public override void LoadContent(ContentManager content) {
         }
         public override void UnloadContent() {
+            EntityManager.Killall();
         }
 
         public override void Update(GameTime gameTime) {
