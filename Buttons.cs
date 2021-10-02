@@ -58,8 +58,8 @@ namespace Mono_Ether {
         {
             Texture = Art.MenuButtonBlank;
             Text = text;
-            Offset = index / 2f;
-            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 2f));
+            Offset = index / 3f;
+            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.2f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 1.5f));
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
             ActiveButtonColor = Color.Green;
             InactiveButtonColor = Color.White;
@@ -69,7 +69,7 @@ namespace Mono_Ether {
 
         public override void Update()
         {
-            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 2f));
+            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.2f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 1.5f));
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
             if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
             {

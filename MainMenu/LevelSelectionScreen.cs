@@ -16,13 +16,13 @@ namespace Mono_Ether.MainMenu {
             buttonManager.AddButton(new LevelButton(0, "Testing stage"));
             buttonManager.AddButton(new LevelButton(1, "Tutorial"));
             buttonManager.AddButton(new LevelButton(2, "Level one"));
-            buttonManager.AddButton(new LevelButton(3, "3"));
-            buttonManager.AddButton(new LevelButton(4, "4"));
-            buttonManager.AddButton(new LevelButton(5, "5"));
-            buttonManager.AddButton(new LevelButton(6, "6"));
-            buttonManager.AddButton(new LevelButton(7, "7"));
-            buttonManager.AddButton(new LevelButton(8, "8"));
-            buttonManager.AddButton(new LevelButton(9, "9"));
+            buttonManager.AddButton(new LevelButton(3, "Placeholder A"));
+            buttonManager.AddButton(new LevelButton(4, "Placeholder B"));
+            buttonManager.AddButton(new LevelButton(5, "Placeholder C"));
+            buttonManager.AddButton(new LevelButton(6, "Placeholder D"));
+            buttonManager.AddButton(new LevelButton(7, "Placeholder E"));
+            buttonManager.AddButton(new LevelButton(8, "Placeholder F"));
+            buttonManager.AddButton(new LevelButton(9, "Placeholder G"));
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
@@ -36,6 +36,8 @@ namespace Mono_Ether.MainMenu {
             switch (clickedButton) {
                 case "Testing stage":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    Ether.Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
+                    Ether.BackgroundParticleManager.Populate(Ether.Map._size * Ether.Map.cellSize, 256);
                     break;
                 case "Tutorial":
                     break;
