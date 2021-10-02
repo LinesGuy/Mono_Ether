@@ -13,8 +13,16 @@ namespace Mono_Ether.MainMenu {
         }
         public override void Initialize() {
             buttonManager = new ButtonManager();
-            buttonManager.AddButton(new LevelButton(0, "Level one"));
-            buttonManager.AddButton(new LevelButton(1, "Level two"));
+            buttonManager.AddButton(new LevelButton(0, "Testing stage"));
+            buttonManager.AddButton(new LevelButton(1, "Tutorial"));
+            buttonManager.AddButton(new LevelButton(2, "Level one"));
+            buttonManager.AddButton(new LevelButton(3, "3"));
+            buttonManager.AddButton(new LevelButton(4, "4"));
+            buttonManager.AddButton(new LevelButton(5, "5"));
+            buttonManager.AddButton(new LevelButton(6, "6"));
+            buttonManager.AddButton(new LevelButton(7, "7"));
+            buttonManager.AddButton(new LevelButton(8, "8"));
+            buttonManager.AddButton(new LevelButton(9, "9"));
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
@@ -23,15 +31,19 @@ namespace Mono_Ether.MainMenu {
             throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
+            buttonManager.Update();
             var clickedButton = buttonManager.getClickedButton();
             switch (clickedButton) {
-                case "asdf":
+                case "Testing stage":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     break;
+                case "Tutorial":
+                    break;
+                case "Level one":
+                    break;
+                default:
+                    break;
             }
-            //if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
-                foreach (LevelButton button in buttonManager.Buttons)
-                    button.offset += 0.1f;
         }
 
         public override void Draw(SpriteBatch spriteBatch) {

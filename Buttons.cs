@@ -12,24 +12,25 @@ namespace Mono_Ether {
         public string Text;
         protected Rectangle Rect;
         protected Texture2D Texture;
-        protected Color FontColor = Color.Black;
-
-        /*public MenuButton(Vector2 pos,  string text) {
-            Pos = pos - texture.Size() / 2f;
-            Rect = new Rectangle(Pos.ToPoint(), texture.Size().ToPoint());
-        }*/
+        protected Color ActiveButtonColor, InactiveButtonColor, ActiveFontColor, InactiveFontColor;
         public bool IsActive() {
             return Rect.Contains(Input.MousePosition.ToPoint());
         }
-        public virtual void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(Texture, Pos, Color.White);
-            DrawText(spriteBatch);
-        }
-        public virtual void DrawText(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), FontColor, 0f, Vector2.Zero, 2f, 0, 0);
-            var asdf = Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text);
+            if (IsActive())
+            {
+                spriteBatch.Draw(Texture, Pos, ActiveButtonColor);
+                spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), ActiveFontColor, 0f, Vector2.Zero, 2f, 0, 0);
+            }
+            else
+            {
+                spriteBatch.Draw(Texture, Pos, InactiveButtonColor);
+                spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), InactiveFontColor, 0f, Vector2.Zero, 2f, 0, 0);
+            }
         }
+
+        public abstract void Update();
     }
     class MenuButton : Button
     {
@@ -39,35 +40,60 @@ namespace Mono_Ether {
             Text = text;
             Pos = pos - Texture.Size() / 2f;
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
+            ActiveButtonColor = Color.Green;
+            InactiveButtonColor = Color.White;
+            ActiveFontColor = Color.Black;
+            InactiveFontColor = Color.Black;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Update()
         {
-            if (IsActive())
-            {
-                spriteBatch.Draw(Texture, Pos, Color.Green);
-                base.DrawText(spriteBatch);
-            }
-            else
-            {
-                base.Draw(spriteBatch);
-            }
+            throw new NotImplementedException();
         }
     }
     class LevelButton : Button
     {
-        public float offset;
+        public float Offset;
         public LevelButton(int index, string text)
         {
             Texture = Art.MenuButtonBlank;
             Text = text;
-            offset = 0f;
-            Pos = new Vector2((float)(GameRoot.ScreenSize.X - Math.Cos(index + offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(index + offset) * GameRoot.ScreenSize.Y / 2f));
+            Offset = index / 2f;
+            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 2f));
+            Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
+            ActiveButtonColor = Color.Green;
+            InactiveButtonColor = Color.White;
+            ActiveFontColor = Color.Black;
+            InactiveFontColor = Color.Black;
+        }
+
+        public override void Update()
+        {
+            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.5f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 2f));
+            Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+            {
+                Offset -= 0.05f;
+                if (Offset < 0f)
+                    Offset += 2f * MathF.PI;
+            }
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+            {
+                Offset += 0.05f;
+                if (Offset > 2f * MathF.PI)
+                    Offset -= 2f * MathF.PI;
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (Offset < MathF.PI / 2f || Offset > 1.5f * MathF.PI)
+                base.Draw(spriteBatch);
         }
     }
     class ButtonManager {
         public List<Button> Buttons = new List<Button>();
-
+        public float buttonOffsets = 0f;
         public void Add(string name) {
             Buttons.Add(new MenuButton(new Vector2(GameRoot.ScreenSize.X / 2f, (Buttons.Count + 1) * 150), name));
         }
@@ -85,7 +111,13 @@ namespace Mono_Ether {
                         return button.Text;
             return null;
         }
-
+        public void Update()
+        {
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                buttonOffsets -= 0.1f;
+            foreach (Button button in Buttons)
+                button.Update();
+        }
         public void Draw(SpriteBatch spriteBatch) {
             foreach (var button in Buttons) {
                 button.Draw(spriteBatch);
