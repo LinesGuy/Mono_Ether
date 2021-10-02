@@ -25,6 +25,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="global.json" />
+    <None Update="Content\TileMapData\Tutorial.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\TileMapData\debugMap.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

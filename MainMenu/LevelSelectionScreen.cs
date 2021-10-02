@@ -40,6 +40,10 @@ namespace Mono_Ether.MainMenu {
                     Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
                     break;
                 case "Tutorial":
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    Ether.Map.LoadFromFile("Tutorial.txt", new Vector2(32, 32));
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+
                     break;
                 case "Level one":
                     break;
