@@ -15,8 +15,8 @@ namespace Mono_Ether.Ether {
         public int TileId;
         public Boolean[] Walls = new Boolean[8];
         public Tile(Vector2 mapPos, int tileId) {
-            this.pos = mapPos;
-            this.TileId = tileId;
+            pos = mapPos;
+            TileId = tileId;
         }
 
         public void draw(SpriteBatch spriteBatch) {
@@ -102,6 +102,7 @@ namespace Mono_Ether.Ether {
         public static Tile[,] _grid;
         public static Vector2 _size;
         private static int SelectedId = 1; // Currently selected Tile ID for editor mode
+        public static Vector2 WorldSize { get { return _size * cellSize; } }
         public static void LoadFromFile(string filename, Vector2 size) {
             _size = size;
             // Load TileId's from TileMapData to _grid
@@ -122,6 +123,9 @@ namespace Mono_Ether.Ether {
             foreach (var tile in _grid) {
                 tile.updateWalls();
             }
+            // Adjust player position to middle of map
+            PlayerShip.Instance.Position = WorldSize / 2f;
+            Camera.CameraPosition = PlayerShip.Instance.Position;
         }
 
         public static Tile GetTileFromMap(Vector2 mapPos) {

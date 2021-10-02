@@ -37,7 +37,7 @@ namespace Mono_Ether.MainMenu {
                 case "Testing stage":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     Ether.Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map._size * Ether.Map.cellSize, 256);
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
                     break;
                 case "Tutorial":
                     break;
