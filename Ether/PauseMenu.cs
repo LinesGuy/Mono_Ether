@@ -5,16 +5,16 @@ namespace Mono_Ether.Ether {
     public static class PauseMenu {
         private static ButtonManager buttonManager = new ButtonManager();
         public static void Initialize() {
-            buttonManager.Add("pauseExit", new Vector2(320, 600));
-            buttonManager.Add("pauseResume", new Vector2(940, 600));
+            buttonManager.Add("Exit", new Vector2(GameRoot.ScreenSize.X * 0.32f, GameRoot.ScreenSize.Y * 0.8f));
+            buttonManager.Add("Resume", new Vector2(GameRoot.ScreenSize.X * 0.68f, GameRoot.ScreenSize.Y * 0.8f));
         }
 
         public static void Update() {
             switch (buttonManager.getClickedButton()) {
-                case "pauseExit":
+                case "Exit":
                     GameRoot.Instance.RemoveScreen();
                     break;
-                case "pauseResume":
+                case "Resume":
                     EtherRoot.Instance.paused = false;
                     break;
             }
