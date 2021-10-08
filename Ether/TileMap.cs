@@ -147,9 +147,9 @@ namespace Mono_Ether.Ether {
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
             var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / cellSize));
-            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).X / cellSize));
+            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(GameRoot.ScreenSize).X / cellSize));
             var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / cellSize));
-            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(new Vector2(1280, 720)).Y / cellSize));
+            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(GameRoot.ScreenSize).Y / cellSize));
             for (int row = startRow; row < endRow; row++) {
                 for (int col = startCol; col < endCol; col++) {
                     var cell = _grid[col, row];
