@@ -14,11 +14,12 @@ namespace Mono_Ether {
         public GraphicsDevice graphicsasdfasdfasdf;
         private SpriteBatch spriteBatch;
         public Stack<GameState> screenStack = new Stack<GameState>();
+        public bool dum_mode = false;
         public GameRoot() {
             Instance = this;
             graphics = new GraphicsDeviceManager(this) {
-                PreferredBackBufferWidth = 1280,
-                PreferredBackBufferHeight = 720
+                PreferredBackBufferWidth = 1366,
+                PreferredBackBufferHeight = 768
             };
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -28,7 +29,6 @@ namespace Mono_Ether {
             graphicsasdfasdfasdf = GraphicsDevice;
             Art.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            //screenStack.Push(new Ether.EtherRoot(GraphicsDevice));
             AddScreen(new MainMenu.TitleScreen(GraphicsDevice));
         }
 
