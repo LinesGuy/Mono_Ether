@@ -36,7 +36,7 @@ namespace Mono_Ether.MainMenu {
             buttonManager.Update();
             var clickedButton = buttonManager.getClickedButton();
             switch (clickedButton) {
-                case "Testing stage":
+                case "Test stage":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     Ether.Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
                     Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
@@ -51,17 +51,24 @@ namespace Mono_Ether.MainMenu {
                 default:
                     break;
             }
+            // Scroll mouse wheel to scroll through items
+            buttonOffsetVelocity -= Input.Mouse.DeltaScrollWheelValue / 10000f;
+            // If user let go of mouse, apply mouse velocity to scroll offset velocity
             if (Input.Mouse.WasButtonJustUp(MonoGame.Extended.Input.MouseButton.Left))
                 buttonOffsetVelocity = (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
+            // If user is holding down left click, allow "dragging" of buttons
             if (Input.Mouse.IsButtonDown(MonoGame.Extended.Input.MouseButton.Left))
             {
-                foreach(LevelButton button in buttonManager.Buttons)
+                
+                foreach (LevelButton button in buttonManager.Buttons)
                     button.Offset -= (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
             }
             else
             {
+                // Otherwise, apply offset velocity
                 foreach (LevelButton button in buttonManager.Buttons)
                     button.Offset -= buttonOffsetVelocity;
+                // Apply friction to velocity
                 buttonOffsetVelocity /= 1.1f;
             }
             
