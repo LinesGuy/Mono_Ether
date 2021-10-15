@@ -21,9 +21,10 @@ namespace Mono_Ether.MainMenu {
             //throw new NotImplementedException();
         }
         public override void UnloadContent() {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
+            NewtonsBackground.update();
             var clickedButton = buttonManager.getClickedButton();
             switch (clickedButton) {
                 case "play":
@@ -44,8 +45,9 @@ namespace Mono_Ether.MainMenu {
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            //GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
+            NewtonsBackground.draw(spriteBatch);
             spriteBatch.DrawString(Art.DebugFont, "welcome to ether", Vector2.Zero, Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
