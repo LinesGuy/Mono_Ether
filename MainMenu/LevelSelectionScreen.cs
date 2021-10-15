@@ -41,28 +41,28 @@ namespace Mono_Ether.MainMenu {
                 case "Tutorial":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     Ether.Map.LoadFromFile("Tutorial.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
                     Ether.Tutorial.state = "movement";
                     break;
                 case "Level one":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     Ether.Map.LoadFromFile("LevelOne.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
                     break;
                 case "Level two":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     Ether.Map.LoadFromFile("LevelTwo.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
                     break;
                 case "Level three":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     Ether.Map.LoadFromFile("LevelThree.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
                     break;
                 case "Super secret stage????????":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
                     Ether.Map.LoadFromFile("Secret.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
                     break;
                 default:
                     break;
