@@ -20,13 +20,16 @@ namespace Mono_Ether.Ether {
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
             Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = 0.1f;
             PauseMenu.Initialize();
+            EnemySpawner.enabled = true;
+            PowerPackSpawner.enabled = true;
         }
 
         public override void LoadContent(ContentManager content) {
         }
         public override void UnloadContent() {
             EntityManager.Killall();
-        }
+            Tutorial.state = "none";
+    }
 
         public override void Update(GameTime gameTime) {
             CurrentGameTime = gameTime;
@@ -62,6 +65,8 @@ namespace Mono_Ether.Ether {
                 PowerPackSpawner.Update();
                 ParticleManager.Update();
                 BackgroundParticleManager.Update();
+                if (Tutorial.state != "none")
+                    Tutorial.update();
             }
         }
         public override void Draw(SpriteBatch spriteBatch) {
@@ -81,6 +86,8 @@ namespace Mono_Ether.Ether {
             spriteBatch.Begin();
             if (paused)
                 PauseMenu.Draw(spriteBatch);
+            if (Tutorial.state != "none")
+                Tutorial.draw(spriteBatch);
             Hud.Draw(spriteBatch);
             spriteBatch.End();
         }
