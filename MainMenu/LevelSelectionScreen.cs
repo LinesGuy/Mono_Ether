@@ -33,6 +33,7 @@ namespace Mono_Ether.MainMenu {
             throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
+            NewtonsBackground.update();
             buttonManager.Update();
             var clickedButton = buttonManager.getClickedButton();
             switch (clickedButton) {
@@ -78,7 +79,9 @@ namespace Mono_Ether.MainMenu {
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
+            NewtonsBackground.draw(spriteBatch);
             spriteBatch.DrawString(Art.DebugFont, "Level selection screen", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(Art.DebugFont, "Use arrow keys, drag the mouse or scroll the mouse wheel to scroll up/down", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }

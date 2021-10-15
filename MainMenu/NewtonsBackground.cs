@@ -21,8 +21,8 @@ namespace Mono_Ether.MainMenu
         // knowing nothing about it
 
         // Settings
-        public static int pixelSize = 6;
-        public static int iterations = 2;
+        public static int pixelSize = 8; // Increase = less detail, more performance
+        public static int iterations = 2; // Increase = more detail, less performance
         public static List<Vector2> polynomial = new List<Vector2> { new Vector2(1, 3), new Vector2(-1, 0) };
         public static List<Complex> solutions = new List<Complex> { new Complex(1, 0), new Complex(-0.809, -0.588), new Complex(0.309, 0.951), new Complex(0.309, -0.951), new Complex(-0.809, 0.588) };
         public static float offset;

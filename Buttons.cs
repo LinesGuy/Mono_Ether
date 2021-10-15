@@ -60,7 +60,8 @@ namespace Mono_Ether {
             Texture = Art.MenuButtonBlank;
             Text = text;
             Offset = MathF.PI - index * (Art.MenuButtonBlank.Height / RADIUS);
-            Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.2f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 1.5f));
+            //Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.4f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 1.5f));
+            Pos = Vector2.Zero;
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
             ActiveButtonColor = Color.Green;
             InactiveButtonColor = Color.White;
