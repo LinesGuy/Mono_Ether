@@ -89,7 +89,7 @@ namespace Mono_Ether {
     class ButtonManager {
         public List<Button> Buttons = new List<Button>();
         public void Add(string name) {
-            Buttons.Add(new MenuButton(new Vector2(GameRoot.ScreenSize.X / 2f, (Buttons.Count + 1) * 150), name));
+            Buttons.Add(new MenuButton(new Vector2(GameRoot.ScreenSize.X / 1.3f, (Buttons.Count + 1) * 150), name));
         }
         public void Add(string name, Vector2 pos) {
             Buttons.Add(new MenuButton(pos, name));
