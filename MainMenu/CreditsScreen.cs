@@ -18,7 +18,7 @@ namespace Mono_Ether.MainMenu {
             //throw new NotImplementedException();
         }
         public override void UnloadContent() {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
             var clickedButton = buttonManager.getClickedButton();
