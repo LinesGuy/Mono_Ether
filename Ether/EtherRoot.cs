@@ -29,6 +29,7 @@ namespace Mono_Ether.Ether {
         public override void UnloadContent() {
             EntityManager.Killall();
             Tutorial.state = "none";
+            BackgroundParticleManager.Clear();
         }
 
         public override void Update(GameTime gameTime) {

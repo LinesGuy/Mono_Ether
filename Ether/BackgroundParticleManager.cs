@@ -45,12 +45,14 @@ namespace Mono_Ether.Ether {
             }
             Particles = Particles.Where(x => !(Map.GetTileFromWorld(x.Pos).TileId > 0)).ToList();
         }
+        public static void Clear() {
+            Particles.Clear();
+        }
         public static void Update() {
             foreach (var particle in Particles) {
                 particle.Update();
             }
         }
-
         public static void Draw(SpriteBatch spriteBatch) {
             foreach (var particle in Particles) {
                 particle.Draw(spriteBatch);
