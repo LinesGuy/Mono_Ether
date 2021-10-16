@@ -13,7 +13,7 @@ namespace Mono_Ether {
         public GraphicsDevice graphicsasdfasdfasdf;
         private SpriteBatch spriteBatch;
         public Stack<GameState> screenStack = new Stack<GameState>();
-        public bool dum_mode = false;
+        public bool dum_mode = true;
         public GameRoot() {
             Instance = this;
             graphics = new GraphicsDeviceManager(this) {
@@ -29,6 +29,12 @@ namespace Mono_Ether {
             Art.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             AddScreen(new MainMenu.TitleScreen(GraphicsDevice));
+            if (dum_mode) {
+                // Skip straight to testing stage
+                AddScreen(new Ether.EtherRoot(GraphicsDevice));
+                Ether.Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
+                Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+            }
         }
 
         protected override void UnloadContent() {
