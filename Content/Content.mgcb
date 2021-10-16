@@ -290,6 +290,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/Wanderer.png
 
+#begin Textures/Gameplay/youDied.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/youDied.png
+
 #begin Textures/Intro/welcome_text.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -481,16 +493,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Tiles/tile4.png
-
-#begin Tracks/Deceit.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Tracks/Deceit.mp3
-
-#begin Tracks/welcome_track.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Tracks/welcome_track.mp3
 
