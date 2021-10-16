@@ -1,9 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Mono_Ether.Ether {
-    public static class Hud {
-        public static void Draw(SpriteBatch spriteBatch) {
+    public class Hud {
+        public static Hud Instance;
+        private static Texture2D YouDiedTexture { get; set; }
+        public bool playingYouDied;
+        private int deadFrames;
+        public Hud() {
+            Instance = this;
+            playingYouDied = false;
+            deadFrames = 0;
+        }
+        public void LoadContent(ContentManager content) {
+            YouDiedTexture = content.Load<Texture2D>("Textures/Gameplay/youDied");
+        }
+        public void UnloadContent() {
+            YouDiedTexture.Dispose();
+        }
+        public void Draw(SpriteBatch spriteBatch) {
             // Top-left debug texts
             if (GameRoot.Instance.dum_mode) {
                 spriteBatch.DrawString(Art.DebugFont, $"Player XY: {PlayerShip.Instance.Position.X:0.0}, {PlayerShip.Instance.Position.Y:0.0}", new Vector2(0, 0), Color.White);
@@ -36,6 +53,20 @@ namespace Mono_Ether.Ether {
                 Vector2 pos = new Vector2(0 + i * 100, GameRoot.ScreenSize.Y - 100);
                 spriteBatch.Draw(Art.Heart, pos, Color.White);
             }
+            // You died
+            if (playingYouDied) {
+                int t = Math.Min(255, (int)(deadFrames / 60f * 255f));    
+                spriteBatch.Draw(YouDiedTexture, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, YouDiedTexture.Size() / 2f, MathHelper.Lerp(1f, 1.5f, deadFrames / 120f), SpriteEffects.None, 0);
+                
+            }
+        }
+        public void Update() {
+            if (playingYouDied) {
+                deadFrames++;
+                if (deadFrames >= 120)
+                    GameRoot.Instance.RemoveScreen();
+            }
+                
         }
     }
 }

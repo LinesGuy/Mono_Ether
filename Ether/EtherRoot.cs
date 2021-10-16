@@ -11,6 +11,7 @@ namespace Mono_Ether.Ether {
         public bool editorMode = false;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
+        public static Hud hud;
         public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
 
@@ -22,14 +23,17 @@ namespace Mono_Ether.Ether {
             PauseMenu.Initialize();
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
+            hud = new Hud();
         }
 
         public override void LoadContent(ContentManager content) {
+            hud.LoadContent(content);
         }
         public override void UnloadContent() {
             EntityManager.Killall();
             Tutorial.state = "none";
             BackgroundParticleManager.Clear();
+            hud.UnloadContent();
         }
 
         public override void Update(GameTime gameTime) {
@@ -53,6 +57,7 @@ namespace Mono_Ether.Ether {
                 paused = !paused;
 
             Map.Update();
+            hud.Update();
 
             if (paused) {
                 PauseMenu.Update();
@@ -86,7 +91,7 @@ namespace Mono_Ether.Ether {
                 PauseMenu.Draw(spriteBatch);
             if (Tutorial.state != "none")
                 Tutorial.Draw(spriteBatch);
-            Hud.Draw(spriteBatch);
+            hud.Draw(spriteBatch);
             spriteBatch.End();
         }
     }

@@ -15,7 +15,7 @@ namespace Mono_Ether.Ether {
             Image = Art.Player;
             Position = new Vector2(0, 0);
             Radius = 10;
-            lives = 3;
+            lives = 2;
         }
 
         const int CooldownFrames = 6;
@@ -143,6 +143,12 @@ namespace Mono_Ether.Ether {
             framesUntilRespawn = 60;
             Art.PlayerDeath.CreateInstance().Play();
             lives -= 1;
+            if (lives < 0) {
+                framesUntilRespawn = 99999;
+                EnemySpawner.enabled = false;
+                PowerPackSpawner.enabled = false;
+                Hud.Instance.playingYouDied = true;
+            }
 
             activePowerPacks = new List<PowerPack>();
 
