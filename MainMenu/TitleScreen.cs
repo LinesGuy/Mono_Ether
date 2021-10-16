@@ -25,13 +25,13 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = buttonManager.GetClickedButton();
             switch (clickedButton) {
                 case "play":
-                    GameRoot.Instance.AddScreen(new LevelSelectionScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new LevelSelectionScreen(GameRoot.Instance.myGraphics));
                     break;
                 case "credits":
-                    GameRoot.Instance.AddScreen(new CreditsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new CreditsScreen(GameRoot.Instance.myGraphics));
                     break;
                 case "settings":
-                    GameRoot.Instance.AddScreen(new SettingsScreen(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new SettingsScreen(GameRoot.Instance.myGraphics));
                     break;
                 case "exit":
                     GameRoot.Instance.RemoveScreen();

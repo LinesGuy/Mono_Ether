@@ -10,7 +10,7 @@ namespace Mono_Ether {
 #pragma warning disable IDE0052 // Remove unread private members
         private readonly GraphicsDeviceManager graphics;
 #pragma warning restore IDE0052 // Remove unread private members
-        public GraphicsDevice graphicsasdfasdfasdf;
+        public GraphicsDevice myGraphics;
         private SpriteBatch spriteBatch;
         public Stack<GameState> screenStack = new Stack<GameState>();
         public bool dum_mode = true;
@@ -25,7 +25,7 @@ namespace Mono_Ether {
         }
 
         protected override void LoadContent() {
-            graphicsasdfasdfasdf = GraphicsDevice;
+            myGraphics = GraphicsDevice;
             Art.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             AddScreen(new MainMenu.TitleScreen(GraphicsDevice));
