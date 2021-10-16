@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
 
 namespace Mono_Ether.MainMenu {
     public class LevelSelectionScreen : States.GameState {
@@ -63,6 +64,11 @@ namespace Mono_Ether.MainMenu {
                 default:
                     break;
             }
+            // Up/down arrow keys to scroll through items
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+                buttonOffsetVelocity -= 0.005f;
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+                buttonOffsetVelocity += 0.005f;
             // Scroll mouse wheel to scroll through items
             buttonOffsetVelocity -= Input.Mouse.DeltaScrollWheelValue / 10000f;
             // If user let go of mouse, apply mouse velocity to scroll offset velocity
@@ -80,6 +86,23 @@ namespace Mono_Ether.MainMenu {
                 // Apply friction to velocity
                 buttonOffsetVelocity /= 1.1f;
             }
+
+            // Ensure that all buttons are visible on the screen at all times
+            LevelButton firstButton = (LevelButton)buttonManager.Buttons[0];
+            LevelButton lastButton = (LevelButton)buttonManager.Buttons[^1];
+            var slack = 0.975f;
+            if (firstButton.Offset < MathF.PI * slack) {
+                var delta = MathF.PI * slack - firstButton.Offset;
+                foreach (LevelButton button in buttonManager.Buttons)
+                    button.Offset += delta / 5f;
+            }
+            if (lastButton.Offset > MathF.PI / slack) {
+                var delta = lastButton.Offset - MathF.PI / slack;
+                foreach (LevelButton button in buttonManager.Buttons)
+                    button.Offset -= delta / 5f;
+            }
+            /*Debug.WriteLine($"first {firstButton.Offset}");
+            Debug.WriteLine($"last {lastButton.Offset}");*/
         }
 
         public override void Draw(SpriteBatch spriteBatch) {

@@ -64,10 +64,6 @@ namespace Mono_Ether {
             Pos.X += GameRoot.ScreenSize.X * 1.5f;
             Pos.Y += GameRoot.ScreenSize.Y / 2f;
             Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
-            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
-                Offset += 0.05f;
-            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
-                Offset -= 0.05f;
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
