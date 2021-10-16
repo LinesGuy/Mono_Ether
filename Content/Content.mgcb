@@ -158,6 +158,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/Glow.png
 
+#begin Textures/Gameplay/heart.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/heart.png
+
 #begin Textures/Gameplay/Laser.png
 /importer:TextureImporter
 /processor:TextureProcessor

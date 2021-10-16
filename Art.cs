@@ -19,11 +19,6 @@ namespace Mono_Ether {
         public static SoundEffect EnemyExplosion { get; private set; }
         public static SpriteFont DebugFont { get; private set; }
         public static Texture2D WelcomeText { get; private set; }
-        /*public static Texture2D MenuPlayButton { get; private set; }
-        public static Texture2D MenuSettingsButton { get; private set; }
-        public static Texture2D MenuCreditsButton { get; private set; }
-        public static Texture2D MenuExitButton { get; private set; }
-        public static Texture2D MenuBackButton { get; private set; }*/
         public static Texture2D MenuButtonBlank { get; private set; }
         public static Texture2D TileGrass { get; private set; }
         public static Texture2D TileDirt { get; private set; }
@@ -47,6 +42,7 @@ namespace Mono_Ether {
         public static SoundEffect PowerPackPickup { get; private set; }
         public static SoundEffect PowerPackPickupBad { get; private set; }
         public static Texture2D BackgroundParticle { get; private set; }
+        public static Texture2D Heart { get; private set; }
         public static void Load(ContentManager content) {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
@@ -63,11 +59,6 @@ namespace Mono_Ether {
             EnemyExplosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");
             DebugFont = content.Load<SpriteFont>("Fonts/DebugFont");
             WelcomeText = content.Load<Texture2D>("Textures/Intro/welcome_text");
-            /*MenuPlayButton = content.Load<Texture2D>("Textures/Menu/play_button");
-            MenuSettingsButton = content.Load<Texture2D>("Textures/Menu/settings_button");
-            MenuCreditsButton = content.Load<Texture2D>("Textures/Menu/credits_button");
-            MenuExitButton = content.Load<Texture2D>("Textures/Menu/exit_button");
-            MenuBackButton = content.Load<Texture2D>("Textures/Menu/back_button");*/
             MenuButtonBlank = content.Load<Texture2D>("Textures/Menu/menu_button_blank");
             TileGrass = content.Load<Texture2D>("Textures/tiles/tile1");
             TileDirt = content.Load<Texture2D>("Textures/tiles/tile2");
@@ -91,7 +82,7 @@ namespace Mono_Ether {
             PowerPackPickup = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickup");
             PowerPackPickupBad = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickupBad");
             BackgroundParticle = content.Load<Texture2D>("Textures/GamePlay/BackgroundParticle");
+            Heart = content.Load<Texture2D>("Textures/GamePlay/Heart");
         }
     }
 }
-
