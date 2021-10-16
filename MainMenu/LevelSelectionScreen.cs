@@ -31,35 +31,35 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = buttonManager.GetClickedButton();
             switch (clickedButton) {
                 case "Test stage":
-                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics));
                     Ether.Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
                     Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
                     break;
                 case "Tutorial":
-                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics));
                     Ether.Map.LoadFromFile("Tutorial.txt", new Vector2(32, 32));
                     Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
                     Ether.Tutorial.state = "movement";
                     break;
                 case "Level one":
-                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
-                    Ether.Map.LoadFromFile("LevelOne.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics));
+                    Ether.Map.LoadFromFile("LevelOne.txt", new Vector2(64, 64));
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
                     break;
                 case "Level two":
-                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
-                    Ether.Map.LoadFromFile("LevelTwo.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics));
+                    Ether.Map.LoadFromFile("LevelTwo.txt", new Vector2(64, 64));
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
                     break;
                 case "Level three":
-                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
-                    Ether.Map.LoadFromFile("LevelThree.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics));
+                    Ether.Map.LoadFromFile("LevelThree.txt", new Vector2(64, 64));
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
                     break;
                 case "Super secret stage????????":
-                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
+                    GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics));
                     Ether.Map.LoadFromFile("Secret.txt", new Vector2(32, 32));
-                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 64);
+                    Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 32);
                     break;
                 default:
                     break;
