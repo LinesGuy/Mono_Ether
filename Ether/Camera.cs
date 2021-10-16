@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     static class Camera {
         public static Vector2 CameraPosition = new Vector2(0, 0);
         public static float Zoom = 1;
         private static bool _isLerping = true;
-        private static readonly bool isAimingWithMouse = false;
+        private static readonly bool isAimingWithMouse = true;
         public static Vector2 WorldToScreen(Vector2 worldPosition) { return ((worldPosition - CameraPosition) * Zoom) + GameRoot.ScreenSize / 2; }
         public static Vector2 ScreenToWorld(Vector2 screenPos) { return (screenPos - GameRoot.ScreenSize / 2) / Zoom + CameraPosition; }
         public static void Update() {
@@ -24,13 +25,16 @@ namespace Mono_Ether.Ether {
                 _isLerping = false;
                 CameraPosition += direction * 5 / Zoom;
             }
-
             // Zoom (Q and E)
             if (Input.Keyboard.IsKeyDown(Keys.Q))
                 Zoom /= 1.03f;
             if (Input.Keyboard.IsKeyDown(Keys.E))
                 Zoom *= 1.03f;
-
+            // Zoom (mouse wheel)
+            if (Input.Mouse.DeltaScrollWheelValue < 0)
+                Zoom *= 1.1f;
+            else if (Input.Mouse.DeltaScrollWheelValue > 0)
+                Zoom /= 1.1f;
             // Lerp
             if (_isLerping)
                 Lerp(PlayerShip.Instance.Position);
