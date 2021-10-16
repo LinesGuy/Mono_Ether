@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Mono_Ether.Ether {
     static class EntityManager {
+        public static List<PlayerShip> Players = new List<PlayerShip>();
         public static List<Entity> Entities = new List<Entity>();
         public static List<Enemy> Enemies = new List<Enemy>();
         public static List<Bullet> Bullets = new List<Bullet>();
@@ -12,13 +13,14 @@ namespace Mono_Ether.Ether {
 
         static bool _isUpdating;
         static readonly List<Entity> AddedEntities = new List<Entity>();
-
+        public static PlayerShip player1 => Players[0];
         public static int Count => Entities.Count;
         public static void Killall() {
-            Entities = new List<Entity>();
-            Enemies = new List<Enemy>();
-            Bullets = new List<Bullet>();
-            PowerPacks = new List<PowerPack>();
+            Players.Clear();
+            Entities.Clear();
+            Enemies.Clear();
+            Bullets.Clear();
+            PowerPacks.Clear();
         }
         public static void Add(Entity entity) {
             if (!_isUpdating)
@@ -26,10 +28,11 @@ namespace Mono_Ether.Ether {
             else
                 AddedEntities.Add(entity);
         }
-
         private static void AddEntity(Entity entity) {
             Entities.Add(entity);
-            if (entity is Bullet bullet)
+            if (entity is PlayerShip player)
+                Players.Add(player);
+            else if (entity is Bullet bullet)
                 Bullets.Add(bullet);
             else if (entity is Enemy enemy)
                 Enemies.Add(enemy);
@@ -93,16 +96,19 @@ namespace Mono_Ether.Ether {
                 }
             }
 
-            // Handle collisions between the player and enemies
-            if (PlayerShip.Instance.GodMode == false) {
-                for (int i = 0; i < Enemies.Count; i++) {
-                    if (Enemies[i].IsActive && IsColliding(PlayerShip.Instance, Enemies[i])) {
-                        PlayerShip.Instance.Kill();
-                        Enemies.ForEach(x => x.WasShot());
-                        break;
+            // Handle collisions between the players and enemies
+            foreach(PlayerShip player in Players) {
+                if (player.GodMode == false) {
+                    for (int i = 0; i < Enemies.Count; i++) {
+                        if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
+                            player.Kill();
+                            Enemies.ForEach(x => x.WasShot());
+                            break;
+                        }
                     }
                 }
             }
+            
             // Handle collisions between walls and enemies + the player
             for (var i = 0; i < Enemies.Count; i++)
                 Enemies[i].HandleTilemapCollision();
@@ -111,12 +117,14 @@ namespace Mono_Ether.Ether {
                 Bullets[i].HandleTilemapCollision();
 
             // Handle collisions between powerpacks and the player
-            for (var i = 0; i < PowerPacks.Count; i++)
-                if (IsColliding(PowerPacks[i], PlayerShip.Instance)) {
-                    PowerPacks[i].WasPickedUp();
-                    PlayerShip.Instance.activePowerPacks.Add(PowerPacks[i]);
-                    PowerPacks[i].IsExpired = true;
-                }
+            foreach(PlayerShip player in Players) {
+                for (var i = 0; i < PowerPacks.Count; i++)
+                    if (IsColliding(PowerPacks[i], player)) {
+                        PowerPacks[i].WasPickedUp();
+                        player.activePowerPacks.Add(PowerPacks[i]);
+                        PowerPacks[i].IsExpired = true;
+                    }
+            }
         }
     }
 }

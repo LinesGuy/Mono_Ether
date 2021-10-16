@@ -7,11 +7,9 @@ using System.Linq;
 
 namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
-        private static PlayerShip _instance;
-        public static PlayerShip Instance => _instance ??= new PlayerShip();
         public bool GodMode = false;  // If true, player can't die
         public int lives;
-        private PlayerShip() {
+        public PlayerShip() {
             Image = Art.Player;
             Position = new Vector2(0, 0);
             Radius = 10;
@@ -44,8 +42,21 @@ namespace Mono_Ether.Ether {
                 else if (power.PowerType == "MoveSpeedDecrease")
                     acceleration /= 1.3f;
             }
+            Vector2 direction = Vector2.Zero;
+            if (this == EntityManager.player1) {
+                if (Input.Keyboard.IsKeyDown(Keys.A))
+                    direction.X -= 1;
+                if (Input.Keyboard.IsKeyDown(Keys.D))
+                    direction.X += 1;
+                if (Input.Keyboard.IsKeyDown(Keys.W))
+                    direction.Y -= 1;
+                if (Input.Keyboard.IsKeyDown(Keys.S))
+                    direction.Y += 1;
+            }
+            if (direction.LengthSquared() > 1)
+                direction.Normalize();
 
-            Velocity += acceleration * Input.GetMovementDirection();  // Normalised direction vector
+            Velocity += acceleration * direction;  // Normalised direction vector
             Velocity /= 1.5f;  // Friction
             Position += Velocity;
             // Change orientation if velocity is non-zero:

@@ -13,22 +13,5 @@ namespace Mono_Ether {
             LastMouse = Mouse;
             Mouse = MouseExtended.GetState();
         }
-        public static Vector2 GetMovementDirection() {
-            Vector2 direction = Vector2.Zero;
-
-            if (Keyboard.IsKeyDown(Keys.A))
-                direction.X -= 1;
-            if (Keyboard.IsKeyDown(Keys.D))
-                direction.X += 1;
-            if (Keyboard.IsKeyDown(Keys.W))
-                direction.Y -= 1;
-            if (Keyboard.IsKeyDown(Keys.S))
-                direction.Y += 1;
-
-            if (direction.LengthSquared() > 1)
-                direction.Normalize();
-
-            return direction;
-        }
     }
 }

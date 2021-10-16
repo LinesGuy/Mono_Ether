@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Linq;
 using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
@@ -11,7 +12,7 @@ namespace Mono_Ether.Ether {
             if (!enabled)
                 return;
 
-            if (!PlayerShip.Instance.IsDead && EntityManager.Count < 200) {
+            if (EntityManager.Players.TrueForAll(p => !p.IsDead) && EntityManager.Count < 200) {
                 if (_rand.Next((int)_inverseSpawnChance) != 0)
                     return;
 
@@ -33,13 +34,14 @@ namespace Mono_Ether.Ether {
         public static Vector2 GetSpawnPosition(float radius = 500f, int attempts = 10) {
             // If returns Vector2.Zero, could not find valid spawn position
             Vector2 pos;
-            Vector2 playerPos = PlayerShip.Instance.Position;
+            int randIndex = _rand.Next(EntityManager.Players.Count);
+            Vector2 playerPos = EntityManager.Players[randIndex].Position; // Pos of random player
             int remainingAttempts = attempts;
             do {
                 pos = new Vector2(_rand.NextFloat(playerPos.X - radius, playerPos.X + radius), _rand.NextFloat(playerPos.Y - radius, playerPos.Y + radius));
                 remainingAttempts -= 1;
             }
-            while ((Vector2.DistanceSquared(pos, PlayerShip.Instance.Position) < Math.Pow(radius / 2f, 2)
+            while ((Vector2.DistanceSquared(pos, playerPos) < Math.Pow(radius / 2f, 2)
                    || Map.GetTileFromMap(Map.WorldtoMap(pos)).TileId > 0
                    || pos.X < 0 || pos.Y < 0 || pos.X > Map._size.X * Map.cellSize || pos.Y > Map._size.Y * Map.cellSize)
                    && remainingAttempts > 0);

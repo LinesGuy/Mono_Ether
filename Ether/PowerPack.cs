@@ -74,7 +74,7 @@ namespace Mono_Ether.Ether {
             if (!enabled)
                 return;
 
-            if (!PlayerShip.Instance.IsDead && EntityManager.PowerPacks.Count < 3) {
+            if (EntityManager.Players.TrueForAll(p => !p.IsDead) && EntityManager.PowerPacks.Count < 3) {
                 if (_rand.Next((int)_inverseSpawnChance) != 0)
                     return;
                 var pos = EnemySpawner.GetSpawnPosition(2500f, 20);

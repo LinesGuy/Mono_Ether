@@ -59,7 +59,7 @@ namespace Mono_Ether.Ether {
                 case "powerpacks":
                     tutorialText = "Power pack spawning is enabled. Move over a power pack to pick it up";
                     PowerPackSpawner.enabled = true;
-                    if (PlayerShip.Instance.activePowerPacks.Count > 0)
+                    if (EntityManager.player1.activePowerPacks.Count > 0)
                         state = "starburst";
                     break;
                 case "starburst":

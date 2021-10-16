@@ -37,7 +37,7 @@ namespace Mono_Ether.Ether {
                 Zoom /= 1.1f;
             // Lerp
             if (_isLerping)
-                Lerp(PlayerShip.Instance.Position);
+                Lerp(EntityManager.player1.Position);
             else if (Input.Keyboard.IsKeyDown(Keys.C))
                 _isLerping = true;  // Press 'c' to enable lerp
         }
@@ -51,7 +51,7 @@ namespace Mono_Ether.Ether {
             return ScreenToWorld(Input.Mouse.Position.ToVector2());
         }
         private static Vector2 GetMouseAimDirection() {
-            Vector2 direction = Camera.ScreenToWorld(Input.MousePosition) - PlayerShip.Instance.Position;
+            Vector2 direction = Camera.ScreenToWorld(Input.MousePosition) - EntityManager.player1.Position;
 
             if (direction == Vector2.Zero)
                 return Vector2.Zero;

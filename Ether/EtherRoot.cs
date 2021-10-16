@@ -17,13 +17,15 @@ namespace Mono_Ether.Ether {
 
         public override void Initialize() {
             Instance = this;
-            EntityManager.Add(PlayerShip.Instance);
+            EntityManager.Add(new PlayerShip());
+            //EntityManager.Add(new PlayerShip());
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
             Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = 0.1f;
             PauseMenu.Initialize();
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
             hud = new Hud();
+            
         }
 
         public override void LoadContent(ContentManager content) {
@@ -37,6 +39,8 @@ namespace Mono_Ether.Ether {
         }
 
         public override void Update(GameTime gameTime) {
+            if (!GameRoot.Instance.IsActive)
+                return;
             CurrentGameTime = gameTime;
             // P to toggle Editor Mode
             if (Input.Keyboard.WasKeyJustDown(Keys.P)) {
@@ -57,11 +61,10 @@ namespace Mono_Ether.Ether {
                 paused = !paused;
 
             Map.Update();
-            hud.Update();
 
-            if (paused) {
+            if (paused)
                 PauseMenu.Update();
-            } else {
+            else {
                 Camera.Update();
                 EntityManager.Update();
                 EnemySpawner.Update();
@@ -71,6 +74,8 @@ namespace Mono_Ether.Ether {
                 if (Tutorial.state != "none")
                     Tutorial.Update();
             }
+
+            hud.Update();
         }
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
@@ -92,6 +97,8 @@ namespace Mono_Ether.Ether {
             if (Tutorial.state != "none")
                 Tutorial.Draw(spriteBatch);
             hud.Draw(spriteBatch);
+            if (!GameRoot.Instance.IsActive)
+                spriteBatch.DrawString(Art.DebugFont, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
             spriteBatch.End();
         }
     }

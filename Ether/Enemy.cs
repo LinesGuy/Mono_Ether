@@ -58,18 +58,31 @@ namespace Mono_Ether.Ether {
         }
         IEnumerable<int> FollowPlayerAStar(float acceleration = 1f) {
             while (true) {
-                // If enemy is with Map.cellSize units from the player, move straight towards the player
-                if (Vector2.DistanceSquared(PlayerShip.Instance.Position, Position) <= MyAStar.CellSize * MyAStar.CellSize) {
-                    Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
-                    if (Velocity != Vector2.Zero)
-                        Orientation = Velocity.ToAngle();
-                    yield return 0;
-                } else if (Map.GetTileFromWorld(PlayerShip.Instance.Position).TileId > 0) {
-                    // Player is on a solid tile, A* will fail so do nothing.
+                // If enemy is within Map.cellSize units from the player, move straight towards the player
+                var dash = false;
+                foreach (PlayerShip player in EntityManager.Players) {
+                    if (Vector2.DistanceSquared(player.Position, Position) <= MyAStar.CellSize * MyAStar.CellSize) {
+                        Velocity += (player.Position - Position).ScaleTo(acceleration);
+                        if (Velocity != Vector2.Zero)
+                            Orientation = Velocity.ToAngle();
+                        yield return 0;
+                        dash = true;
+                        break;
+                    }
+                }
+                if (dash)
+                    continue;
+                //else if (Map.GetTileFromWorld(PlayerShip.Instance.Position).TileId > 0) {
+                else if (EntityManager.Players.TrueForAll(player => Map.GetTileFromWorld(player.Position).TileId > 0)) {
+                    // All players are in solid tiles, do nothing.
                     yield return 0;
                 } else {
-                    // Use A* to move towards the player
-                    var path = MyAStar.AStar(Position, PlayerShip.Instance.Position);
+                    // Use A* to move towards the nearest player
+                    PlayerShip nearestPlayer = EntityManager.player1;
+                    foreach (PlayerShip player in EntityManager.Players)
+                        if (Vector2.DistanceSquared(Position, player.Position) < Vector2.DistanceSquared(Position, nearestPlayer.Position))
+                            nearestPlayer = player;
+                    var path = MyAStar.AStar(Position, nearestPlayer.Position);
                     // Instead of calculating a new path every frame or whatever, we will calculate a new path
                     // based on how far the enemy is from the player:
                     // - If the enemy is within 1000 units of the player, update the path every 30 frames
