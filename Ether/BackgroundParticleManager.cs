@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether.Ether {
     public class BackgroundParticle {
@@ -29,16 +29,16 @@ namespace Mono_Ether.Ether {
         }
 
         public void Draw(SpriteBatch spriteBatch) {
-            var particlePos = Camera.world_to_screen_pos(Pos);
+            var particlePos = Camera.WorldToScreen(Pos);
             var radius = Art.BackgroundParticle.Width / 2f;
             if (particlePos.X < GameRoot.ScreenSize.X + radius && particlePos.Y < GameRoot.ScreenSize.Y + radius && particlePos.X > 0 - radius && particlePos.Y > 0 - radius)
-                spriteBatch.Draw(Art.BackgroundParticle, Camera.world_to_screen_pos(Pos), null, Color.White * Brightness, Rotation, new Vector2(radius), Camera.Zoom * Size * Brightness, SpriteEffects.None, 0);
+                spriteBatch.Draw(Art.BackgroundParticle, Camera.WorldToScreen(Pos), null, Color.White * Brightness, Rotation, new Vector2(radius), Camera.Zoom * Size * Brightness, SpriteEffects.None, 0);
         }
     }
 
     public static class BackgroundParticleManager {
         private static List<BackgroundParticle> Particles = new List<BackgroundParticle>();
-        
+
         public static void Populate(Vector2 size, int num) {
             for (int i = 0; i < num; i++) {
                 Particles.Add(new BackgroundParticle(size));

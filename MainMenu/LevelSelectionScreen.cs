@@ -2,10 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class LevelSelectionScreen : States.GameState {
@@ -29,9 +25,9 @@ namespace Mono_Ether.MainMenu {
             throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
-            NewtonsBackground.update();
+            NewtonsBackground.Update();
             buttonManager.Update();
-            var clickedButton = buttonManager.getClickedButton();
+            var clickedButton = buttonManager.GetClickedButton();
             switch (clickedButton) {
                 case "Test stage":
                     GameRoot.Instance.AddScreen(new Ether.EtherRoot(GameRoot.Instance.graphicsasdfasdfasdf));
@@ -73,28 +69,23 @@ namespace Mono_Ether.MainMenu {
             if (Input.Mouse.WasButtonJustUp(MonoGame.Extended.Input.MouseButton.Left))
                 buttonOffsetVelocity = (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
             // If user is holding down left click, allow "dragging" of buttons
-            if (Input.Mouse.IsButtonDown(MonoGame.Extended.Input.MouseButton.Left))
-            {
-                
+            if (Input.Mouse.IsButtonDown(MonoGame.Extended.Input.MouseButton.Left)) {
+
                 foreach (LevelButton button in buttonManager.Buttons)
                     button.Offset -= (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
-            }
-            else
-            {
+            } else {
                 // Otherwise, apply offset velocity
                 foreach (LevelButton button in buttonManager.Buttons)
                     button.Offset -= buttonOffsetVelocity;
                 // Apply friction to velocity
                 buttonOffsetVelocity /= 1.1f;
             }
-            
-
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            NewtonsBackground.draw(spriteBatch);
+            NewtonsBackground.Draw(spriteBatch);
             spriteBatch.DrawString(Art.DebugFont, "Level selection screen", Vector2.Zero, Color.White);
             spriteBatch.DrawString(Art.DebugFont, "Use arrow keys, drag the mouse or scroll the mouse wheel to scroll up/down", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);

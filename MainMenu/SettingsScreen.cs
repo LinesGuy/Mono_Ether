@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class SettingsScreen : States.GameState {
@@ -21,7 +18,7 @@ namespace Mono_Ether.MainMenu {
             // throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
-            var clickedButton = buttonManager.getClickedButton();
+            var clickedButton = buttonManager.GetClickedButton();
             if (clickedButton == "back")
                 GameRoot.Instance.RemoveScreen();
         }

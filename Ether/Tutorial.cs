@@ -1,20 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Mono_Ether.Ether
-{
-    public static class Tutorial
-    {
+namespace Mono_Ether.Ether {
+    public static class Tutorial {
         public static string state = "none";
         public static string tutorialText = "";
         public static float timer = 0f;
-        public static void update()
-        {
-            switch (state)
-            {
+        public static void Update() {
+            switch (state) {
                 case "none":
                     break;
                 case "movement":
@@ -24,23 +17,21 @@ namespace Mono_Ether.Ether
                     if (Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.W) ||
                         Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.A) ||
                         Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.S) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.D))
-                    {
+                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.D)) {
                         state = "shooting";
                     }
                     break;
                 case "shooting":
                     tutorialText = "Move the cursor around and hold left click to shoot";
-                    if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Left))
-                    {
+                    if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Left)) {
                         state = "shootingEnemies";
                         EnemySpawner.enabled = true;
                         timer = 10f;
                     }
-                        
+
                     break;
                 case "shootingEnemies":
-                    tutorialText = $"Enemy spawning is now enabled. Please survive {timer.ToString("0")} more seconds.";
+                    tutorialText = $"Enemy spawning is now enabled. Please survive {timer:0} more seconds.";
                     timer -= 0.0166f;
                     if (timer <= 0)
                         state = "starburst";
@@ -59,8 +50,7 @@ namespace Mono_Ether.Ether
             }
         }
 
-        public static void draw(SpriteBatch spriteBatch)
-        {
+        public static void Draw(SpriteBatch spriteBatch) {
             spriteBatch.DrawString(Art.DebugFont, tutorialText, GameRoot.ScreenSize / 4f, Color.White);
         }
     }

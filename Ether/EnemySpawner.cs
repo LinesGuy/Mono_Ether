@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     static class EnemySpawner {
-        static Random _rand = new Random();
+        static readonly Random _rand = new Random();
         static float _inverseSpawnChance = 60;
         public static bool enabled = true;
         public static void Update() {

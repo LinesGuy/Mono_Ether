@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Mono_Ether.Ether {
@@ -43,7 +42,6 @@ namespace Mono_Ether.Ether {
                     EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
                 }
             }
-
         }
     }
 
@@ -51,7 +49,7 @@ namespace Mono_Ether.Ether {
         private int age;
         private readonly int lifespan;
         static readonly Random Rand = new Random();
-        static float bullet_speed = 15f;
+        static readonly float bullet_speed = 15f;
 
         public Starburst(Vector2 position, Vector2 destination) {
             Image = Art.StarBurst;
@@ -73,7 +71,6 @@ namespace Mono_Ether.Ether {
                     Vector2 bulletVelocity = MathUtil.FromPolar(Rand.NextFloat((float)-Math.PI, (float)Math.PI), Rand.NextFloat(8f, 16f));
                     EntityManager.Add(new Bullet(Position, bulletVelocity, new Color(128, 128, 0)));
                 }
-
             }
         }
     }

@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether.MainMenu {
     public class TitleScreen : States.GameState {
@@ -24,8 +21,8 @@ namespace Mono_Ether.MainMenu {
             // throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime) {
-            NewtonsBackground.update();
-            var clickedButton = buttonManager.getClickedButton();
+            NewtonsBackground.Update();
+            var clickedButton = buttonManager.GetClickedButton();
             switch (clickedButton) {
                 case "play":
                     GameRoot.Instance.AddScreen(new LevelSelectionScreen(GameRoot.Instance.graphicsasdfasdfasdf));
@@ -47,7 +44,7 @@ namespace Mono_Ether.MainMenu {
         public override void Draw(SpriteBatch spriteBatch) {
             //GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            NewtonsBackground.draw(spriteBatch);
+            NewtonsBackground.Draw(spriteBatch);
             spriteBatch.DrawString(Art.DebugFont, "welcome to ether", Vector2.Zero, Color.White);
             spriteBatch.DrawString(Art.DebugFont, "(this background has nothing to do with the game I just thought it looked cool)", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);

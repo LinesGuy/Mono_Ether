@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     public class Node {
@@ -135,11 +134,6 @@ namespace Mono_Ether.Ether {
             }
             Debug.WriteLine("NO PATH FOUND ENDING EARLY");
             return null;
-        }
-
-        public static int[,] Grid = new int[100, 100];
-        public static void Draw(SpriteBatch spriteBatch) {
-
         }
     }
 }

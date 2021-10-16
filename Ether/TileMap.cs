@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace Mono_Ether.Ether {
@@ -19,21 +17,21 @@ namespace Mono_Ether.Ether {
             TileId = tileId;
         }
 
-        public void draw(SpriteBatch spriteBatch) {
+        public void Draw(SpriteBatch spriteBatch) {
             Texture2D texture;
             switch (TileId) // Get texture based on TextureID
             {
                 case 1:
-                    texture = Art.tileGrass;
+                    texture = Art.TileGrass;
                     break;
                 case 2:
-                    texture = Art.tileDirt;
+                    texture = Art.TileDirt;
                     break;
                 case 3:
-                    texture = Art.tileStone;
+                    texture = Art.TileStone;
                     break;
                 case 4:
-                    texture = Art.tileSus;
+                    texture = Art.TileSus;
                     break;
                 default:
                     return;
@@ -41,14 +39,14 @@ namespace Mono_Ether.Ether {
             var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
             spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
             if (EtherRoot.Instance.editorMode) {
-                if (Walls[0]) spriteBatch.Draw(Art.collisionLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[1]) spriteBatch.Draw(Art.collisionUp, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[2]) spriteBatch.Draw(Art.collisionRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[3]) spriteBatch.Draw(Art.collisionDown, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[4]) spriteBatch.Draw(Art.collisionTopLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[5]) spriteBatch.Draw(Art.collisionTopRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[6]) spriteBatch.Draw(Art.collisionBottomRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[7]) spriteBatch.Draw(Art.collisionBottomLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[0]) spriteBatch.Draw(Art.CollisionLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[1]) spriteBatch.Draw(Art.CollisionUp, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[2]) spriteBatch.Draw(Art.CollisionRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[3]) spriteBatch.Draw(Art.CollisionDown, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[4]) spriteBatch.Draw(Art.CollisionTopLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[5]) spriteBatch.Draw(Art.CollisionTopRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[6]) spriteBatch.Draw(Art.CollisionBottomRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[7]) spriteBatch.Draw(Art.CollisionBottomLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
             }
         }
 
@@ -61,7 +59,7 @@ namespace Mono_Ether.Ether {
         public Vector2 BottomLeft { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize); }
         public Vector2 Left { get => new Vector2(TopLeft.X, TopLeft.Y + Map.cellSize / 2f); }
 
-        public void updateWalls() {
+        public void UpdateWalls() {
             Walls = new Boolean[8]; // Set all walls to False (temp)
             // Update wall values based on surrounding tiles
             if (Map.GetTileFromMap(new Vector2(pos.X - 1, pos.Y)).TileId <= 0)
@@ -81,7 +79,7 @@ namespace Mono_Ether.Ether {
             if (!Walls[3] && !Walls[0])
                 Walls[7] = true; // Bottom left
         }
-        public void updateNeighbouringWalls() {
+        public void UpdateNeighbouringWalls() {
             // Updates this tile's walls and all 8 surrounding tile's walls
             List<Vector2> offsets = new List<Vector2>
             {
@@ -93,7 +91,7 @@ namespace Mono_Ether.Ether {
                 Vector2 offsetPos = pos + offset;
                 if (offsetPos.X < 0 || offsetPos.Y < 0 || offsetPos.X >= Map._size.X || offsetPos.Y >= Map._size.Y)
                     continue;
-                Map._grid[(int)offsetPos.X, (int)offsetPos.Y].updateWalls();
+                Map._grid[(int)offsetPos.X, (int)offsetPos.Y].UpdateWalls();
             }
         }
     }
@@ -107,11 +105,11 @@ namespace Mono_Ether.Ether {
             _size = size;
             // Load TileId's from TileMapData to _grid
             string lines = File.ReadAllText(@"Content/TileMapData/" + filename);
-            int i = 0, j = 0;
+            int i = 0;
             _grid = new Tile[(int)size.X, (int)size.Y];
             foreach (var row in lines.Split('\n')) {
                 if (row.Length == 0) continue;
-                j = 0;
+                int j = 0;
                 foreach (var col in row.Trim().Split(',')) {
                     var id = int.Parse(col);
                     _grid[j, i] = new Tile(new Vector2(j, i), id);
@@ -121,7 +119,7 @@ namespace Mono_Ether.Ether {
             }
             // Create tile collision data
             foreach (var tile in _grid) {
-                tile.updateWalls();
+                tile.UpdateWalls();
             }
             // Adjust player position to middle of map
             PlayerShip.Instance.Position = WorldSize / 2f;
@@ -141,27 +139,26 @@ namespace Mono_Ether.Ether {
         }
         public static Vector2 WorldtoMap(Vector2 worldPos) => Vector2.Floor(worldPos / cellSize);
         public static Vector2 MapToWorld(Vector2 mapPos) => mapPos * cellSize;
-        public static Vector2 MapToScreen(Vector2 mapPos) => Camera.world_to_screen_pos(MapToWorld(mapPos));
+        public static Vector2 MapToScreen(Vector2 mapPos) => Camera.WorldToScreen(MapToWorld(mapPos));
         public static void Draw(SpriteBatch spriteBatch) {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
-            var startCol = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).X / cellSize));
-            var endCol = Math.Min(_size.X, 1 + (int)(Camera.screen_to_world_pos(GameRoot.ScreenSize).X / cellSize));
-            var startRow = Math.Max(0, (int)(Camera.screen_to_world_pos(Vector2.Zero).Y / cellSize));
-            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.screen_to_world_pos(GameRoot.ScreenSize).Y / cellSize));
+            var startCol = Math.Max(0, (int)(Camera.ScreenToWorld(Vector2.Zero).X / cellSize));
+            var endCol = Math.Min(_size.X, 1 + (int)(Camera.ScreenToWorld(GameRoot.ScreenSize).X / cellSize));
+            var startRow = Math.Max(0, (int)(Camera.ScreenToWorld(Vector2.Zero).Y / cellSize));
+            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.ScreenToWorld(GameRoot.ScreenSize).Y / cellSize));
             for (int row = startRow; row < endRow; row++) {
                 for (int col = startCol; col < endCol; col++) {
                     var cell = _grid[col, row];
-                    cell.draw(spriteBatch);
+                    cell.Draw(spriteBatch);
                 }
             }
             // Draw tile cursor is in if in editor mode
             if (EtherRoot.Instance.editorMode) {
-                var screenCoords = MapToScreen(Vector2.Floor(Camera.mouse_world_coords() / cellSize));
+                var screenCoords = MapToScreen(Vector2.Floor(Camera.MouseWorldCoords() / cellSize));
                 spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
             }
-
         }
 
         public static void Update() {
@@ -182,7 +179,7 @@ namespace Mono_Ether.Ether {
                     }
                     File.WriteAllLines(@"Content/TileMapData/" + filename, lines.ToArray());
                 }
-                var tile = GetTileFromWorld(Camera.mouse_world_coords());
+                var tile = GetTileFromWorld(Camera.MouseWorldCoords());
                 // Set Tile ID
                 if (Input.Keyboard.IsKeyDown(Keys.D1))
                     SelectedId = 1;
@@ -207,13 +204,13 @@ namespace Mono_Ether.Ether {
                 if (Input.Mouse.IsButtonDown(MouseButton.Left)) // Place last placed tile ID at cursor
                 {
                     tile.TileId = SelectedId;
-                    tile.updateNeighbouringWalls();
+                    tile.UpdateNeighbouringWalls();
                 }
 
                 if (Input.Mouse.IsButtonDown(MouseButton.Right)) // Delete tile at cursor
                 {
                     tile.TileId = 0;
-                    tile.updateNeighbouringWalls();
+                    tile.UpdateNeighbouringWalls();
                 }
             }
         }

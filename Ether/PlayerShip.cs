@@ -2,9 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
@@ -47,7 +46,7 @@ namespace Mono_Ether.Ether {
             }
 
             Velocity += acceleration * Input.GetMovementDirection();  // Normalised direction vector
-            Velocity = Velocity / 1.5f;  // Friction
+            Velocity /= 1.5f;  // Friction
             Position += Velocity;
             // Change orientation if velocity is non-zero:
             if (Velocity.LengthSquared() > 0)
@@ -123,7 +122,7 @@ namespace Mono_Ether.Ether {
                     cooldownRemaining--;
 
                 if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right)) {
-                    EntityManager.Add(new Starburst(Position, Camera.mouse_world_coords()));
+                    EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords()));
                 }
             }
 

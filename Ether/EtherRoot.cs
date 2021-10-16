@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Mono_Ether.States;
 using Microsoft.Xna.Framework.Input;
+using Mono_Ether.States;
 
 namespace Mono_Ether.Ether {
     public class EtherRoot : GameState {
@@ -29,7 +29,7 @@ namespace Mono_Ether.Ether {
         public override void UnloadContent() {
             EntityManager.Killall();
             Tutorial.state = "none";
-    }
+        }
 
         public override void Update(GameTime gameTime) {
             CurrentGameTime = gameTime;
@@ -46,15 +46,12 @@ namespace Mono_Ether.Ether {
                     PowerPackSpawner.enabled = false;
                     editorMode = true;
                 }
-
             }
             // Esc to toggle pause
             if (Input.Keyboard.WasKeyJustDown(Keys.Escape))
                 paused = !paused;
 
-            
             Map.Update();
-            
 
             if (paused) {
                 PauseMenu.Update();
@@ -66,7 +63,7 @@ namespace Mono_Ether.Ether {
                 ParticleManager.Update();
                 BackgroundParticleManager.Update();
                 if (Tutorial.state != "none")
-                    Tutorial.update();
+                    Tutorial.Update();
             }
         }
         public override void Draw(SpriteBatch spriteBatch) {
@@ -78,7 +75,7 @@ namespace Mono_Ether.Ether {
             EntityManager.Draw(spriteBatch);
             ParticleManager.Draw(spriteBatch);
 
-            Vector2 mousePos = Camera.world_to_screen_pos(Camera.mouse_world_coords());
+            Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
 
             spriteBatch.End();
@@ -87,7 +84,7 @@ namespace Mono_Ether.Ether {
             if (paused)
                 PauseMenu.Draw(spriteBatch);
             if (Tutorial.state != "none")
-                Tutorial.draw(spriteBatch);
+                Tutorial.Draw(spriteBatch);
             Hud.Draw(spriteBatch);
             spriteBatch.End();
         }

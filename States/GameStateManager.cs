@@ -9,7 +9,7 @@ namespace Mono_Ether.States {
         private static GameStateManager _instance;
 
         // Stck for screens
-        private Stack<GameState> _screens = new Stack<GameState>();
+        private readonly Stack<GameState> _screens = new Stack<GameState>();
 
         private ContentManager _content;
         // Sets content manager
@@ -38,9 +38,7 @@ namespace Mono_Ether.States {
 
         public void RemoveScreen() {
             if (_screens.Count > 0) {
-                var screen = _screens.Peek();
                 _screens.Pop();
-
             }
         }
 

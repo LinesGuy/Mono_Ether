@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mono_Ether {
     internal abstract class Button {
@@ -16,15 +14,11 @@ namespace Mono_Ether {
         public bool IsActive() {
             return Rect.Contains(Input.MousePosition.ToPoint());
         }
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            if (IsActive())
-            {
+        public virtual void Draw(SpriteBatch spriteBatch) {
+            if (IsActive()) {
                 spriteBatch.Draw(Texture, Pos, ActiveButtonColor);
                 spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), ActiveFontColor, 0f, Vector2.Zero, 2f, 0, 0);
-            }
-            else
-            {
+            } else {
                 spriteBatch.Draw(Texture, Pos, InactiveButtonColor);
                 spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), InactiveFontColor, 0f, Vector2.Zero, 2f, 0, 0);
             }
@@ -32,10 +26,8 @@ namespace Mono_Ether {
 
         public abstract void Update();
     }
-    class MenuButton : Button
-    {
-        public MenuButton(Vector2 pos, string text)
-        {
+    class MenuButton : Button {
+        public MenuButton(Vector2 pos, string text) {
             Texture = Art.MenuButtonBlank;
             Text = text;
             Pos = pos - Texture.Size() / 2f;
@@ -46,17 +38,14 @@ namespace Mono_Ether {
             InactiveFontColor = Color.Black;
         }
 
-        public override void Update()
-        {
+        public override void Update() {
             throw new NotImplementedException();
         }
     }
-    class LevelButton : Button
-    {
+    class LevelButton : Button {
         public float Offset;
         public const float RADIUS = 1366f;
-        public LevelButton(int index, string text)
-        {
+        public LevelButton(int index, string text) {
             Texture = Art.MenuButtonBlank;
             Text = text;
             Offset = MathF.PI - index * (Art.MenuButtonBlank.Height / RADIUS);
@@ -69,8 +58,7 @@ namespace Mono_Ether {
             InactiveFontColor = Color.Black;
         }
 
-        public override void Update()
-        {
+        public override void Update() {
             //Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.2f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 1.5f));
             Pos = MathUtil.FromPolar(Offset, RADIUS);
             Pos.X += GameRoot.ScreenSize.X * 1.5f;
@@ -82,8 +70,7 @@ namespace Mono_Ether {
                 Offset -= 0.05f;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
+        public override void Draw(SpriteBatch spriteBatch) {
             base.Draw(spriteBatch);
         }
     }
@@ -95,19 +82,17 @@ namespace Mono_Ether {
         public void Add(string name, Vector2 pos) {
             Buttons.Add(new MenuButton(pos, name));
         }
-        public void AddButton(Button button)
-        {
+        public void AddButton(Button button) {
             Buttons.Add(button);
         }
-        public string getClickedButton() {
+        public string GetClickedButton() {
             if (Input.Mouse.WasButtonJustDown(MouseButton.Left))
                 foreach (var button in Buttons)
                     if (button.IsActive())
                         return button.Text;
             return null;
         }
-        public void Update()
-        {
+        public void Update() {
             foreach (Button button in Buttons)
                 button.Update();
         }

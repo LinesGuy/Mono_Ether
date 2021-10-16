@@ -1,16 +1,15 @@
-﻿using Mono_Ether.States;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Mono_Ether.States;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Input;
 
 namespace Mono_Ether {
     public class GameRoot : Game {
         public static GameRoot Instance { get; private set; }
-        public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
-        public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
-
-        private GraphicsDeviceManager graphics;
+        public static readonly Vector2 ScreenSize = new Vector2(1366, 768);
+#pragma warning disable IDE0052 // Remove unread private members
+        private readonly GraphicsDeviceManager graphics;
+#pragma warning restore IDE0052 // Remove unread private members
         public GraphicsDevice graphicsasdfasdfasdf;
         private SpriteBatch spriteBatch;
         public Stack<GameState> screenStack = new Stack<GameState>();
@@ -18,8 +17,8 @@ namespace Mono_Ether {
         public GameRoot() {
             Instance = this;
             graphics = new GraphicsDeviceManager(this) {
-                PreferredBackBufferWidth = 1366,
-                PreferredBackBufferHeight = 768
+                PreferredBackBufferWidth = (int)ScreenSize.X,
+                PreferredBackBufferHeight = (int)ScreenSize.Y
             };
             Content.RootDirectory = "Content";
             IsMouseVisible = true;

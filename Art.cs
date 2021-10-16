@@ -1,7 +1,6 @@
-﻿using System.Net.Mime;
+﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether {
     static class Art {
@@ -26,21 +25,21 @@ namespace Mono_Ether {
         public static Texture2D MenuExitButton { get; private set; }
         public static Texture2D MenuBackButton { get; private set; }*/
         public static Texture2D MenuButtonBlank { get; private set; }
-        public static Texture2D tileGrass { get; private set; }
-        public static Texture2D tileDirt { get; private set; }
-        public static Texture2D tileStone { get; private set; }
-        public static Texture2D tileSus { get; private set; }
-        public static Texture2D collisionLeft { get; private set; }
-        public static Texture2D collisionUp { get; private set; }
-        public static Texture2D collisionRight { get; private set; }
-        public static Texture2D collisionDown { get; private set; }
-        public static Texture2D collisionTopLeft { get; private set; }
-        public static Texture2D collisionTopRight { get; private set; }
-        public static Texture2D collisionBottomRight { get; private set; }
-        public static Texture2D collisionBottomLeft { get; private set; }
-        public static Texture2D pauseBg { get; private set; }
-        public static Texture2D pauseExit { get; private set; }
-        public static Texture2D pauseResume { get; private set; }
+        public static Texture2D TileGrass { get; private set; }
+        public static Texture2D TileDirt { get; private set; }
+        public static Texture2D TileStone { get; private set; }
+        public static Texture2D TileSus { get; private set; }
+        public static Texture2D CollisionLeft { get; private set; }
+        public static Texture2D CollisionUp { get; private set; }
+        public static Texture2D CollisionRight { get; private set; }
+        public static Texture2D CollisionDown { get; private set; }
+        public static Texture2D CollisionTopLeft { get; private set; }
+        public static Texture2D CollisionTopRight { get; private set; }
+        public static Texture2D CollisionBottomRight { get; private set; }
+        public static Texture2D CollisionBottomLeft { get; private set; }
+        public static Texture2D PauseBg { get; private set; }
+        public static Texture2D PauseExit { get; private set; }
+        public static Texture2D PauseResume { get; private set; }
         public static Texture2D PowerShootSpeedIncrease { get; private set; }
         public static Texture2D PowerShootSpeedDecrease { get; private set; }
         public static Texture2D PowerMoveSpeedIncrease { get; private set; }
@@ -70,21 +69,21 @@ namespace Mono_Ether {
             MenuExitButton = content.Load<Texture2D>("Textures/Menu/exit_button");
             MenuBackButton = content.Load<Texture2D>("Textures/Menu/back_button");*/
             MenuButtonBlank = content.Load<Texture2D>("Textures/Menu/menu_button_blank");
-            tileGrass = content.Load<Texture2D>("Textures/tiles/tile1");
-            tileDirt = content.Load<Texture2D>("Textures/tiles/tile2");
-            tileStone = content.Load<Texture2D>("Textures/tiles/tile3");
-            tileSus = content.Load<Texture2D>("Textures/tiles/tile4");
-            collisionLeft = content.Load<Texture2D>("Textures/tiles/collisionLeft");
-            collisionUp = content.Load<Texture2D>("Textures/tiles/collisionUp");
-            collisionRight = content.Load<Texture2D>("Textures/tiles/collisionRight");
-            collisionDown = content.Load<Texture2D>("Textures/tiles/collisionDown");
-            collisionTopLeft = content.Load<Texture2D>("Textures/tiles/collisionTopLeft");
-            collisionTopRight = content.Load<Texture2D>("Textures/tiles/collisionTopRight");
-            collisionBottomRight = content.Load<Texture2D>("Textures/tiles/collisionBottomRight");
-            collisionBottomLeft = content.Load<Texture2D>("Textures/tiles/collisionBottomLeft");
-            pauseBg = content.Load<Texture2D>("Textures/GamePause/pause_bg");
-            pauseExit = content.Load<Texture2D>("Textures/GamePause/exit_button");
-            pauseResume = content.Load<Texture2D>("Textures/GamePause/resume_button");
+            TileGrass = content.Load<Texture2D>("Textures/tiles/tile1");
+            TileDirt = content.Load<Texture2D>("Textures/tiles/tile2");
+            TileStone = content.Load<Texture2D>("Textures/tiles/tile3");
+            TileSus = content.Load<Texture2D>("Textures/tiles/tile4");
+            CollisionLeft = content.Load<Texture2D>("Textures/tiles/collisionLeft");
+            CollisionUp = content.Load<Texture2D>("Textures/tiles/collisionUp");
+            CollisionRight = content.Load<Texture2D>("Textures/tiles/collisionRight");
+            CollisionDown = content.Load<Texture2D>("Textures/tiles/collisionDown");
+            CollisionTopLeft = content.Load<Texture2D>("Textures/tiles/collisionTopLeft");
+            CollisionTopRight = content.Load<Texture2D>("Textures/tiles/collisionTopRight");
+            CollisionBottomRight = content.Load<Texture2D>("Textures/tiles/collisionBottomRight");
+            CollisionBottomLeft = content.Load<Texture2D>("Textures/tiles/collisionBottomLeft");
+            PauseBg = content.Load<Texture2D>("Textures/GamePause/pause_bg");
+            PauseExit = content.Load<Texture2D>("Textures/GamePause/exit_button");
+            PauseResume = content.Load<Texture2D>("Textures/GamePause/resume_button");
             PowerShootSpeedIncrease = content.Load<Texture2D>("Textures/GamePlay/PowerShootSpeedIncrease");
             PowerShootSpeedDecrease = content.Load<Texture2D>("Textures/GamePlay/PowerShootSpeedDecrease");
             PowerMoveSpeedIncrease = content.Load<Texture2D>("Textures/GamePlay/PowerMoveSpeedIncrease");

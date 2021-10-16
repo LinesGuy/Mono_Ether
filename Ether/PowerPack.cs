@@ -66,8 +66,8 @@ namespace Mono_Ether.Ether {
         }
     }
     static class PowerPackSpawner {
-        static Random _rand = new Random();
-        static float _inverseSpawnChance = 50;
+        static readonly Random _rand = new Random();
+        static readonly float _inverseSpawnChance = 50;
         public static bool enabled = true;
         private const int numTypes = 4;
         public static void Update() {

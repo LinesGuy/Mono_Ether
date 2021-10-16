@@ -1,12 +1,12 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Mono_Ether.Ether {
     public class ParticleManager<T> {
         // This delegate will be called for each particle.
-        private Action<Particle> updateParticle;
-        private CircularParticleArray particleList;
+        private readonly Action<Particle> updateParticle;
+        private readonly CircularParticleArray particleList;
 
         public ParticleManager(int capacity, Action<Particle> updateParticle) {
             this.updateParticle = updateParticle;
@@ -41,7 +41,7 @@ namespace Mono_Ether.Ether {
             public int Count { get; set; }
 
             public int Capacity { get { return list.Length; } }
-            private Particle[] list;
+            private readonly Particle[] list;
 
             public CircularParticleArray(int capacity) {
                 list = new Particle[capacity];
@@ -110,7 +110,7 @@ namespace Mono_Ether.Ether {
                 var particle = particleList[i];
 
                 Vector2 origin = new Vector2(particle.Texture.Width / 2, particle.Texture.Height / 2);
-                var screenPos = Camera.world_to_screen_pos(particle.Position);
+                var screenPos = Camera.WorldToScreen(particle.Position);
                 var scale = Camera.Zoom * particle.Scale;
                 spriteBatch.Draw(particle.Texture, screenPos, null, particle.Tint, particle.Orientation, origin, scale, 0, 0);
             }

@@ -9,7 +9,7 @@ namespace Mono_Ether.Ether {
         public ParticleType Type;
         public float LengthMultiplier;
 
-        private static Random rand = new Random();
+        private static readonly Random rand = new Random();
 
         public ParticleState(Vector2 velocity, ParticleType type, float lengthMultiplier = 1f) {
             Velocity = velocity;
@@ -18,10 +18,11 @@ namespace Mono_Ether.Ether {
         }
 
         public static ParticleState GetRandom(float minVel, float maxVel) {
-            var state = new ParticleState();
-            state.Velocity = rand.NextVector2(minVel, maxVel);
-            state.Type = ParticleType.None;
-            state.LengthMultiplier = 1;
+            var state = new ParticleState {
+                Velocity = rand.NextVector2(minVel, maxVel),
+                Type = ParticleType.None,
+                LengthMultiplier = 1
+            };
 
             return state;
         }

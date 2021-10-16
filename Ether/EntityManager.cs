@@ -14,8 +14,7 @@ namespace Mono_Ether.Ether {
         static readonly List<Entity> AddedEntities = new List<Entity>();
 
         public static int Count => Entities.Count;
-        public static void Killall()
-        {
+        public static void Killall() {
             Entities = new List<Entity>();
             Enemies = new List<Enemy>();
             Bullets = new List<Bullet>();

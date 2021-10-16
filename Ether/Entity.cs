@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace Mono_Ether.Ether {
     internal abstract class Entity {
@@ -18,7 +17,7 @@ namespace Mono_Ether.Ether {
         public abstract void Update();
 
         public virtual void Draw(SpriteBatch spriteBatch) {
-            var screenPos = Camera.world_to_screen_pos(Position);
+            var screenPos = Camera.WorldToScreen(Position);
             spriteBatch.Draw(Image, screenPos, null, Color, Orientation, Size / 2f, Camera.Zoom, 0, 0);
         }
 

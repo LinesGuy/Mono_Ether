@@ -1,18 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
 using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
-namespace Mono_Ether.MainMenu
-{
-    public static class NewtonsBackground
-    {
+namespace Mono_Ether.MainMenu {
+    public static class NewtonsBackground {
         // This is the code for the animated background in the title screen. It is very CPU intensive, makes the game very laggy, but it looks cool
         // also the code for it is like really complex so i figured i'd include it here
 
@@ -29,14 +25,12 @@ namespace Mono_Ether.MainMenu
         // Camera stuffs
         public static Vector2 CameraPosition = new Vector2(1, 0);
         public static float Zoom = 200;
-        public static Vector2 world_to_screen(Vector2 worldPosition) { return ((worldPosition - CameraPosition) * Zoom) + GameRoot.ScreenSize / 2; }
-        public static Vector2 screen_to_world_pos(Vector2 screenPos) { return (screenPos - GameRoot.ScreenSize / 2) / Zoom + CameraPosition; }
-        public static void update()
-        {
+        public static Vector2 WorldToScreen(Vector2 worldPosition) { return ((worldPosition - CameraPosition) * Zoom) + GameRoot.ScreenSize / 2; }
+        public static Vector2 ScreenToWorld(Vector2 screenPos) { return (screenPos - GameRoot.ScreenSize / 2) / Zoom + CameraPosition; }
+        public static void Update() {
             solutions = new List<Complex>();
             offset += 0.005f;
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < 5; i++) {
                 float z = (float)i / 5 * MathF.PI * 2;
                 solutions.Add(new Complex(Math.Cos(z + offset), Math.Sin(z + offset)));
             }
@@ -59,8 +53,7 @@ namespace Mono_Ether.MainMenu
             else if (Input.Keyboard.WasKeyJustDown(Keys.D4)) pixelSize = 8;
             else if (Input.Keyboard.WasKeyJustDown(Keys.D5)) pixelSize = 16;
         }
-        public static void draw(SpriteBatch spriteBatch)
-        {
+        public static void Draw(SpriteBatch spriteBatch) {
             List<List<int>> grid = new List<List<int>>();
             // Populate grid with zeros
             List<int> zeroRow = new List<int>();
@@ -69,35 +62,30 @@ namespace Mono_Ether.MainMenu
             for (int y = 0; y < (int)GameRoot.ScreenSize.Y; y += pixelSize)
                 grid.Add(zeroRow);
             // For each row in grid
-            Parallel.For(0, (int)(GameRoot.ScreenSize.Y / pixelSize), z =>
-            {
+            Parallel.For(0, (int)(GameRoot.ScreenSize.Y / pixelSize), z => {
                 var y = z * pixelSize;
                 List<int> row = new List<int>();
                 // For each pixel in row
-                for (int x = 0; x < GameRoot.ScreenSize.X; x += pixelSize)
-                {
-                    Vector2 coords = screen_to_world_pos(new Vector2(x, y)); // Get pixel coordinates on screen and convert to cartesian coordinates
+                for (int x = 0; x < GameRoot.ScreenSize.X; x += pixelSize) {
+                    Vector2 coords = ScreenToWorld(new Vector2(x, y)); // Get pixel coordinates on screen and convert to cartesian coordinates
                     coords = new Vector2(coords.X * MathF.Cos(offset) - coords.Y * MathF.Sin(offset), coords.X * MathF.Sin(offset) + coords.Y * MathF.Cos(offset)); // rotate for fancy effect (not canonically part of newton method fractal)
                     Complex coordsComplex = new Complex(coords.X, coords.Y); // Convert cartesian to complex
                     Complex newtonCoordsComplex = coordsComplex; // Variable for storing newton iteration result
-                    for (int i = 0; i <= iterations; i++)
-                    {
+                    for (int i = 0; i <= iterations; i++) {
                         Complex polySum = Complex.Zero; // f(x)
                         Complex derSum = Complex.Zero; // f'(x)
                         // Calculate f(x) and f'(x) values
-                        foreach (var term in polynomial)
-                        {
+                        foreach (var term in polynomial) {
                             polySum += term.X * Complex.Pow(newtonCoordsComplex, term.Y);
                             derSum += term.X * term.Y * Complex.Pow(newtonCoordsComplex, term.Y - 1);
                         }
-                        newtonCoordsComplex = newtonCoordsComplex - polySum / derSum; // x = x - f(x) / f'(x)
+                        newtonCoordsComplex -= polySum / derSum; // x = x - f(x) / f'(x)
                     }
                     Vector2 newtonCoords = new Vector2((float)newtonCoordsComplex.Real, (float)newtonCoordsComplex.Imaginary); // Convert complex to cartesian
                     Complex bestSol = Complex.Zero; // Variable for storing nearest solution so far
                     float bestDist = float.PositiveInfinity; // Distance (squared) of nearest solution so far
                     // Find nearest root
-                    foreach (var sol in solutions)
-                    {
+                    foreach (var sol in solutions) {
                         var dist = Vector2.DistanceSquared(new Vector2((float)sol.Real, (float)sol.Imaginary), newtonCoords); // Distance squared can be calculated faster than actual distance and does not affect method
                         if (dist < bestDist) // Check if this root is closer than the current closer root
                         {
@@ -108,8 +96,7 @@ namespace Mono_Ether.MainMenu
                     // Colour pixel based on which root was nearest
                     int color = 0;
                     for (int i = 0; i < solutions.Count; i++)
-                        if (bestSol == solutions[i])
-                        {
+                        if (bestSol == solutions[i]) {
                             color = i + 1;
                             break;
                         }
@@ -117,10 +104,8 @@ namespace Mono_Ether.MainMenu
                 }
                 grid[z] = row; // Add row of pixels to grid
             });
-            for (int y = 0; y < (int)(GameRoot.ScreenSize.Y / pixelSize); y++)
-            { // For row in grid..
-                for (int x = 0; x < (int)(GameRoot.ScreenSize.X / pixelSize); x++)
-                { // Row pixel in row..
+            for (int y = 0; y < (int)(GameRoot.ScreenSize.Y / pixelSize); y++) { // For row in grid..
+                for (int x = 0; x < (int)(GameRoot.ScreenSize.X / pixelSize); x++) { // Row pixel in row..
                     var cell = grid[y][x];
                     // Get colour based on colour code
                     Color color = Color.Black;
