@@ -10,12 +10,14 @@ namespace Mono_Ether.Ether {
         int Age;
         int Lifespan;
         public bool IsExpired;
+        public float Scale;
         Color Color;
         public FloatingText(string text, Vector2 pos, Color color) {
             Text = text;
             Pos = pos;
             Color = color;
             IsExpired = false;
+            Scale = 1f;
             Age = 0;
             Lifespan = 180;
         }
@@ -26,8 +28,7 @@ namespace Mono_Ether.Ether {
                 IsExpired = true;
         }
         public void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.DrawString(Art.DebugFont, Text, Camera.WorldToScreen(Pos) - Art.DebugFont.MeasureString(Text) / 2f, Color);
-            spriteBatch.DrawString()
+            spriteBatch.DrawString(Art.DebugFont, Text, Camera.WorldToScreen(Pos), Color, 0f, Art.DebugFont.MeasureString(Text) / 2f, Scale, SpriteEffects.None, 0);
         }
     }
     public static class FloatingTextManager {
