@@ -84,7 +84,7 @@ namespace Mono_Ether.Ether {
                     yield return 0;
                 } else {
                     // Use A* to move towards the nearest player
-                    PlayerShip nearestPlayer = EntityManager.player1;
+                    PlayerShip nearestPlayer = EntityManager.Player1;
                     foreach (PlayerShip player in EntityManager.Players)
                         if (Vector2.DistanceSquared(Position, player.Position) < Vector2.DistanceSquared(Position, nearestPlayer.Position))
                             nearestPlayer = player;

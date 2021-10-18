@@ -124,7 +124,7 @@ namespace Mono_Ether.Ether {
             // Adjust player position to middle of map
             foreach(PlayerShip player in EntityManager.Players)
                 player.Position = WorldSize / 2f;
-            Camera.CameraPosition = EntityManager.player1.Position;
+            Camera.CameraPosition = EntityManager.Player1.Position;
         }
 
         public static Tile GetTileFromMap(Vector2 mapPos) {

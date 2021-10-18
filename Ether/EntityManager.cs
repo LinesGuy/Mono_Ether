@@ -13,7 +13,7 @@ namespace Mono_Ether.Ether {
 
         static bool _isUpdating;
         static readonly List<Entity> AddedEntities = new List<Entity>();
-        public static PlayerShip player1 => Players[0];
+        public static PlayerShip Player1 => Players[0];
         public static int Count => Entities.Count;
         public static void Killall() {
             Players.Clear();

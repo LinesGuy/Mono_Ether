@@ -47,7 +47,7 @@ namespace Mono_Ether.Ether {
                     acceleration /= 1.3f;
             }
             Vector2 direction = Vector2.Zero;
-            if (this == EntityManager.player1) {
+            if (this == EntityManager.Player1) {
                 if (Input.Keyboard.IsKeyDown(Keys.A))
                     direction.X -= 1;
                 if (Input.Keyboard.IsKeyDown(Keys.D))
