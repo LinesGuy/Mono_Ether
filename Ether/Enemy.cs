@@ -7,12 +7,14 @@ namespace Mono_Ether.Ether {
     class Enemy : Entity {
         private int timeUntilStart = 60;
         public bool IsActive => timeUntilStart <= 0;
+        private readonly int Worth; // The amount of score given when this enemy is killed
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
         private readonly Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position) {
             this.Image = image;
             Position = position;
+            Worth = rand.Next(50, 150);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
         }
@@ -27,9 +29,13 @@ namespace Mono_Ether.Ether {
             Position += Velocity;
             Velocity *= 0.8f;  // Friction
         }
-        public void WasShot() {
+        public void WasShot(int PlayerIndex) {
             IsExpired = true;
-
+            // Increment player score
+            EntityManager.Players[PlayerIndex].score += Worth;
+            // Floating text
+            FloatingTextManager.Add(Worth.ToString(), Position, Color.White);
+            // Particles
             float hue1 = rand.NextFloat(0, 6);
             float hue2 = (hue1 + rand.NextFloat(0, 2)) % 6f;
             Color color1 = ColorUtil.HsvToColor(hue1, 0.5f, 1);

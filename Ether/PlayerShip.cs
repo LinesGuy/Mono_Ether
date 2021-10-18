@@ -9,11 +9,15 @@ namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
         public bool GodMode = false;  // If true, player can't die
         public int lives;
+        public int score;
+        public int playerIndex;
         public PlayerShip() {
             Image = Art.Player;
             Position = new Vector2(0, 0);
             Radius = 10;
-            lives = 2;
+            lives = 3;
+            score = 0;
+            playerIndex = EntityManager.Players.Count;
         }
 
         const int CooldownFrames = 6;
@@ -125,7 +129,7 @@ namespace Mono_Ether.Ether {
                             bulletColor = new Color(252, 123, 3); // Orange
                         else
                             bulletColor = new Color(239, 247, 74); // Yellow
-                        EntityManager.Add(new Bullet(Position + offset, vel, bulletColor));
+                        EntityManager.Add(new Bullet(Position + offset, vel, bulletColor, playerIndex));
                     }
                 }
 
@@ -133,7 +137,7 @@ namespace Mono_Ether.Ether {
                     cooldownRemaining--;
 
                 if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right)) {
-                    EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords()));
+                    EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
                 }
             }
 

@@ -86,10 +86,10 @@ namespace Mono_Ether.Ether {
 
             // Handle collisions between bullets and enemies
             for (var i = 0; i < Enemies.Count; i++) {
-                foreach (var t in Bullets) {
-                    if (IsColliding(Enemies[i], t)) {
-                        Enemies[i].WasShot();
-                        t.IsExpired = true;
+                foreach (var bullet in Bullets) {
+                    if (IsColliding(Enemies[i], bullet)) {
+                        Enemies[i].WasShot(bullet.PlayerIndex);
+                        bullet.IsExpired = true;
                         // Play enemy_explosion.wav
                         Art.EnemyExplosion.CreateInstance().Play();
                     }
@@ -102,7 +102,7 @@ namespace Mono_Ether.Ether {
                     for (int i = 0; i < Enemies.Count; i++) {
                         if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
                             player.Kill();
-                            Enemies.ForEach(x => x.WasShot());
+                            Enemies.ForEach(e => e.WasShot(player.playerIndex));
                             break;
                         }
                     }

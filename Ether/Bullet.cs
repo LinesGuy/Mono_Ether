@@ -5,18 +5,19 @@ namespace Mono_Ether.Ether {
     class Bullet : Entity {
         private int age;
         private readonly int lifespan;
+        public readonly int PlayerIndex;
         private readonly Random rand = new Random();
-        public Bullet(Vector2 position, Vector2 velocity, Color color) {
+        public Bullet(Vector2 position, Vector2 velocity, Color color, int playerIndex) {
             Image = Art.Bullet;
             Position = position;
             Velocity = velocity;
+            PlayerIndex = playerIndex;
             Orientation = Velocity.ToAngle();
             Radius = 8;
             age = 0;
             lifespan = 120;  // Bullet will disappear after two seconds if it doesn't hit something
             Color = color;
         }
-
         public override void Update() {
             Position += Velocity;
             // Delete bullets after a certain time:
@@ -24,7 +25,6 @@ namespace Mono_Ether.Ether {
             if (age > lifespan)
                 IsExpired = true;
         }
-
         public override void HandleTilemapCollision() {
             var tile = Map.GetTileFromWorld(Position);
             if (tile.TileId > 0) {
@@ -48,12 +48,13 @@ namespace Mono_Ether.Ether {
     class Starburst : Entity {
         private int age;
         private readonly int lifespan;
+        private readonly int PlayerIndex;
         static readonly Random Rand = new Random();
         static readonly float bullet_speed = 15f;
-
-        public Starburst(Vector2 position, Vector2 destination) {
+        public Starburst(Vector2 position, Vector2 destination, int playerIndex) {
             Image = Art.StarBurst;
             Position = position;
+            PlayerIndex = playerIndex;
             Velocity = Vector2.Normalize(destination - position) * bullet_speed;
             Orientation = Velocity.ToAngle();
             age = 0;
@@ -69,7 +70,7 @@ namespace Mono_Ether.Ether {
                 IsExpired = true;
                 for (int i = 0; i < 50; i++) {
                     Vector2 bulletVelocity = MathUtil.FromPolar(Rand.NextFloat((float)-Math.PI, (float)Math.PI), Rand.NextFloat(8f, 16f));
-                    EntityManager.Add(new Bullet(Position, bulletVelocity, new Color(128, 128, 0)));
+                    EntityManager.Add(new Bullet(Position, bulletVelocity, new Color(128, 128, 0), PlayerIndex));
                 }
             }
         }

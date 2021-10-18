@@ -62,9 +62,7 @@ namespace Mono_Ether.Ether {
 
             Map.Update();
 
-            if (paused)
-                PauseMenu.Update();
-            else {
+            if (!paused) {
                 Camera.Update();
                 EntityManager.Update();
                 EnemySpawner.Update();
@@ -73,8 +71,8 @@ namespace Mono_Ether.Ether {
                 BackgroundParticleManager.Update();
                 if (Tutorial.state != "none")
                     Tutorial.Update();
-            }
-
+                FloatingTextManager.Update();  
+            } else PauseMenu.Update();
             hud.Update();
         }
         public override void Draw(SpriteBatch spriteBatch) {
@@ -96,6 +94,7 @@ namespace Mono_Ether.Ether {
                 PauseMenu.Draw(spriteBatch);
             if (Tutorial.state != "none")
                 Tutorial.Draw(spriteBatch);
+            FloatingTextManager.Draw(spriteBatch);
             hud.Draw(spriteBatch);
             if (!GameRoot.Instance.IsActive)
                 spriteBatch.DrawString(Art.DebugFont, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
