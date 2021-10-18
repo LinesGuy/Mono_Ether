@@ -98,13 +98,11 @@ namespace Mono_Ether.Ether {
 
             // Handle collisions between the players and enemies
             foreach(PlayerShip player in Players) {
-                if (player.GodMode == false) {
-                    for (int i = 0; i < Enemies.Count; i++) {
-                        if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
-                            player.Kill();
-                            Enemies.ForEach(e => e.WasShot(player.playerIndex));
-                            break;
-                        }
+                for (int i = 0; i < Enemies.Count; i++) {
+                    if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
+                        player.Kill();
+                        Enemies.ForEach(e => e.WasShot(player.playerIndex));
+                        break;
                     }
                 }
             }
