@@ -100,8 +100,9 @@ namespace Mono_Ether.Ether {
             if (!EtherRoot.Instance.editorMode) {
                 var aim = Camera.GetAimDirection();
                 if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
+                    // Play shooting sound
                     Art.PlayerShoot.CreateInstance().Play();
-
+                    // Cooldown calculations
                     float cooldownRemainingMultiplier = 1f;
                     foreach (var power in activePowerPacks) {
                         if (power.PowerType == "ShootSpeedIncrease")
@@ -126,6 +127,8 @@ namespace Mono_Ether.Ether {
                             bulletColor = new Color(239, 247, 74); // Yellow
                         EntityManager.Add(new Bullet(Position + offset, vel, bulletColor, playerIndex));
                     }
+                    // Knockback
+                    Camera.CameraPosition += MathUtil.FromPolar(aimangle + MathF.PI, 5f);
                 }
 
                 if (cooldownRemaining > 0)
