@@ -38,7 +38,7 @@ namespace Mono_Ether.Ether {
                 framesUntilRespawn--;
                 return;
             }
-            // Movement
+            #region Movement
             float acceleration = 5;
             foreach (var power in activePowerPacks) {
                 if (power.PowerType == "MoveSpeedIncrease")
@@ -68,8 +68,8 @@ namespace Mono_Ether.Ether {
                 Orientation = Velocity.ToAngle();
 
             HandleTilemapCollision();
-
-            // Exhaust fire
+            #endregion Movement
+            #region Exhaust fire
             if (Velocity.LengthSquared() > 0.1f) {
                 Orientation = Velocity.ToAngle();
                 double t = EtherRoot.CurrentGameTime.TotalGameTime.TotalSeconds;
@@ -98,10 +98,9 @@ namespace Mono_Ether.Ether {
                     new ParticleState(vel1, ParticleType.Enemy));
                 EtherRoot.ParticleManager.CreateParticle(Art.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel2, ParticleType.Enemy));
-
             }
-
-            // Shoot
+            #endregion Exhaust fire
+            #region Shooting
             if (!EtherRoot.Instance.editorMode) {
                 var aim = Camera.GetAimDirection();
                 if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
@@ -140,13 +139,15 @@ namespace Mono_Ether.Ether {
                     EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
                 }
             }
-
+            #endregion Shooting
+            #region Power packs
             foreach (var powerPack in activePowerPacks) {
                 powerPack.framesRemaining--;
                 if (powerPack.framesRemaining <= 0)
                     powerPack.isExpended = true;
             }
             activePowerPacks = activePowerPacks.Where(x => !x.isExpended).ToList();
+            #endregion Power packs
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
