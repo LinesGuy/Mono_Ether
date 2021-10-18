@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
-        public bool GodMode = false;  // If true, player can't die
         public int lives;
         public int score;
         public int playerIndex;
@@ -30,9 +29,6 @@ namespace Mono_Ether.Ether {
         public bool IsDead => framesUntilRespawn > 0;
 
         public override void Update() {
-            // Press G to toggle GodMode (for debugging purposes)
-            if (Input.Keyboard.WasKeyJustDown(Keys.G))
-                GodMode = !GodMode;
             // Do nothing if dead
             if (IsDead) {
                 framesUntilRespawn--;
