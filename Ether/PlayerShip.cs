@@ -127,8 +127,8 @@ namespace Mono_Ether.Ether {
                             bulletColor = new Color(239, 247, 74); // Yellow
                         EntityManager.Add(new Bullet(Position + offset, vel, bulletColor, playerIndex));
                     }
-                    // Knockback
-                    Camera.CameraPosition += MathUtil.FromPolar(aimangle + MathF.PI, 5f);
+                    // Knockback (dumb)
+                    //Camera.CameraPosition += MathUtil.FromPolar(aimangle + MathF.PI, 5f);
                 }
 
                 if (cooldownRemaining > 0)
