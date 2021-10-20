@@ -93,14 +93,21 @@ namespace Mono_Ether.Ether {
                         if (Vector2.DistanceSquared(Position, player.Position) < Vector2.DistanceSquared(Position, nearestPlayer.Position))
                             nearestPlayer = player;
                     var path = MyAStar.AStar(Position, nearestPlayer.Position);
+
                     // Instead of calculating a new path every frame or whatever, we will calculate a new path
                     // based on how far the enemy is from the player:
                     // - If the enemy is within 1000 units of the player, update the path every 30 frames
                     // - If within 2500 units, update every 60 frames
                     // - If within 5000 units, every 120 frames
                     // - Otherwise, every 240 frames
-                    // TODO implement the above
-                    for (int i = 0; i < 60; i++) {
+                    var timeUntilNextCalculation = 240;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 2500 * 2500)
+                        timeUntilNextCalculation = 120;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 1500 * 1500)
+                        timeUntilNextCalculation = 60;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 750 * 750)
+                        timeUntilNextCalculation = 30;
+                    for (int i = 0; i < timeUntilNextCalculation; i++) {
                         if (path is null) {
                             yield return 0;
                             continue;
