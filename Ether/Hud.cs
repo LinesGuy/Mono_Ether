@@ -50,10 +50,14 @@ namespace Mono_Ether.Ether {
                 spriteBatch.Draw(icon, pos, Color.White);
             }
             // Bottom-left hearts
+            // ONLY APPLIES to player1
             for (int i = 0; i < EntityManager.Player1.lives; i++) {
                 Vector2 pos = new Vector2(0 + i * 100, GameRoot.ScreenSize.Y - 100);
                 spriteBatch.Draw(Art.Heart, pos, Color.White);
             }
+            // Top-right score
+            // ONLY APPLIES to player1
+            spriteBatch.DrawString(Art.DebugFont, $"Player 1 score: {EntityManager.Player1.score}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 0), Color.White);
             // You died
             if (playingYouDied) {
                 int t = Math.Min(255, (int)(deadFrames / 60f * 255f));    
