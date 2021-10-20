@@ -12,7 +12,7 @@ namespace Mono_Ether.Ether {
         public bool isSnakeBody;
         public List<Enemy> tail; // Used for snake enemy type
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
-        private readonly Random rand = new Random();
+        private static Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position) {
             this.Image = image;
@@ -148,6 +148,30 @@ namespace Mono_Ether.Ether {
                     Velocity += acceleration;
                     yield return 0;
                 }
+                
+            }
+        }
+        IEnumerable<int> BounceOffWalls(float angle, float speed = 1f) {
+            Vector2 lastPos = Position;
+            Vector2 acceleration = MathUtil.FromPolar(angle, speed);
+            while (true) {
+                if (Math.Abs(Position.X - lastPos.X) < 0.001)
+                    acceleration.X = -acceleration.X;
+                if (Math.Abs(Position.Y - lastPos.Y) < 0.001)
+                    acceleration.Y = -acceleration.Y;
+                lastPos = Position;
+                Velocity += acceleration;
+                yield return 0;
+            }
+        }
+        IEnumerable<int> ExhaustFire() {
+            while (true) {
+                if (Velocity.LengthSquared() > 0.1f) {
+                    Vector2 baseVel = Velocity.ScaleTo(-3).Rotate(rand.NextFloat(-0.3f, 0.3f));
+                    EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, Color.OrangeRed * 0.7f, 60f, new Vector2(0.5f, 1),
+                        new ParticleState(baseVel, ParticleType.Enemy));
+                }
+                yield return 0;
             }
         }
         IEnumerable<int> EnemyFacesVelocity() {
@@ -209,7 +233,7 @@ namespace Mono_Ether.Ether {
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             enemy.tail = new List<Enemy> { enemy };
-            int tailLength = new Random().Next(5, 15);
+            int tailLength = rand.Next(5, 15);
             for (int i = 0; i < tailLength; i++) {
                 enemy.tail.Add(Enemy.CreateSnakeBody(position));
             }
@@ -220,6 +244,13 @@ namespace Mono_Ether.Ether {
         public static Enemy CreateSnakeBody(Vector2 position) {
             var enemy = new Enemy(Art.SnakeBody, position);
             enemy.isSnakeBody = true;
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+            return enemy;
+        }
+        public static Enemy CreateBackAndForther(Vector2 position) {
+            var enemy = new Enemy(Art.BackAndForther, position);
+            enemy.AddBehaviour(enemy.BounceOffWalls(new Random().Next(4) * MathF.PI / 2));
+            enemy.AddBehaviour(enemy.ExhaustFire());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }

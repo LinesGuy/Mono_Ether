@@ -20,7 +20,7 @@ namespace Mono_Ether.Ether {
                 if (pos == Vector2.Zero)
                     return; // Couldn't find valid spawn position
 
-                switch (_rand.Next(3)) {
+                switch (_rand.Next(4)) {
                     case (0):
                         EntityManager.Add(Enemy.CreateSeeker(pos));
                         break;
@@ -29,6 +29,9 @@ namespace Mono_Ether.Ether {
                         break;
                     case (2):
                         EntityManager.Add(Enemy.CreateSnake(pos));
+                        break;
+                    case (3):
+                        EntityManager.Add(Enemy.CreateBackAndForther(pos));
                         break;
                     default:
                         Debug.WriteLine("ur dum");
