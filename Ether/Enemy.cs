@@ -96,17 +96,15 @@ namespace Mono_Ether.Ether {
 
                     // Instead of calculating a new path every frame or whatever, we will calculate a new path
                     // based on how far the enemy is from the player:
-                    // - If the enemy is within 1000 units of the player, update the path every 30 frames
-                    // - If within 2500 units, update every 60 frames
-                    // - If within 5000 units, every 120 frames
-                    // - Otherwise, every 240 frames
                     var timeUntilNextCalculation = 240;
                     if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 2500 * 2500)
                         timeUntilNextCalculation = 120;
                     if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 1500 * 1500)
                         timeUntilNextCalculation = 60;
                     if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 750 * 750)
-                        timeUntilNextCalculation = 30;
+                        timeUntilNextCalculation = 20;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 300 * 300)
+                        timeUntilNextCalculation = 10;
                     for (int i = 0; i < timeUntilNextCalculation; i++) {
                         if (path is null) {
                             yield return 0;
@@ -148,7 +146,6 @@ namespace Mono_Ether.Ether {
                     Velocity += acceleration;
                     yield return 0;
                 }
-                
             }
         }
         IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
@@ -184,7 +181,7 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        IEnumerable<int> RotateOrientationConstantly(float speed = 0.01f) {
+        IEnumerable<int> RotateOrientationConstantly(float speed = 0.1f) {
             while (true) {
                 Orientation += speed;
                 yield return 0;
