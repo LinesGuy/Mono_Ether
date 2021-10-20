@@ -61,10 +61,16 @@ namespace Mono_Ether.Ether {
             Enemies = Enemies.Where(x => !x.IsExpired).ToList();
             PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
         }
-
         public static void Draw(SpriteBatch spriteBatch) {
-            foreach (var entity in Entities)
+            foreach (var entity in Entities) {
                 entity.Draw(spriteBatch);
+                if (entity is Enemy enemy)
+                    if (enemy.tail != null) // If enemy has a tail, it's a snake.
+                        for (int i = 1; i < enemy.tail.Count; i++) {
+                            Enemy tail = enemy.tail[i];
+                            tail.Draw(spriteBatch);
+                        }
+            }
         }
 
         private static bool IsColliding(Entity a, Entity b) {
@@ -93,6 +99,13 @@ namespace Mono_Ether.Ether {
                         // Play enemy_explosion.wav
                         Art.EnemyExplosion.CreateInstance().Play();
                     }
+                    // If bullet collides with snake body, destroy bullet but not snake
+                    if (Enemies[i].tail != null)
+                        for (int j = 1; j < Enemies[i].tail.Count; j++) {
+                            Enemy tail = Enemies[i].tail[j];
+                            if (IsColliding(tail, bullet))
+                                bullet.IsExpired = true;
+                        }
                 }
             }
 
@@ -100,10 +113,17 @@ namespace Mono_Ether.Ether {
             foreach(PlayerShip player in Players) {
                 for (int i = 0; i < Enemies.Count; i++) {
                     if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
-                        player.Kill();
-                        Enemies.ForEach(e => e.WasShot(player.playerIndex));
-                        break;
+                        
                     }
+                    if (Enemies[i].tail != null)
+                        for (int j = 1; j < Enemies[i].tail.Count; j++) {
+                            Enemy tail = Enemies[i].tail[j];
+                            if (IsColliding(tail, player)) {
+                                player.Kill();
+                                Enemies.ForEach(e => e.WasShot(player.playerIndex));
+                                break;
+                            }
+                        }
                 }
             }
             

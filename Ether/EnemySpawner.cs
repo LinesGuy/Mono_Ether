@@ -20,10 +20,20 @@ namespace Mono_Ether.Ether {
                 if (pos == Vector2.Zero)
                     return; // Couldn't find valid spawn position
 
-                if (_rand.Next(0, 2) == 0)
-                    EntityManager.Add(Enemy.CreateSeeker(pos));
-                else
-                    EntityManager.Add(Enemy.CreateWanderer(pos));
+                switch (_rand.Next(3)) {
+                    case (0):
+                        EntityManager.Add(Enemy.CreateSeeker(pos));
+                        break;
+                    case (1):
+                        EntityManager.Add(Enemy.CreateWanderer(pos));
+                        break;
+                    case (2):
+                        EntityManager.Add(Enemy.CreateSnake(pos));
+                        break;
+                    default:
+                        Debug.WriteLine("ur dum");
+                        break;
+                }
             }
 
             // Slowly increase spawn rate as time progresses

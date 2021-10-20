@@ -2,18 +2,22 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     class Enemy : Entity {
-        private int timeUntilStart = 60;
+        public int timeUntilStart = 60;
         public bool IsActive => timeUntilStart <= 0;
         private readonly int Worth; // The amount of score given when this enemy is killed
+        public bool isSnakeBody;
+        public List<Enemy> tail; // Used for snake enemy type
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
         private readonly Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position) {
             this.Image = image;
             Position = position;
+            isSnakeBody = false;
             Worth = rand.Next(50, 150);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
@@ -109,17 +113,15 @@ namespace Mono_Ether.Ether {
                             break;
                         // Move towards player
                         Velocity += (path[0] - Position).ScaleTo(acceleration);
-                        if (Velocity != Vector2.Zero)
-                            Orientation = Velocity.ToAngle();
-
                         yield return 0;
                     }
                 }
             }
         }
-        IEnumerable<int> MoveRandomly() {
+        IEnumerable<int> MoveRandomly(float speed = 0.4f, float rotationSpeed = 0.1f, float bounds = 0.1f) {
             float direction = rand.NextFloat(0, MathHelper.TwoPi);
-            Vector2 acceleration = MathUtil.FromPolar(direction, 0.4f);
+            Vector2 acceleration = MathUtil.FromPolar(direction, speed);
+            float rotationDelta = 0f;
             Vector2 lastPos = Position;
             while (true) {
                 if (Math.Abs(Position.X - lastPos.X) < 0.001)
@@ -128,14 +130,33 @@ namespace Mono_Ether.Ether {
                     acceleration.Y = -acceleration.Y;
 
                 lastPos = Position;
-
-                acceleration.Rotate(rand.NextFloat(-0.1f, 0.1f));
+                rotationDelta += rand.NextFloat(-rotationSpeed, rotationSpeed);
+                if (rotationDelta < -bounds)
+                    rotationDelta = -bounds;
+                if (rotationDelta > bounds)
+                    rotationDelta = bounds;
+                acceleration = acceleration.Rotate(rotationDelta);
 
                 for (int i = 0; i < 6; i++) {
                     Velocity += acceleration;
-                    Orientation -= 0.01f;
                     yield return 0;
                 }
+            }
+        }
+        IEnumerable<int> EnemyFacesVelocity() {
+            Vector2 lastPos = Position;
+            while (true) {
+                Vector2 delta = Position - lastPos;
+                if (delta != Vector2.Zero)
+                    Orientation = delta.ToAngle();
+                lastPos = Position;
+                yield return 0;
+            }
+        }
+        IEnumerable<int> RotateOrientationConstantly(float speed = 0.01f) {
+            while (true) {
+                Orientation += speed;
+                yield return 0;
             }
         }
         private IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f) {
@@ -146,16 +167,52 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
+        private IEnumerable<int> UpdateTail(float distance = 20f) {
+            while (true) {
+                for (int i = 1; i < tail.Count; i++) {
+                    Enemy bodyTail = tail[i];
+                    if (bodyTail.timeUntilStart > 0) {
+                        bodyTail.timeUntilStart--;
+                        bodyTail.Color = Color.White * (1 - timeUntilStart / 60f);
+                    }
+                    if (Vector2.DistanceSquared(bodyTail.Position, tail[i - 1].Position) > distance * distance) {
+                        bodyTail.Position = tail[i - 1].Position + (bodyTail.Position - tail[i - 1].Position).ScaleTo(distance);
+                    }
+                    bodyTail.ApplyBehaviours();
+                }
+                yield return 0;
+            }
+        }
         public static Enemy CreateSeeker(Vector2 position) {
             var enemy = new Enemy(Art.Seeker, position);
             enemy.AddBehaviour(enemy.FollowPlayerAStar());
-
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public static Enemy CreateWanderer(Vector2 position) {
             var enemy = new Enemy(Art.Wanderer, position);
             enemy.AddBehaviour(enemy.MoveRandomly());
             enemy.AddBehaviour(enemy.DodgeBullets());
+            enemy.AddBehaviour(enemy.RotateOrientationConstantly());
+            return enemy;
+        }
+        public static Enemy CreateSnake(Vector2 position) {
+            var enemy = new Enemy(Art.SnakeHead, position);
+            
+            enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+            enemy.tail = new List<Enemy> { enemy };
+            for (int i = 0; i < 10; i++) {
+                enemy.tail.Add(Enemy.CreateSnakeBody(position));
+            }
+                
+            enemy.AddBehaviour(enemy.UpdateTail());
+            return enemy;
+        }
+        public static Enemy CreateSnakeBody(Vector2 position) {
+            var enemy = new Enemy(Art.SnakeBody, position);
+            enemy.isSnakeBody = true;
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public void HandleCollision(Enemy other) {
