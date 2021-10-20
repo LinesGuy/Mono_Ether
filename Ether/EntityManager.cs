@@ -113,7 +113,9 @@ namespace Mono_Ether.Ether {
             foreach(PlayerShip player in Players) {
                 for (int i = 0; i < Enemies.Count; i++) {
                     if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
-                        
+                        player.Kill();
+                        Enemies.ForEach(e => e.WasShot(player.playerIndex));
+                        break;
                     }
                     if (Enemies[i].tail != null)
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
