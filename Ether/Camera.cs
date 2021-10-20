@@ -35,6 +35,11 @@ namespace Mono_Ether.Ether {
                 Zoom *= 1.1f;
             else if (Input.Mouse.DeltaScrollWheelValue > 0)
                 Zoom /= 1.1f;
+            // Zoom bounds
+            if (Zoom > 3f)
+                Zoom = 3f;
+            if (Zoom < 0.1f)
+                Zoom = 0.1f;
             // Lerp
             if (_isLerping)
                 Lerp(EntityManager.Player1.Position);
