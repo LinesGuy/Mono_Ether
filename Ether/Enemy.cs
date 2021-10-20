@@ -202,7 +202,8 @@ namespace Mono_Ether.Ether {
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             enemy.tail = new List<Enemy> { enemy };
-            for (int i = 0; i < 10; i++) {
+            int tailLength = new Random().Next(5, 15);
+            for (int i = 0; i < tailLength; i++) {
                 enemy.tail.Add(Enemy.CreateSnakeBody(position));
             }
                 
