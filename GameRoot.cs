@@ -16,14 +16,16 @@ namespace Mono_Ether {
         public bool dum_mode = true;
         public GameRoot() {
             Instance = this;
-            graphics = new GraphicsDeviceManager(this) {
-                PreferredBackBufferWidth = (int)ScreenSize.X,
-                PreferredBackBufferHeight = (int)ScreenSize.Y
-            };
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-
+        protected override void Initialize() {
+            graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
+            graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
+            graphics.ApplyChanges();
+            base.Initialize();
+        }
         protected override void LoadContent() {
             myGraphics = GraphicsDevice;
             Art.Load(Content);
