@@ -43,6 +43,8 @@ namespace Mono_Ether {
         public static SoundEffect PowerPackPickupBad { get; private set; }
         public static Texture2D BackgroundParticle { get; private set; }
         public static Texture2D Heart { get; private set; }
+        public static Texture2D SnakeHead { get; private set; }
+        public static Texture2D SnakeBody { get; private set; }
         public static void Load(ContentManager content) {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
@@ -83,6 +85,8 @@ namespace Mono_Ether {
             PowerPackPickupBad = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickupBad");
             BackgroundParticle = content.Load<Texture2D>("Textures/GamePlay/BackgroundParticle");
             Heart = content.Load<Texture2D>("Textures/GamePlay/Heart");
+            SnakeHead = content.Load<Texture2D>("Textures/GamePlay/SnakeHead");
+            SnakeBody = content.Load<Texture2D>("Textures/GamePlay/SnakeBody");
         }
     }
 }
