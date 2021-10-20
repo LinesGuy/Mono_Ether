@@ -151,7 +151,7 @@ namespace Mono_Ether.Ether {
                 
             }
         }
-        IEnumerable<int> BounceOffWalls(float angle, float speed = 1f) {
+        IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
             Vector2 lastPos = Position;
             Vector2 acceleration = MathUtil.FromPolar(angle, speed);
             while (true) {
