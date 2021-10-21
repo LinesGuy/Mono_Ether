@@ -7,8 +7,12 @@ namespace Mono_Ether {
         public static Texture2D Pixel { get; private set; }
         public static Texture2D Default { get; private set; }
         public static Texture2D Player { get; private set; }
-        public static Texture2D Seeker { get; private set; }
-        public static Texture2D Wanderer { get; private set; }
+        public static Texture2D GreenSeeker { get; private set; }
+        public static Texture2D PinkSeeker { get; private set; }
+        public static Texture2D PinkSeekerChild { get; private set; }
+        public static Texture2D BlueSeeker { get; private set; }
+        public static Texture2D PurpleWanderer { get; private set; }
+        public static Texture2D PinkWanderer { get; private set; }
         public static Texture2D Bullet { get; private set; }
         public static Texture2D StarBurst { get; private set; }
         public static Texture2D Pointer { get; private set; }
@@ -50,8 +54,12 @@ namespace Mono_Ether {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
             Player = content.Load<Texture2D>("Textures/Gameplay/Player");
-            Seeker = content.Load<Texture2D>("Textures/Gameplay/Seeker");
-            Wanderer = content.Load<Texture2D>("Textures/Gameplay/Wanderer");
+            BlueSeeker = content.Load<Texture2D>("Textures/Gameplay/BlueSeeker");
+            GreenSeeker = content.Load<Texture2D>("Textures/Gameplay/GreenSeeker");
+            PinkSeeker = content.Load<Texture2D>("Textures/Gameplay/PinkSeeker");
+            PinkSeekerChild = content.Load<Texture2D>("Textures/Gameplay/PinkSeekerChild");
+            PinkWanderer = content.Load<Texture2D>("Textures/Gameplay/PinkWanderer");
+            PurpleWanderer = content.Load<Texture2D>("Textures/Gameplay/PurpleWanderer");
             Bullet = content.Load<Texture2D>("Textures/Gameplay/Bullet");
             StarBurst = content.Load<Texture2D>("Textures/Gameplay/StarBurst");
             Pointer = content.Load<Texture2D>("Textures/Gameplay/Pointer");
