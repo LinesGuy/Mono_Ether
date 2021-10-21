@@ -9,15 +9,16 @@ namespace Mono_Ether.Ether {
         public int timeUntilStart = 60;
         public bool IsActive => timeUntilStart <= 0;
         private readonly int Worth; // The amount of score given when this enemy is killed
-        public bool isSnakeBody;
         public List<Enemy> tail; // Used for snake enemy type
+        public string Type;
+        public bool invincible = false;
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
         private static Random rand = new Random();
 
-        private Enemy(Texture2D image, Vector2 position) {
+        private Enemy(Texture2D image, Vector2 position, string type) {
             this.Image = image;
             Position = position;
-            isSnakeBody = false;
+            Type = type;
             Worth = rand.Next(50, 150);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
@@ -66,7 +67,8 @@ namespace Mono_Ether.Ether {
                     behaviours.RemoveAt(i--);
             }
         }
-        IEnumerable<int> FollowPlayerAStar(float acceleration = 1f) {
+        #region IEnumerables
+        private IEnumerable<int> FollowPlayerAStar(float acceleration = 1f) {
             while (true) {
                 // If enemy is within Map.cellSize units from the player, move straight towards the player
                 var dash = false;
@@ -123,7 +125,7 @@ namespace Mono_Ether.Ether {
                 }
             }
         }
-        IEnumerable<int> MoveRandomly(float speed = 0.4f, float rotationSpeed = 0.1f, float bounds = 0.1f) {
+        private IEnumerable<int> MoveRandomly(float speed = 0.4f, float rotationSpeed = 0.1f, float bounds = 0.1f) {
             float direction = rand.NextFloat(0, MathHelper.TwoPi);
             Vector2 acceleration = MathUtil.FromPolar(direction, speed);
             float rotationDelta = 0f;
@@ -148,7 +150,7 @@ namespace Mono_Ether.Ether {
                 }
             }
         }
-        IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
+        private IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
             Vector2 lastPos = Position;
             Vector2 acceleration = MathUtil.FromPolar(angle, speed);
             while (true) {
@@ -161,7 +163,7 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        IEnumerable<int> ExhaustFire() {
+        private IEnumerable<int> ExhaustFire() {
             while (true) {
                 if (Velocity.LengthSquared() > 0.1f) {
                     Vector2 baseVel = Velocity.ScaleTo(-3).Rotate(rand.NextFloat(-0.3f, 0.3f));
@@ -171,7 +173,7 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        IEnumerable<int> EnemyFacesVelocity() {
+        private IEnumerable<int> EnemyFacesVelocity() {
             Vector2 lastPos = Position;
             while (true) {
                 Vector2 delta = Position - lastPos;
@@ -181,10 +183,22 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        IEnumerable<int> RotateOrientationConstantly(float speed = 0.1f) {
+        private IEnumerable<int> RotateOrientationConstantly(float speed = 0.1f) {
             while (true) {
                 Orientation += speed;
                 yield return 0;
+            }
+        }
+        private IEnumerable<int> MoveOrthonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
+            while (true) {
+                Vector2 velocity = MathUtil.FromPolar(rand.Next(4) * MathF.PI / 2f, speed);
+                for (int i = 0; i < activeFrames; i++) {
+                    Position += velocity;
+                    yield return 0;
+                }
+                for (int i = 0; i < sleepFrames; i++) {
+                    yield return 0;
+                }
             }
         }
         private IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f) {
@@ -211,21 +225,42 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        public static Enemy CreateSeeker(Vector2 position) {
-            var enemy = new Enemy(Art.Seeker, position);
-            enemy.AddBehaviour(enemy.FollowPlayerAStar());
+        private IEnumerable<int> RotateAroundPosition(Vector2 pos) {
+            float orientation = rand.NextFloat(0, MathF.PI * 2f);
+            const float rotationSpeed = 0.1f;
+            const float speed = 1f;
+            while (true) {
+                Velocity += MathUtil.FromPolar(orientation, speed);
+                orientation += rotationSpeed;
+                yield return 0;
+            }
+        }
+        private IEnumerable<int> InvincibleForTime(int frames) {
+            invincible = true;
+            for (int i = 0; i < frames; i++) {
+                yield return 0;
+            }
+            invincible = false;
+            while (true) {
+                yield return 0;
+            }
+        }
+        #endregion IEnumerables
+        #region CreateEnemies
+        public static Enemy CreateBlueSeeker(Vector2 position) {
+            var enemy = new Enemy(Art.BlueSeeker, position, "BlueSeeker");
+            enemy.AddBehaviour(enemy.FollowPlayerAStar(0.8f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
-        public static Enemy CreateWanderer(Vector2 position) {
-            var enemy = new Enemy(Art.Wanderer, position);
+        public static Enemy CreatePurpleWanderer(Vector2 position) {
+            var enemy = new Enemy(Art.PurpleWanderer, position, "PurpleWanderer");
             enemy.AddBehaviour(enemy.MoveRandomly());
-            enemy.AddBehaviour(enemy.DodgeBullets());
             enemy.AddBehaviour(enemy.RotateOrientationConstantly());
             return enemy;
         }
         public static Enemy CreateSnake(Vector2 position) {
-            var enemy = new Enemy(Art.SnakeHead, position);
+            var enemy = new Enemy(Art.SnakeHead, position, "Snake");
             
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
@@ -234,23 +269,50 @@ namespace Mono_Ether.Ether {
             for (int i = 0; i < tailLength; i++) {
                 enemy.tail.Add(Enemy.CreateSnakeBody(position));
             }
-                
             enemy.AddBehaviour(enemy.UpdateTail());
             return enemy;
         }
         public static Enemy CreateSnakeBody(Vector2 position) {
-            var enemy = new Enemy(Art.SnakeBody, position);
-            enemy.isSnakeBody = true;
+            var enemy = new Enemy(Art.SnakeBody, position, "SnakeBody");
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public static Enemy CreateBackAndForther(Vector2 position) {
-            var enemy = new Enemy(Art.BackAndForther, position);
-            enemy.AddBehaviour(enemy.BounceOffWalls(new Random().Next(4) * MathF.PI / 2));
+            var enemy = new Enemy(Art.BackAndForther, position, "BackAndForther");
+            enemy.Orientation = new Random().Next(4) * MathF.PI / 2;
+            enemy.AddBehaviour(enemy.BounceOffWalls(enemy.Orientation + MathF.PI));
             enemy.AddBehaviour(enemy.ExhaustFire());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
+        public static Enemy CreatePinkWanderer(Vector2 position) {
+            var enemy = new Enemy(Art.PinkWanderer, position, "PinkWanderer");
+            enemy.AddBehaviour(enemy.MoveOrthonallyOccasionally());
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+            return enemy;
+        }
+        public static Enemy CreateGreenSeeker(Vector2 position) {
+            var enemy = new Enemy(Art.GreenSeeker, position, "GreenSeeker");
+            enemy.AddBehaviour(enemy.FollowPlayerAStar(1.2f));
+            enemy.AddBehaviour(enemy.DodgeBullets(100f, 1.5f));
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+            return enemy;
+        }
+        public static Enemy CreatePinkSeeker(Vector2 position) {
+            var enemy = new Enemy(Art.PinkSeeker, position, "PinkSeeker");
+            enemy.AddBehaviour(enemy.FollowPlayerAStar(1.2f));
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+            return enemy;
+        }
+        public static Enemy CreatePinkSeekerChild(Vector2 position) {
+            var enemy = new Enemy(Art.PinkSeekerChild, position, "PinkSeekerChild");
+            enemy.AddBehaviour(enemy.RotateAroundPosition(position));
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+            enemy.AddBehaviour(enemy.InvincibleForTime(6));
+            enemy.Radius = 10f;
+            return enemy;
+        }
+        #endregion CreateEnemies
         public void HandleCollision(Enemy other) {
             var delta = Position - other.Position;
             Velocity += 10 * delta / (delta.LengthSquared() + 1);
