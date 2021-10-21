@@ -4,10 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Mono_Ether.Ether {
     internal abstract class Entity {
         protected Texture2D Image = Art.Default;  // Tint of image
-        protected Color Color = Color.White;
+        public Color Color = Color.White;
 
         public Vector2 Position;
-        protected Vector2 Velocity;
+        public Vector2 Velocity;
         protected float Orientation;
         public float Radius = 20;  // Used for circular collision detection
         public bool IsExpired;  // If true, entity will be removed on next update
