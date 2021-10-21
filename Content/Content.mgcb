@@ -128,6 +128,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/Black Hole.png
 
+#begin Textures/Gameplay/BlueSeeker.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/BlueSeeker.png
+
 #begin Textures/Gameplay/Bullet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -164,6 +176,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/Glow.png
 
+#begin Textures/Gameplay/GreenSeeker.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/GreenSeeker.png
+
 #begin Textures/Gameplay/heart.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -187,6 +211,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/Laser.png
+
+#begin Textures/Gameplay/PinkSeeker.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/PinkSeeker.png
+
+#begin Textures/Gameplay/PinkSeekerChild.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/PinkSeekerChild.png
+
+#begin Textures/Gameplay/PinkWanderer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/PinkWanderer.png
 
 #begin Textures/Gameplay/Player.png
 /importer:TextureImporter
@@ -260,7 +320,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/PowerShootSpeedIncrease.png
 
-#begin Textures/Gameplay/Seeker.png
+#begin Textures/Gameplay/PurpleWanderer.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -270,7 +330,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/Seeker.png
+/build:Textures/Gameplay/PurpleWanderer.png
 
 #begin Textures/Gameplay/SnakeBody.png
 /importer:TextureImporter
@@ -307,18 +367,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/StarBurst.png
-
-#begin Textures/Gameplay/Wanderer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Gameplay/Wanderer.png
 
 #begin Textures/Gameplay/youDied.png
 /importer:TextureImporter
