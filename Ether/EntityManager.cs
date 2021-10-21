@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +15,7 @@ namespace Mono_Ether.Ether {
         static bool _isUpdating;
         static readonly List<Entity> AddedEntities = new List<Entity>();
         public static PlayerShip Player1 => Players[0];
+        public static Random rand = new Random();
         public static int Count => Entities.Count;
         public static void Killall() {
             Players.Clear();
@@ -65,7 +67,7 @@ namespace Mono_Ether.Ether {
             foreach (var entity in Entities) {
                 entity.Draw(spriteBatch);
                 if (entity is Enemy enemy)
-                    if (enemy.tail != null) // If enemy has a tail, it's a snake.
+                    if (enemy.Type == "Snake")
                         for (int i = 1; i < enemy.tail.Count; i++) {
                             Enemy tail = enemy.tail[i];
                             tail.Draw(spriteBatch);
@@ -93,19 +95,32 @@ namespace Mono_Ether.Ether {
             // Handle collisions between bullets and enemies
             for (var i = 0; i < Enemies.Count; i++) {
                 foreach (var bullet in Bullets) {
+                    if (Enemies[i].invincible)
+                        continue;
                     if (IsColliding(Enemies[i], bullet)) {
                         Enemies[i].WasShot(bullet.PlayerIndex);
                         bullet.IsExpired = true;
                         // Play enemy_explosion.wav
                         Art.EnemyExplosion.CreateInstance().Play();
-                    }
+                        // If enemy type is PinkSeeker, summon two more enemies
+                        if (Enemies[i].Type == "PinkSeeker") {
+                            for (int j = 0; j < 2; j++) {
+                                var enemy = Enemy.CreatePinkSeekerChild(Enemies[i].Position);
+                                enemy.Velocity = MathUtil.FromPolar(rand.NextFloat(0, MathF.PI * 2), 10f);
+                                enemy.timeUntilStart = 0;
+                                enemy.Color = Color.White;
+                                enemy.invincible = true;
+                                EntityManager.Add(enemy);
+                            }
+                        }
                     // If bullet collides with snake body, destroy bullet but not snake
-                    if (Enemies[i].tail != null)
+                    if (Enemies[i].Type == "Snake")
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
                             Enemy tail = Enemies[i].tail[j];
                             if (IsColliding(tail, bullet))
                                 bullet.IsExpired = true;
                         }
+                    }
                 }
             }
 
@@ -117,7 +132,7 @@ namespace Mono_Ether.Ether {
                         Enemies.ForEach(e => e.WasShot(player.playerIndex));
                         break;
                     }
-                    if (Enemies[i].tail != null)
+                    if (Enemies[i].Type == "Snake")
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
                             Enemy tail = Enemies[i].tail[j];
                             if (IsColliding(tail, player)) {
