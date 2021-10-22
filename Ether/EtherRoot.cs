@@ -9,7 +9,7 @@ namespace Mono_Ether.Ether {
         public static EtherRoot Instance { get; private set; }
         public bool paused = false;
         public bool editorMode = false;
-        private string MapFileName;
+        private readonly string MapFileName;
         private Vector2 MapSize;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
