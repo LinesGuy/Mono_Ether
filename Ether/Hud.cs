@@ -58,6 +58,9 @@ namespace Mono_Ether.Ether {
             // Top-right score
             // ONLY APPLIES to player1
             spriteBatch.DrawString(Art.DebugFont, $"Player 1 score: {EntityManager.Player1.score}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 0), Color.White);
+            // Top-right geoms
+            // ONLY APPLIES to player1
+            spriteBatch.DrawString(Art.DebugFont, $"Player 1 geoms: {EntityManager.Player1.geoms}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 32), Color.White);
             // You died
             if (playingYouDied) {
                 int t = Math.Min(255, (int)(deadFrames / 60f * 255f));    
