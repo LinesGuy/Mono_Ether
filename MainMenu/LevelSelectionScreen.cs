@@ -73,7 +73,6 @@ namespace Mono_Ether.MainMenu {
                 // Apply friction to velocity
                 buttonOffsetVelocity /= 1.1f;
             }
-
             // Ensure that all buttons are visible on the screen at all times
             LevelButton firstButton = (LevelButton)buttonManager.Buttons[0];
             LevelButton lastButton = (LevelButton)buttonManager.Buttons[^1];
@@ -88,8 +87,9 @@ namespace Mono_Ether.MainMenu {
                 foreach (LevelButton button in buttonManager.Buttons)
                     button.Offset -= delta / 5f;
             }
-            /*Debug.WriteLine($"first {firstButton.Offset}");
-            Debug.WriteLine($"last {lastButton.Offset}");*/
+            // Esc to go back to title screen
+            if (Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+                GameRoot.Instance.RemoveScreenTransition();
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
