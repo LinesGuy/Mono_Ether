@@ -13,7 +13,7 @@ namespace Mono_Ether.Ether {
         public string Type;
         public bool invincible = false;
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
-        private static Random rand = new Random();
+        private static readonly Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position, string type) {
             this.Image = image;
@@ -225,7 +225,7 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        private IEnumerable<int> RotateAroundPosition(Vector2 pos) {
+        private IEnumerable<int> RotateAroundPosition() {
             float orientation = rand.NextFloat(0, MathF.PI * 2f);
             const float rotationSpeed = 0.1f;
             const float speed = 1f;
@@ -278,8 +278,9 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBackAndForther(Vector2 position) {
-            var enemy = new Enemy(Art.BackAndForther, position, "BackAndForther");
-            enemy.Orientation = new Random().Next(4) * MathF.PI / 2;
+            Enemy enemy = new Enemy(Art.BackAndForther, position, "BackAndForther") {
+                Orientation = new Random().Next(4) * MathF.PI / 2
+            };
             enemy.AddBehaviour(enemy.BounceOffWalls(enemy.Orientation + MathF.PI));
             enemy.AddBehaviour(enemy.ExhaustFire());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
@@ -306,7 +307,7 @@ namespace Mono_Ether.Ether {
         }
         public static Enemy CreatePinkSeekerChild(Vector2 position) {
             var enemy = new Enemy(Art.PinkSeekerChild, position, "PinkSeekerChild");
-            enemy.AddBehaviour(enemy.RotateAroundPosition(position));
+            enemy.AddBehaviour(enemy.RotateAroundPosition());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             enemy.AddBehaviour(enemy.InvincibleForTime(6));
             enemy.Radius = 10f;
