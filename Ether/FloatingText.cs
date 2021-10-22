@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace Mono_Ether.Ether {
     class FloatingText {
-        string Text;
+        readonly string Text;
         Vector2 Pos; // MIDDLE of text
         int Age;
-        int Lifespan;
+        readonly int Lifespan;
         public bool IsExpired;
         public float Scale;
         Color Color;
