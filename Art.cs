@@ -50,6 +50,7 @@ namespace Mono_Ether {
         public static Texture2D SnakeHead { get; private set; }
         public static Texture2D SnakeBody { get; private set; }
         public static Texture2D BackAndForther { get; private set; }
+        public static Texture2D Geom { get; private set; }
         public static void Load(ContentManager content) {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
@@ -97,6 +98,7 @@ namespace Mono_Ether {
             SnakeHead = content.Load<Texture2D>("Textures/GamePlay/SnakeHead");
             SnakeBody = content.Load<Texture2D>("Textures/GamePlay/SnakeBody");
             BackAndForther = content.Load<Texture2D>("Textures/GamePlay/BackAndForther");
+            Geom = content.Load<Texture2D>("Textures/GamePlay/Geom");
         }
     }
 }
