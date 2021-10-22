@@ -38,6 +38,8 @@ namespace Mono_Ether.Ether {
             IsExpired = true;
             // Increment player score
             EntityManager.Players[PlayerIndex].score += Worth;
+            // Summon geom
+            EntityManager.Add(new Geom(Position));
             // Floating text
             FloatingTextManager.Add(Worth.ToString(), Position, Color.White);
             // Particles

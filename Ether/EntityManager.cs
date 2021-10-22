@@ -8,6 +8,7 @@ namespace Mono_Ether.Ether {
     static class EntityManager {
         public static List<PlayerShip> Players = new List<PlayerShip>();
         public static List<Entity> Entities = new List<Entity>();
+        public static List<Geom> Geoms = new List<Geom>();
         public static List<Enemy> Enemies = new List<Enemy>();
         public static List<Bullet> Bullets = new List<Bullet>();
         public static List<PowerPack> PowerPacks = new List<PowerPack>();
@@ -21,6 +22,7 @@ namespace Mono_Ether.Ether {
             Players.Clear();
             Entities.Clear();
             Enemies.Clear();
+            Geoms.Clear();
             Bullets.Clear();
             PowerPacks.Clear();
         }
@@ -40,6 +42,8 @@ namespace Mono_Ether.Ether {
                 Enemies.Add(enemy);
             else if (entity is PowerPack powerPack)
                 PowerPacks.Add(powerPack);
+            else if (entity is Geom geom)
+                Geoms.Add(geom);
         }
 
         public static void Update() {
@@ -59,6 +63,7 @@ namespace Mono_Ether.Ether {
 
             // Remove expired entities
             Entities = Entities.Where(x => !x.IsExpired).ToList();
+            Geoms = Geoms.Where(x => !x.IsExpired).ToList();
             Bullets = Bullets.Where(x => !x.IsExpired).ToList();
             Enemies = Enemies.Where(x => !x.IsExpired).ToList();
             PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
@@ -74,14 +79,14 @@ namespace Mono_Ether.Ether {
                         }
             }
         }
-
         private static bool IsColliding(Entity a, Entity b) {
             float radius = a.Radius + b.Radius;
             return !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < radius * radius;
         }
 
         static void HandleCollisions() {
-            // Handle collisions between enemies
+            #region Handle collisions between enemies
+
             for (int i = 0; i < Enemies.Count; i++) {
                 for (int j = i + 1; j < Enemies.Count; j++) {
 
@@ -91,8 +96,8 @@ namespace Mono_Ether.Ether {
                     }
                 }
             }
-
-            // Handle collisions between bullets and enemies
+            #endregion  Handle collisions between enemies
+            #region Handle collisions between bullets and enemies
             for (var i = 0; i < Enemies.Count; i++) {
                 foreach (var bullet in Bullets) {
                     if (Enemies[i].invincible)
@@ -123,9 +128,9 @@ namespace Mono_Ether.Ether {
                     }
                 }
             }
-
-            // Handle collisions between the players and enemies
-            foreach(PlayerShip player in Players) {
+            #endregion Handle collisions between bullets and enemies
+            #region Handle collisions between the players and enemies
+            foreach (PlayerShip player in Players) {
                 for (int i = 0; i < Enemies.Count; i++) {
                     if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
                         player.Kill();
@@ -143,16 +148,17 @@ namespace Mono_Ether.Ether {
                         }
                 }
             }
-            
-            // Handle collisions between walls and enemies + the player
+            #endregion Handle collisions between the players and enemies
+            #region Handle collisions between walls and enemies
             for (var i = 0; i < Enemies.Count; i++)
                 Enemies[i].HandleTilemapCollision();
-            // Same as above but for bullets
+            #endregion Handle collisions between walls and enemies + the player
+            #region Same as above but for bullets
             for (var i = 0; i < Bullets.Count; i++)
                 Bullets[i].HandleTilemapCollision();
-
-            // Handle collisions between powerpacks and the player
-            foreach(PlayerShip player in Players) {
+            #endregion Same as above but for bullets
+            #region Handle collisions between powerpacks and the player
+            foreach (PlayerShip player in Players) {
                 for (var i = 0; i < PowerPacks.Count; i++)
                     if (IsColliding(PowerPacks[i], player)) {
                         PowerPacks[i].WasPickedUp();
@@ -160,6 +166,19 @@ namespace Mono_Ether.Ether {
                         PowerPacks[i].IsExpired = true;
                     }
             }
+            #endregion Handle collisions between powerpacks and the player
+            #region Handle players and geoms
+            foreach(Geom geom in Geoms) {
+                foreach(PlayerShip player in Players) {
+                    if (IsColliding(geom, player)) {
+                        geom.IsExpired = true;
+                        player.geoms += 1;
+                    }
+                    if (Vector2.DistanceSquared(player.Position, geom.Position) < 150f * 150f)
+                        geom.Velocity += (player.Position - geom.Position).ScaleTo(1.3f);
+                }
+            }
+            #endregion  Handle players and geoms
         }
     }
 }

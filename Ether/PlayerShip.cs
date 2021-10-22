@@ -9,11 +9,13 @@ namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
         public int lives;
         public int score;
+        public int geoms;
         public int playerIndex;
         public PlayerShip() {
             Image = Art.Player;
             Position = new Vector2(0, 0);
             Radius = 10;
+            geoms = 0;
             lives = 3;
             score = 0;
             playerIndex = EntityManager.Players.Count;
