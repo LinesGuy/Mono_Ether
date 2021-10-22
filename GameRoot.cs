@@ -8,9 +8,7 @@ namespace Mono_Ether {
     public class GameRoot : Game {
         public static GameRoot Instance { get; private set; }
         public static readonly Vector2 ScreenSize = new Vector2(1366, 768);
-#pragma warning disable IDE0052 // Remove unread private members
         private readonly GraphicsDeviceManager graphics;
-#pragma warning restore IDE0052 // Remove unread private members
         public GraphicsDevice myGraphics;
         private SpriteBatch spriteBatch;
         public Stack<GameState> screenStack = new Stack<GameState>();
