@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -165,7 +164,7 @@ namespace Mono_Ether.Ether {
         public static void Update() {
             if (EtherRoot.Instance.editorMode) {
                 // Press 'R' to save map
-                if (Input.Keyboard.WasKeyJustDown(Keys.R)) {
+                if (Input.WasKeyJustDown(Keys.R)) {
                     string filename = "susMap3.txt";
                     Debug.WriteLine("Wrote to Content/TileMapData/" + filename);
                     List<string> lines = new List<string>();
@@ -182,33 +181,33 @@ namespace Mono_Ether.Ether {
                 }
                 var tile = GetTileFromWorld(Camera.MouseWorldCoords());
                 // Set Tile ID
-                if (Input.Keyboard.IsKeyDown(Keys.D1))
+                if (Input.keyboard.IsKeyDown(Keys.D1))
                     SelectedId = 1;
-                else if (Input.Keyboard.IsKeyDown(Keys.D2))
+                else if (Input.keyboard.IsKeyDown(Keys.D2))
                     SelectedId = 2;
-                else if (Input.Keyboard.IsKeyDown(Keys.D3))
+                else if (Input.keyboard.IsKeyDown(Keys.D3))
                     SelectedId = 3;
-                else if (Input.Keyboard.IsKeyDown(Keys.D4))
+                else if (Input.keyboard.IsKeyDown(Keys.D4))
                     SelectedId = 4;
-                else if (Input.Keyboard.IsKeyDown(Keys.D0))
+                else if (Input.keyboard.IsKeyDown(Keys.D0))
                     SelectedId = 0;
                 // Toggle cell walls
-                if (Input.Keyboard.WasKeyJustDown(Keys.J)) // Left
+                if (Input.WasKeyJustDown(Keys.J)) // Left
                     tile.Walls[0] = !tile.Walls[0];
-                else if (Input.Keyboard.WasKeyJustDown(Keys.I)) // Up
+                else if (Input.WasKeyJustDown(Keys.I)) // Up
                     tile.Walls[1] = !tile.Walls[1];
-                else if (Input.Keyboard.WasKeyJustDown(Keys.L)) // Right
+                else if (Input.WasKeyJustDown(Keys.L)) // Right
                     tile.Walls[2] = !tile.Walls[2];
-                else if (Input.Keyboard.WasKeyJustDown(Keys.K)) // Down
+                else if (Input.WasKeyJustDown(Keys.K)) // Down
                     tile.Walls[3] = !tile.Walls[3];
 
-                if (Input.Mouse.IsButtonDown(MouseButton.Left)) // Place last placed tile ID at cursor
+                if (Input.mouse.LeftButton == ButtonState.Pressed) // Place last placed tile ID at cursor
                 {
                     tile.TileId = SelectedId;
                     tile.UpdateNeighbouringWalls();
                 }
 
-                if (Input.Mouse.IsButtonDown(MouseButton.Right)) // Delete tile at cursor
+                if (Input.mouse.RightButton == ButtonState.Pressed) // Delete tile at cursor
                 {
                     tile.TileId = 0;
                     tile.UpdateNeighbouringWalls();

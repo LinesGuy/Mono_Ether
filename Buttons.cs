@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Input;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +11,7 @@ namespace Mono_Ether {
         protected Texture2D Texture;
         protected Color ActiveButtonColor, InactiveButtonColor, ActiveFontColor, InactiveFontColor;
         public bool IsActive() {
-            return Rect.Contains(Input.MousePosition.ToPoint());
+            return Rect.Contains(Input.mouse.Position);
         }
         public virtual void Draw(SpriteBatch spriteBatch) {
             if (IsActive()) {
@@ -82,7 +81,7 @@ namespace Mono_Ether {
             Buttons.Add(button);
         }
         public string GetClickedButton() {
-            if (Input.Mouse.WasButtonJustDown(MouseButton.Left))
+            if (Input.WasLeftButtonJustDown())
                 foreach (var button in Buttons)
                     if (button.IsActive())
                         return button.Text;

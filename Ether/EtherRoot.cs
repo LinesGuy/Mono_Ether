@@ -49,7 +49,7 @@ namespace Mono_Ether.Ether {
                 return;
             CurrentGameTime = gameTime;
             // P to toggle Editor Mode
-            if (Input.Keyboard.WasKeyJustDown(Keys.P)) {
+            if (Input.WasKeyJustDown(Keys.P)) {
                 if (editorMode) {
                     EnemySpawner.enabled = true;
                     PowerPackSpawner.enabled = true;
@@ -63,7 +63,7 @@ namespace Mono_Ether.Ether {
                 }
             }
             // Esc to toggle pause
-            if (Input.Keyboard.WasKeyJustDown(Keys.Escape))
+            if (Input.WasKeyJustDown(Keys.Escape))
                 paused = !paused;
 
             Map.Update();

@@ -13,27 +13,27 @@ namespace Mono_Ether.Ether {
         public static void Update() {
             // Freecam (disables lerp if used)
             Vector2 direction = Vector2.Zero;
-            if (Input.Keyboard.IsKeyDown(Keys.Left))
+            if (Input.keyboard.IsKeyDown(Keys.Left))
                 direction.X -= 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Right))
+            if (Input.keyboard.IsKeyDown(Keys.Right))
                 direction.X += 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Up))
+            if (Input.keyboard.IsKeyDown(Keys.Up))
                 direction.Y -= 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Down))
+            if (Input.keyboard.IsKeyDown(Keys.Down))
                 direction.Y += 1;
             if (direction != Vector2.Zero) {
                 _isLerping = false;
                 CameraPosition += direction * 5 / Zoom;
             }
             // Zoom (Q and E)
-            if (Input.Keyboard.IsKeyDown(Keys.Q))
+            if (Input.keyboard.IsKeyDown(Keys.Q))
                 Zoom /= 1.03f;
-            if (Input.Keyboard.IsKeyDown(Keys.E))
+            if (Input.keyboard.IsKeyDown(Keys.E))
                 Zoom *= 1.03f;
             // Zoom (mouse wheel)
-            if (Input.Mouse.DeltaScrollWheelValue < 0)
+            if (Input.DeltaScrollWheelValue() < 0)
                 Zoom *= 1.1f;
-            else if (Input.Mouse.DeltaScrollWheelValue > 0)
+            else if (Input.DeltaScrollWheelValue() > 0)
                 Zoom /= 1.1f;
             // Zoom bounds
             if (Zoom > 3f)
@@ -43,7 +43,7 @@ namespace Mono_Ether.Ether {
             // Lerp
             if (_isLerping)
                 Lerp(EntityManager.Player1.Position);
-            else if (Input.Keyboard.IsKeyDown(Keys.C))
+            else if (Input.keyboard.IsKeyDown(Keys.C))
                 _isLerping = true;  // Press 'c' to enable lerp
         }
         private static void Lerp(Vector2 destination) {
@@ -53,10 +53,10 @@ namespace Mono_Ether.Ether {
         }
 
         public static Vector2 MouseWorldCoords() {
-            return ScreenToWorld(Input.Mouse.Position.ToVector2());
+            return ScreenToWorld(Input.mouse.Position.ToVector2());
         }
         private static Vector2 GetMouseAimDirection() {
-            Vector2 direction = Camera.ScreenToWorld(Input.MousePosition) - EntityManager.Player1.Position;
+            Vector2 direction = Camera.ScreenToWorld(Input.mouse.Position.ToVector2()) - EntityManager.Player1.Position;
 
             if (direction == Vector2.Zero)
                 return Vector2.Zero;
@@ -70,13 +70,13 @@ namespace Mono_Ether.Ether {
 
             Vector2 direction = Vector2.Zero;
 
-            if (Input.Keyboard.IsKeyDown(Keys.Left))
+            if (Input.keyboard.IsKeyDown(Keys.Left))
                 direction.X -= 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Right))
+            if (Input.keyboard.IsKeyDown(Keys.Right))
                 direction.X += 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Up))
+            if (Input.keyboard.IsKeyDown(Keys.Up))
                 direction.Y -= 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Down))
+            if (Input.keyboard.IsKeyDown(Keys.Down))
                 direction.Y += 1;
 
             // If no aim input, return zero, otherwise normalize direction

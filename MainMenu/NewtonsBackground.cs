@@ -36,22 +36,22 @@ namespace Mono_Ether.MainMenu {
             }
             // Camera (arrow keys or WASD)
             Vector2 direction = Vector2.Zero;
-            if (Input.Keyboard.IsKeyDown(Keys.Left) || Input.Keyboard.IsKeyDown(Keys.A)) direction.X -= 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Right) || Input.Keyboard.IsKeyDown(Keys.D)) direction.X += 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Up) || Input.Keyboard.IsKeyDown(Keys.W)) direction.Y -= 1;
-            if (Input.Keyboard.IsKeyDown(Keys.Down) || Input.Keyboard.IsKeyDown(Keys.S)) direction.Y += 1;
+            if (Input.keyboard.IsKeyDown(Keys.Left) || Input.keyboard.IsKeyDown(Keys.A)) direction.X -= 1;
+            if (Input.keyboard.IsKeyDown(Keys.Right) || Input.keyboard.IsKeyDown(Keys.D)) direction.X += 1;
+            if (Input.keyboard.IsKeyDown(Keys.Up) || Input.keyboard.IsKeyDown(Keys.W)) direction.Y -= 1;
+            if (Input.keyboard.IsKeyDown(Keys.Down) || Input.keyboard.IsKeyDown(Keys.S)) direction.Y += 1;
             if (direction != Vector2.Zero) CameraPosition += direction * 5 / Zoom;
             // Zoom (Q and E)
-            if (Input.Keyboard.IsKeyDown(Keys.Q))
+            if (Input.keyboard.IsKeyDown(Keys.Q))
                 Zoom /= 1.03f;
-            if (Input.Keyboard.IsKeyDown(Keys.E))
+            if (Input.keyboard.IsKeyDown(Keys.E))
                 Zoom *= 1.03f;
             // Change pixel size (keys 1 through 5)
-            if (Input.Keyboard.WasKeyJustDown(Keys.D1)) pixelSize = 1;
-            else if (Input.Keyboard.WasKeyJustDown(Keys.D2)) pixelSize = 2;
-            else if (Input.Keyboard.WasKeyJustDown(Keys.D3)) pixelSize = 4;
-            else if (Input.Keyboard.WasKeyJustDown(Keys.D4)) pixelSize = 8;
-            else if (Input.Keyboard.WasKeyJustDown(Keys.D5)) pixelSize = 16;
+            if (Input.WasKeyJustDown(Keys.D1)) pixelSize = 1;
+            else if (Input.WasKeyJustDown(Keys.D2)) pixelSize = 2;
+            else if (Input.WasKeyJustDown(Keys.D3)) pixelSize = 4;
+            else if (Input.WasKeyJustDown(Keys.D4)) pixelSize = 8;
+            else if (Input.WasKeyJustDown(Keys.D5)) pixelSize = 16;
         }
         public static void Draw(SpriteBatch spriteBatch) {
             List<List<int>> grid = new List<List<int>>();

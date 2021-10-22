@@ -46,13 +46,13 @@ namespace Mono_Ether.Ether {
             }
             Vector2 direction = Vector2.Zero;
             if (this == EntityManager.Player1) {
-                if (Input.Keyboard.IsKeyDown(Keys.A))
+                if (Input.keyboard.IsKeyDown(Keys.A))
                     direction.X -= 1;
-                if (Input.Keyboard.IsKeyDown(Keys.D))
+                if (Input.keyboard.IsKeyDown(Keys.D))
                     direction.X += 1;
-                if (Input.Keyboard.IsKeyDown(Keys.W))
+                if (Input.keyboard.IsKeyDown(Keys.W))
                     direction.Y -= 1;
-                if (Input.Keyboard.IsKeyDown(Keys.S))
+                if (Input.keyboard.IsKeyDown(Keys.S))
                     direction.Y += 1;
             }
             if (direction.LengthSquared() > 1)
@@ -101,7 +101,7 @@ namespace Mono_Ether.Ether {
             #region Shooting
             if (!EtherRoot.Instance.editorMode) {
                 var aim = Camera.GetAimDirection();
-                if ((autoFire ^ Input.Mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
+                if ((autoFire ^ Input.mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
                     // Play shooting sound
                     Art.PlayerShoot.CreateInstance().Play();
                     // Cooldown calculations
@@ -136,7 +136,7 @@ namespace Mono_Ether.Ether {
                 if (cooldownRemaining > 0)
                     cooldownRemaining--;
 
-                if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right)) {
+                if (Input.WasRightButtonJustDown()) {
                     EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
                 }
             }

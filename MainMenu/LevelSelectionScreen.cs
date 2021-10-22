@@ -52,20 +52,20 @@ namespace Mono_Ether.MainMenu {
                     break;
             }
             // Up/down arrow keys to scroll through items
-            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+            if (Input.keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
                 buttonOffsetVelocity -= 0.005f;
-            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+            if (Input.keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                 buttonOffsetVelocity += 0.005f;
             // Scroll mouse wheel to scroll through items
-            buttonOffsetVelocity -= Input.Mouse.DeltaScrollWheelValue / 10000f;
+            buttonOffsetVelocity -= Input.DeltaScrollWheelValue() / 10000f;
             // If user let go of mouse, apply mouse velocity to scroll offset velocity
-            if (Input.Mouse.WasButtonJustUp(MonoGame.Extended.Input.MouseButton.Left))
-                buttonOffsetVelocity = (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
+            if (Input.WasLeftButtonJustUp())
+                buttonOffsetVelocity = (Input.mouse.Y - Input.lastMouse.Y) / LevelButton.RADIUS;
             // If user is holding down left click, allow "dragging" of buttons
-            if (Input.Mouse.IsButtonDown(MonoGame.Extended.Input.MouseButton.Left)) {
+            if (Input.mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
 
                 foreach (LevelButton button in buttonManager.Buttons)
-                    button.Offset -= (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
+                    button.Offset -= (Input.mouse.Y - Input.lastMouse.Y) / LevelButton.RADIUS;
             } else {
                 // Otherwise, apply offset velocity
                 foreach (LevelButton button in buttonManager.Buttons)
@@ -88,7 +88,7 @@ namespace Mono_Ether.MainMenu {
                     button.Offset -= delta / 5f;
             }
             // Esc to go back to title screen
-            if (Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+            if (Input.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 GameRoot.Instance.RemoveScreenTransition();
         }
 

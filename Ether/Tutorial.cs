@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Mono_Ether.Ether {
     public static class Tutorial {
@@ -14,37 +15,37 @@ namespace Mono_Ether.Ether {
                     tutorialText = "Use WASD to move the player around";
                     EnemySpawner.enabled = false;
                     PowerPackSpawner.enabled = false;
-                    if (Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.W) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.A) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.S) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.D)) {
+                    if (Input.WasKeyJustDown(Keys.W) ||
+                        Input.WasKeyJustDown(Keys.A) ||
+                        Input.WasKeyJustDown(Keys.S) ||
+                        Input.WasKeyJustDown(Keys.D)) {
                         state = "camera";
                     }
                     break;
                 case "camera":
                     tutorialText = "Use arrow keys to move the camera around";
-                    if (Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Left) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Right) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Up) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Down)) {
+                    if (Input.WasKeyJustDown(Keys.Left) ||
+                        Input.WasKeyJustDown(Keys.Right) ||
+                        Input.WasKeyJustDown(Keys.Up) ||
+                        Input.WasKeyJustDown(Keys.Down)) {
                         state = "zooming";
                     }
                     break;
                 case "zooming":
                     tutorialText = "Use Q and E or scroll wheel to zoom";
-                    if (Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Q) ||
-                        Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.E) ||
-                        Input.Mouse.DeltaScrollWheelValue != 0)
+                    if (Input.WasKeyJustDown(Keys.Q) ||
+                        Input.WasKeyJustDown(Keys.E) ||
+                        Input.DeltaScrollWheelValue() != 0)
                         state = "disableLerp";
                     break;
                 case "disableLerp":
                     tutorialText = "Press C to disable free camera";
-                    if (Input.Keyboard.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.C))
+                    if (Input.WasKeyJustDown(Keys.C))
                         state = "shooting";
                     break;
                 case "shooting":
                     tutorialText = "Move the cursor around and hold left click to shoot";
-                    if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Left)) {
+                    if (Input.WasLeftButtonJustDown()) {
                         state = "shootingEnemies";
                         EnemySpawner.enabled = true;
                         timer = 10f;
@@ -64,7 +65,7 @@ namespace Mono_Ether.Ether {
                     break;
                 case "starburst":
                     tutorialText = "Right click anywhere to shoot a starburst bullet";
-                    if (Input.Mouse.WasButtonJustDown(MonoGame.Extended.Input.MouseButton.Right))
+                    if (Input.WasRightButtonJustDown())
                         state = "end";
                     break;
                 case "end":
