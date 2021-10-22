@@ -20,10 +20,10 @@ namespace Mono_Ether.MainMenu {
             buttonManager.AddButton(new LevelButton(5, "Super secret stage????????"));
         }
         public override void LoadContent(ContentManager content) {
-            //throw new NotImplementedException();
+            
         }
         public override void UnloadContent() {
-            throw new NotImplementedException();
+            
         }
         public override void Update(GameTime gameTime) {
             NewtonsBackground.Update();
