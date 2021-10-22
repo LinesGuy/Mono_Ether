@@ -20,7 +20,7 @@ namespace Mono_Ether.MainMenu {
         public override void Update(GameTime gameTime) {
             var clickedButton = buttonManager.GetClickedButton();
             if (clickedButton == "back")
-                GameRoot.Instance.RemoveScreen();
+                GameRoot.Instance.RemoveScreenTransition();
         }
 
         public override void Draw(SpriteBatch spriteBatch) {

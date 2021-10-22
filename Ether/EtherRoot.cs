@@ -9,10 +9,15 @@ namespace Mono_Ether.Ether {
         public static EtherRoot Instance { get; private set; }
         public bool paused = false;
         public bool editorMode = false;
+        private string MapFileName;
+        private Vector2 MapSize;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
         public static Hud hud;
-        public EtherRoot(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
+        public EtherRoot(GraphicsDevice graphicsDevice, string mapFileName, Vector2 mapSize, string tutorialState = "none") : base(graphicsDevice) {
+            MapFileName = mapFileName;
+            MapSize = mapSize;
+            Tutorial.state = tutorialState;
         }
 
         public override void Initialize() {
@@ -25,7 +30,8 @@ namespace Mono_Ether.Ether {
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
             hud = new Hud();
-            
+            Map.LoadFromFile(MapFileName, MapSize);
+            BackgroundParticleManager.Populate(Map.WorldSize, 128);
         }
 
         public override void LoadContent(ContentManager content) {

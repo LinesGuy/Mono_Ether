@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono_Ether.States;
+using System;
 using System.Collections.Generic;
 
 namespace Mono_Ether {
@@ -13,7 +14,11 @@ namespace Mono_Ether {
         public GraphicsDevice myGraphics;
         private SpriteBatch spriteBatch;
         public Stack<GameState> screenStack = new Stack<GameState>();
-        public bool dum_mode = true;
+        public GameState pendingScreen;
+        public int framesUntilTransition;
+        public int transitionState; // 0 = none, 1 = load screen, -1 = unload screen
+        private const int transitionLength = 30; // frames
+        public bool dum_mode = false;
         public GameRoot() {
             Instance = this;
             graphics = new GraphicsDeviceManager(this);
@@ -33,10 +38,9 @@ namespace Mono_Ether {
             AddScreen(new MainMenu.TitleScreen(GraphicsDevice));
             if (dum_mode) {
                 // Skip straight to testing stage
-                AddScreen(new Ether.EtherRoot(GraphicsDevice));
-                Ether.Map.LoadFromFile("debugMap.txt", new Vector2(64, 64));
-                Ether.BackgroundParticleManager.Populate(Ether.Map.WorldSize, 256);
+                AddScreen(new Ether.EtherRoot(GraphicsDevice, "debugMap.txt", new Vector2(64, 64)));
             }
+            framesUntilTransition = 0;
         }
 
         protected override void UnloadContent() {
@@ -45,26 +49,61 @@ namespace Mono_Ether {
 
         protected override void Update(GameTime gameTime) {
             Input.Update();
+            // Handle any ongoing screen transitions
+            if (framesUntilTransition > 0) {
+                framesUntilTransition -= 1;
+                if (framesUntilTransition == 0) {
+                    if (transitionState == 1) {
+                        AddScreen(pendingScreen);
+                    } else if (transitionState == -1) {
+                        RemoveScreen();
+                    }
+                    transitionState = 0;
+                }
+            } else if (framesUntilTransition < 0)
+                framesUntilTransition += 1;
             screenStack.Peek().Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime) {
             screenStack.Peek().Draw(spriteBatch);
+            // Draw transition fade
+            if (framesUntilTransition != 0) {
+                float transparency;
+                if (framesUntilTransition > 0)
+                    transparency = 1 - framesUntilTransition / (float)transitionLength;
+                else
+                    transparency = Math.Abs(framesUntilTransition / (float)transitionLength);
+                spriteBatch.Begin();
+                spriteBatch.Draw(Art.Pixel, new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y), Color.Black * transparency);
+                spriteBatch.End();
+            }
+            
             base.Draw(gameTime);
         }
-
-        public void AddScreen(GameState screen) {
+        private void AddScreen(GameState screen) {
             screenStack.Push(screen);
             screenStack.Peek().Initialize();
             screenStack.Peek().LoadContent(Content);
+            framesUntilTransition = -transitionLength;
         }
-        public void RemoveScreen() {
+        public void TransitionScreen(GameState screen) {
+            pendingScreen = screen;
+            transitionState = 1;
+            framesUntilTransition = transitionLength;
+        }
+        private void RemoveScreen() {
             screenStack.Peek().UnloadContent();
             screenStack.Pop();
             if (screenStack.Count == 0) {
                 Exit();
             }
+            framesUntilTransition = -transitionLength;
+        }
+        public void RemoveScreenTransition() {
+            transitionState = -1;
+            framesUntilTransition = transitionLength;
         }
     }
 }

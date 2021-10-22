@@ -69,7 +69,7 @@ namespace Mono_Ether.Ether {
             if (playingYouDied) {
                 deadFrames++;
                 if (deadFrames >= 120)
-                    GameRoot.Instance.RemoveScreen();
+                    GameRoot.Instance.RemoveScreenTransition();
             }
         }
     }

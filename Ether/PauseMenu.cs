@@ -12,7 +12,7 @@ namespace Mono_Ether.Ether {
         public static void Update() {
             switch (buttonManager.GetClickedButton()) {
                 case "Exit":
-                    GameRoot.Instance.RemoveScreen();
+                    GameRoot.Instance.RemoveScreenTransition();
                     break;
                 case "Resume":
                     EtherRoot.Instance.paused = false;
