@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Mono_Ether.States;
 
 namespace Mono_Ether.Ether {
@@ -32,6 +33,8 @@ namespace Mono_Ether.Ether {
             hud = new Hud();
             Map.LoadFromFile(MapFileName, MapSize);
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(Art.Music);
         }
 
         public override void LoadContent(ContentManager content) {
@@ -42,6 +45,7 @@ namespace Mono_Ether.Ether {
             Tutorial.state = "none";
             BackgroundParticleManager.Clear();
             hud.UnloadContent();
+            MediaPlayer.Stop();
         }
 
         public override void Update(GameTime gameTime) {
