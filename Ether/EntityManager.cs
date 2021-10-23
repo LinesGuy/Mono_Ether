@@ -172,7 +172,7 @@ namespace Mono_Ether.Ether {
                 foreach(PlayerShip player in Players) {
                     if (IsColliding(geom, player)) {
                         geom.IsExpired = true;
-                        player.geoms += 1;
+                        player.addGeoms(1);
                     }
                     if (Vector2.DistanceSquared(player.Position, geom.Position) < 150f * 150f)
                         geom.Velocity += (player.Position - geom.Position).ScaleTo(1.3f);

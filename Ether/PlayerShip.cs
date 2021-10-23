@@ -9,23 +9,17 @@ namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
         public int lives;
         public int score { get; private set; }
-        public int geoms;
+        public int geoms { get; private set; }
+        public int multiplier { get; private set; }
         public int playerIndex;
-        public const float multiplierExpiryTime = 0.8f;
-        private const int maxMultiplier = 20;
-        public int Multiplier;
-        private float multiplierTimeLeft;
-        private int scoreForExtraLife;
         public PlayerShip() {
             Image = Art.Player;
             Position = new Vector2(0, 0);
             Radius = 10;
             geoms = 0;
+            multiplier = 1;
             lives = 3;
             score = 0;
-            Multiplier = 1;
-            scoreForExtraLife = 2000;
-            multiplierTimeLeft = 0f;
             playerIndex = EntityManager.Players.Count;
         }
 
@@ -157,38 +151,22 @@ namespace Mono_Ether.Ether {
             }
             activePowerPacks = activePowerPacks.Where(x => !x.isExpended).ToList();
             #endregion Power packs
-            #region Score multiplier
-            if (Multiplier > 1) {
-                // Update multiplier timer
-                multiplierTimeLeft -= 1 / 60f;
-                if (multiplierTimeLeft <= 0) {
-                    multiplierTimeLeft = multiplierExpiryTime;
-                    Multiplier = 1;
-                }
-            }
-            #endregion Score multiplier
         }
         public override void Draw(SpriteBatch spriteBatch) {
-            if (!IsDead)
+            if (!IsDead) {
                 base.Draw(spriteBatch);
+            }
         }
         public void AddPoints(int basePoints) {
             if (IsDead)
                 return;
-
-            score += basePoints * Multiplier;
-            while (score >= scoreForExtraLife) {
-                scoreForExtraLife += 2000;
-                lives++;
-            }
+            score += basePoints * geoms;
         }
-        public void IncreaseMultiplier() {
+        public void addGeoms(int amount) {
             if (IsDead)
                 return;
-
-            multiplierTimeLeft = multiplierExpiryTime;
-            if (Multiplier < maxMultiplier)
-                Multiplier++;
+            geoms += amount;
+            multiplier += amount;
         }
         public void Kill() {
             framesUntilRespawn = 60;
@@ -213,7 +191,10 @@ namespace Mono_Ether.Ether {
                 };
                 EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
             }
+
             EnemySpawner.Reset();
+
+            multiplier = 1;
         }
     }
 }
