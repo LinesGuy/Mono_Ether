@@ -31,7 +31,7 @@ namespace Mono_Ether {
             return mouse.RightButton == ButtonState.Released && (lastMouse.RightButton == ButtonState.Pressed);
         }
         public static int DeltaScrollWheelValue() {
-            return mouse.ScrollWheelValue - lastMouse.ScrollWheelValue;
+            return lastMouse.ScrollWheelValue - mouse.ScrollWheelValue;
         }
     }
 }
