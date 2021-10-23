@@ -34,23 +34,65 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/NovaSquare48.spritefont
 
-#begin Samples/Gameplay/enemy_explosion.wav
+#begin Samples/Gameplay/explosions/explosion-01.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Samples/Gameplay/enemy_explosion.wav
+/build:Samples/Gameplay/explosions/explosion-01.wav
+
+#begin Samples/Gameplay/explosions/explosion-02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/explosions/explosion-02.wav
+
+#begin Samples/Gameplay/explosions/explosion-03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/explosions/explosion-03.wav
+
+#begin Samples/Gameplay/explosions/explosion-04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/explosions/explosion-04.wav
+
+#begin Samples/Gameplay/explosions/explosion-05.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/explosions/explosion-05.wav
+
+#begin Samples/Gameplay/explosions/explosion-06.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/explosions/explosion-06.wav
+
+#begin Samples/Gameplay/explosions/explosion-07.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/explosions/explosion-07.wav
+
+#begin Samples/Gameplay/explosions/explosion-08.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/explosions/explosion-08.wav
+
+#begin Samples/Gameplay/geomPickup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/geomPickup.wav
 
 #begin Samples/Gameplay/player_death.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Samples/Gameplay/player_death.wav
-
-#begin Samples/Gameplay/player_shoot.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Samples/Gameplay/player_shoot.wav
 
 #begin Samples/Gameplay/PowerPackPickup.wav
 /importer:WavImporter
@@ -63,6 +105,78 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Samples/Gameplay/PowerPackPickupBad.wav
+
+#begin Samples/Gameplay/shoot/shoot-01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/shoot/shoot-01.wav
+
+#begin Samples/Gameplay/shoot/shoot-02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/shoot/shoot-02.wav
+
+#begin Samples/Gameplay/shoot/shoot-03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/shoot/shoot-03.wav
+
+#begin Samples/Gameplay/shoot/shoot-04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/shoot/shoot-04.wav
+
+#begin Samples/Gameplay/spawn/spawn-01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-01.wav
+
+#begin Samples/Gameplay/spawn/spawn-02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-02.wav
+
+#begin Samples/Gameplay/spawn/spawn-03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-03.wav
+
+#begin Samples/Gameplay/spawn/spawn-04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-04.wav
+
+#begin Samples/Gameplay/spawn/spawn-05.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-05.wav
+
+#begin Samples/Gameplay/spawn/spawn-06.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-06.wav
+
+#begin Samples/Gameplay/spawn/spawn-07.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-07.wav
+
+#begin Samples/Gameplay/spawn/spawn-08.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/Gameplay/spawn/spawn-08.wav
 
 #begin Samples/jixaw.mp3
 /importer:Mp3Importer
@@ -597,4 +711,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Tiles/tile4.png
+
+#begin Tracks/Music.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Tracks/Music.mp3
 
