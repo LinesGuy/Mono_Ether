@@ -96,8 +96,8 @@ namespace Mono_Ether.MainMenu {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             NewtonsBackground.Draw(spriteBatch);
-            spriteBatch.DrawString(Art.DebugFont, "Level selection screen", Vector2.Zero, Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "Use arrow keys, drag the mouse or scroll the mouse wheel to scroll up/down", new Vector2(0, 28), Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, "Level selection screen", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, "Use arrow keys, drag the mouse or scroll the mouse wheel to scroll up/down", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }

@@ -103,7 +103,7 @@ namespace Mono_Ether.Ether {
             FloatingTextManager.Draw(spriteBatch);
             hud.Draw(spriteBatch);
             if (!GameRoot.Instance.IsActive)
-                spriteBatch.DrawString(Art.DebugFont, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
+                spriteBatch.DrawString(Art.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
             spriteBatch.End();
         }
     }

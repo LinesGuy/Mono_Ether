@@ -23,10 +23,10 @@ namespace Mono_Ether.Ether {
         public void Draw(SpriteBatch spriteBatch) {
             // Top-left debug texts
             if (GameRoot.Instance.dum_mode) {
-                spriteBatch.DrawString(Art.DebugFont, $"Player1 XY: {EntityManager.Player1.Position.X:0.0}, {EntityManager.Player1.Position.Y:0.0}", new Vector2(0, 0), Color.White);
-                spriteBatch.DrawString(Art.DebugFont, $"Cursor XY: {Camera.MouseWorldCoords().X:0.0}, {Camera.MouseWorldCoords().Y:0.0}", new Vector2(0, 30), Color.White);
-                spriteBatch.DrawString(Art.DebugFont, $"Tile ID: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).TileId}", new Vector2(0, 60), Color.White);
-                spriteBatch.DrawString(Art.DebugFont, $"Tile XY: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).pos}", new Vector2(0, 90), Color.White);
+                spriteBatch.DrawString(Art.NovaSquare24, $"Player1 XY: {EntityManager.Player1.Position.X:0.0}, {EntityManager.Player1.Position.Y:0.0}", new Vector2(0, 0), Color.White);
+                spriteBatch.DrawString(Art.NovaSquare24, $"Cursor XY: {Camera.MouseWorldCoords().X:0.0}, {Camera.MouseWorldCoords().Y:0.0}", new Vector2(0, 30), Color.White);
+                spriteBatch.DrawString(Art.NovaSquare24, $"Tile ID: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).TileId}", new Vector2(0, 60), Color.White);
+                spriteBatch.DrawString(Art.NovaSquare24, $"Tile XY: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).pos}", new Vector2(0, 90), Color.White);
             }
             // Bottom-right powerups
             // ONLY APPLIES TO player1
@@ -57,10 +57,10 @@ namespace Mono_Ether.Ether {
             }
             // Top-right score
             // ONLY APPLIES to player1
-            spriteBatch.DrawString(Art.DebugFont, $"Player 1 score: {EntityManager.Player1.score}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 0), Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, $"Player 1 score: {EntityManager.Player1.score}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 0), Color.White);
             // Top-right geoms
             // ONLY APPLIES to player1
-            spriteBatch.DrawString(Art.DebugFont, $"Player 1 geoms: {EntityManager.Player1.geoms}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 30), Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, $"Player 1 geoms: {EntityManager.Player1.geoms}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 30), Color.White);
             // You died
             if (playingYouDied) {
                 int t = Math.Min(255, (int)(deadFrames / 60f * 255f));    

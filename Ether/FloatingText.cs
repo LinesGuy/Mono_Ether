@@ -28,7 +28,7 @@ namespace Mono_Ether.Ether {
                 IsExpired = true;
         }
         public void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.DrawString(Art.DebugFont, Text, Camera.WorldToScreen(Pos), Color, 0f, Art.DebugFont.MeasureString(Text) / 2f, Scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Art.NovaSquare24, Text, Camera.WorldToScreen(Pos), Color, 0f, Art.Arial24.MeasureString(Text) / 2f, Scale, SpriteEffects.None, 0);
         }
     }
     public static class FloatingTextManager {

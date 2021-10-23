@@ -21,7 +21,9 @@ namespace Mono_Ether {
         public static SoundEffect PlayerShoot { get; private set; }
         public static SoundEffect PlayerDeath { get; private set; }
         public static SoundEffect EnemyExplosion { get; private set; }
-        public static SpriteFont DebugFont { get; private set; }
+        public static SpriteFont Arial24 { get; private set; }
+        public static SpriteFont NovaSquare24 { get; private set; }
+        public static SpriteFont NovaSquare48 { get; private set; }
         public static Texture2D WelcomeText { get; private set; }
         public static Texture2D MenuButtonBlank { get; private set; }
         public static Texture2D TileGrass { get; private set; }
@@ -69,7 +71,9 @@ namespace Mono_Ether {
             PlayerShoot = content.Load<SoundEffect>("Samples/Gameplay/player_shoot");
             PlayerDeath = content.Load<SoundEffect>("Samples/Gameplay/player_death");
             EnemyExplosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");
-            DebugFont = content.Load<SpriteFont>("Fonts/DebugFont");
+            Arial24 = content.Load<SpriteFont>("Fonts/Arial24");
+            NovaSquare24 = content.Load<SpriteFont>("Fonts/NovaSquare24");
+            NovaSquare48 = content.Load<SpriteFont>("Fonts/NovaSquare48");
             WelcomeText = content.Load<Texture2D>("Textures/Intro/welcome_text");
             MenuButtonBlank = content.Load<Texture2D>("Textures/Menu/menu_button_blank");
             TileGrass = content.Load<Texture2D>("Textures/tiles/tile1");

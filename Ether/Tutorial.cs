@@ -78,7 +78,7 @@ namespace Mono_Ether.Ether {
         }
 
         public static void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.DrawString(Art.DebugFont, tutorialText, GameRoot.ScreenSize / 4f, Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, tutorialText, GameRoot.ScreenSize / 4f, Color.White);
         }
     }
 }

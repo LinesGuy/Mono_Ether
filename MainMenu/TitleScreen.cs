@@ -45,8 +45,8 @@ namespace Mono_Ether.MainMenu {
             //GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             NewtonsBackground.Draw(spriteBatch);
-            spriteBatch.DrawString(Art.DebugFont, "welcome to ether", Vector2.Zero, Color.White);
-            spriteBatch.DrawString(Art.DebugFont, "(this background has nothing to do with the game I just thought it looked cool)", new Vector2(0, 28), Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, "welcome to ether", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, "(this background has nothing to do with the game I just thought it looked cool)", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }

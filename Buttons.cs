@@ -16,10 +16,10 @@ namespace Mono_Ether {
         public virtual void Draw(SpriteBatch spriteBatch) {
             if (IsActive()) {
                 spriteBatch.Draw(Texture, Pos, ActiveButtonColor);
-                spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), ActiveFontColor, 0f, Vector2.Zero, 2f, 0, 0);
+                spriteBatch.DrawString(Art.NovaSquare48, Text, Pos + Texture.Size() / 2f, ActiveFontColor, 0f, Art.NovaSquare48.MeasureString(Text) / 2f, 1f, 0, 0);
             } else {
                 spriteBatch.Draw(Texture, Pos, InactiveButtonColor);
-                spriteBatch.DrawString(Art.DebugFont, Text, Pos + Texture.Size() / 2f - Art.DebugFont.MeasureString(Text), InactiveFontColor, 0f, Vector2.Zero, 2f, 0, 0);
+                spriteBatch.DrawString(Art.NovaSquare48, Text, Pos + Texture.Size() / 2f, InactiveFontColor, 0f, Art.NovaSquare48.MeasureString(Text) / 2f, 1f, 0, 0);
             }
         }
 

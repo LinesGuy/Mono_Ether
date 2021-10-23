@@ -26,7 +26,7 @@ namespace Mono_Ether.MainMenu {
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Art.DebugFont, $"there are none", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(Art.NovaSquare24, $"there are none", Vector2.Zero, Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }
