@@ -13,12 +13,26 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/DebugFont.spritefont
+#begin Fonts/Arial24.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/DebugFont.spritefont
+/build:Fonts/Arial24.spritefont
+
+#begin Fonts/NovaSquare24.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/NovaSquare24.spritefont
+
+#begin Fonts/NovaSquare48.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/NovaSquare48.spritefont
 
 #begin Samples/Gameplay/enemy_explosion.wav
 /importer:WavImporter
