@@ -49,8 +49,12 @@ namespace Mono_Ether {
         public static Texture2D CollisionTopLeft;
         public static Texture2D CollisionTopRight;
         public static Texture2D BackgroundParticle;        
+        public static Texture2D SettingsSliderLeft;
+        public static Texture2D SettingsSliderBall;
+        public static Texture2D SettingsSliderRight;
         public static Texture2D CollisionBottomLeft;
         public static Texture2D CollisionBottomRight;
+        public static Texture2D SettingsSliderMiddle;
         public static Texture2D PowerMoveSpeedIncrease;
         public static Texture2D PowerMoveSpeedDecrease;
         public static Texture2D PowerShootSpeedIncrease;
@@ -106,8 +110,12 @@ namespace Mono_Ether {
             MenuButtonBlank = content.Load<Texture2D>("Textures/Menu/menu_button_blank");
             PurpleWanderer = content.Load<Texture2D>("Textures/Gameplay/PurpleWanderer");
             CollisionTopLeft = content.Load<Texture2D>("Textures/tiles/collisionTopLeft");
+            SettingsSliderLeft = content.Load<Texture2D>("Textures/Menu/slider_ball_left");
+            SettingsSliderBall = content.Load<Texture2D>("Textures/Menu/slider_ball_ball");
             PinkSeekerChild = content.Load<Texture2D>("Textures/Gameplay/PinkSeekerChild");
             CollisionTopRight = content.Load<Texture2D>("Textures/tiles/collisionTopRight");
+            SettingsSliderRight = content.Load<Texture2D>("Textures/Menu/slider_ball_right");
+            SettingsSliderMiddle = content.Load<Texture2D>("Textures/Menu/slider_ball_middle");
             CollisionBottomLeft = content.Load<Texture2D>("Textures/tiles/collisionBottomLeft");
             BackgroundParticle = content.Load<Texture2D>("Textures/GamePlay/BackgroundParticle");
             CollisionBottomRight = content.Load<Texture2D>("Textures/tiles/collisionBottomRight");
