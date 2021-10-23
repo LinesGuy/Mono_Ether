@@ -1,28 +1,52 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
     class FloatingText {
         readonly string Text;
+        Vector2 Velocity; // not be used for all types
+        Vector2 StartPos;
         Vector2 Pos; // MIDDLE of text
         int Age;
         readonly int Lifespan;
         public bool IsExpired;
         public float Scale;
+        public string Type;
         Color Color;
-        public FloatingText(string text, Vector2 pos, Color color) {
+        private static readonly Random rand = new Random();
+        public FloatingText(string text, Vector2 pos, Color color, string type) {
             Text = text;
             Pos = pos;
+            StartPos = Pos;
+            Velocity = Vector2.Zero;
             Color = color;
+            Type = type;
+            switch (Type) {
+                case "bounce":
+                    Velocity.X = rand.NextFloat(-3f, 3f);
+                    Velocity.Y = rand.NextFloat(0.5f, 1.5f);
+                    break;
+                default:
+                    break;
+            }
             IsExpired = false;
             Scale = 1f;
             Age = 0;
-            Lifespan = 180;
+            Lifespan = 118;
         }
         public void Update() {
-            Pos.Y -= 1;
+            switch (Type) {
+                case "rise":
+                    Pos.Y -= 1;
+                    break;
+                case "bounce":
+                    Pos.X = StartPos.X + Velocity.X * Age;
+                    Pos.Y = StartPos.Y - Velocity.Y * MathF.Abs(MathF.Sin(0.08f * Age) * (144f - Age * 0.8f));
+                    break;
+            }
             Age += 1;
             if (Age > Lifespan)
                 IsExpired = true;
@@ -43,8 +67,8 @@ namespace Mono_Ether.Ether {
             foreach (FloatingText text in texts)
                 text.Draw(spriteBatch);
         }
-        public static void Add(string text, Vector2 pos, Color color) {
-            texts.Add(new FloatingText(text, pos, color));
+        public static void Add(string text, Vector2 pos, Color color, String type) {
+            texts.Add(new FloatingText(text, pos, color, type));
         }
         public static void Clear() {
             texts.Clear();
