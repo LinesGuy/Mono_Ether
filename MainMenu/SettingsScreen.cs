@@ -1,15 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace Mono_Ether.MainMenu {
     public class SettingsScreen : States.GameState {
         private ButtonManager buttonManager;
+        private Dictionary<string, Slider> Sliders = new Dictionary<string, Slider>();
         public SettingsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
             buttonManager = new ButtonManager();
             buttonManager.Add("back");
+            Sliders.Add("Master Volume", new Slider(new Vector2(400, 200), "Master Volume", 400f, 0f, 1f, GameSettings.MasterVolume));
+            Sliders.Add("SFX Volume", new Slider(new Vector2(400, 400), "SFX Volume", 400f, 0f, 1f, GameSettings.SoundEffectVolume));
+            Sliders.Add("Music Volume", new Slider(new Vector2(400, 600), "Music Volume", 400f, 0f, 1f, GameSettings.MusicVolume));
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
@@ -21,14 +27,83 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = buttonManager.GetClickedButton();
             if (clickedButton == "back")
                 GameRoot.Instance.RemoveScreenTransition();
+            foreach(Slider slider in Sliders.Values) {
+                slider.Update();
+                if (slider.IsBeingDragged) {
+                    switch (slider.Text) {
+                        case "Master Volume":
+                            GameSettings.MasterVolume = slider.Value;
+                            break;
+                        case "SFX Volume":
+                            GameSettings.SoundEffectVolume = slider.Value;
+                            break;
+                        case "Music Volume":
+                            GameSettings.MusicVolume = slider.Value;
+                            break;
+                    }
+                    GameSettings.ApplyChanges();
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Art.NovaSquare24, $"there are none", Vector2.Zero, Color.White);
+            foreach (Slider slider in Sliders.Values)
+                slider.Draw(spriteBatch);
+            spriteBatch.DrawString(Art.NovaSquare24, "Settings", Vector2.Zero, Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
+        }
+    }
+    class Slider {
+        public Vector2 SliderPos;
+        public Vector2 BallPos;
+        public string Text;
+        private float Width; // pixels
+        protected Texture2D Texture;
+        private float Min;
+        private float Max;
+        public float Value;
+        public bool IsBeingHovered;
+        public bool IsBeingDragged;
+        public Slider(Vector2 sliderPos, string text, float width, float min, float max, float startValue) {
+            SliderPos = sliderPos;
+            Text = text;
+            Width = width;
+            Texture = Art.Default;
+            Min = min;
+            Value = startValue;
+            Max = max;
+            BallPos = new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
+            IsBeingHovered = false;
+            IsBeingDragged = false;
+        }
+
+        public void Update() {
+            IsBeingHovered = Vector2.DistanceSquared(Input.mouse.Position.ToVector2(), BallPos) < Math.Pow(Art.SettingsSliderBall.Width / 2f, 2);
+            if (IsBeingHovered && Input.WasLeftButtonJustDown())
+                IsBeingDragged = true;
+            else if (Input.WasLeftButtonJustUp())
+                IsBeingDragged = false;
+            if (IsBeingDragged) {
+                Value = (Input.mouse.X - Width / 2f) / Width;
+                Value = Math.Clamp(Value, 0f, 1f);
+                BallPos = new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
+            }
+        }
+        public void Draw(SpriteBatch spriteBatch) {
+            spriteBatch.Draw(Art.SettingsSliderMiddle, new Rectangle((int)(SliderPos.X - Width / 2f), (int)(SliderPos.Y - Art.SettingsSliderMiddle.Height / 2f), (int)Width, (int)Art.SettingsSliderMiddle.Height), Color.White);
+            spriteBatch.Draw(Art.SettingsSliderLeft, new Vector2(SliderPos.X - Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderLeft.Height / 2f), Color.White);
+            spriteBatch.Draw(Art.SettingsSliderRight, new Vector2(SliderPos.X + Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderRight.Height / 2f), Color.White);
+            spriteBatch.DrawString(Art.NovaSquare48, Text, new Vector2(SliderPos.X, SliderPos.Y - 75f), Color.White, 0f, Art.NovaSquare48.MeasureString(Text) / 2f, 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Art.NovaSquare24, $"{Value*100:0}%", new Vector2(SliderPos.X + Width / 2f + Art.SettingsSliderRight.Width + 35f, SliderPos.Y), Color.White, 0f, Art.NovaSquare24.MeasureString($"{Value * 100:0}%") / 2f, 1f, SpriteEffects.None, 0);
+            Color sliderBallColor;
+            if (IsBeingHovered || IsBeingDragged)
+                sliderBallColor = new Color(0, 255, 0);
+            else
+                sliderBallColor = new Color(0, 128, 0);
+            spriteBatch.Draw(Art.SettingsSliderBall, BallPos, null, sliderBallColor, 0, Art.SettingsSliderBall.Size() / 2f, 1f, SpriteEffects.None, 0);
         }
     }
 }
