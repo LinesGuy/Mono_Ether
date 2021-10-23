@@ -9,21 +9,22 @@ using System.Linq;
 namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
         public int lives;
-        public int score { get; private set; }
-        public int geoms { get; private set; }
-        public int multiplier { get; private set; }
+        public int Score { get; private set; }
+        public int Geoms { get; private set; }
+        public int Multiplier { get; private set; }
         public int playerIndex;
-        public int highScore { get; private set; }
-        private const string highScoreFilename = "highscore.txt";
+        public int HighScore { get; private set; }
+        private static readonly string highScoreFilename = "highscore.txt";
+
         public PlayerShip() {
             Image = Art.Player;
             Position = new Vector2(0, 0);
             Radius = 10;
-            geoms = 0;
-            multiplier = 1;
+            Geoms = 0;
+            Multiplier = 1;
             lives = 3;
-            score = 0;
-            highScore = LoadHighScore();
+            Score = 0;
+            HighScore = LoadHighScore();
             playerIndex = EntityManager.Players.Count;
         }
 
@@ -109,7 +110,7 @@ namespace Mono_Ether.Ether {
                 var aim = Camera.GetAimDirection();
                 if ((autoFire ^ Input.mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
                     // Play shooting sound
-                    Art.PlayerShoot.CreateInstance().Play();
+                    Art.PlayerShoot.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
                     // Cooldown calculations
                     float cooldownRemainingMultiplier = 1f;
                     foreach (var power in activePowerPacks) {
@@ -164,13 +165,13 @@ namespace Mono_Ether.Ether {
         public void AddPoints(int basePoints) {
             if (IsDead)
                 return;
-            score += basePoints * multiplier;
+            Score += basePoints * Multiplier;
         }
-        public void addGeoms(int amount) {
+        public void AddGeoms(int amount) {
             if (IsDead)
                 return;
-            geoms += amount;
-            multiplier += amount;
+            Geoms += amount;
+            Multiplier += amount;
         }
         public void Kill() {
             framesUntilRespawn = 60;
@@ -198,15 +199,14 @@ namespace Mono_Ether.Ether {
 
             EnemySpawner.Reset();
 
-            if (score > highScore)
-                SaveHighScore(score);
+            if (Score > HighScore)
+                SaveHighScore(Score);
 
-            multiplier = 1;
+            Multiplier = 1;
         }
         private int LoadHighScore() {
             // Return saved score if it exists, or return 0 if there is none
-            int score;
-            return File.Exists(highScoreFilename) && int.TryParse(File.ReadAllText(highScoreFilename), out score) ? score : 0;
+            return File.Exists(highScoreFilename) && int.TryParse(File.ReadAllText(highScoreFilename), out int score) ? score : 0;
         }
         private void SaveHighScore(int score) {
             // Saves the score to the highscore file, note that this does not check the saved score is greater than the new score.

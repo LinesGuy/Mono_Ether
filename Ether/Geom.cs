@@ -20,5 +20,10 @@ namespace Mono_Ether.Ether {
         public override void Draw(SpriteBatch spriteBatch) {
             base.Draw(spriteBatch);
         }
+        public void Pickup(int playerIndex) {
+            IsExpired = true;
+            EntityManager.Players[playerIndex].AddGeoms(1);
+            Art.GeomPickup.Play(GameSettings.SoundEffectVolume, rand.NextFloat(-0.2f, 0.2f), 0);
+        }
     }
 }

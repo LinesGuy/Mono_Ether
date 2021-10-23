@@ -25,7 +25,7 @@ namespace Mono_Ether.Ether {
             EntityManager.Add(new PlayerShip());
             //EntityManager.Add(new PlayerShip());
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
-            Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = 0.1f;
+            Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = GameSettings.MasterVolume;
             PauseMenu.Initialize();
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;

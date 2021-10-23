@@ -105,8 +105,6 @@ namespace Mono_Ether.Ether {
                     if (IsColliding(Enemies[i], bullet)) {
                         Enemies[i].WasShot(bullet.PlayerIndex);
                         bullet.IsExpired = true;
-                        // Play enemy_explosion.wav
-                        Art.EnemyExplosion.CreateInstance().Play();
                         // If enemy type is PinkSeeker, summon two more enemies
                         if (Enemies[i].Type == "PinkSeeker") {
                             for (int j = 0; j < 2; j++) {
@@ -169,10 +167,10 @@ namespace Mono_Ether.Ether {
             #endregion Handle collisions between powerpacks and the player
             #region Handle players and geoms
             foreach(Geom geom in Geoms) {
-                foreach(PlayerShip player in Players) {
+                for (int i = 0; i < Players.Count; i++) {
+                    PlayerShip player = Players[i];
                     if (IsColliding(geom, player)) {
-                        geom.IsExpired = true;
-                        player.addGeoms(1);
+                        geom.Pickup(i);
                     }
                     if (Vector2.DistanceSquared(player.Position, geom.Position) < 150f * 150f)
                         geom.Velocity += (player.Position - geom.Position).ScaleTo(1.3f);

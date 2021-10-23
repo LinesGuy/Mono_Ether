@@ -22,6 +22,7 @@ namespace Mono_Ether.Ether {
             Worth = rand.Next(1, 10);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
+            Art.EnemySpawn.Play(GameSettings.SoundEffectVolume, rand.NextFloat(-0.2f, 0.2f), 0);
         }
         public override void Update() {
             if (timeUntilStart <= 0) {
@@ -41,7 +42,9 @@ namespace Mono_Ether.Ether {
             // Summon geom
             EntityManager.Add(new Geom(Position));
             // Floating text
-            FloatingTextManager.Add((Worth * EntityManager.Players[PlayerIndex].multiplier).ToString(), Position, Color.White, "bounce");
+            FloatingTextManager.Add((Worth * EntityManager.Players[PlayerIndex].Multiplier).ToString(), Position, Color.White, "bounce");
+            // Play sound
+            Art.EnemyExplosion.Play(GameSettings.SoundEffectVolume, rand.NextFloat(-0.2f, 0.2f), 0);
             // Particles
             float hue1 = rand.NextFloat(0, 6);
             float hue2 = (hue1 + rand.NextFloat(0, 2)) % 6f;
