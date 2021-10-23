@@ -132,6 +132,8 @@ namespace Mono_Ether {
             explosions = Enumerable.Range(1, 8).Select(x => content.Load<SoundEffect>("Samples/Gameplay/explosions/explosion-0" + x)).ToArray();
             playerShoots = Enumerable.Range(1, 4).Select(x => content.Load<SoundEffect>("Samples/Gameplay/shoot/shoot-0" + x)).ToArray();
             enemySpawns = Enumerable.Range(1, 8).Select(x => content.Load<SoundEffect>("Samples/Gameplay/spawn/spawn-0" + x)).ToArray();
+
+            Music = content.Load<Song>("Tracks/Music");
         }
     }
 }
