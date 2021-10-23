@@ -14,7 +14,7 @@ namespace Mono_Ether.Ether {
         public override void Update() {
             Position += Velocity;
             Velocity *= 0.95f;  // Friction
-            Orientation += Velocity.Length() / 10f;
+            Orientation += Velocity.Length() / 10f - 0.03f;
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
