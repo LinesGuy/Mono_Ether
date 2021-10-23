@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
@@ -12,6 +13,8 @@ namespace Mono_Ether.Ether {
         public int geoms { get; private set; }
         public int multiplier { get; private set; }
         public int playerIndex;
+        public int highScore { get; private set; }
+        private const string highScoreFilename = "highscore.txt";
         public PlayerShip() {
             Image = Art.Player;
             Position = new Vector2(0, 0);
@@ -20,6 +23,7 @@ namespace Mono_Ether.Ether {
             multiplier = 1;
             lives = 3;
             score = 0;
+            highScore = LoadHighScore();
             playerIndex = EntityManager.Players.Count;
         }
 
@@ -160,7 +164,7 @@ namespace Mono_Ether.Ether {
         public void AddPoints(int basePoints) {
             if (IsDead)
                 return;
-            score += basePoints * geoms;
+            score += basePoints * multiplier;
         }
         public void addGeoms(int amount) {
             if (IsDead)
@@ -194,7 +198,19 @@ namespace Mono_Ether.Ether {
 
             EnemySpawner.Reset();
 
+            if (score > highScore)
+                SaveHighScore(score);
+
             multiplier = 1;
+        }
+        private int LoadHighScore() {
+            // Return saved score if it exists, or return 0 if there is none
+            int score;
+            return File.Exists(highScoreFilename) && int.TryParse(File.ReadAllText(highScoreFilename), out score) ? score : 0;
+        }
+        private void SaveHighScore(int score) {
+            // Saves the score to the highscore file, note that this does not check the saved score is greater than the new score.
+            File.WriteAllText(highScoreFilename, score.ToString());
         }
     }
 }
