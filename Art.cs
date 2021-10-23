@@ -1,9 +1,15 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mono_Ether {
     static class Art {
+        private static readonly Random rand = new Random();
+
         public static SpriteFont Arial24;
         public static SpriteFont NovaSquare24;
         public static SpriteFont NovaSquare48;
@@ -50,11 +56,19 @@ namespace Mono_Ether {
         public static Texture2D PowerShootSpeedIncrease;
         public static Texture2D PowerShootSpeedDecrease;
 
-        public static SoundEffect PlayerShoot;
+        public static SoundEffect GeomPickup;
         public static SoundEffect PlayerDeath;
-        public static SoundEffect EnemyExplosion;
         public static SoundEffect PowerPackPickup;
         public static SoundEffect PowerPackPickupBad;
+
+        private static SoundEffect[] explosions;
+        public static SoundEffect EnemyExplosion { get { return explosions[rand.Next(explosions.Length)]; } }
+        private static SoundEffect[] playerShoots;
+        public static SoundEffect PlayerShoot { get { return playerShoots[rand.Next(playerShoots.Length)]; } }
+        private static SoundEffect[] enemySpawns;
+        public static SoundEffect EnemySpawn { get { return enemySpawns[rand.Next(enemySpawns.Length)]; } }
+
+        public static Song Music;
         public static void Load(ContentManager content) {
             Arial24 = content.Load<SpriteFont>("Fonts/Arial24");
             NovaSquare24 = content.Load<SpriteFont>("Fonts/NovaSquare24");
@@ -102,11 +116,14 @@ namespace Mono_Ether {
             PowerShootSpeedIncrease = content.Load<Texture2D>("Textures/GamePlay/PowerShootSpeedIncrease");
             PowerShootSpeedDecrease = content.Load<Texture2D>("Textures/GamePlay/PowerShootSpeedDecrease");
 
-            PlayerShoot = content.Load<SoundEffect>("Samples/Gameplay/player_shoot");
+            GeomPickup = content.Load<SoundEffect>("Samples/Gameplay/geomPickup");
             PlayerDeath = content.Load<SoundEffect>("Samples/Gameplay/player_death");
-            EnemyExplosion = content.Load<SoundEffect>("Samples/Gameplay/enemy_explosion");
             PowerPackPickup = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickup");
             PowerPackPickupBad = content.Load<SoundEffect>("Samples/Gameplay/PowerPackPickupBad");
+
+            explosions = Enumerable.Range(1, 8).Select(x => content.Load<SoundEffect>("Samples/Gameplay/explosions/explosion-0" + x)).ToArray();
+            playerShoots = Enumerable.Range(1, 4).Select(x => content.Load<SoundEffect>("Samples/Gameplay/shoot/shoot-0" + x)).ToArray();
+            enemySpawns = Enumerable.Range(1, 8).Select(x => content.Load<SoundEffect>("Samples/Gameplay/spawn/spawn-0" + x)).ToArray();
         }
     }
 }
