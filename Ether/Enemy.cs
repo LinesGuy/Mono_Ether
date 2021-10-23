@@ -41,7 +41,7 @@ namespace Mono_Ether.Ether {
             // Summon geom
             EntityManager.Add(new Geom(Position));
             // Floating text
-            FloatingTextManager.Add(Worth.ToString(), Position, Color.White);
+            FloatingTextManager.Add((Worth * EntityManager.Players[PlayerIndex].multiplier).ToString(), Position, Color.White);
             // Particles
             float hue1 = rand.NextFloat(0, 6);
             float hue2 = (hue1 + rand.NextFloat(0, 2)) % 6f;
