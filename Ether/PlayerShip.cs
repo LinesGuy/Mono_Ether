@@ -8,9 +8,14 @@ using System.Linq;
 namespace Mono_Ether.Ether {
     class PlayerShip : Entity {
         public int lives;
-        public int score;
+        public int score { get; private set; }
         public int geoms;
         public int playerIndex;
+        public const float multiplierExpiryTime = 0.8f;
+        private const int maxMultiplier = 20;
+        public int Multiplier;
+        private float multiplierTimeLeft;
+        private int scoreForExtraLife;
         public PlayerShip() {
             Image = Art.Player;
             Position = new Vector2(0, 0);
@@ -18,6 +23,9 @@ namespace Mono_Ether.Ether {
             geoms = 0;
             lives = 3;
             score = 0;
+            Multiplier = 1;
+            scoreForExtraLife = 2000;
+            multiplierTimeLeft = 0f;
             playerIndex = EntityManager.Players.Count;
         }
 
@@ -149,13 +157,39 @@ namespace Mono_Ether.Ether {
             }
             activePowerPacks = activePowerPacks.Where(x => !x.isExpended).ToList();
             #endregion Power packs
+            #region Score multiplier
+            if (Multiplier > 1) {
+                // Update multiplier timer
+                multiplierTimeLeft -= 1 / 60f;
+                if (multiplierTimeLeft <= 0) {
+                    multiplierTimeLeft = multiplierExpiryTime;
+                    Multiplier = 1;
+                }
+            }
+            #endregion Score multiplier
         }
-
         public override void Draw(SpriteBatch spriteBatch) {
             if (!IsDead)
                 base.Draw(spriteBatch);
         }
+        public void AddPoints(int basePoints) {
+            if (IsDead)
+                return;
 
+            score += basePoints * Multiplier;
+            while (score >= scoreForExtraLife) {
+                scoreForExtraLife += 2000;
+                lives++;
+            }
+        }
+        public void IncreaseMultiplier() {
+            if (IsDead)
+                return;
+
+            multiplierTimeLeft = multiplierExpiryTime;
+            if (Multiplier < maxMultiplier)
+                Multiplier++;
+        }
         public void Kill() {
             framesUntilRespawn = 60;
             Art.PlayerDeath.CreateInstance().Play();

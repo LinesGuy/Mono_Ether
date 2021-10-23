@@ -19,7 +19,7 @@ namespace Mono_Ether.Ether {
             this.Image = image;
             Position = position;
             Type = type;
-            Worth = rand.Next(50, 150);
+            Worth = rand.Next(1, 10);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
         }
@@ -37,7 +37,7 @@ namespace Mono_Ether.Ether {
         public void WasShot(int PlayerIndex) {
             IsExpired = true;
             // Increment player score
-            EntityManager.Players[PlayerIndex].score += Worth;
+            EntityManager.Players[PlayerIndex].AddPoints(Worth);
             // Summon geom
             EntityManager.Add(new Geom(Position));
             // Floating text
