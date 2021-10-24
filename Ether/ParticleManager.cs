@@ -112,7 +112,7 @@ namespace Mono_Ether.Ether {
                 Vector2 origin = new Vector2(particle.Texture.Width / 2, particle.Texture.Height / 2);
                 var screenPos = Camera.WorldToScreen(particle.Position);
                 var scale = Camera.Zoom * particle.Scale;
-                spriteBatch.Draw(particle.Texture, screenPos, null, particle.Tint, particle.Orientation, origin, scale, 0, 0);
+                spriteBatch.Draw(particle.Texture, screenPos, null, particle.Tint, particle.Orientation + Camera.Orientation, origin, scale, 0, 0);
             }
         }
     }

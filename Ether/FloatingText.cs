@@ -43,8 +43,9 @@ namespace Mono_Ether.Ether {
                     Pos.Y -= 1;
                     break;
                 case "bounce":
-                    Pos.X = StartPos.X + Velocity.X * Age;
-                    Pos.Y = StartPos.Y - Velocity.Y * MathF.Abs(MathF.Sin(0.08f * Age) * (144f - Age * 0.8f));
+                    Pos = Camera.WorldToScreen(StartPos);
+                    Pos.X += Velocity.X * Age * Camera.Zoom;
+                    Pos.Y -= Velocity.Y * MathF.Abs(MathF.Sin(0.08f * Age) * (144f - Age * 0.8f)) * Camera.Zoom;
                     break;
             }
             Age += 1;
@@ -52,7 +53,7 @@ namespace Mono_Ether.Ether {
                 IsExpired = true;
         }
         public void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.DrawString(Fonts.NovaSquare24, Text, Camera.WorldToScreen(Pos), Color, 0f, Fonts.NovaSquare24.MeasureString(Text) / 2f, Scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Fonts.NovaSquare24, Text, Pos, Color, 0f, Fonts.NovaSquare24.MeasureString(Text) / 2f, Scale * Camera.Zoom, SpriteEffects.None, 0);
         }
     }
     public static class FloatingTextManager {

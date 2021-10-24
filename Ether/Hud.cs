@@ -18,7 +18,7 @@ namespace Mono_Ether.Ether {
         public void Draw(SpriteBatch spriteBatch) {
             // Top-left debug texts
             if (GameRoot.Instance.dum_mode) {
-                spriteBatch.DrawString(Fonts.NovaSquare24, $"Player1 XY: {EntityManager.Player1.Position.X:0.0}, {EntityManager.Player1.Position.Y:0.0}", new Vector2(0, 0), Color.White);
+                spriteBatch.DrawString(Fonts.NovaSquare24, $"Camera XY: {EntityManager.Player1.Position.X:0.0}, {Camera.CameraPosition.Y:0.0}", new Vector2(0, 0), Color.White);
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Cursor XY: {Camera.MouseWorldCoords().X:0.0}, {Camera.MouseWorldCoords().Y:0.0}", new Vector2(0, 30), Color.White);
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Tile ID: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).TileId}", new Vector2(0, 60), Color.White);
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Tile XY: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).pos}", new Vector2(0, 90), Color.White);

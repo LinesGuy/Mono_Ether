@@ -6,10 +6,11 @@ namespace Mono_Ether.Ether {
     static class Camera {
         public static Vector2 CameraPosition = new Vector2(0, 0);
         public static float Zoom = 1;
+        public static float Orientation = 0f;
         private static bool _isLerping = true;
         private static readonly bool isAimingWithMouse = true;
-        public static Vector2 WorldToScreen(Vector2 worldPosition) { return ((worldPosition - CameraPosition) * Zoom) + GameRoot.ScreenSize / 2; }
-        public static Vector2 ScreenToWorld(Vector2 screenPos) { return (screenPos - GameRoot.ScreenSize / 2) / Zoom + CameraPosition; }
+        public static Vector2 WorldToScreen(Vector2 worldPosition) { return ((worldPosition - CameraPosition) * Zoom).Rotate(Orientation) + GameRoot.ScreenSize / 2f; }
+        public static Vector2 ScreenToWorld(Vector2 screenPos) { return (screenPos - GameRoot.ScreenSize / 2).Rotate(-Orientation) / Zoom + CameraPosition; }
         public static void Update() {
             // Freecam (disables lerp if used)
             Vector2 direction = Vector2.Zero;
@@ -40,6 +41,11 @@ namespace Mono_Ether.Ether {
                 Zoom = 3f;
             if (Zoom < 0.1f)
                 Zoom = 0.1f;
+            // Rotate
+            if (Input.keyboard.IsKeyDown(Keys.Z))
+                Orientation += 0.01f;
+            if (Input.keyboard.IsKeyDown(Keys.X))
+                Orientation -= 0.01f;
             // Lerp
             if (_isLerping)
                 Lerp(EntityManager.Player1.Position);

@@ -20,7 +20,6 @@ namespace Mono_Ether.Ether {
             MapSize = mapSize;
             Tutorial.state = tutorialState;
         }
-
         public override void Initialize() {
             Instance = this;
             EntityManager.Add(new PlayerShip());
@@ -36,7 +35,6 @@ namespace Mono_Ether.Ether {
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sounds.Music);
         }
-
         public override void LoadContent(ContentManager content) {
         }
         public override void UnloadContent() {
@@ -45,7 +43,6 @@ namespace Mono_Ether.Ether {
             BackgroundParticleManager.Clear();
             MediaPlayer.Stop();
         }
-
         public override void Update(GameTime gameTime) {
             if (!GameRoot.Instance.IsActive)
                 return;
@@ -82,7 +79,7 @@ namespace Mono_Ether.Ether {
                 FloatingTextManager.Update();
                 hud.Update();
             } else PauseMenu.Update();
-            
+
         }
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);

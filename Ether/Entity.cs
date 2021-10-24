@@ -18,7 +18,7 @@ namespace Mono_Ether.Ether {
 
         public virtual void Draw(SpriteBatch spriteBatch) {
             var screenPos = Camera.WorldToScreen(Position);
-            spriteBatch.Draw(Image, screenPos, null, Color, Orientation, Size / 2f, Camera.Zoom, 0, 0);
+            spriteBatch.Draw(Image, screenPos, null, Color, Orientation + Camera.Orientation, Size / 2f, Camera.Zoom, 0, 0);
         }
 
         public virtual void HandleTilemapCollision() {

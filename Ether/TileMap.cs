@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Mono_Ether.Ether {
     public class Tile {
@@ -36,16 +37,16 @@ namespace Mono_Ether.Ether {
                     return;
             }
             var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
-            spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+            spriteBatch.Draw(texture, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
             if (EtherRoot.Instance.editorMode) {
-                if (Walls[0]) spriteBatch.Draw(Art.CollisionLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[1]) spriteBatch.Draw(Art.CollisionUp, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[2]) spriteBatch.Draw(Art.CollisionRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[3]) spriteBatch.Draw(Art.CollisionDown, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[4]) spriteBatch.Draw(Art.CollisionTopLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[5]) spriteBatch.Draw(Art.CollisionTopRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[6]) spriteBatch.Draw(Art.CollisionBottomRight, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[7]) spriteBatch.Draw(Art.CollisionBottomLeft, position, null, Color.White, 0f, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[0]) spriteBatch.Draw(Art.CollisionLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[1]) spriteBatch.Draw(Art.CollisionUp, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[2]) spriteBatch.Draw(Art.CollisionRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[3]) spriteBatch.Draw(Art.CollisionDown, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[4]) spriteBatch.Draw(Art.CollisionTopLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[5]) spriteBatch.Draw(Art.CollisionTopRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[6]) spriteBatch.Draw(Art.CollisionBottomRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[7]) spriteBatch.Draw(Art.CollisionBottomLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
             }
         }
 
@@ -144,10 +145,13 @@ namespace Mono_Ether.Ether {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
             especially when zoomed in. */
-            var startCol = Math.Max(0, (int)(Camera.ScreenToWorld(Vector2.Zero).X / cellSize));
-            var endCol = Math.Min(_size.X, 1 + (int)(Camera.ScreenToWorld(GameRoot.ScreenSize).X / cellSize));
-            var startRow = Math.Max(0, (int)(Camera.ScreenToWorld(Vector2.Zero).Y / cellSize));
-            var endRow = Math.Min(_size.Y, 1 + (int)(Camera.ScreenToWorld(GameRoot.ScreenSize).Y / cellSize));
+            List<Vector2> corners = new List<Vector2> { Camera.ScreenToWorld(Vector2.Zero), Camera.ScreenToWorld(GameRoot.ScreenSize), Camera.ScreenToWorld(new Vector2(GameRoot.ScreenSize.X, 0)), Camera.ScreenToWorld(new Vector2(0, GameRoot.ScreenSize.Y)) };
+            List<float> xCoords = corners.Select(v => v.X).ToList();
+            List<float> yCoords = corners.Select(v => v.Y).ToList();
+            int startCol = Math.Max(0, (int)(xCoords.Min() / cellSize));
+            var endCol = Math.Min(_size.X, 1 + (int)(xCoords.Max() / cellSize));
+            var startRow = Math.Max(0, (int)(yCoords.Min() / cellSize));
+            var endRow = Math.Min(_size.Y, 1 + (int)(yCoords.Max() / cellSize));
             for (int row = startRow; row < endRow; row++) {
                 for (int col = startCol; col < endCol; col++) {
                     var cell = _grid[col, row];
@@ -157,7 +161,7 @@ namespace Mono_Ether.Ether {
             // Draw tile cursor is in if in editor mode
             if (EtherRoot.Instance.editorMode) {
                 var screenCoords = MapToScreen(Vector2.Floor(Camera.MouseWorldCoords() / cellSize));
-                spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), 0f, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
+                spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), Camera.Orientation, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
             }
         }
 

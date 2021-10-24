@@ -64,6 +64,7 @@ namespace Mono_Ether.Ether {
             }
             if (direction.LengthSquared() > 1)
                 direction.Normalize();
+            direction = direction.Rotate(-Camera.Orientation);
 
             Velocity += acceleration * direction;  // Normalised direction vector
             Velocity /= 1.5f;  // Friction
