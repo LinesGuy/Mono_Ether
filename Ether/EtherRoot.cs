@@ -34,11 +34,12 @@ namespace Mono_Ether.Ether {
             Map.LoadFromFile(MapFileName, MapSize);
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(Art.Music);
+            MediaPlayer.Play(Sounds.Music);
         }
 
         public override void LoadContent(ContentManager content) {
             hud.LoadContent(content);
+            hud.Reset();
         }
         public override void UnloadContent() {
             EntityManager.Killall();
@@ -81,9 +82,10 @@ namespace Mono_Ether.Ether {
                 BackgroundParticleManager.Update();
                 if (Tutorial.state != "none")
                     Tutorial.Update();
-                FloatingTextManager.Update();  
+                FloatingTextManager.Update();
+                hud.Update();
             } else PauseMenu.Update();
-            hud.Update();
+            
         }
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
@@ -107,7 +109,7 @@ namespace Mono_Ether.Ether {
             FloatingTextManager.Draw(spriteBatch);
             hud.Draw(spriteBatch);
             if (!GameRoot.Instance.IsActive)
-                spriteBatch.DrawString(Art.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
+                spriteBatch.DrawString(Fonts.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
             spriteBatch.End();
         }
     }

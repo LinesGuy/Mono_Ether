@@ -22,7 +22,7 @@ namespace Mono_Ether.Ether {
             Radius = 10;
             Geoms = 0;
             Multiplier = 1;
-            lives = 3;
+            lives = 0;
             Score = 0;
             HighScore = LoadHighScore();
             playerIndex = EntityManager.Players.Count;
@@ -110,7 +110,7 @@ namespace Mono_Ether.Ether {
                 var aim = Camera.GetAimDirection();
                 if ((autoFire ^ Input.mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
                     // Play shooting sound
-                    Art.PlayerShoot.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
+                    Sounds.PlayerShoot.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
                     // Cooldown calculations
                     float cooldownRemainingMultiplier = 1f;
                     foreach (var power in activePowerPacks) {
@@ -175,13 +175,13 @@ namespace Mono_Ether.Ether {
         }
         public void Kill() {
             framesUntilRespawn = 60;
-            Art.PlayerDeath.CreateInstance().Play();
+            Sounds.PlayerDeath.CreateInstance().Play();
             lives -= 1;
             if (lives < 0) {
                 framesUntilRespawn = 99999;
                 EnemySpawner.enabled = false;
                 PowerPackSpawner.enabled = false;
-                Hud.Instance.playingYouDied = true;
+                EtherRoot.hud.playingYouDied = true;
             }
 
             activePowerPacks = new List<PowerPack>();

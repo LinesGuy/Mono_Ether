@@ -2,15 +2,17 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     public class Hud {
-        public static Hud Instance;
         private static Texture2D YouDiedTexture { get; set; }
         public bool playingYouDied;
         private int deadFrames;
         public Hud() {
-            Instance = this;
+            Reset();
+        }
+        public void Reset() {
             playingYouDied = false;
             deadFrames = 0;
         }
@@ -23,10 +25,10 @@ namespace Mono_Ether.Ether {
         public void Draw(SpriteBatch spriteBatch) {
             // Top-left debug texts
             if (GameRoot.Instance.dum_mode) {
-                spriteBatch.DrawString(Art.NovaSquare24, $"Player1 XY: {EntityManager.Player1.Position.X:0.0}, {EntityManager.Player1.Position.Y:0.0}", new Vector2(0, 0), Color.White);
-                spriteBatch.DrawString(Art.NovaSquare24, $"Cursor XY: {Camera.MouseWorldCoords().X:0.0}, {Camera.MouseWorldCoords().Y:0.0}", new Vector2(0, 30), Color.White);
-                spriteBatch.DrawString(Art.NovaSquare24, $"Tile ID: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).TileId}", new Vector2(0, 60), Color.White);
-                spriteBatch.DrawString(Art.NovaSquare24, $"Tile XY: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).pos}", new Vector2(0, 90), Color.White);
+                spriteBatch.DrawString(Fonts.NovaSquare24, $"Player1 XY: {EntityManager.Player1.Position.X:0.0}, {EntityManager.Player1.Position.Y:0.0}", new Vector2(0, 0), Color.White);
+                spriteBatch.DrawString(Fonts.NovaSquare24, $"Cursor XY: {Camera.MouseWorldCoords().X:0.0}, {Camera.MouseWorldCoords().Y:0.0}", new Vector2(0, 30), Color.White);
+                spriteBatch.DrawString(Fonts.NovaSquare24, $"Tile ID: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).TileId}", new Vector2(0, 60), Color.White);
+                spriteBatch.DrawString(Fonts.NovaSquare24, $"Tile XY: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).pos}", new Vector2(0, 90), Color.White);
             }
             // Bottom-right powerups
             // ONLY APPLIES TO player1
@@ -57,16 +59,16 @@ namespace Mono_Ether.Ether {
             }
             // Top-right score
             // ONLY APPLIES to player1
-            spriteBatch.DrawString(Art.NovaSquare24, $"Player 1 score: {EntityManager.Player1.Score}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 0), Color.White);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"Player 1 score: {EntityManager.Player1.Score}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 0), Color.White);
             // Top-right multiplier
             // ONLY APPLIES to player1
-            spriteBatch.DrawString(Art.NovaSquare24, $"[x{EntityManager.Player1.Multiplier}]", new Vector2(GameRoot.ScreenSize.X * 0.75f, 30), Color.White);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"[x{EntityManager.Player1.Multiplier}]", new Vector2(GameRoot.ScreenSize.X * 0.75f, 30), Color.White);
             // Top-right highscore
             // ONLY APPLIES to player1
-            spriteBatch.DrawString(Art.NovaSquare24, $"Highscore: {Math.Max(EntityManager.Player1.Score, EntityManager.Player1.HighScore)}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 60), Color.White);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"Highscore: {Math.Max(EntityManager.Player1.Score, EntityManager.Player1.HighScore)}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 60), Color.White);
             // Top-right geoms
             // ONLY APPLIES to player1
-            spriteBatch.DrawString(Art.NovaSquare24, $"Player 1 geoms: {EntityManager.Player1.Geoms}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 90), Color.White);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"Player 1 geoms: {EntityManager.Player1.Geoms}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 90), Color.White);
             // You died
             if (playingYouDied) {
                 int t = Math.Min(255, (int)(deadFrames / 60f * 255f));    
@@ -77,6 +79,7 @@ namespace Mono_Ether.Ether {
         public void Update() {
             if (playingYouDied) {
                 deadFrames++;
+                Debug.WriteLine(deadFrames);
                 if (deadFrames >= 120)
                     GameRoot.Instance.RemoveScreenTransition();
             }

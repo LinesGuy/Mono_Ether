@@ -7,15 +7,15 @@ using System.Collections.Generic;
 namespace Mono_Ether.MainMenu {
     public class SettingsScreen : States.GameState {
         private ButtonManager buttonManager;
-        private Dictionary<string, Slider> Sliders = new Dictionary<string, Slider>();
+        private readonly Dictionary<string, Slider> Sliders = new Dictionary<string, Slider>();
         public SettingsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
             buttonManager = new ButtonManager();
             buttonManager.Add("back");
-            Sliders.Add("Master Volume", new Slider(new Vector2(400, 200), "Master Volume", 400f, 0f, 1f, GameSettings.MasterVolume));
-            Sliders.Add("SFX Volume", new Slider(new Vector2(400, 400), "SFX Volume", 400f, 0f, 1f, GameSettings.SoundEffectVolume));
-            Sliders.Add("Music Volume", new Slider(new Vector2(400, 600), "Music Volume", 400f, 0f, 1f, GameSettings.MusicVolume));
+            Sliders.Add("Master Volume", new Slider(new Vector2(400, 200), "Master Volume", 400f, GameSettings.MasterVolume));
+            Sliders.Add("SFX Volume", new Slider(new Vector2(400, 400), "SFX Volume", 400f, GameSettings.SoundEffectVolume));
+            Sliders.Add("Music Volume", new Slider(new Vector2(400, 600), "Music Volume", 400f, GameSettings.MusicVolume));
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
@@ -51,7 +51,7 @@ namespace Mono_Ether.MainMenu {
             spriteBatch.Begin();
             foreach (Slider slider in Sliders.Values)
                 slider.Draw(spriteBatch);
-            spriteBatch.DrawString(Art.NovaSquare24, "Settings", Vector2.Zero, Color.White);
+            spriteBatch.DrawString(Fonts.NovaSquare24, "Settings", Vector2.Zero, Color.White);
             buttonManager.Draw(spriteBatch);
             spriteBatch.End();
         }
@@ -60,21 +60,17 @@ namespace Mono_Ether.MainMenu {
         public Vector2 SliderPos;
         public Vector2 BallPos;
         public string Text;
-        private float Width; // pixels
+        private readonly float Width; // pixels
         protected Texture2D Texture;
-        private float Min;
-        private float Max;
         public float Value;
         public bool IsBeingHovered;
         public bool IsBeingDragged;
-        public Slider(Vector2 sliderPos, string text, float width, float min, float max, float startValue) {
+        public Slider(Vector2 sliderPos, string text, float width, float startValue) {
             SliderPos = sliderPos;
             Text = text;
             Width = width;
             Texture = Art.Default;
-            Min = min;
             Value = startValue;
-            Max = max;
             BallPos = new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
             IsBeingHovered = false;
             IsBeingDragged = false;
@@ -96,8 +92,8 @@ namespace Mono_Ether.MainMenu {
             spriteBatch.Draw(Art.SettingsSliderMiddle, new Rectangle((int)(SliderPos.X - Width / 2f), (int)(SliderPos.Y - Art.SettingsSliderMiddle.Height / 2f), (int)Width, (int)Art.SettingsSliderMiddle.Height), Color.White);
             spriteBatch.Draw(Art.SettingsSliderLeft, new Vector2(SliderPos.X - Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderLeft.Height / 2f), Color.White);
             spriteBatch.Draw(Art.SettingsSliderRight, new Vector2(SliderPos.X + Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderRight.Height / 2f), Color.White);
-            spriteBatch.DrawString(Art.NovaSquare48, Text, new Vector2(SliderPos.X, SliderPos.Y - 75f), Color.White, 0f, Art.NovaSquare48.MeasureString(Text) / 2f, 1f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(Art.NovaSquare24, $"{Value*100:0}%", new Vector2(SliderPos.X + Width / 2f + Art.SettingsSliderRight.Width + 35f, SliderPos.Y), Color.White, 0f, Art.NovaSquare24.MeasureString($"{Value * 100:0}%") / 2f, 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Fonts.NovaSquare48, Text, new Vector2(SliderPos.X, SliderPos.Y - 75f), Color.White, 0f, Fonts.NovaSquare48.MeasureString(Text) / 2f, 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"{Value*100:0}%", new Vector2(SliderPos.X + Width / 2f + Art.SettingsSliderRight.Width + 35f, SliderPos.Y), Color.White, 0f, Fonts.NovaSquare24.MeasureString($"{Value * 100:0}%") / 2f, 1f, SpriteEffects.None, 0);
             Color sliderBallColor;
             if (IsBeingHovered || IsBeingDragged)
                 sliderBallColor = new Color(0, 255, 0);

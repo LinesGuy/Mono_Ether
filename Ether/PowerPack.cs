@@ -48,9 +48,9 @@ namespace Mono_Ether.Ether {
 
         public void WasPickedUp() {
             if (isGood)
-                Art.PowerPackPickup.CreateInstance().Play();
+                Sounds.PowerPackPickup.CreateInstance().Play();
             else
-                Art.PowerPackPickupBad.CreateInstance().Play();
+                Sounds.PowerPackPickupBad.CreateInstance().Play();
             for (var i = 0; i < 50; i++) {
                 var speed = 30f * (1f - 1 / rand.NextFloat(1f, 10f));
                 var state = new ParticleState() {
