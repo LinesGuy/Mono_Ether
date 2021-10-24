@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 
@@ -16,12 +17,14 @@ namespace Mono_Ether.MainMenu {
             Sliders.Add("Master Volume", new Slider(new Vector2(400, 200), "Master Volume", 400f, GameSettings.MasterVolume));
             Sliders.Add("SFX Volume", new Slider(new Vector2(400, 400), "SFX Volume", 400f, GameSettings.SoundEffectVolume));
             Sliders.Add("Music Volume", new Slider(new Vector2(400, 600), "Music Volume", 400f, GameSettings.MusicVolume));
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(Sounds.Music);
         }
         public override void LoadContent(ContentManager content) {
             //throw new NotImplementedException();
         }
         public override void UnloadContent() {
-            // throw new NotImplementedException();
+            MediaPlayer.Stop();
         }
         public override void Update(GameTime gameTime) {
             var clickedButton = buttonManager.GetClickedButton();
@@ -62,6 +65,7 @@ namespace Mono_Ether.MainMenu {
         public string Text;
         private readonly float Width; // pixels
         protected Texture2D Texture;
+        private float framesSincePlay;
         public float Value;
         public bool IsBeingHovered;
         public bool IsBeingDragged;
@@ -70,6 +74,7 @@ namespace Mono_Ether.MainMenu {
             Text = text;
             Width = width;
             Texture = Art.Default;
+            framesSincePlay = 0;
             Value = startValue;
             BallPos = new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
             IsBeingHovered = false;
@@ -86,6 +91,14 @@ namespace Mono_Ether.MainMenu {
                 Value = (Input.mouse.X - Width / 2f) / Width;
                 Value = Math.Clamp(Value, 0f, 1f);
                 BallPos = new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
+                // sfx
+                if (Text == "SFX Volume") {
+                    framesSincePlay++;
+                    if (framesSincePlay >= 6) {
+                        framesSincePlay = 0;
+                        Sounds.PlayerShoot.Play(GameSettings.SoundEffectVolume, 0.1f, 0);
+                    }
+                }
             }
         }
         public void Draw(SpriteBatch spriteBatch) {

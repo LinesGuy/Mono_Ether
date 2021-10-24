@@ -36,7 +36,6 @@ namespace Mono_Ether {
             ActiveFontColor = Color.Black;
             InactiveFontColor = Color.Black;
         }
-
         public override void Update() {
             throw new NotImplementedException();
         }
@@ -83,8 +82,11 @@ namespace Mono_Ether {
         public string GetClickedButton() {
             if (Input.WasLeftButtonJustDown())
                 foreach (var button in Buttons)
-                    if (button.IsActive())
+                    if (button.IsActive()) {
+                        Sounds.ButtonClick.Play(volume: GameSettings.SoundEffectVolume, 1f, 0);
                         return button.Text;
+                    }
+                        
             return null;
         }
         public void Update() {
