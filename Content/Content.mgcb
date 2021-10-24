@@ -34,6 +34,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/NovaSquare48.spritefont
 
+#begin Samples/click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Samples/click.wav
+
 #begin Samples/Gameplay/explosions/explosion-01.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
