@@ -6,7 +6,6 @@ using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     public class Hud {
-        private static Texture2D YouDiedTexture { get; set; }
         public bool playingYouDied;
         private int deadFrames;
         public Hud() {
@@ -15,12 +14,6 @@ namespace Mono_Ether.Ether {
         public void Reset() {
             playingYouDied = false;
             deadFrames = 0;
-        }
-        public void LoadContent(ContentManager content) {
-            YouDiedTexture = content.Load<Texture2D>("Textures/Gameplay/youDied");
-        }
-        public void UnloadContent() {
-            YouDiedTexture.Dispose();
         }
         public void Draw(SpriteBatch spriteBatch) {
             // Top-left debug texts
@@ -72,15 +65,15 @@ namespace Mono_Ether.Ether {
             // You died
             if (playingYouDied) {
                 int t = Math.Min(255, (int)(deadFrames / 60f * 255f));    
-                spriteBatch.Draw(YouDiedTexture, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, YouDiedTexture.Size() / 2f, MathHelper.Lerp(1f, 1.5f, deadFrames / 120f), SpriteEffects.None, 0);
+                spriteBatch.Draw(Art.YouDied, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, Art.YouDied.Size() / 2f, MathHelper.Lerp(1f, 1.5f, deadFrames / 120f), SpriteEffects.None, 0);
                 
             }
         }
         public void Update() {
             if (playingYouDied) {
                 deadFrames++;
-                Debug.WriteLine(deadFrames);
-                if (deadFrames >= 120)
+                //Debug.WriteLine(deadFrames);
+                if (deadFrames == 120)
                     GameRoot.Instance.RemoveScreenTransition();
             }
         }

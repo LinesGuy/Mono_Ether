@@ -38,14 +38,11 @@ namespace Mono_Ether.Ether {
         }
 
         public override void LoadContent(ContentManager content) {
-            hud.LoadContent(content);
-            hud.Reset();
         }
         public override void UnloadContent() {
             EntityManager.Killall();
             Tutorial.state = "none";
             BackgroundParticleManager.Clear();
-            hud.UnloadContent();
             MediaPlayer.Stop();
         }
 
