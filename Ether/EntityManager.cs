@@ -105,17 +105,6 @@ namespace Mono_Ether.Ether {
                     if (IsColliding(Enemies[i], bullet)) {
                         Enemies[i].WasShot(bullet.PlayerIndex);
                         bullet.IsExpired = true;
-                        // If enemy type is PinkSeeker, summon two more enemies
-                        if (Enemies[i].Type == "PinkSeeker") {
-                            for (int j = 0; j < 2; j++) {
-                                var enemy = Enemy.CreatePinkSeekerChild(Enemies[i].Position);
-                                enemy.Velocity = MathUtil.FromPolar(rand.NextFloat(0, MathF.PI * 2), 10f);
-                                enemy.timeUntilStart = 0;
-                                enemy.Color = Color.White;
-                                enemy.invincible = true;
-                                EntityManager.Add(enemy);
-                            }
-                        }
                     // If bullet collides with snake body, destroy bullet but not snake
                     if (Enemies[i].Type == "Snake")
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {

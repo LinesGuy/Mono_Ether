@@ -8,6 +8,7 @@ namespace Mono_Ether.Ether {
     class Enemy : Entity {
         public int timeUntilStart = 60;
         public bool IsActive => timeUntilStart <= 0;
+        public int Health;
         private readonly int Worth; // The amount of score given when this enemy is killed
         public List<Enemy> tail; // Used for snake enemy type
         public string Type;
@@ -16,9 +17,10 @@ namespace Mono_Ether.Ether {
         private static readonly Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position, string type) {
-            this.Image = image;
+            Image = image;
             Position = position;
             Type = type;
+            Health = 1;
             Worth = rand.Next(1, 10);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
@@ -36,6 +38,11 @@ namespace Mono_Ether.Ether {
             Velocity *= 0.8f;  // Friction
         }
         public void WasShot(int PlayerIndex) {
+            Health--;
+            if (Health <= 0)
+                WasKilled(PlayerIndex);
+        }
+        public void WasKilled(int PlayerIndex) {
             IsExpired = true;
             // Increment player score
             EntityManager.Players[PlayerIndex].AddPoints(Worth);
@@ -62,6 +69,17 @@ namespace Mono_Ether.Ether {
                 Color color = Color.Lerp(color1, color2, rand.NextFloat(0, 1));
                 EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
             }
+            // If enemy type is PinkSeeker, summon two more enemies
+            if (Type == "PinkSeeker") {
+                for (int j = 0; j < 2; j++) {
+                    var enemy = Enemy.CreatePinkSeekerChild(Position);
+                    enemy.Velocity = MathUtil.FromPolar(rand.NextFloat(0, MathF.PI * 2), 10f);
+                    enemy.timeUntilStart = 0;
+                    enemy.Color = Color.White;
+                    enemy.invincible = true;
+                    EntityManager.Add(enemy);
+                }
+            }
         }
         private void AddBehaviour(IEnumerable<int> behaviour) {
             behaviours.Add(behaviour.GetEnumerator());
@@ -71,6 +89,11 @@ namespace Mono_Ether.Ether {
                 if (!behaviours[i].MoveNext())
                     behaviours.RemoveAt(i--);
             }
+        }
+        public void HandleCollision(Enemy other) {
+            var delta = Position - other.Position;
+            Velocity += 10 * delta / (delta.LengthSquared() + 1);
+            // ^ Push current enemy away from other enemy. The closer they are, the harder the push.
         }
         #region IEnumerables
         private IEnumerable<int> FollowPlayerAStar(float acceleration = 1f) {
@@ -319,10 +342,5 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         #endregion CreateEnemies
-        public void HandleCollision(Enemy other) {
-            var delta = Position - other.Position;
-            Velocity += 10 * delta / (delta.LengthSquared() + 1);
-            // ^ Push current enemy away from other enemy. The closer they are, the harder the push.
-        }
     }
 }
