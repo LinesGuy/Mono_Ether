@@ -33,6 +33,8 @@ namespace Mono_Ether {
         protected override void LoadContent() {
             myGraphics = GraphicsDevice;
             Art.Load(Content);
+            Sounds.Load(Content);
+            Fonts.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             AddScreen(new MainMenu.TitleScreen(GraphicsDevice));
             if (dum_mode) {
