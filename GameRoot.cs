@@ -27,7 +27,7 @@ namespace Mono_Ether {
             graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
             graphics.ApplyChanges();
-            GameSettings.ApplyChanges();
+            GameSettings.LoadSettings();
             base.Initialize();
         }
         protected override void LoadContent() {

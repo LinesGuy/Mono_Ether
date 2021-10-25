@@ -12,6 +12,7 @@ namespace Mono_Ether.MainMenu {
         public SettingsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
+            GameSettings.LoadSettings();
             buttonManager = new ButtonManager();
             buttonManager.Add("back");
             Sliders.Add("Master Volume", new Slider(new Vector2(400, 200), "Master Volume", 400f, GameSettings.MasterVolume));
@@ -28,8 +29,10 @@ namespace Mono_Ether.MainMenu {
         }
         public override void Update(GameTime gameTime) {
             var clickedButton = buttonManager.GetClickedButton();
-            if (clickedButton == "back")
+            if (clickedButton == "back") {
+                GameSettings.SaveSettings();
                 GameRoot.Instance.RemoveScreenTransition();
+            }
             foreach(Slider slider in Sliders.Values) {
                 slider.Update();
                 if (slider.IsBeingDragged) {
