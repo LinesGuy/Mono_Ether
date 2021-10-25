@@ -120,6 +120,8 @@ namespace Mono_Ether.Ether {
             #endregion Handle collisions between bullets and enemies
             #region Handle collisions between the players and enemies
             foreach (PlayerShip player in Players) {
+                if (player.IsDead)
+                    continue;
                 for (int i = 0; i < Enemies.Count; i++) {
                     if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
                         player.Kill();

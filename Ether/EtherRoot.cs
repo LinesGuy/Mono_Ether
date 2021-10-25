@@ -14,7 +14,6 @@ namespace Mono_Ether.Ether {
         private Vector2 MapSize;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
-        public static Hud hud;
         public EtherRoot(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
             MapFileName = mapFileName;
             switch (mapFileName) {
@@ -50,11 +49,13 @@ namespace Mono_Ether.Ether {
             PauseMenu.Initialize();
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
-            hud = new Hud();
+            Hud.Reset();
             Map.LoadFromFile(MapFileName, MapSize);
-            if (Map.Filename == "LevelOne.txt" || Map.Filename == "Level.txt" || Map.Filename == "LevelThree.txt")
+            if (Map.Filename == "LevelOne.txt" || Map.Filename == "Level.txt" || Map.Filename == "LevelThree.txt") {
                 foreach (PlayerShip player in EntityManager.Players)
                     player.Position = new Vector2(Map.cellSize * 2);
+                Hud.bossBarEnabled = true;
+            }
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sounds.Music);
@@ -101,7 +102,7 @@ namespace Mono_Ether.Ether {
                 if (Tutorial.state != "none")
                     Tutorial.Update();
                 FloatingTextManager.Update();
-                hud.Update();
+                Hud.Update();
             } else PauseMenu.Update();
 
         }
@@ -125,7 +126,7 @@ namespace Mono_Ether.Ether {
             if (Tutorial.state != "none")
                 Tutorial.Draw(spriteBatch);
             FloatingTextManager.Draw(spriteBatch);
-            hud.Draw(spriteBatch);
+            Hud.Draw(spriteBatch);
             if (!GameRoot.Instance.IsActive)
                 spriteBatch.DrawString(Fonts.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
             spriteBatch.End();

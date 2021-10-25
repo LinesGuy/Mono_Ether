@@ -5,17 +5,26 @@ using System;
 using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
-    public class Hud {
-        public bool playingYouDied;
-        private int deadFrames;
-        public Hud() {
-            Reset();
+    public static class Hud {
+        public static string transitionImage;
+        private static int transitionFrames;
+        private static readonly Rectangle bossBarRect = new Rectangle(20, 20, (int)GameRoot.ScreenSize.X - 40, 80);
+        public static float bossBarFullness = 1f;
+        public static bool bossBarEnabled = false;
+        public static void Reset() {
+            transitionFrames = 0;
+            bossBarFullness = 1f;
+            bossBarEnabled = false;
         }
-        public void Reset() {
-            playingYouDied = false;
-            deadFrames = 0;
-        }
-        public void Draw(SpriteBatch spriteBatch) {
+        public static void Draw(SpriteBatch spriteBatch) {
+            // bossbar
+            if (bossBarEnabled) {
+                spriteBatch.Draw(Art.Pixel, bossBarRect, Color.Red);
+                Rectangle greenRect = bossBarRect;
+                greenRect.Width = (int)((GameRoot.ScreenSize.X - 40) * bossBarFullness);
+                spriteBatch.Draw(Art.Pixel, greenRect, Color.Green);
+            }
+            
             // Top-left debug texts
             if (GameRoot.Instance.dum_mode) {
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Camera XY: {EntityManager.Player1.Position.X:0.0}, {Camera.CameraPosition.Y:0.0}", new Vector2(0, 0), Color.White);
@@ -63,17 +72,21 @@ namespace Mono_Ether.Ether {
             // ONLY APPLIES to player1
             spriteBatch.DrawString(Fonts.NovaSquare24, $"Player 1 geoms: {EntityManager.Player1.Geoms}", new Vector2(GameRoot.ScreenSize.X * 0.75f, 90), Color.White);
             // You died
-            if (playingYouDied) {
-                int t = Math.Min(255, (int)(deadFrames / 60f * 255f));    
-                spriteBatch.Draw(Art.YouDied, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, Art.YouDied.Size() / 2f, MathHelper.Lerp(1f, 1.5f, deadFrames / 120f), SpriteEffects.None, 0);
+            if (transitionImage != null) {
+                int t = Math.Min(255, (int)(transitionFrames / 60f * 255f));
+                Texture2D texture = transitionImage switch {
+                    "youDied" => Art.YouDied,
+                    "youWon" => Art.YouWon,
+                    _ => Art.Default,
+                };
+                spriteBatch.Draw(texture, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, Art.YouDied.Size() / 2f, MathHelper.Lerp(1f, 1.5f, transitionFrames / 120f), SpriteEffects.None, 0);
                 
             }
         }
-        public void Update() {
-            if (playingYouDied) {
-                deadFrames++;
-                //Debug.WriteLine(deadFrames);
-                if (deadFrames == 120)
+        public static void Update() {
+            if (transitionImage != null) {
+                transitionFrames++;
+                if (transitionFrames == 120)
                     GameRoot.Instance.RemoveScreenTransition();
             }
         }

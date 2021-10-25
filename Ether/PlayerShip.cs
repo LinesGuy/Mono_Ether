@@ -145,7 +145,7 @@ namespace Mono_Ether.Ether {
                     cooldownRemaining--;
 
                 if (Input.WasRightButtonJustDown()) {
-                    EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
+                        EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
                 }
             }
             #endregion Shooting
@@ -182,7 +182,7 @@ namespace Mono_Ether.Ether {
                 framesUntilRespawn = 99999;
                 EnemySpawner.enabled = false;
                 PowerPackSpawner.enabled = false;
-                EtherRoot.hud.playingYouDied = true;
+                Hud.transitionImage = "youDied";
             }
 
             activePowerPacks = new List<PowerPack>();

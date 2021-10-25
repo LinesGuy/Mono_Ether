@@ -45,6 +45,9 @@ namespace Mono_Ether.Ether {
         }
         public void WasKilled(int PlayerIndex) {
             IsExpired = true;
+            // Esnd game if boss
+            if (IsBoss)
+                Hud.transitionImage = "youWon";
             // Increment player score
             EntityManager.Players[PlayerIndex].AddPoints(Worth);
             // Summon geom
@@ -349,10 +352,17 @@ namespace Mono_Ether.Ether {
         }
         public static Enemy CreateBossOne(Vector2 position) {
             var enemy = new Enemy(Art.BossOne, position, "BossOne") {
-                Health = 10000,
-                Radius = 100,
+                Health = 1000,
+                Radius = 400,
                 IsBoss = true
             };
+            IEnumerable<int> UpdateBossBar() {
+                while (true) {
+                    Hud.bossBarFullness = enemy.Health / 1000f;
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(UpdateBossBar());
             enemy.AddBehaviour(enemy.RotateOrientationConstantly());
             for (int i = 0; i < 3; i++) {
                 EntityManager.Add(CreateBossOneChild(position, MathF.PI * 2 * i / 3));
@@ -360,11 +370,13 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBossOneChild(Vector2 centre, float initialRadians) {
-            var enemy = new Enemy(Art.BossOneChild, centre, "BossOneChild");
-            enemy.invincible = true;
-            enemy.IsBoss = true;
+            var enemy = new Enemy(Art.BossOneChild, centre, "BossOneChild") {
+                invincible = true,
+                IsBoss = true,
+                Radius = 80
+            };
             IEnumerable<int> BossChildOneAI(Vector2 centre, float radians) {
-                float dist = 200f;
+                float dist = 600f;
                 while (true) {
                     for (int i = 0; i < 180; i++) {
                         // Idle rotate
@@ -372,10 +384,10 @@ namespace Mono_Ether.Ether {
                         enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
                         yield return 0;
                     }
-                    for (int i = 0; i < 30; i++) {
+                    for (int i = 0; i < 60; i++) {
                         // Extend
                         radians += 0.05f;
-                        dist += 10f;
+                        dist += 20f;
                         enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
                         yield return 0;
                     }
@@ -385,10 +397,10 @@ namespace Mono_Ether.Ether {
                         enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
                         yield return 0;
                     }
-                    for (int i = 0; i < 30; i++) {
+                    for (int i = 0; i < 60; i++) {
                         // Reduce
                         radians += 0.05f;
-                        dist -= 10f;
+                        dist -= 20f;
                         enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
                         yield return 0;
                     }
