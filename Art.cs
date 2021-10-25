@@ -13,6 +13,7 @@ namespace Mono_Ether {
         public static Texture2D Heart;
         public static Texture2D Pixel;
         public static Texture2D Player;
+        public static Texture2D YouWon;
         public static Texture2D Bullet;
         public static Texture2D PauseBg;
         public static Texture2D Default;
@@ -67,6 +68,7 @@ namespace Mono_Ether {
             TileStone = content.Load<Texture2D>("Textures/tiles/tile3");
             Player = content.Load<Texture2D>("Textures/Gameplay/Player");
             Bullet = content.Load<Texture2D>("Textures/Gameplay/Bullet");
+            YouWon = content.Load<Texture2D>("Textures/Gameplay/YouWon");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
             BossOne = content.Load<Texture2D>("Textures/GamePlay/BossOne");
             YouDied = content.Load<Texture2D>("Textures/Gameplay/youDied");
