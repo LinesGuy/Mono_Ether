@@ -45,7 +45,7 @@ namespace Mono_Ether.Ether {
         }
         public void WasKilled(int PlayerIndex) {
             IsExpired = true;
-            // Esnd game if boss
+            // End game if boss
             if (IsBoss)
                 Hud.transitionImage = "youWon";
             // Increment player score
