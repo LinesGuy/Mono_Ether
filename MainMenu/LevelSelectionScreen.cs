@@ -31,22 +31,22 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = buttonManager.GetClickedButton();
             switch (clickedButton) {
                 case "Test stage":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "debugMap.txt", new Vector2(64, 64)));
+                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "debugMap.txt"));
                     break;
                 case "Tutorial":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Tutorial.txt", new Vector2(32, 32), "movement"));
+                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Tutorial.txt"));
                     break;
                 case "Level one":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelOne.txt", new Vector2(64, 64)));
+                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelOne.txt"));
                     break;
                 case "Level two":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelTwo.txt", new Vector2(64, 64)));
+                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelTwo.txt"));
                     break;
                 case "Level three":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelThree.txt", new Vector2(64, 64)));
+                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelThree.txt"));
                     break;
                 case "Super secret stage????????":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Secret.txt", new Vector2(32, 32)));
+                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
                     break;
                 default:
                     break;

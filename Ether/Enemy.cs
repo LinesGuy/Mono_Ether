@@ -341,6 +341,12 @@ namespace Mono_Ether.Ether {
             enemy.Radius = 10f;
             return enemy;
         }
+        public static Enemy CreateBossOne(Vector2 position) {
+            var enemy = new Enemy(Art.BossOne, position, "PinkSeekerChild");
+            enemy.Health = 100;
+            enemy.Radius = 200;
+            return enemy;
+        }
         #endregion CreateEnemies
     }
 }

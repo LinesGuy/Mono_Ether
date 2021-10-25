@@ -22,6 +22,7 @@ namespace Mono_Ether.Ether {
                 direction.Y -= 1;
             if (Input.keyboard.IsKeyDown(Keys.Down))
                 direction.Y += 1;
+            direction = direction.Rotate(-Orientation);
             if (direction != Vector2.Zero) {
                 _isLerping = false;
                 CameraPosition += direction * 5 / Zoom;

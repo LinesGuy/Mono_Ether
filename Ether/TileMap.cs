@@ -16,7 +16,6 @@ namespace Mono_Ether.Ether {
             pos = mapPos;
             TileId = tileId;
         }
-
         public void Draw(SpriteBatch spriteBatch) {
             Texture2D texture;
             switch (TileId) // Get texture based on TextureID
@@ -96,12 +95,14 @@ namespace Mono_Ether.Ether {
         }
     }
     static class Map {
+        public static string Filename;
         public const float cellSize = 64f;
         public static Tile[,] _grid;
         public static Vector2 _size;
         private static int SelectedId = 1; // Currently selected Tile ID for editor mode
         public static Vector2 WorldSize { get { return _size * cellSize; } }
         public static void LoadFromFile(string filename, Vector2 size) {
+            Filename = filename;
             _size = size;
             // Load TileId's from TileMapData to _grid
             string lines = File.ReadAllText(@"Content/TileMapData/" + filename);

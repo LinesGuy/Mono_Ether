@@ -39,7 +39,7 @@ namespace Mono_Ether {
             AddScreen(new MainMenu.TitleScreen(GraphicsDevice));
             if (dum_mode) {
                 // Skip straight to testing stage
-                AddScreen(new Ether.EtherRoot(GraphicsDevice, "debugMap.txt", new Vector2(64, 64)));
+                AddScreen(new Ether.EtherRoot(GraphicsDevice, "debugMap.txt"));
             }
             framesUntilTransition = 0;
         }

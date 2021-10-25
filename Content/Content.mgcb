@@ -274,6 +274,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/BlueSeeker.png
 
+#begin Textures/Gameplay/BossOne.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/BossOne.png
+
+#begin Textures/Gameplay/BossOneChild.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/BossOneChild.png
+
 #begin Textures/Gameplay/Bullet.png
 /importer:TextureImporter
 /processor:TextureProcessor

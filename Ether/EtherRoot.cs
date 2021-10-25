@@ -15,10 +15,31 @@ namespace Mono_Ether.Ether {
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
         public static Hud hud;
-        public EtherRoot(GraphicsDevice graphicsDevice, string mapFileName, Vector2 mapSize, string tutorialState = "none") : base(graphicsDevice) {
+        public EtherRoot(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
             MapFileName = mapFileName;
-            MapSize = mapSize;
-            Tutorial.state = tutorialState;
+            switch (mapFileName) {
+                case "debugMap.txt":
+                    MapSize = new Vector2(64, 64);
+                    GameRoot.Instance.dum_mode = true;
+                    break;
+                case "Tutorial.txt":
+                    MapSize = new Vector2(32, 32);
+                    Tutorial.state = "movement";
+                    break;
+                case "LevelOne.txt":
+                    MapSize = new Vector2(64, 64);
+                    EntityManager.Add(Enemy.CreateBossOne(MapSize * Map.cellSize / 2f));
+                    break;
+                case "LevelTwo.txt":
+                    MapSize = new Vector2(64, 64);
+                    break;
+                case "LevelThree.txt":
+                    MapSize = new Vector2(64, 64);
+                    break;
+                case "Secret.txt":
+                    MapSize = new Vector2(32, 32);
+                    break;
+            }
         }
         public override void Initialize() {
             Instance = this;
@@ -31,6 +52,9 @@ namespace Mono_Ether.Ether {
             PowerPackSpawner.enabled = true;
             hud = new Hud();
             Map.LoadFromFile(MapFileName, MapSize);
+            if (Map.Filename == "LevelOne.txt" || Map.Filename == "Level.txt" || Map.Filename == "LevelThree.txt")
+                foreach (PlayerShip player in EntityManager.Players)
+                    player.Position = new Vector2(Map.cellSize * 2);
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sounds.Music);

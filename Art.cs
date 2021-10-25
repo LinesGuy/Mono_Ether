@@ -19,6 +19,7 @@ namespace Mono_Ether {
         public static Texture2D YouDied;
         public static Texture2D TileSus;
         public static Texture2D Pointer;
+        public static Texture2D BossOne;
         public static Texture2D TileDirt;
         public static Texture2D SnakeBody;
         public static Texture2D PauseExit;
@@ -32,6 +33,7 @@ namespace Mono_Ether {
         public static Texture2D PauseResume;
         public static Texture2D CollisionUp;
         public static Texture2D WelcomeText;
+        public static Texture2D BossOneChild;
         public static Texture2D PinkWanderer;
         public static Texture2D LineParticle;
         public static Texture2D CollisionLeft;
@@ -66,6 +68,7 @@ namespace Mono_Ether {
             Player = content.Load<Texture2D>("Textures/Gameplay/Player");
             Bullet = content.Load<Texture2D>("Textures/Gameplay/Bullet");
             Default = content.Load<Texture2D>("Textures/Gameplay/Default");
+            BossOne = content.Load<Texture2D>("Textures/GamePlay/BossOne");
             YouDied = content.Load<Texture2D>("Textures/Gameplay/youDied");
             Pointer = content.Load<Texture2D>("Textures/Gameplay/Pointer");
             PauseBg = content.Load<Texture2D>("Textures/GamePause/pause_bg");
@@ -81,6 +84,7 @@ namespace Mono_Ether {
             GreenSeeker = content.Load<Texture2D>("Textures/Gameplay/GreenSeeker");
             CollisionDown = content.Load<Texture2D>("Textures/tiles/collisionDown");
             CollisionLeft = content.Load<Texture2D>("Textures/tiles/collisionLeft");
+            BossOneChild = content.Load<Texture2D>("Textures/GamePlay/BossOneChild");
             PinkWanderer = content.Load<Texture2D>("Textures/Gameplay/PinkWanderer");
             CollisionRight = content.Load<Texture2D>("Textures/tiles/collisionRight");
             PauseResume = content.Load<Texture2D>("Textures/GamePause/resume_button");
