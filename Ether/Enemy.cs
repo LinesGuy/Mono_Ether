@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     class Enemy : Entity {
@@ -11,6 +12,7 @@ namespace Mono_Ether.Ether {
         private readonly int Worth; // The amount of score given when this enemy is killed
         public List<Enemy> tail; // Used for snake enemy type
         public string Type;
+        public bool IsBoss = false;
         public bool invincible = false;
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
         private static readonly Random rand = new Random();
@@ -52,6 +54,20 @@ namespace Mono_Ether.Ether {
             // Play sound
             Sounds.EnemyExplosion.Play(GameSettings.SoundEffectVolume, rand.NextFloat(-0.2f, 0.2f), 0);
             // Particles
+            SummonParticles();
+            // If enemy type is PinkSeeker, summon two more enemies
+            if (Type == "PinkSeeker") {
+                for (int j = 0; j < 2; j++) {
+                    var enemy = Enemy.CreatePinkSeekerChild(Position);
+                    enemy.Velocity = MathUtil.FromPolar(rand.NextFloat(0, MathF.PI * 2), 10f);
+                    enemy.timeUntilStart = 0;
+                    enemy.Color = Color.White;
+                    enemy.invincible = true;
+                    EntityManager.Add(enemy);
+                }
+            }
+        }
+        public void SummonParticles() {
             float hue1 = rand.NextFloat(0, 6);
             float hue2 = (hue1 + rand.NextFloat(0, 2)) % 6f;
             Color color1 = ColorUtil.HsvToColor(hue1, 0.5f, 1);
@@ -67,17 +83,6 @@ namespace Mono_Ether.Ether {
 
                 Color color = Color.Lerp(color1, color2, rand.NextFloat(0, 1));
                 EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
-            }
-            // If enemy type is PinkSeeker, summon two more enemies
-            if (Type == "PinkSeeker") {
-                for (int j = 0; j < 2; j++) {
-                    var enemy = Enemy.CreatePinkSeekerChild(Position);
-                    enemy.Velocity = MathUtil.FromPolar(rand.NextFloat(0, MathF.PI * 2), 10f);
-                    enemy.timeUntilStart = 0;
-                    enemy.Color = Color.White;
-                    enemy.invincible = true;
-                    EntityManager.Add(enemy);
-                }
             }
         }
         private void AddBehaviour(IEnumerable<int> behaviour) {
@@ -343,24 +348,53 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBossOne(Vector2 position) {
-            var enemy = new Enemy(Art.BossOne, position, "BossOne");
-            enemy.Health = 100;
-            enemy.Radius = 200;
+            var enemy = new Enemy(Art.BossOne, position, "BossOne") {
+                Health = 10000,
+                Radius = 100,
+                IsBoss = true
+            };
             enemy.AddBehaviour(enemy.RotateOrientationConstantly());
             for (int i = 0; i < 3; i++) {
-                //EntityManager.Add(CreateBossOneChild(position + new Vector2(200, 0).Rotate(MathF.PI * 6 / i)));
+                EntityManager.Add(CreateBossOneChild(position, MathF.PI * 2 * i / 3));
             }
             return enemy;
         }
-        public static Enemy CreateBossOneChild(Vector2 position) {
-            var enemy = new Enemy(Art.BossOneChild, position, "BossOneChild");
+        public static Enemy CreateBossOneChild(Vector2 centre, float initialRadians) {
+            var enemy = new Enemy(Art.BossOneChild, centre, "BossOneChild");
             enemy.invincible = true;
-            IEnumerable<int> BossChildOneAI() {
+            enemy.IsBoss = true;
+            IEnumerable<int> BossChildOneAI(Vector2 centre, float radians) {
+                float dist = 200f;
                 while (true) {
-                    yield return 0;
+                    for (int i = 0; i < 180; i++) {
+                        // Idle rotate
+                        radians += 0.05f;
+                        enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
+                        yield return 0;
+                    }
+                    for (int i = 0; i < 30; i++) {
+                        // Extend
+                        radians += 0.05f;
+                        dist += 10f;
+                        enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
+                        yield return 0;
+                    }
+                    for (int i = 0; i < 180; i++) {
+                        // Idle rotate
+                        radians += 0.05f;
+                        enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
+                        yield return 0;
+                    }
+                    for (int i = 0; i < 30; i++) {
+                        // Reduce
+                        radians += 0.05f;
+                        dist -= 10f;
+                        enemy.Position = centre + new Vector2(dist, 0).Rotate(radians);
+                        yield return 0;
+                    }
                 }
             }
-            //enemy.AddBehaviour(BossChildOneAI); 
+            enemy.AddBehaviour(BossChildOneAI(centre, initialRadians)); 
             return enemy;
         }
         #endregion CreateEnemies

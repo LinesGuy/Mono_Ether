@@ -28,23 +28,26 @@ namespace Mono_Ether.Ether {
         public override void HandleTilemapCollision() {
             var tile = Map.GetTileFromWorld(Position);
             if (tile.TileId > 0) {
-                IsExpired = true;
+                Expire();
+            }
+        }
+        public void Expire() {
+            IsExpired = true;
+            // Particles
+            for (var i = 0; i < 20; i++) {
+                var speed = 7f * (1f - 1 / rand.NextFloat(1f, 10f));
+                var state = new ParticleState() {
+                    Velocity = rand.NextVector2(speed, speed),
+                    Type = ParticleType.Enemy,
+                    LengthMultiplier = 1f
+                };
 
-                for (var i = 0; i < 20; i++) {
-                    var speed = 7f * (1f - 1 / rand.NextFloat(1f, 10f));
-                    var state = new ParticleState() {
-                        Velocity = rand.NextVector2(speed, speed),
-                        Type = ParticleType.Enemy,
-                        LengthMultiplier = 1f
-                    };
-
-                    Color color = new Color(235, 222, 77);
-                    EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
-                }
+                Color color = new Color(235, 222, 77);
+                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
             }
         }
     }
-
+    
     class Starburst : Entity {
         private int age;
         private readonly int lifespan;

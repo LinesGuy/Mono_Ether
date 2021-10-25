@@ -22,7 +22,7 @@ namespace Mono_Ether.Ether {
             Radius = 10;
             Geoms = 0;
             Multiplier = 1;
-            lives = 0;
+            lives = 3;
             Score = 0;
             HighScore = LoadHighScore();
             playerIndex = EntityManager.Players.Count;

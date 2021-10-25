@@ -100,17 +100,19 @@ namespace Mono_Ether.Ether {
             #region Handle collisions between bullets and enemies
             for (var i = 0; i < Enemies.Count; i++) {
                 foreach (var bullet in Bullets) {
-                    if (Enemies[i].invincible)
-                        continue;
                     if (IsColliding(Enemies[i], bullet)) {
+                        if (Enemies[i].invincible) {
+                            bullet.Expire();
+                            continue;
+                        }
                         Enemies[i].WasShot(bullet.PlayerIndex);
                         bullet.IsExpired = true;
                     // If bullet collides with snake body, destroy bullet but not snake
                     if (Enemies[i].Type == "Snake")
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
                             Enemy tail = Enemies[i].tail[j];
-                            if (IsColliding(tail, bullet))
-                                bullet.IsExpired = true;
+                                if (IsColliding(tail, bullet))
+                                    bullet.Expire();
                         }
                     }
                 }
@@ -121,7 +123,12 @@ namespace Mono_Ether.Ether {
                 for (int i = 0; i < Enemies.Count; i++) {
                     if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
                         player.Kill();
-                        Enemies.ForEach(e => e.WasShot(player.playerIndex));
+                        foreach(Enemy enemy in Enemies) {
+                            if (!enemy.IsBoss)
+                                enemy.SummonParticles();
+                        }
+                        Enemies = Enemies.Where(e => (e.IsBoss)).ToList();
+                        Entities = Entities.Where(e => !(e is Enemy enemy && !enemy.IsBoss)).ToList();
                         break;
                     }
                     if (Enemies[i].Type == "Snake")
@@ -129,7 +136,12 @@ namespace Mono_Ether.Ether {
                             Enemy tail = Enemies[i].tail[j];
                             if (IsColliding(tail, player)) {
                                 player.Kill();
-                                Enemies.ForEach(e => e.WasShot(player.playerIndex));
+                                foreach (Enemy enemy in Enemies) {
+                                    if (!enemy.IsBoss)
+                                        enemy.SummonParticles();
+                                }
+                                Enemies = Enemies.Where(e => (e.IsBoss)).ToList();
+                                Entities = Entities.Where(e => !(e is Enemy enemy && !enemy.IsBoss)).ToList();
                                 break;
                             }
                         }
@@ -140,7 +152,7 @@ namespace Mono_Ether.Ether {
             for (var i = 0; i < Enemies.Count; i++)
                 Enemies[i].HandleTilemapCollision();
             #endregion Handle collisions between walls and enemies + the player
-            #region Same as above but for bullets
+            #region Handle collisions walls and bullets
             for (var i = 0; i < Bullets.Count; i++)
                 Bullets[i].HandleTilemapCollision();
             #endregion Same as above but for bullets
