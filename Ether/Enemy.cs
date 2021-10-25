@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     class Enemy : Entity {
@@ -178,29 +177,6 @@ namespace Mono_Ether.Ether {
                 }
             }
         }
-        private IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
-            Vector2 lastPos = Position;
-            Vector2 acceleration = MathUtil.FromPolar(angle, speed);
-            while (true) {
-                if (Math.Abs(Position.X - lastPos.X) < 0.001)
-                    acceleration.X = -acceleration.X;
-                if (Math.Abs(Position.Y - lastPos.Y) < 0.001)
-                    acceleration.Y = -acceleration.Y;
-                lastPos = Position;
-                Velocity += acceleration;
-                yield return 0;
-            }
-        }
-        private IEnumerable<int> ExhaustFire() {
-            while (true) {
-                if (Velocity.LengthSquared() > 0.1f) {
-                    Vector2 baseVel = Velocity.ScaleTo(-3).Rotate(rand.NextFloat(-0.3f, 0.3f));
-                    EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, Color.OrangeRed * 0.7f, 60f, new Vector2(0.5f, 1),
-                        new ParticleState(baseVel, ParticleType.Enemy));
-                }
-                yield return 0;
-            }
-        }
         private IEnumerable<int> EnemyFacesVelocity() {
             Vector2 lastPos = Position;
             while (true) {
@@ -217,18 +193,6 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        private IEnumerable<int> MoveOrthonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
-            while (true) {
-                Vector2 velocity = MathUtil.FromPolar(rand.Next(4) * MathF.PI / 2f, speed);
-                for (int i = 0; i < activeFrames; i++) {
-                    Position += velocity;
-                    yield return 0;
-                }
-                for (int i = 0; i < sleepFrames; i++) {
-                    yield return 0;
-                }
-            }
-        }
         private IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f) {
             while (true) {
                 foreach (var bullet in EntityManager.Bullets)
@@ -237,42 +201,8 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        private IEnumerable<int> UpdateTail(float distance = 20f) {
-            while (true) {
-                for (int i = 1; i < tail.Count; i++) {
-                    Enemy bodyTail = tail[i];
-                    if (bodyTail.timeUntilStart > 0) {
-                        bodyTail.timeUntilStart--;
-                        bodyTail.Color = Color.White * (1 - timeUntilStart / 60f);
-                    }
-                    if (Vector2.DistanceSquared(bodyTail.Position, tail[i - 1].Position) > distance * distance) {
-                        bodyTail.Position = tail[i - 1].Position + (bodyTail.Position - tail[i - 1].Position).ScaleTo(distance);
-                    }
-                    bodyTail.ApplyBehaviours();
-                }
-                yield return 0;
-            }
-        }
-        private IEnumerable<int> RotateAroundPosition() {
-            float orientation = rand.NextFloat(0, MathF.PI * 2f);
-            const float rotationSpeed = 0.1f;
-            const float speed = 1f;
-            while (true) {
-                Velocity += MathUtil.FromPolar(orientation, speed);
-                orientation += rotationSpeed;
-                yield return 0;
-            }
-        }
-        private IEnumerable<int> InvincibleForTime(int frames) {
-            invincible = true;
-            for (int i = 0; i < frames; i++) {
-                yield return 0;
-            }
-            invincible = false;
-            while (true) {
-                yield return 0;
-            }
-        }
+        
+        
         #endregion IEnumerables
         #region CreateEnemies
         public static Enemy CreateBlueSeeker(Vector2 position) {
@@ -289,7 +219,7 @@ namespace Mono_Ether.Ether {
         }
         public static Enemy CreateSnake(Vector2 position) {
             var enemy = new Enemy(Art.SnakeHead, position, "Snake");
-            
+
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             enemy.tail = new List<Enemy> { enemy };
@@ -297,7 +227,23 @@ namespace Mono_Ether.Ether {
             for (int i = 0; i < tailLength; i++) {
                 enemy.tail.Add(Enemy.CreateSnakeBody(position));
             }
-            enemy.AddBehaviour(enemy.UpdateTail());
+            IEnumerable<int> UpdateTail(float distance = 20f) {
+                while (true) {
+                    for (int i = 1; i < enemy.tail.Count; i++) {
+                        Enemy bodyTail = enemy.tail[i];
+                        if (bodyTail.timeUntilStart > 0) {
+                            bodyTail.timeUntilStart--;
+                            bodyTail.Color = Color.White * (1 - enemy.timeUntilStart / 60f);
+                        }
+                        if (Vector2.DistanceSquared(bodyTail.Position, enemy.tail[i - 1].Position) > distance * distance) {
+                            bodyTail.Position = enemy.tail[i - 1].Position + (bodyTail.Position - enemy.tail[i - 1].Position).ScaleTo(distance);
+                        }
+                        bodyTail.ApplyBehaviours();
+                    }
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(UpdateTail());
             return enemy;
         }
         public static Enemy CreateSnakeBody(Vector2 position) {
@@ -309,14 +255,49 @@ namespace Mono_Ether.Ether {
             Enemy enemy = new Enemy(Art.BackAndForther, position, "BackAndForther") {
                 Orientation = new Random().Next(4) * MathF.PI / 2
             };
-            enemy.AddBehaviour(enemy.BounceOffWalls(enemy.Orientation + MathF.PI));
-            enemy.AddBehaviour(enemy.ExhaustFire());
+            IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
+                Vector2 lastPos = enemy.Position;
+                Vector2 acceleration = MathUtil.FromPolar(angle, speed);
+                while (true) {
+                    if (Math.Abs(enemy.Position.X - lastPos.X) < 0.001)
+                        acceleration.X = -acceleration.X;
+                    if (Math.Abs(enemy.Position.Y - lastPos.Y) < 0.001)
+                        acceleration.Y = -acceleration.Y;
+                    lastPos = enemy.Position;
+                    enemy.Velocity += acceleration;
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(BounceOffWalls(enemy.Orientation + MathF.PI));
+            IEnumerable<int> ExhaustFire() {
+                while (true) {
+                    if (enemy.Velocity.LengthSquared() > 0.1f) {
+                        Vector2 baseVel = enemy.Velocity.ScaleTo(-3).Rotate(rand.NextFloat(-0.3f, 0.3f));
+                        EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, enemy.Position, Color.OrangeRed * 0.7f, 60f, new Vector2(0.5f, 1),
+                            new ParticleState(baseVel, ParticleType.Enemy));
+                    }
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(ExhaustFire());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public static Enemy CreatePinkWanderer(Vector2 position) {
             var enemy = new Enemy(Art.PinkWanderer, position, "PinkWanderer");
-            enemy.AddBehaviour(enemy.MoveOrthonallyOccasionally());
+            IEnumerable<int> MoveOrthonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
+                while (true) {
+                    Vector2 velocity = MathUtil.FromPolar(rand.Next(4) * MathF.PI / 2f, speed);
+                    for (int i = 0; i < activeFrames; i++) {
+                        enemy.Position += velocity;
+                        yield return 0;
+                    }
+                    for (int i = 0; i < sleepFrames; i++) {
+                        yield return 0;
+                    }
+                }
+            }
+            enemy.AddBehaviour(MoveOrthonallyOccasionally());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
@@ -335,16 +316,51 @@ namespace Mono_Ether.Ether {
         }
         public static Enemy CreatePinkSeekerChild(Vector2 position) {
             var enemy = new Enemy(Art.PinkSeekerChild, position, "PinkSeekerChild");
-            enemy.AddBehaviour(enemy.RotateAroundPosition());
+            IEnumerable<int> WalkInCircles() {
+                float orientation = rand.NextFloat(0, MathF.PI * 2f);
+                const float rotationSpeed = 0.1f;
+                const float speed = 1f;
+                while (true) {
+                    enemy.Velocity += MathUtil.FromPolar(orientation, speed);
+                    orientation += rotationSpeed;
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(WalkInCircles());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
-            enemy.AddBehaviour(enemy.InvincibleForTime(6));
+            IEnumerable<int> InvincibleForTime(int frames) {
+                enemy.invincible = true;
+                for (int i = 0; i < frames; i++) {
+                    yield return 0;
+                }
+                enemy.invincible = false;
+                while (true) {
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(InvincibleForTime(6));
             enemy.Radius = 10f;
             return enemy;
         }
         public static Enemy CreateBossOne(Vector2 position) {
-            var enemy = new Enemy(Art.BossOne, position, "PinkSeekerChild");
+            var enemy = new Enemy(Art.BossOne, position, "BossOne");
             enemy.Health = 100;
             enemy.Radius = 200;
+            enemy.AddBehaviour(enemy.RotateOrientationConstantly());
+            for (int i = 0; i < 3; i++) {
+                //EntityManager.Add(CreateBossOneChild(position + new Vector2(200, 0).Rotate(MathF.PI * 6 / i)));
+            }
+            return enemy;
+        }
+        public static Enemy CreateBossOneChild(Vector2 position) {
+            var enemy = new Enemy(Art.BossOneChild, position, "BossOneChild");
+            enemy.invincible = true;
+            IEnumerable<int> BossChildOneAI() {
+                while (true) {
+                    yield return 0;
+                }
+            }
+            //enemy.AddBehaviour(BossChildOneAI); 
             return enemy;
         }
         #endregion CreateEnemies
