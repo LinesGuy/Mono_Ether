@@ -31,7 +31,6 @@ namespace Mono_Ether.Ether {
         const int CooldownFrames = 6;
         int cooldownRemaining;
         static readonly Random Rand = new Random();
-        private readonly bool autoFire = false;  // If true, hold left click to stop fire
         int framesUntilRespawn;
 
         public List<PowerPack> activePowerPacks = new List<PowerPack>();
@@ -108,8 +107,8 @@ namespace Mono_Ether.Ether {
             #endregion Exhaust fire
             #region Shooting
             if (!EtherRoot.Instance.editorMode) {
-                var aim = Camera.GetAimDirection();
-                if ((autoFire ^ Input.mouse.LeftButton == ButtonState.Pressed) && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
+                var aim = Camera.GetMouseAimDirection(Position);
+                if (Input.mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
                     // Play shooting sound
                     Sounds.PlayerShoot.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
                     // Cooldown calculations
@@ -121,13 +120,13 @@ namespace Mono_Ether.Ether {
                             cooldownRemainingMultiplier *= 1.3f;
                     }
                     cooldownRemaining = (int)((float)CooldownFrames * cooldownRemainingMultiplier);
-                    var aimangle = aim.ToAngle();
+                    var aimAngle = aim.ToAngle();
                     const int bulletCount = 3;
                     for (var i = 0; i < bulletCount; i++) {
                         var randomSpread = Rand.NextFloat(-0.04f, 0.04f) + Rand.NextFloat(-0.04f, 0.04f);
-                        var offsetAngle = aimangle + MathUtil.Interpolate(-.2f, .2f, i / (bulletCount - 0.999f));
+                        var offsetAngle = aimAngle + MathUtil.Interpolate(-.2f, .2f, i / (bulletCount - 0.999f));
                         var offset = MathUtil.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
-                        var vel = MathUtil.FromPolar(aimangle + randomSpread, 18f);
+                        var vel = MathUtil.FromPolar(aimAngle + randomSpread, 18f);
                         Color bulletColor;
                         if (cooldownRemainingMultiplier < 1f)
                             bulletColor = new Color(3, 252, 252); // Baby blue
