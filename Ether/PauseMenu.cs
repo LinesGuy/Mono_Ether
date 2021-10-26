@@ -52,6 +52,7 @@ namespace Mono_Ether.Ether {
                         GameRoot.Instance.RemoveScreenTransition();
                         break;
                     case "Resume":
+                        SlideOut();
                         EtherRoot.Instance.paused = false;
                         break;
 
