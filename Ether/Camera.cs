@@ -8,7 +8,6 @@ namespace Mono_Ether.Ether {
         public static float Zoom = 1;
         public static float Orientation = 0f;
         private static bool _isLerping = true;
-        private static readonly bool isAimingWithMouse = true;
         public static Vector2 WorldToScreen(Vector2 worldPosition) { return ((worldPosition - CameraPosition) * Zoom).Rotate(Orientation) + GameRoot.ScreenSize / 2f; }
         public static Vector2 ScreenToWorld(Vector2 screenPos) { return (screenPos - GameRoot.ScreenSize / 2).Rotate(-Orientation) / Zoom + CameraPosition; }
         public static void Update() {
@@ -62,31 +61,9 @@ namespace Mono_Ether.Ether {
         public static Vector2 MouseWorldCoords() {
             return ScreenToWorld(Input.mouse.Position.ToVector2());
         }
-        private static Vector2 GetMouseAimDirection() {
-            Vector2 direction = Camera.ScreenToWorld(Input.mouse.Position.ToVector2()) - EntityManager.Player1.Position;
+        public static Vector2 GetMouseAimDirection(Vector2 source) {
+            Vector2 direction = Camera.ScreenToWorld(Input.mouse.Position.ToVector2()) - source;
 
-            if (direction == Vector2.Zero)
-                return Vector2.Zero;
-            else
-                return Vector2.Normalize(direction);
-        }
-
-        public static Vector2 GetAimDirection() {
-            if (isAimingWithMouse)
-                return GetMouseAimDirection();
-
-            Vector2 direction = Vector2.Zero;
-
-            if (Input.keyboard.IsKeyDown(Keys.Left))
-                direction.X -= 1;
-            if (Input.keyboard.IsKeyDown(Keys.Right))
-                direction.X += 1;
-            if (Input.keyboard.IsKeyDown(Keys.Up))
-                direction.Y -= 1;
-            if (Input.keyboard.IsKeyDown(Keys.Down))
-                direction.Y += 1;
-
-            // If no aim input, return zero, otherwise normalize direction
             if (direction == Vector2.Zero)
                 return Vector2.Zero;
             else
