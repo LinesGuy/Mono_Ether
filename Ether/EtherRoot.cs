@@ -66,7 +66,9 @@ namespace Mono_Ether.Ether {
             EntityManager.Killall();
             Tutorial.state = "none";
             BackgroundParticleManager.Clear();
+            Hud.Reset();
             MediaPlayer.Stop();
+            PauseMenu.state = "hidden";
         }
         public override void Update(GameTime gameTime) {
             if (!GameRoot.Instance.IsActive)
@@ -87,11 +89,16 @@ namespace Mono_Ether.Ether {
                 }
             }
             // Esc to toggle pause
-            if (Input.WasKeyJustDown(Keys.Escape))
+            if (Input.WasKeyJustDown(Keys.Escape)) {
                 paused = !paused;
+                if (paused)
+                    PauseMenu.SlideIn();
+                else
+                    PauseMenu.SlideOut();
+            }
+                
 
             Map.Update();
-
             if (!paused) {
                 Camera.Update();
                 EntityManager.Update();
@@ -103,7 +110,8 @@ namespace Mono_Ether.Ether {
                     Tutorial.Update();
                 FloatingTextManager.Update();
                 Hud.Update();
-            } else PauseMenu.Update();
+            }
+            PauseMenu.Update();
 
         }
         public override void Draw(SpriteBatch spriteBatch) {
@@ -121,7 +129,7 @@ namespace Mono_Ether.Ether {
             spriteBatch.End();
             // No BlendState.Additive from here
             spriteBatch.Begin();
-            if (paused)
+            if (PauseMenu.state != "hidden")
                 PauseMenu.Draw(spriteBatch);
             if (Tutorial.state != "none")
                 Tutorial.Draw(spriteBatch);

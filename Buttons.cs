@@ -37,7 +37,7 @@ namespace Mono_Ether {
             InactiveFontColor = Color.Black;
         }
         public override void Update() {
-            throw new NotImplementedException();
+            Rect = new Rectangle(Pos.ToPoint(), Texture.Size().ToPoint());
         }
     }
     class LevelButton : Button {
