@@ -12,6 +12,7 @@ namespace Mono_Ether {
         public static Texture2D Geom;
         public static Texture2D Heart;
         public static Texture2D Pixel;
+        public static Texture2D Drone;
         public static Texture2D Player;
         public static Texture2D YouWon;
         public static Texture2D Bullet;
@@ -63,6 +64,7 @@ namespace Mono_Ether {
             Geom = content.Load<Texture2D>("Textures/GamePlay/Geom");
             TileSus = content.Load<Texture2D>("Textures/tiles/tile4");
             Heart = content.Load<Texture2D>("Textures/GamePlay/Heart");
+            Drone = content.Load<Texture2D>("Textures/GamePlay/Drone");
             TileDirt = content.Load<Texture2D>("Textures/tiles/tile2");
             TileGrass = content.Load<Texture2D>("Textures/tiles/tile1");
             TileStone = content.Load<Texture2D>("Textures/tiles/tile3");
