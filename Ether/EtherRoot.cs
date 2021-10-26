@@ -43,6 +43,7 @@ namespace Mono_Ether.Ether {
         public override void Initialize() {
             Instance = this;
             EntityManager.Add(new PlayerShip());
+            EntityManager.Add(Drone.CreateShooter(0));
             //EntityManager.Add(new PlayerShip());
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
             Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = GameSettings.MasterVolume;
