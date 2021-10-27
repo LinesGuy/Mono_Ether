@@ -26,7 +26,8 @@ namespace Mono_Ether.Ether {
             Worth = rand.Next(1, 10);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
-            Sounds.EnemySpawn.Play(GameSettings.SoundEffectVolume, rand.NextFloat(-0.2f, 0.2f), 0);
+            if (Type != "SnakeBody" && Type != "BossTwoTail")
+                Sounds.EnemySpawn.Play(GameSettings.SoundEffectVolume, rand.NextFloat(-0.2f, 0.2f), 0);
         }
         public override void Update() {
             if (timeUntilStart <= 0) {
@@ -419,7 +420,14 @@ namespace Mono_Ether.Ether {
                 Radius = 40,
                 IsBoss = true
             };
-            
+            /*IEnumerable<int> Followcursor() {
+                while (true) {
+                    Vector2 delta = (Camera.MouseWorldCoords() - enemy.Position).ScaleTo(3f);
+                    enemy.Velocity += delta;
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(Followcursor());*/
             enemy.AddBehaviour(enemy.UpdateBossBar());
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
