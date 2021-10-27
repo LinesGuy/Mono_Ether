@@ -119,7 +119,6 @@ namespace Mono_Ether.Ether {
                 }
                 if (dash)
                     continue;
-                //else if (Map.GetTileFromWorld(PlayerShip.Instance.Position).TileId > 0) {
                 else if (EntityManager.Players.TrueForAll(player => Map.GetTileFromWorld(player.Position).TileId > 0)) {
                     // All players are in solid tiles, do nothing.
                     yield return 0;
