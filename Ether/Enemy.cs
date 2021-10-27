@@ -208,8 +208,29 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        
-        
+        IEnumerable<int> UpdateTail(float distance = 20f) {
+            while (true) {
+                for (int i = 1; i < tail.Count; i++) {
+                    Enemy bodyTail = tail[i];
+                    if (bodyTail.timeUntilStart > 0) {
+                        bodyTail.timeUntilStart--;
+                        bodyTail.Color = Color.White * (1 - timeUntilStart / 60f);
+                    }
+                    if (Vector2.DistanceSquared(bodyTail.Position, tail[i - 1].Position) > distance * distance) {
+                        bodyTail.Position = tail[i - 1].Position + (bodyTail.Position - tail[i - 1].Position).ScaleTo(distance);
+                    }
+                    bodyTail.ApplyBehaviours();
+                }
+                yield return 0;
+            }
+        }
+        IEnumerable<int> UpdateBossBar() {
+            float maxHealth = Health;
+            while (true) {
+                Hud.bossBarFullness = Health / maxHealth;
+                yield return 0;
+            }
+        }
         #endregion IEnumerables
         #region CreateEnemies
         public static Enemy CreateBlueSeeker(Vector2 position) {
@@ -234,23 +255,8 @@ namespace Mono_Ether.Ether {
             for (int i = 0; i < tailLength; i++) {
                 enemy.tail.Add(Enemy.CreateSnakeBody(position));
             }
-            IEnumerable<int> UpdateTail(float distance = 20f) {
-                while (true) {
-                    for (int i = 1; i < enemy.tail.Count; i++) {
-                        Enemy bodyTail = enemy.tail[i];
-                        if (bodyTail.timeUntilStart > 0) {
-                            bodyTail.timeUntilStart--;
-                            bodyTail.Color = Color.White * (1 - enemy.timeUntilStart / 60f);
-                        }
-                        if (Vector2.DistanceSquared(bodyTail.Position, enemy.tail[i - 1].Position) > distance * distance) {
-                            bodyTail.Position = enemy.tail[i - 1].Position + (bodyTail.Position - enemy.tail[i - 1].Position).ScaleTo(distance);
-                        }
-                        bodyTail.ApplyBehaviours();
-                    }
-                    yield return 0;
-                }
-            }
-            enemy.AddBehaviour(UpdateTail());
+            
+            enemy.AddBehaviour(enemy.UpdateTail());
             return enemy;
         }
         public static Enemy CreateSnakeBody(Vector2 position) {
@@ -355,13 +361,7 @@ namespace Mono_Ether.Ether {
                 Radius = 400,
                 IsBoss = true
             };
-            IEnumerable<int> UpdateBossBar() {
-                while (true) {
-                    Hud.bossBarFullness = enemy.Health / 1000f;
-                    yield return 0;
-                }
-            }
-            enemy.AddBehaviour(UpdateBossBar());
+            enemy.AddBehaviour(enemy.UpdateBossBar());
             enemy.AddBehaviour(enemy.RotateOrientationConstantly());
             for (int i = 0; i < 3; i++) {
                 EntityManager.Add(CreateBossOneChild(position, MathF.PI * 2 * i / 3));
@@ -406,6 +406,30 @@ namespace Mono_Ether.Ether {
                 }
             }
             enemy.AddBehaviour(BossChildOneAI(centre, initialRadians)); 
+            return enemy;
+        }
+        public static Enemy CreateBossTwoHead(Vector2 position) {
+            var enemy = new Enemy(Art.BossTwoHead, position, "BossTwoHead") {
+                Health = 300,
+                Radius = 40,
+                IsBoss = true
+            };
+            
+            enemy.AddBehaviour(enemy.UpdateBossBar());
+            enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+            enemy.tail = new List<Enemy> { enemy };
+            for (int i = 0; i < 100; i++) {
+                enemy.tail.Add(CreateBossTwoTail(position));
+            }
+            enemy.AddBehaviour(enemy.UpdateTail(40));
+
+            return enemy;
+        }
+        public static Enemy CreateBossTwoTail(Vector2 position) {
+            var enemy = new Enemy(Art.BossTwoTail, position, "BossTwoTail");
+            enemy.Radius = 20;
+            enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         #endregion CreateEnemies
