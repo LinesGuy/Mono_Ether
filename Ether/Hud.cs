@@ -12,6 +12,7 @@ namespace Mono_Ether.Ether {
         public static float bossBarFullness = 1f;
         public static bool bossBarEnabled = false;
         public static void Reset() {
+            transitionImage = null;
             transitionFrames = 0;
             bossBarFullness = 1f;
             bossBarEnabled = false;
