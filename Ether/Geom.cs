@@ -34,7 +34,6 @@ namespace Mono_Ether.Ether {
             } else {
                 base.Draw(spriteBatch);
             }
-                
         }
         public void Pickup(int playerIndex) {
             IsExpired = true;
