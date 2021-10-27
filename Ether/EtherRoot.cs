@@ -42,8 +42,19 @@ namespace Mono_Ether.Ether {
         }
         public override void Initialize() {
             Instance = this;
+            // ADD PLAYER ONE
             EntityManager.Add(new PlayerShip());
+            // LOAD MAP, SET PLAYER POS, OPTIONAL BOSS BAR
+            Map.LoadFromFile(MapFileName, MapSize);
+            if (Map.Filename == "LevelOne.txt" || Map.Filename == "Level.txt" || Map.Filename == "LevelThree.txt") {
+                foreach (PlayerShip player in EntityManager.Players)
+                    player.Position = new Vector2(Map.cellSize * 2);
+                Hud.bossBarEnabled = true;
+            }
+            // ADD DRONES
+            EntityManager.Add(Drone.CreateGeomCollector(0));
             EntityManager.Add(Drone.CreateShooter(0));
+            // ADD PLAYER TWO (currently disabled)
             //EntityManager.Add(new PlayerShip());
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
             Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = GameSettings.MasterVolume;
@@ -51,12 +62,7 @@ namespace Mono_Ether.Ether {
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
             Hud.Reset();
-            Map.LoadFromFile(MapFileName, MapSize);
-            if (Map.Filename == "LevelOne.txt" || Map.Filename == "Level.txt" || Map.Filename == "LevelThree.txt") {
-                foreach (PlayerShip player in EntityManager.Players)
-                    player.Position = new Vector2(Map.cellSize * 2);
-                Hud.bossBarEnabled = true;
-            }
+            
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sounds.Music);
@@ -97,7 +103,6 @@ namespace Mono_Ether.Ether {
                 else
                     PauseMenu.SlideOut();
             }
-                
 
             Map.Update();
             if (!paused) {
