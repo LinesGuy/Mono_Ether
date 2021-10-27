@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mono_Ether.Ether {
     class Drone : Entity{
@@ -81,6 +82,68 @@ namespace Mono_Ether.Ether {
             drone.AddBehaviour(ShootWhenPlayerShoots());
             return drone;
         }
-        #endregion CreateEnemies
+        public static Drone CreateGeomCollector(int playerIndex) {
+            var drone = new Drone(playerIndex, "geomCollector");
+            drone.AddBehaviour(drone.DroneFacesVelocity());
+            IEnumerable<int> collectGeomsAStar() {
+                // Also follow player when no geoms are to be found
+                const float acceleration = 1.5f;
+                
+                while (true) {
+                    // If Geom is within Map.Cellsize of drone, move straight towards it
+                    var dash = false;
+                    foreach (Geom geom in EntityManager.Geoms) {
+                        if (Vector2.DistanceSquared(geom.Position, drone.Position) < MyAStar.CellSize * MyAStar.CellSize) {
+                            drone.Velocity += (geom.Position - drone.Position).ScaleTo(acceleration);
+                            if (drone.Velocity != Vector2.Zero)
+                                drone.Orientation = drone.Velocity.ToAngle();
+                            yield return 0;
+                            dash = true;
+                            break;
+                        }
+                    }
+                    if (dash)
+                        continue;
+                    else {
+                        Vector2 destination;
+                        List<Geom> accessibleGeoms = EntityManager.Geoms.Where(geom => Map.GetTileFromWorld(geom.Position).TileId <= 0).ToList();
+                        if (accessibleGeoms.Count == 0) {
+                            // There are no accessible geoms, return to player
+                            destination = EntityManager.Players[drone.PlayerIndex].Position;
+                            // If player is within Map.Cellsize of drone, do nothing
+                            if (Vector2.DistanceSquared(EntityManager.Players[drone.PlayerIndex].Position, drone.Position) < Map.cellSize * Map.cellSize)
+                                yield return 0;
+                        } else {
+                            // Go to nearest accessible geom
+                            Geom nearestGeom = accessibleGeoms[0];
+                            foreach(Geom geom in accessibleGeoms) {
+                                if (Vector2.DistanceSquared(drone.Position, geom.Position) < Vector2.DistanceSquared(drone.Position, nearestGeom.Position))
+                                    nearestGeom = geom;
+                            }
+                            destination = nearestGeom.Position;
+                        }
+                        List<Vector2> path = MyAStar.AStar(drone.Position, destination);
+                        for (int i = 0; i < 6; i++) { // 15 frames per path re-calculation
+                            if (path is null) {
+                                yield return 0;
+                                continue;
+                            }
+                            // If drone is at current target position, update target position
+                            if (Vector2.DistanceSquared(drone.Position, path[0]) <= Math.Pow(MyAStar.CellSize * 0.8f, 2))
+                                path.RemoveAt(0);
+                            // If path is empty, make a new path
+                            if (path.Count <= 0)
+                                break;
+                            // Move towards destination
+                            drone.Velocity += (path[0] - drone.Position).ScaleTo(acceleration);
+                            yield return 0;
+                        }
+                    }
+                }
+            }
+            drone.AddBehaviour(collectGeomsAStar());
+            return drone;
+        }
+        #endregion CreateDrones
     }
 }
