@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Mono_Ether.Ether {
     class Enemy : Entity {
@@ -46,8 +47,12 @@ namespace Mono_Ether.Ether {
         public void WasKilled(int PlayerIndex) {
             IsExpired = true;
             // End game if boss
-            if (IsBoss)
+            if (IsBoss) {
                 Hud.transitionImage = "youWon";
+                EntityManager.Enemies.Where(e => !e.IsBoss).ToList().ForEach(e => e.WasKilled(PlayerIndex));
+                EntityManager.Entities = EntityManager.Entities.Where(e => !(e is Enemy enemy)).ToList();
+            }
+                
             // Increment player score
             EntityManager.Players[PlayerIndex].AddPoints(Worth);
             // Summon geom
