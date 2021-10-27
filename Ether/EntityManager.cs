@@ -12,6 +12,7 @@ namespace Mono_Ether.Ether {
         public static List<Enemy> Enemies = new List<Enemy>();
         public static List<Bullet> Bullets = new List<Bullet>();
         public static List<PowerPack> PowerPacks = new List<PowerPack>();
+        public static List<Drone> Drones = new List<Drone>();
 
         static bool _isUpdating;
         static readonly List<Entity> AddedEntities = new List<Entity>();
@@ -25,6 +26,7 @@ namespace Mono_Ether.Ether {
             Geoms.Clear();
             Bullets.Clear();
             PowerPacks.Clear();
+            Drones.Clear();
         }
         public static void Add(Entity entity) {
             if (!_isUpdating)
@@ -44,6 +46,8 @@ namespace Mono_Ether.Ether {
                 PowerPacks.Add(powerPack);
             else if (entity is Geom geom)
                 Geoms.Add(geom);
+            else if (entity is Drone drone)
+                Drones.Add(drone);
         }
 
         public static void Update() {
@@ -177,6 +181,19 @@ namespace Mono_Ether.Ether {
                     }
                     if (Vector2.DistanceSquared(player.Position, geom.Position) < 150f * 150f)
                         geom.Velocity += (player.Position - geom.Position).ScaleTo(1.3f);
+                }
+            }
+            #endregion  Handle players and geoms
+            #region Handle geom drones and geoms
+            List<Drone> geomDrones = Drones.Where(drone => drone.Type == "geomCollector").ToList();
+            foreach (Geom geom in Geoms) {
+                for (int i = 0; i < geomDrones.Count; i++) {
+                    Drone drone = geomDrones[i];
+                    if (IsColliding(geom, drone)) {
+                        geom.Pickup(drone.PlayerIndex);
+                    }
+                    if (Vector2.DistanceSquared(drone.Position, geom.Position) < 150f * 150f)
+                        geom.Velocity += (drone.Position - geom.Position).ScaleTo(1.3f);
                 }
             }
             #endregion  Handle players and geoms
