@@ -31,6 +31,8 @@ namespace Mono_Ether {
         public static Texture2D TileStone;
         public static Texture2D BlueSeeker;
         public static Texture2D PinkSeeker;
+        public static Texture2D BossTwoHead;
+        public static Texture2D BossTwoTail;
         public static Texture2D GreenSeeker;
         public static Texture2D PauseResume;
         public static Texture2D CollisionUp;
@@ -86,6 +88,8 @@ namespace Mono_Ether {
             WelcomeText = content.Load<Texture2D>("Textures/Intro/welcome_text");
             PauseExit = content.Load<Texture2D>("Textures/GamePause/exit_button");
             GreenSeeker = content.Load<Texture2D>("Textures/Gameplay/GreenSeeker");
+            BossTwoHead = content.Load<Texture2D>("Textures/Gameplay/BossTwoHead");
+            BossTwoTail = content.Load<Texture2D>("Textures/Gameplay/BossTwoTail");
             CollisionDown = content.Load<Texture2D>("Textures/tiles/collisionDown");
             CollisionLeft = content.Load<Texture2D>("Textures/tiles/collisionLeft");
             BossOneChild = content.Load<Texture2D>("Textures/GamePlay/BossOneChild");
