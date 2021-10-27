@@ -298,18 +298,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/BossOneChild.png
 
-#begin Textures/Gameplay/BossTwoChild.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Gameplay/BossTwoChild.png
-
 #begin Textures/Gameplay/BossTwohead.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -321,6 +309,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/BossTwohead.png
+
+#begin Textures/Gameplay/BossTwoTail.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/BossTwoTail.png
 
 #begin Textures/Gameplay/Bullet.png
 /importer:TextureImporter
