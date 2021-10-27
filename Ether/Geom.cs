@@ -5,6 +5,8 @@ using System;
 namespace Mono_Ether.Ether {
     class Geom : Entity {
         private readonly static Random rand = new Random();
+        private int Age = 0;
+        private const int Lifespan = 600;
         public Geom(Vector2 position) {
             Position = position;
             Image = Art.Geom;
@@ -15,10 +17,24 @@ namespace Mono_Ether.Ether {
             Position += Velocity;
             Velocity *= 0.95f;  // Friction
             Orientation += Velocity.Length() / 10f - 0.03f;
+
+            Age++;
+            if (Map.GetTileFromWorld(Position).TileId > 0)
+                // If Geom is in solid tile, expire 5x as fast
+                Age += 4;
+            if (Age > Lifespan)
+                IsExpired = true;
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
-            base.Draw(spriteBatch);
+            if (Age > (int)(Lifespan * 0.75f)) {
+                if (Age % 30 < 15) {
+                    base.Draw(spriteBatch);
+                }
+            } else {
+                base.Draw(spriteBatch);
+            }
+                
         }
         public void Pickup(int playerIndex) {
             IsExpired = true;
