@@ -31,6 +31,7 @@ namespace Mono_Ether.Ether {
                     break;
                 case "LevelTwo.txt":
                     MapSize = new Vector2(64, 64);
+                    EntityManager.Add(Enemy.CreateBossTwoHead(MapSize * Map.cellSize / 2f));
                     break;
                 case "LevelThree.txt":
                     MapSize = new Vector2(64, 64);
@@ -45,8 +46,9 @@ namespace Mono_Ether.Ether {
             // ADD PLAYER ONE
             EntityManager.Add(new PlayerShip());
             // LOAD MAP, SET PLAYER POS, OPTIONAL BOSS BAR
+            Hud.Reset();
             Map.LoadFromFile(MapFileName, MapSize);
-            if (Map.Filename == "LevelOne.txt" || Map.Filename == "Level.txt" || Map.Filename == "LevelThree.txt") {
+            if (Map.Filename == "LevelOne.txt" || Map.Filename == "LevelTwo.txt" || Map.Filename == "LevelThree.txt") {
                 foreach (PlayerShip player in EntityManager.Players)
                     player.Position = new Vector2(Map.cellSize * 2);
                 Hud.bossBarEnabled = true;
@@ -61,7 +63,7 @@ namespace Mono_Ether.Ether {
             PauseMenu.Initialize();
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
-            Hud.Reset();
+            
             
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
             MediaPlayer.IsRepeating = true;
