@@ -76,7 +76,7 @@ namespace Mono_Ether.Ether {
             foreach (var entity in Entities) {
                 entity.Draw(spriteBatch);
                 if (entity is Enemy enemy)
-                    if (enemy.Type == "Snake")
+                    if (enemy.Type == "Snake" || enemy.Type == "BossTwoHead")
                         for (int i = 1; i < enemy.tail.Count; i++) {
                             Enemy tail = enemy.tail[i];
                             tail.Draw(spriteBatch);
@@ -110,13 +110,14 @@ namespace Mono_Ether.Ether {
                             continue;
                         }
                         Enemies[i].WasShot(bullet.PlayerIndex);
-                        bullet.IsExpired = true;
+                        bullet.Expire();
+                    }
                     // If bullet collides with snake body, destroy bullet but not snake
-                    if (Enemies[i].Type == "Snake")
+                    if (Enemies[i].Type == "Snake" || Enemies[i].Type == "BossTwoHead") {
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
                             Enemy tail = Enemies[i].tail[j];
-                                if (IsColliding(tail, bullet))
-                                    bullet.Expire();
+                            if (IsColliding(tail, bullet))
+                                bullet.Expire();
                         }
                     }
                 }
@@ -129,7 +130,7 @@ namespace Mono_Ether.Ether {
                 for (int i = 0; i < Enemies.Count; i++) {
                     if (Enemies[i].IsActive && IsColliding(player, Enemies[i])) {
                         player.Kill();
-                        foreach(Enemy enemy in Enemies) {
+                        foreach (Enemy enemy in Enemies) {
                             if (!enemy.IsBoss)
                                 enemy.SummonParticles();
                         }
@@ -137,7 +138,7 @@ namespace Mono_Ether.Ether {
                         Entities = Entities.Where(e => !(e is Enemy enemy && !enemy.IsBoss)).ToList();
                         break;
                     }
-                    if (Enemies[i].Type == "Snake")
+                    if (Enemies[i].Type == "Snake" || Enemies[i].Type == "BossTwoHead")
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
                             Enemy tail = Enemies[i].tail[j];
                             if (IsColliding(tail, player)) {
@@ -173,7 +174,7 @@ namespace Mono_Ether.Ether {
             }
             #endregion Handle collisions between powerpacks and the player
             #region Handle players and geoms
-            foreach(Geom geom in Geoms) {
+            foreach (Geom geom in Geoms) {
                 for (int i = 0; i < Players.Count; i++) {
                     PlayerShip player = Players[i];
                     if (IsColliding(geom, player)) {
