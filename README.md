@@ -2,7 +2,7 @@
 project for my college computer science coursework
 
 # Demos
-All videos shown here are downscaled to 480p (game resolution is 1366x768)
+All videos shown here are downscaled to 480p and have no sound(game resolution is 1366x768 and has sound)
 
 Main menu and gameplay
 
