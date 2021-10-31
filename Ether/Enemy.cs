@@ -49,7 +49,7 @@ namespace Mono_Ether.Ether {
             IsExpired = true;
             // End game if boss
             if (IsBoss) {
-                Hud.transitionImage = "youWon";
+                Hud.transitionImage = "YouWon";
                 EntityManager.Enemies.Where(e => !e.IsBoss).ToList().ForEach(e => e.WasKilled(PlayerIndex));
                 EntityManager.Entities = EntityManager.Entities.Where(e => !(e is Enemy enemy)).ToList();
             }

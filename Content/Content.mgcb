@@ -250,7 +250,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/BackgroundParticle.png
 
-#begin Textures/Gameplay/Black Hole.png
+#begin Textures/Gameplay/BlackHole.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -260,7 +260,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/Black Hole.png
+/build:Textures/Gameplay/BlackHole.png
 
 #begin Textures/Gameplay/BlueSeeker.png
 /importer:TextureImporter
@@ -298,7 +298,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/BossOneChild.png
 
-#begin Textures/Gameplay/BossTwohead.png
+#begin Textures/Gameplay/BossTwoHead.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -308,7 +308,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/BossTwohead.png
+/build:Textures/Gameplay/BossTwoHead.png
 
 #begin Textures/Gameplay/BossTwoTail.png
 /importer:TextureImporter
@@ -334,7 +334,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/Bullet.png
 
-#begin Textures/Gameplay/default.png
+#begin Textures/Gameplay/Default.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -344,7 +344,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/default.png
+/build:Textures/Gameplay/Default.png
 
 #begin Textures/Gameplay/Drone.png
 /importer:TextureImporter
@@ -394,7 +394,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/GreenSeeker.png
 
-#begin Textures/Gameplay/heart.png
+#begin Textures/Gameplay/Heart.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -404,7 +404,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/heart.png
+/build:Textures/Gameplay/Heart.png;Textures/Gameplay/Heart.png
 
 #begin Textures/Gameplay/Laser.png
 /importer:TextureImporter
@@ -574,7 +574,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/StarBurst.png
 
-#begin Textures/Gameplay/youDied.png
+#begin Textures/Gameplay/YouDied.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -584,9 +584,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/youDied.png
+/build:Textures/Gameplay/YouDied.png;Textures/Gameplay/YouDied.png
 
-#begin Textures/Gameplay/youWon.png
+#begin Textures/Gameplay/YouWon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -596,7 +596,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/youWon.png
+/build:Textures/Gameplay/YouWon.png;Textures/Gameplay/YouWon.png
 
 #begin Textures/Intro/welcome_text.png
 /importer:TextureImporter
@@ -694,7 +694,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Menu/slider_middle.png
 
-#begin Textures/tiles/collisionBottomLeft.png
+#begin Textures/Tiles/collision_bottom_left.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -704,9 +704,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/tiles/collisionBottomLeft.png
+/build:Textures/Tiles/collision_bottom_left.png
 
-#begin Textures/tiles/collisionBottomRight.png
+#begin Textures/Tiles/collision_bottom_right.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -716,9 +716,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/tiles/collisionBottomRight.png
+/build:Textures/Tiles/collision_bottom_right.png
 
-#begin Textures/Tiles/collisionDown.png
+#begin Textures/Tiles/collision_down.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -728,9 +728,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/collisionDown.png
+/build:Textures/Tiles/collision_down.png
 
-#begin Textures/Tiles/collisionLeft.png
+#begin Textures/Tiles/collision_left.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -740,9 +740,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/collisionLeft.png
+/build:Textures/Tiles/collision_left.png
 
-#begin Textures/Tiles/collisionRight.png
+#begin Textures/Tiles/collision_right.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -752,9 +752,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/collisionRight.png
+/build:Textures/Tiles/collision_right.png
 
-#begin Textures/tiles/collisionTopLeft.png
+#begin Textures/Tiles/collision_top_left.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -764,9 +764,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/tiles/collisionTopLeft.png
+/build:Textures/Tiles/collision_top_left.png
 
-#begin Textures/tiles/collisionTopRight.png
+#begin Textures/Tiles/collision_top_right.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -776,9 +776,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/tiles/collisionTopRight.png
+/build:Textures/Tiles/collision_top_right.png
 
-#begin Textures/Tiles/collisionUp.png
+#begin Textures/Tiles/collision_up.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -788,9 +788,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/collisionUp.png
+/build:Textures/Tiles/collision_up.png
 
-#begin Textures/Tiles/tile1.png
+#begin Textures/Tiles/tile_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -800,9 +800,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/tile1.png
+/build:Textures/Tiles/tile_1.png
 
-#begin Textures/Tiles/tile2.png
+#begin Textures/Tiles/tile_2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -812,9 +812,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/tile2.png
+/build:Textures/Tiles/tile_2.png
 
-#begin Textures/Tiles/tile3.png
+#begin Textures/Tiles/tile_3.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -824,9 +824,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/tile3.png
+/build:Textures/Tiles/tile_3.png
 
-#begin Textures/Tiles/tile4.png
+#begin Textures/Tiles/tile_4.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -836,7 +836,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tiles/tile4.png
+/build:Textures/Tiles/tile_4.png
 
 #begin Tracks/Music.mp3
 /importer:Mp3Importer

@@ -76,8 +76,8 @@ namespace Mono_Ether.Ether {
             if (transitionImage != null) {
                 int t = Math.Min(255, (int)(transitionFrames / 60f * 255f));
                 Texture2D texture = transitionImage switch {
-                    "youDied" => Art.YouDied,
-                    "youWon" => Art.YouWon,
+                    "YouDied" => Art.YouDied,
+                    "YouWon" => Art.YouWon,
                     _ => Art.Default,
                 };
                 spriteBatch.Draw(texture, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, Art.YouDied.Size() / 2f, MathHelper.Lerp(1f, 1.5f, transitionFrames / 120f), SpriteEffects.None, 0);

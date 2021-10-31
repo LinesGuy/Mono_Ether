@@ -181,7 +181,7 @@ namespace Mono_Ether.Ether {
                 framesUntilRespawn = 99999;
                 EnemySpawner.enabled = false;
                 PowerPackSpawner.enabled = false;
-                Hud.transitionImage = "youDied";
+                Hud.transitionImage = "YouDied";
             }
 
             activePowerPacks = new List<PowerPack>();
