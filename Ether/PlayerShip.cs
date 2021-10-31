@@ -144,7 +144,7 @@ namespace Mono_Ether.Ether {
                     cooldownRemaining--;
 
                 if (Input.WasRightButtonJustDown()) {
-                        EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
+                    EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
                 }
             }
             #endregion Shooting

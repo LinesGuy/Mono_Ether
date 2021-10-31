@@ -33,7 +33,7 @@ namespace Mono_Ether.MainMenu {
                 GameSettings.SaveSettings();
                 GameRoot.Instance.RemoveScreenTransition();
             }
-            foreach(Slider slider in Sliders.Values) {
+            foreach (Slider slider in Sliders.Values) {
                 slider.Update();
                 if (slider.IsBeingDragged) {
                     switch (slider.Text) {
@@ -109,7 +109,7 @@ namespace Mono_Ether.MainMenu {
             spriteBatch.Draw(Art.SettingsSliderLeft, new Vector2(SliderPos.X - Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderLeft.Height / 2f), Color.White);
             spriteBatch.Draw(Art.SettingsSliderRight, new Vector2(SliderPos.X + Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderRight.Height / 2f), Color.White);
             spriteBatch.DrawString(Fonts.NovaSquare48, Text, new Vector2(SliderPos.X, SliderPos.Y - 75f), Color.White, 0f, Fonts.NovaSquare48.MeasureString(Text) / 2f, 1f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(Fonts.NovaSquare24, $"{Value*100:0}%", new Vector2(SliderPos.X + Width / 2f + Art.SettingsSliderRight.Width + 35f, SliderPos.Y), Color.White, 0f, Fonts.NovaSquare24.MeasureString($"{Value * 100:0}%") / 2f, 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"{Value * 100:0}%", new Vector2(SliderPos.X + Width / 2f + Art.SettingsSliderRight.Width + 35f, SliderPos.Y), Color.White, 0f, Fonts.NovaSquare24.MeasureString($"{Value * 100:0}%") / 2f, 1f, SpriteEffects.None, 0);
             Color sliderBallColor;
             if (IsBeingHovered || IsBeingDragged)
                 sliderBallColor = new Color(0, 255, 0);

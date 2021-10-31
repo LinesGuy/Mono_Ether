@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
@@ -53,7 +52,7 @@ namespace Mono_Ether.Ether {
                 EntityManager.Enemies.Where(e => !e.IsBoss).ToList().ForEach(e => e.WasKilled(PlayerIndex));
                 EntityManager.Entities = EntityManager.Entities.Where(e => !(e is Enemy enemy)).ToList();
             }
-                
+
             // Increment player score
             EntityManager.Players[PlayerIndex].AddPoints(Worth);
             // Summon geom
@@ -261,7 +260,7 @@ namespace Mono_Ether.Ether {
             for (int i = 0; i < tailLength; i++) {
                 enemy.tail.Add(Enemy.CreateSnakeBody(position));
             }
-            
+
             enemy.AddBehaviour(enemy.UpdateTail());
             return enemy;
         }
@@ -411,7 +410,7 @@ namespace Mono_Ether.Ether {
                     }
                 }
             }
-            enemy.AddBehaviour(BossChildOneAI(centre, initialRadians)); 
+            enemy.AddBehaviour(BossChildOneAI(centre, initialRadians));
             return enemy;
         }
         public static Enemy CreateBossTwoHead(Vector2 position) {

@@ -15,7 +15,7 @@ namespace Mono_Ether.Ether {
         public static void Update() {
             switch (state) {
                 case "slideIn":
-                    yOffset = (10/9) * slideRemainingFrames * slideRemainingFrames;
+                    yOffset = (10 / 9) * slideRemainingFrames * slideRemainingFrames;
                     slideRemainingFrames--;
                     if (slideRemainingFrames == 0) {
                         state = "visible";
@@ -29,7 +29,7 @@ namespace Mono_Ether.Ether {
                     }
                     break;
                 case "slideOut":
-                    yOffset = 1000f - (10/9) * slideRemainingFrames * slideRemainingFrames;
+                    yOffset = 1000f - (10 / 9) * slideRemainingFrames * slideRemainingFrames;
                     slideRemainingFrames--;
                     if (slideRemainingFrames == 0) {
                         state = "hidden";

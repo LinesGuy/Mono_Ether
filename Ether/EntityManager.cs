@@ -164,7 +164,7 @@ namespace Mono_Ether.Ether {
                     }
                 }
             }
-                
+
             #endregion Handle collisions between walls and enemies + the player
             #region Handle collisions walls and bullets
             for (var i = 0; i < Bullets.Count; i++)

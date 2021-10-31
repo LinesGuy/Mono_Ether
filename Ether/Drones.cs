@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
-    class Drone : Entity{
+    class Drone : Entity {
         public string Type;
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
         public int PlayerIndex;
@@ -53,7 +53,7 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        
+
         #endregion IEnumerables
         #region CreateDrones
         public static Drone CreateShooter(int playerIndex) {
@@ -88,7 +88,7 @@ namespace Mono_Ether.Ether {
             IEnumerable<int> collectGeomsAStar() {
                 // Also follow player when no geoms are to be found
                 const float acceleration = 1.5f;
-                
+
                 while (true) {
                     // If Geom is within Map.Cellsize of drone, move straight towards it
                     var dash = false;
@@ -116,7 +116,7 @@ namespace Mono_Ether.Ether {
                         } else {
                             // Go to nearest accessible geom
                             Geom nearestGeom = accessibleGeoms[0];
-                            foreach(Geom geom in accessibleGeoms) {
+                            foreach (Geom geom in accessibleGeoms) {
                                 if (Vector2.DistanceSquared(drone.Position, geom.Position) < Vector2.DistanceSquared(drone.Position, nearestGeom.Position))
                                     nearestGeom = geom;
                             }

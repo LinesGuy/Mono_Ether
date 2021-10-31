@@ -123,7 +123,7 @@ namespace Mono_Ether.Ether {
                 tile.UpdateWalls();
             }
             // Adjust player position to middle of map
-            foreach(PlayerShip player in EntityManager.Players)
+            foreach (PlayerShip player in EntityManager.Players)
                 player.Position = WorldSize / 2f;
             Camera.CameraPosition = EntityManager.Player1.Position;
         }

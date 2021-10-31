@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
     public static class Hud {
@@ -25,7 +23,7 @@ namespace Mono_Ether.Ether {
                 greenRect.Width = (int)((GameRoot.ScreenSize.X - 40) * bossBarFullness);
                 spriteBatch.Draw(Art.Pixel, greenRect, Color.Green);
             }
-            
+
             // Top-left debug texts
             if (GameRoot.Instance.dum_mode) {
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Camera XY: {EntityManager.Player1.Position.X:0.0}, {Camera.CameraPosition.Y:0.0}", new Vector2(0, 0), Color.White);
@@ -81,7 +79,7 @@ namespace Mono_Ether.Ether {
                     _ => Art.Default,
                 };
                 spriteBatch.Draw(texture, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, Art.YouDied.Size() / 2f, MathHelper.Lerp(1f, 1.5f, transitionFrames / 120f), SpriteEffects.None, 0);
-                
+
             }
         }
         public static void Update() {

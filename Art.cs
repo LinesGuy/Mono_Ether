@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Mono_Ether {
     static class Art {
@@ -49,7 +44,7 @@ namespace Mono_Ether {
         public static Texture2D MenuButtonBlank;
         public static Texture2D CollisionTopLeft;
         public static Texture2D CollisionTopRight;
-        public static Texture2D BackgroundParticle;        
+        public static Texture2D BackgroundParticle;
         public static Texture2D SettingsSliderLeft;
         public static Texture2D SettingsSliderBall;
         public static Texture2D SettingsSliderRight;

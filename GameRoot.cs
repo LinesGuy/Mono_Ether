@@ -83,7 +83,7 @@ namespace Mono_Ether {
                 spriteBatch.Draw(Art.Pixel, new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y), Color.Black * transparency);
                 spriteBatch.End();
             }
-            
+
             base.Draw(gameTime);
             spriteBatch.Begin();
             spriteBatch.DrawString(Fonts.NovaSquare24, $"FPS: {(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(0, 120), Color.White);

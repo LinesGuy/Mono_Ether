@@ -86,7 +86,7 @@ namespace Mono_Ether {
                         Sounds.ButtonClick.Play(volume: GameSettings.SoundEffectVolume, 1f, 0);
                         return button.Text;
                     }
-                        
+
             return null;
         }
         public void Update() {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -81,8 +80,6 @@ namespace Mono_Ether.Ether {
                 };
                 foreach (var offset in offsets) {
                     Vector2 nodePosition = currentNode.Position + offset * CellSize;
-
-                    // TODO: check that we are within the bounds of the map, optional?
 
                     // Check if this node is in the closed list
                     index = 0;

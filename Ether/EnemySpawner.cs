@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Linq;
 using System.Diagnostics;
 
 namespace Mono_Ether.Ether {

@@ -47,7 +47,7 @@ namespace Mono_Ether.Ether {
             }
         }
     }
-    
+
     class Starburst : Entity {
         private int age;
         private readonly int lifespan;

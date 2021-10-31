@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Diagnostics;
 
 namespace Mono_Ether.MainMenu {
     public class LevelSelectionScreen : States.GameState {
@@ -20,10 +19,10 @@ namespace Mono_Ether.MainMenu {
             buttonManager.AddButton(new LevelButton(5, "Super secret stage????????"));
         }
         public override void LoadContent(ContentManager content) {
-            
+
         }
         public override void UnloadContent() {
-            
+
         }
         public override void Update(GameTime gameTime) {
             NewtonsBackground.Update();
