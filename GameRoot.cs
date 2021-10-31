@@ -22,6 +22,8 @@ namespace Mono_Ether {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            /*graphics.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = false;*/
         }
         protected override void Initialize() {
             graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
@@ -83,6 +85,9 @@ namespace Mono_Ether {
             }
             
             base.Draw(gameTime);
+            spriteBatch.Begin();
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"FPS: {(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(0, 120), Color.White);
+            spriteBatch.End();
         }
         private void AddScreen(GameState screen) {
             screenStack.Push(screen);
