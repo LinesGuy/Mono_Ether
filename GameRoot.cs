@@ -86,7 +86,7 @@ namespace Mono_Ether {
 
             base.Draw(gameTime);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Fonts.NovaSquare24, $"FPS: {(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(0, 120), Color.White);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"FPS: {(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}", new Vector2(GameRoot.ScreenSize.X - 200, GameRoot.ScreenSize.Y - 40), Color.White);
             spriteBatch.End();
         }
         private void AddScreen(GameState screen) {
