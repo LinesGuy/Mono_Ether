@@ -15,13 +15,14 @@ namespace Mono_Ether.Ether {
         public bool IsBoss = false;
         public bool invincible = false;
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
+        public static int baseHealthMultiplier = 1;
         private static readonly Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position, string type) {
             Image = image;
             Position = position;
             Type = type;
-            Health = 1;
+            Health = baseHealthMultiplier;
             Worth = rand.Next(1, 10);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
