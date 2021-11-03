@@ -12,6 +12,12 @@ namespace Mono_Ether {
         public static void ApplyChanges() {
             SoundEffect.MasterVolume = MasterVolume * SoundEffectVolume;
             MediaPlayer.Volume = MasterVolume * MusicVolume;
+            if (Difficulty == "Easy")
+                Ether.Enemy.baseHealthMultiplier = 1;
+            else if (Difficulty == "Normal")
+                Ether.Enemy.baseHealthMultiplier = 2;
+            else if (Difficulty == "Hard")
+                Ether.Enemy.baseHealthMultiplier = 3;
         }
         public static void LoadSettings() {
             if (File.Exists(settingsFilename)) {
