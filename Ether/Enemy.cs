@@ -439,8 +439,9 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBossTwoTail(Vector2 position) {
-            var enemy = new Enemy(Art.BossTwoTail, position, "BossTwoTail");
-            enemy.Radius = 20;
+            var enemy = new Enemy(Art.BossTwoTail, position, "BossTwoTail") {
+                Radius = 20
+            };
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }

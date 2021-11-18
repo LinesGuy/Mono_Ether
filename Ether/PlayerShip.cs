@@ -56,13 +56,13 @@ namespace Mono_Ether.Ether {
             if (EtherRoot.Instance.doomMode) {
                 if (this == EntityManager.Player1) {
                     if (Input.keyboard.IsKeyDown(Keys.A))
-                        Orientation -= 0.05f;
+                        Orientation -= 0.025f;
                     if (Input.keyboard.IsKeyDown(Keys.D))
-                        Orientation += 0.05f;
+                        Orientation += 0.025f;
                     if (Input.keyboard.IsKeyDown(Keys.W))
-                        direction += MathUtil.FromPolar(Orientation, 1f);
+                        direction += MathUtil.FromPolar(Orientation, 0.3f);
                     if (Input.keyboard.IsKeyDown(Keys.S))
-                        direction -= MathUtil.FromPolar(Orientation, 1f);
+                        direction -= MathUtil.FromPolar(Orientation, 0.2f);
                 }
             } else {
                 
