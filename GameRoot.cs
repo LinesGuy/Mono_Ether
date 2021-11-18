@@ -16,7 +16,7 @@ namespace Mono_Ether {
         public int framesUntilTransition;
         public int transitionState; // 0 = none, 1 = load screen, -1 = unload screen
         private const int transitionLength = 30; // frames
-        public bool dum_mode = false;
+        public bool dum_mode = true;
         public GameRoot() {
             Instance = this;
             graphics = new GraphicsDeviceManager(this);
@@ -47,6 +47,7 @@ namespace Mono_Ether {
         }
 
         protected override void UnloadContent() {
+            // TODO: Unload any non ContentManager content here
         }
 
         protected override void Update(GameTime gameTime) {

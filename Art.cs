@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
 
 namespace Mono_Ether {
     static class Art {
@@ -56,8 +55,6 @@ namespace Mono_Ether {
         public static Texture2D PowerMoveSpeedDecrease;
         public static Texture2D PowerShootSpeedIncrease;
         public static Texture2D PowerShootSpeedDecrease;
-
-        public static Texture2D[] BossThree;
         public static void Load(ContentManager content) {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Glow = content.Load<Texture2D>("Textures/Gameplay/Glow");
@@ -111,8 +108,6 @@ namespace Mono_Ether {
             PowerMoveSpeedDecrease = content.Load<Texture2D>("Textures/Gameplay/PowerMoveSpeedDecrease");
             PowerShootSpeedIncrease = content.Load<Texture2D>("Textures/Gameplay/PowerShootSpeedIncrease");
             PowerShootSpeedDecrease = content.Load<Texture2D>("Textures/Gameplay/PowerShootSpeedDecrease");
-
-            BossThree = Enumerable.Range(1, 8).Select(x => content.Load<Texture2D>("Textures/Gameplay/BossThree/BossThree_" + x)).ToArray();
         }
     }
 }

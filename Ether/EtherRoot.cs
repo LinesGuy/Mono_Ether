@@ -10,6 +10,7 @@ namespace Mono_Ether.Ether {
         public static EtherRoot Instance { get; private set; }
         public bool paused = false;
         public bool editorMode = false;
+        public bool doomMode = true;
         private readonly string MapFileName;
         private Vector2 MapSize;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
@@ -35,7 +36,6 @@ namespace Mono_Ether.Ether {
                     break;
                 case "LevelThree.txt":
                     MapSize = new Vector2(64, 64);
-                    EntityManager.Add(Enemy.CreateBossThree(MapSize * Map.cellSize / 2f, 8));
                     break;
                 case "Secret.txt":
                     MapSize = new Vector2(32, 32);
@@ -49,7 +49,7 @@ namespace Mono_Ether.Ether {
             // LOAD MAP, SET PLAYER POS, OPTIONAL BOSS BAR
             Hud.Reset();
             Map.LoadFromFile(MapFileName, MapSize);
-            if (Map.Filename.StartsWith("Level")) {
+            if (Map.Filename == "LevelOne.txt" || Map.Filename == "LevelTwo.txt" || Map.Filename == "LevelThree.txt") {
                 foreach (PlayerShip player in EntityManager.Players)
                     player.Position = new Vector2(Map.cellSize * 2);
                 Hud.bossBarEnabled = true;
@@ -62,10 +62,7 @@ namespace Mono_Ether.Ether {
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
             Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = GameSettings.MasterVolume;
             PauseMenu.Initialize();
-            if (Map.Filename != "LevelThree.txt")
-                EnemySpawner.enabled = true;
-            else
-                EnemySpawner.enabled = false;
+            EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
 
 
@@ -122,6 +119,7 @@ namespace Mono_Ether.Ether {
                     Tutorial.Update();
                 FloatingTextManager.Update();
                 Hud.Update();
+                Doom.Update();
             }
             PauseMenu.Update();
 
@@ -147,6 +145,7 @@ namespace Mono_Ether.Ether {
                 Tutorial.Draw(spriteBatch);
             FloatingTextManager.Draw(spriteBatch);
             Hud.Draw(spriteBatch);
+            Doom.Draw(spriteBatch);
             if (!GameRoot.Instance.IsActive)
                 spriteBatch.DrawString(Fonts.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
             spriteBatch.End();

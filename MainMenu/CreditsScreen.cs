@@ -8,10 +8,10 @@ using System.Collections.Generic;
 namespace Mono_Ether.MainMenu {
     public class CreditsScreen : States.GameState {
         private ButtonManager buttonManager;
-        private readonly List<Letter> Letters = new List<Letter>();
+        private List<Letter> Letters = new List<Letter>();
         public static readonly Random rand = new Random();
         private int Frame;
-        private readonly char[] credits1 = "everything by me + lamkas a cute".ToCharArray();
+        private char[] credits1 = "everything by me + lamkas a cute".ToCharArray();
         public CreditsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) { }
         public override void Initialize() {
             buttonManager = new ButtonManager();

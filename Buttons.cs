@@ -57,6 +57,7 @@ namespace Mono_Ether {
         }
 
         public override void Update() {
+            //Pos = new Vector2((float)(GameRoot.ScreenSize.X / 1.2f - Math.Cos(Offset) * GameRoot.ScreenSize.Y / 2f), (float)(GameRoot.ScreenSize.Y / 2f + Math.Sin(Offset) * GameRoot.ScreenSize.Y / 1.5f));
             Pos = MathUtil.FromPolar(Offset, RADIUS);
             Pos.X += GameRoot.ScreenSize.X * 1.5f;
             Pos.Y += GameRoot.ScreenSize.Y / 2f;

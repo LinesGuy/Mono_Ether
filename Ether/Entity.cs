@@ -8,7 +8,7 @@ namespace Mono_Ether.Ether {
 
         public Vector2 Position;
         public Vector2 Velocity;
-        protected float Orientation;
+        public float Orientation;
         public float Radius = 20;  // Used for circular collision detection
         public bool IsExpired;  // If true, entity will be removed on next update
 
