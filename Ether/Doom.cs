@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Mono_Ether.Ether {
     public static class Doom {
-        static float fov = MathF.PI;
+        static float fov = MathF.PI * 0.8f;
         static float stepDist = 4;
-        static int maxSteps = 256;
+        static int maxSteps = 512;
         static float maxDist = stepDist * maxSteps;
-        public static void Update() {
-
-        }
         public static void Draw(SpriteBatch spriteBatch) {
             spriteBatch.Draw(Art.Pixel, new Rectangle(0, (int)(GameRoot.ScreenSize.Y / 2f), (int)(GameRoot.ScreenSize.X), (int)(GameRoot.ScreenSize.Y / 2f)), new Color(32, 32, 32));
             Vector2 p1Pos = EntityManager.Player1.Position;
@@ -28,7 +25,6 @@ namespace Mono_Ether.Ether {
             Parallel.For(0, (int)GameRoot.ScreenSize.X, i => {
                 float deltaAngle = MathUtil.Interpolate(-fov / 2f, fov / 2f, (GameRoot.ScreenSize.X - i) / GameRoot.ScreenSize.X);
                 float rayAngle = p1Angle - deltaAngle;
-                float texX = -1f;
                 int tileId = -1;
                 int step;
                 Vector2 currentRayPos = p1Pos;
@@ -198,14 +194,9 @@ namespace Mono_Ether.Ether {
                         img = Art.TileStone;
                     if (tileId == 4)
                         img = Art.TileSus;
-                    //spriteBatch.Draw(img, new Rectangle(i, (int)(GameRoot.ScreenSize.Y / 2f - GameRoot.ScreenSize.Y / 2f / ed), 1, (int)(GameRoot.ScreenSize.Y / ed)), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), Color.White);
                     int c = (int)(255f * (1 - dist / maxDist));
-                    float height = 16f / ed;
-                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), new Color(c, c, c), 0f, new Vector2(32f, 32f), new Vector2(1, height), 0, 0);
-                } else {
-                    //spriteBatch.Draw(Art.Pixel, new Rectangle(i, (int)(topLeft.Y + delta.Y / 2f - delta.Y / 2f / ed), 1, (int)(delta.Y / ed)), new Color(0, 255 - (int)MathUtil.Interpolate(0, 255, step / 445f), 0, 64));
+                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), new Color(c, c, c), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);
                 }
-                //spriteBatch.Draw(Art.Pixel, new Rectangle(i, (int)(GameRoot.ScreenSize.Y / 2f - GameRoot.ScreenSize.Y / 2f / ed + GameRoot.ScreenSize.Y / ed), 1, (int)(GameRoot.ScreenSize.Y + GameRoot.ScreenSize.Y / 2f - GameRoot.ScreenSize.Y / 2f / ed + GameRoot.ScreenSize.Y / ed)), new Color(255,0 ,  255, 64));
             }
         }
     }

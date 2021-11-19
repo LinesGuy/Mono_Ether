@@ -118,7 +118,6 @@ namespace Mono_Ether.Ether {
                     Tutorial.Update();
                 FloatingTextManager.Update();
                 Hud.Update();
-                Doom.Update();
             }
             PauseMenu.Update();
 
