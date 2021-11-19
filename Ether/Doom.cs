@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Mono_Ether.Ether {
     public static class Doom {
         static float fov = MathF.PI;
-        static float stepDist = 8;
-        static int maxSteps = 128;
+        static float stepDist = 4;
+        static int maxSteps = 256;
         static float maxDist = stepDist * maxSteps;
         public static void Update() {
 
@@ -19,11 +19,12 @@ namespace Mono_Ether.Ether {
             float p1Angle = EntityManager.Player1.Orientation;
             List<float> dists = new List<float>();
             List<float> texXs = new List<float>();
+            List<int> tileIds = new List<int>();
             for (int i = 0; i < (int)GameRoot.ScreenSize.X; i++) {
                 dists.Add(0);
-                texXs.Add(0);
+                texXs.Add(-1f);
+                tileIds.Add(0);
             }
-                
             Parallel.For(0, (int)GameRoot.ScreenSize.X, i => {
                 float deltaAngle = MathUtil.Interpolate(-fov / 2f, fov / 2f, (GameRoot.ScreenSize.X - i) / GameRoot.ScreenSize.X);
                 float rayAngle = p1Angle - deltaAngle;
@@ -34,12 +35,10 @@ namespace Mono_Ether.Ether {
                 Vector2 stepVector = MathUtil.FromPolar(rayAngle, stepDist);
                 float dist = 0f;
                 for (step = 0; step <= maxSteps; step++) {
-                    currentRayPos += stepVector;
+
                     tileId = Map.GetTileFromWorld(currentRayPos).TileId;
                     if (tileId > 0) {
-
                         // Collision! Let's find the nearest intersection between the ray and tile
-
                         var tile = Map.GetTileFromWorld(currentRayPos);
                         Vector2 nearestCollision = Vector2.Zero;
                         float nearestDistSquared = float.MaxValue;
@@ -59,7 +58,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y);
+                                texXs[(int)i] = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y);
+                                tileId = upperTile.TileId;
                             }
                         } else if (tile.Walls[0] && tile.Bottom.Y > ty && ty > tile.Top.Y) {
                             Vector2 collision = new Vector2(tile.Left.X, ty);
@@ -67,7 +67,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.Y - tile.Top.Y) / (tile.Bottom.Y - tile.Top.Y);
+                                texXs[(int)i] = (collision.Y - tile.Top.Y) / (tile.Bottom.Y - tile.Top.Y);
+                                tileId = tile.TileId;
                             }
                         } else if (lowerTile.Walls[0] && tile.Bottom.Y < ty) {
 
@@ -76,7 +77,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.Y - lowerTile.Top.Y) / (lowerTile.Bottom.Y - lowerTile.Top.Y);
+                                texXs[(int)i] = (collision.Y - lowerTile.Top.Y) / (lowerTile.Bottom.Y - lowerTile.Top.Y);
+                                tileId = lowerTile.TileId;
                             }
                         }
                         // Top wall
@@ -89,7 +91,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.X - leftTile.Right.X) / (leftTile.Left.X - leftTile.Right.X);
+                                texXs[(int)i] = (collision.X - leftTile.Right.X) / (leftTile.Left.X - leftTile.Right.X);
+                                tileId = leftTile.TileId;
                             }
                         } else if (tile.Walls[1] && tile.Left.X < tx && tx < tile.Right.X) {
                             Vector2 collision = new Vector2(tx, tile.Top.Y);
@@ -97,7 +100,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.X - tile.Right.X) / (tile.Left.X - tile.Right.X);
+                                texXs[(int)i] = (collision.X - tile.Right.X) / (tile.Left.X - tile.Right.X);
+                                tileId = tile.TileId;
                             }
                         } else if (rightTile.Walls[1] && tx > tile.Right.X) {
                             Vector2 collision = new Vector2(tx, rightTile.Top.Y);
@@ -105,7 +109,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.X - rightTile.Right.X) / (rightTile.Left.X - rightTile.Right.X);
+                                texXs[(int)i] = (collision.X - rightTile.Right.X) / (rightTile.Left.X - rightTile.Right.X);
+                                tileId = rightTile.TileId;
                             }
                         }
                         // Right wall
@@ -118,7 +123,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y);
+                                texXs[(int)i] = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y);
+                                tileId = upperTile.TileId;
                             }
                         } else if (tile.Walls[2] && tile.Bottom.Y > ty && ty > tile.Top.Y) {
                             Vector2 collision = new Vector2(tile.Right.X, ty);
@@ -126,7 +132,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.Y - tile.Top.Y) / (tile.Bottom.Y - tile.Top.Y);
+                                texXs[(int)i] = (collision.Y - tile.Top.Y) / (tile.Bottom.Y - tile.Top.Y);
+                                tileId = tile.TileId;
                             }
                         } else if (lowerTile.Walls[2] && tile.Bottom.Y < ty) {
                             Vector2 collision = new Vector2(lowerTile.Right.X, ty);
@@ -134,7 +141,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.Y - lowerTile.Top.Y) / (lowerTile.Bottom.Y - lowerTile.Top.Y);
+                                texXs[(int)i] = (collision.Y - lowerTile.Top.Y) / (lowerTile.Bottom.Y - lowerTile.Top.Y);
+                                tileId = lowerTile.TileId;
                             }
                         }
                         // Bottom wall
@@ -147,7 +155,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.X - leftTile.Right.X) / (leftTile.Left.X - leftTile.Right.X);
+                                texXs[(int)i] = (collision.X - leftTile.Right.X) / (leftTile.Left.X - leftTile.Right.X);
+                                tileId = leftTile.TileId;
                             }
                         } else if (tile.Walls[3] && tile.Left.X < tx && tx < tile.Right.X) {
                             Vector2 collision = new Vector2(tx, tile.Bottom.Y);
@@ -155,7 +164,8 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.X - tile.Right.X) / (tile.Left.X - tile.Right.X);
+                                texXs[(int)i] = (collision.X - tile.Right.X) / (tile.Left.X - tile.Right.X);
+                                tileId = tile.TileId;
                             }
                         } else if (rightTile.Walls[3] && tx > tile.Right.X) {
                             Vector2 collision = new Vector2(tx, rightTile.Bottom.Y);
@@ -163,38 +173,35 @@ namespace Mono_Ether.Ether {
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texX = (collision.X - rightTile.Right.X) / (rightTile.Left.X - rightTile.Right.X);
+                                texXs[(int)i] = (collision.X - rightTile.Right.X) / (rightTile.Left.X - rightTile.Right.X);
+                                tileId = rightTile.TileId;
                             }
                         }
                         dist = MathF.Sqrt(nearestDistSquared);
                         dists[(int)i] = dist;
-                        texXs[(int)i] = texX;
+                        tileIds[(int)i] = tileId;
                         break;
                     }
-                    //spriteBatch.Draw(Art.Pixel, Camera.WorldToScreen(currentRayPos), Color.Red);
+                    currentRayPos += stepVector;
                 }
             });
             for (int i = 0; i < (int)GameRoot.ScreenSize.X; i++) {
                 float dist = dists[i];
                 float texX = texXs[i];
+                int tileId = tileIds[i];
                 float ed = dist / 32f;
-                if (dist < 0.1f)
-                    dist = 0.1f;
-                if (ed < 0.1f)
-                    ed = 0.1f;
                 if (texX >= 0) {
                     Texture2D img = Art.TileGrass;
-                    /*
                     if (tileId == 2)
                         img = Art.TileDirt;
                     if (tileId == 3)
                         img = Art.TileStone;
                     if (tileId == 4)
                         img = Art.TileSus;
-                    */
                     //spriteBatch.Draw(img, new Rectangle(i, (int)(GameRoot.ScreenSize.Y / 2f - GameRoot.ScreenSize.Y / 2f / ed), 1, (int)(GameRoot.ScreenSize.Y / ed)), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), Color.White);
                     int c = (int)(255f * (1 - dist / maxDist));
-                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), new Color(c, c, c), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);
+                    float height = 16f / ed;
+                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), new Color(c, c, c), 0f, new Vector2(32f, 32f), new Vector2(1, height), 0, 0);
                 } else {
                     //spriteBatch.Draw(Art.Pixel, new Rectangle(i, (int)(topLeft.Y + delta.Y / 2f - delta.Y / 2f / ed), 1, (int)(delta.Y / ed)), new Color(0, 255 - (int)MathUtil.Interpolate(0, 255, step / 445f), 0, 64));
                 }
