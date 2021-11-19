@@ -12,7 +12,7 @@ namespace Mono_Ether.Ether {
 
         }
         public static void Draw(SpriteBatch spriteBatch) {
-            
+            spriteBatch.Draw(Art.Pixel, new Rectangle(0, (int)(GameRoot.ScreenSize.Y / 2f), (int)(GameRoot.ScreenSize.X), (int)(GameRoot.ScreenSize.Y / 2f)), new Color(32, 32, 32));
             Vector2 p1Pos = EntityManager.Player1.Position;
             float p1Angle = EntityManager.Player1.Orientation;
             for (int i = 0; i < (int)GameRoot.ScreenSize.X; i++) {
@@ -183,7 +183,8 @@ namespace Mono_Ether.Ether {
                     if (tileId == 4)
                         img = Art.TileSus;
                     //spriteBatch.Draw(img, new Rectangle(i, (int)(GameRoot.ScreenSize.Y / 2f - GameRoot.ScreenSize.Y / 2f / ed), 1, (int)(GameRoot.ScreenSize.Y / ed)), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), Color.White);
-                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), Color.White * (1 - dist / maxDist), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);
+                    int c = (int)(255f * (1 - dist / maxDist));
+                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), new Color(c, c, c), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);
                 } else {
                     //spriteBatch.Draw(Art.Pixel, new Rectangle(i, (int)(topLeft.Y + delta.Y / 2f - delta.Y / 2f / ed), 1, (int)(delta.Y / ed)), new Color(0, 255 - (int)MathUtil.Interpolate(0, 255, step / 445f), 0, 64));
                 }

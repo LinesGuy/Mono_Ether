@@ -125,12 +125,20 @@ namespace Mono_Ether.Ether {
         }
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
+            
+            if (doomMode) {
+                spriteBatch.Begin();
+                Doom.Draw(spriteBatch);
+                spriteBatch.End();
+            } else {
+                spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
+                Map.Draw(spriteBatch);
+                BackgroundParticleManager.Draw(spriteBatch);
+                EntityManager.Draw(spriteBatch);
+                ParticleManager.Draw(spriteBatch);
+            }
+            spriteBatch.Begin();
 
-            Map.Draw(spriteBatch);
-            BackgroundParticleManager.Draw(spriteBatch);
-            EntityManager.Draw(spriteBatch);
-            ParticleManager.Draw(spriteBatch);
 
             Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
@@ -144,7 +152,7 @@ namespace Mono_Ether.Ether {
                 Tutorial.Draw(spriteBatch);
             FloatingTextManager.Draw(spriteBatch);
             Hud.Draw(spriteBatch);
-            Doom.Draw(spriteBatch);
+            
             if (!GameRoot.Instance.IsActive)
                 spriteBatch.DrawString(Fonts.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
             spriteBatch.End();
