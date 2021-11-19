@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mono_Ether.Ether {
     public static class Doom {
@@ -15,9 +17,16 @@ namespace Mono_Ether.Ether {
             spriteBatch.Draw(Art.Pixel, new Rectangle(0, (int)(GameRoot.ScreenSize.Y / 2f), (int)(GameRoot.ScreenSize.X), (int)(GameRoot.ScreenSize.Y / 2f)), new Color(32, 32, 32));
             Vector2 p1Pos = EntityManager.Player1.Position;
             float p1Angle = EntityManager.Player1.Orientation;
+            List<float> dists = new List<float>();
+            List<float> texXs = new List<float>();
             for (int i = 0; i < (int)GameRoot.ScreenSize.X; i++) {
+                dists.Add(0);
+                texXs.Add(0);
+            }
+                
+            Parallel.For(0, (int)GameRoot.ScreenSize.X, i => {
                 float deltaAngle = MathUtil.Interpolate(-fov / 2f, fov / 2f, (GameRoot.ScreenSize.X - i) / GameRoot.ScreenSize.X);
-                float rayAngle = p1Angle - deltaAngle;                
+                float rayAngle = p1Angle - deltaAngle;
                 float texX = -1f;
                 int tileId = -1;
                 int step;
@@ -28,7 +37,7 @@ namespace Mono_Ether.Ether {
                     currentRayPos += stepVector;
                     tileId = Map.GetTileFromWorld(currentRayPos).TileId;
                     if (tileId > 0) {
-                        
+
                         // Collision! Let's find the nearest intersection between the ray and tile
 
                         var tile = Map.GetTileFromWorld(currentRayPos);
@@ -44,7 +53,7 @@ namespace Mono_Ether.Ether {
                         Tile upperTile = Map.GetTileFromMap(tile.pos - new Vector2(0, 1));
                         Tile lowerTile = Map.GetTileFromMap(tile.pos + new Vector2(0, 1));
                         if (upperTile.Walls[0] && ty < tile.Top.Y) {
-                            
+
                             Vector2 collision = new Vector2(upperTile.Left.X, ty);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
                             if (distSquared < nearestDistSquared) {
@@ -52,8 +61,7 @@ namespace Mono_Ether.Ether {
                                 nearestDistSquared = distSquared;
                                 texX = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y);
                             }
-                        }
-                        else if (tile.Walls[0] && tile.Bottom.Y > ty && ty > tile.Top.Y) {
+                        } else if (tile.Walls[0] && tile.Bottom.Y > ty && ty > tile.Top.Y) {
                             Vector2 collision = new Vector2(tile.Left.X, ty);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
                             if (distSquared < nearestDistSquared) {
@@ -61,8 +69,7 @@ namespace Mono_Ether.Ether {
                                 nearestDistSquared = distSquared;
                                 texX = (collision.Y - tile.Top.Y) / (tile.Bottom.Y - tile.Top.Y);
                             }
-                        }
-                        else if (lowerTile.Walls[0] && tile.Bottom.Y < ty) {
+                        } else if (lowerTile.Walls[0] && tile.Bottom.Y < ty) {
 
                             Vector2 collision = new Vector2(lowerTile.Left.X, ty);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
@@ -84,8 +91,7 @@ namespace Mono_Ether.Ether {
                                 nearestDistSquared = distSquared;
                                 texX = (collision.X - leftTile.Right.X) / (leftTile.Left.X - leftTile.Right.X);
                             }
-                        }
-                        else if (tile.Walls[1] && tile.Left.X < tx && tx < tile.Right.X) {
+                        } else if (tile.Walls[1] && tile.Left.X < tx && tx < tile.Right.X) {
                             Vector2 collision = new Vector2(tx, tile.Top.Y);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
                             if (distSquared < nearestDistSquared) {
@@ -93,8 +99,7 @@ namespace Mono_Ether.Ether {
                                 nearestDistSquared = distSquared;
                                 texX = (collision.X - tile.Right.X) / (tile.Left.X - tile.Right.X);
                             }
-                        }
-                        else if (rightTile.Walls[1] && tx > tile.Right.X) {
+                        } else if (rightTile.Walls[1] && tx > tile.Right.X) {
                             Vector2 collision = new Vector2(tx, rightTile.Top.Y);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
                             if (distSquared < nearestDistSquared) {
@@ -115,8 +120,7 @@ namespace Mono_Ether.Ether {
                                 nearestDistSquared = distSquared;
                                 texX = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y);
                             }
-                        }
-                        else if (tile.Walls[2] && tile.Bottom.Y > ty && ty > tile.Top.Y) {
+                        } else if (tile.Walls[2] && tile.Bottom.Y > ty && ty > tile.Top.Y) {
                             Vector2 collision = new Vector2(tile.Right.X, ty);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
                             if (distSquared < nearestDistSquared) {
@@ -124,8 +128,7 @@ namespace Mono_Ether.Ether {
                                 nearestDistSquared = distSquared;
                                 texX = (collision.Y - tile.Top.Y) / (tile.Bottom.Y - tile.Top.Y);
                             }
-                        }
-                        else if (lowerTile.Walls[2] && tile.Bottom.Y < ty) {
+                        } else if (lowerTile.Walls[2] && tile.Bottom.Y < ty) {
                             Vector2 collision = new Vector2(lowerTile.Right.X, ty);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
                             if (distSquared < nearestDistSquared) {
@@ -146,8 +149,7 @@ namespace Mono_Ether.Ether {
                                 nearestDistSquared = distSquared;
                                 texX = (collision.X - leftTile.Right.X) / (leftTile.Left.X - leftTile.Right.X);
                             }
-                        }
-                        else if (tile.Walls[3] && tile.Left.X < tx && tx < tile.Right.X) {
+                        } else if (tile.Walls[3] && tile.Left.X < tx && tx < tile.Right.X) {
                             Vector2 collision = new Vector2(tx, tile.Bottom.Y);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
                             if (distSquared < nearestDistSquared) {
@@ -165,10 +167,16 @@ namespace Mono_Ether.Ether {
                             }
                         }
                         dist = MathF.Sqrt(nearestDistSquared);
+                        dists[(int)i] = dist;
+                        texXs[(int)i] = texX;
                         break;
                     }
                     //spriteBatch.Draw(Art.Pixel, Camera.WorldToScreen(currentRayPos), Color.Red);
                 }
+            });
+            for (int i = 0; i < (int)GameRoot.ScreenSize.X; i++) {
+                float dist = dists[i];
+                float texX = texXs[i];
                 float ed = dist / 32f;
                 if (dist < 0.1f)
                     dist = 0.1f;
@@ -176,12 +184,14 @@ namespace Mono_Ether.Ether {
                     ed = 0.1f;
                 if (texX >= 0) {
                     Texture2D img = Art.TileGrass;
+                    /*
                     if (tileId == 2)
                         img = Art.TileDirt;
                     if (tileId == 3)
                         img = Art.TileStone;
                     if (tileId == 4)
                         img = Art.TileSus;
+                    */
                     //spriteBatch.Draw(img, new Rectangle(i, (int)(GameRoot.ScreenSize.Y / 2f - GameRoot.ScreenSize.Y / 2f / ed), 1, (int)(GameRoot.ScreenSize.Y / ed)), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), Color.White);
                     int c = (int)(255f * (1 - dist / maxDist));
                     spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), new Color(c, c, c), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);

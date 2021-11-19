@@ -22,8 +22,8 @@ namespace Mono_Ether {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            /*graphics.SynchronizeWithVerticalRetrace = false;
-            IsFixedTimeStep = false;*/
+            graphics.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = false;
         }
         protected override void Initialize() {
             graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
