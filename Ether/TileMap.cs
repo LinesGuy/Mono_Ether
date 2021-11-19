@@ -11,7 +11,7 @@ namespace Mono_Ether.Ether {
     public class Tile {
         public Vector2 pos;
         public int TileId;
-        public Boolean[] Walls = new Boolean[8];
+        public bool[] Walls = new bool[8];
         public Tile(Vector2 mapPos, int tileId) {
             pos = mapPos;
             TileId = tileId;
