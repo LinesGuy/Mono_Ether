@@ -10,7 +10,7 @@ namespace Mono_Ether.Ether {
         public static EtherRoot Instance { get; private set; }
         public bool paused = false;
         public bool editorMode = false;
-        public bool doomMode = true;
+        public bool doomMode = false;
         private readonly string MapFileName;
         private Vector2 MapSize;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
@@ -39,6 +39,7 @@ namespace Mono_Ether.Ether {
                     break;
                 case "Secret.txt":
                     MapSize = new Vector2(32, 32);
+                    //doomMode = true;
                     break;
             }
         }
@@ -64,7 +65,10 @@ namespace Mono_Ether.Ether {
             PauseMenu.Initialize();
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
-
+            if (Map.Filename == "Secret.txt") {
+                EnemySpawner.enabled = false;
+                PowerPackSpawner.enabled = false;
+            }
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sounds.Music);
@@ -135,16 +139,11 @@ namespace Mono_Ether.Ether {
                 BackgroundParticleManager.Draw(spriteBatch);
                 EntityManager.Draw(spriteBatch);
                 ParticleManager.Draw(spriteBatch);
+                spriteBatch.End();
             }
             spriteBatch.Begin();
-
-
             Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
-
-            spriteBatch.End();
-            // No BlendState.Additive from here
-            spriteBatch.Begin();
             if (PauseMenu.state != "hidden")
                 PauseMenu.Draw(spriteBatch);
             if (Tutorial.state != "none")
