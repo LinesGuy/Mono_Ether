@@ -40,14 +40,19 @@ namespace Mono_Ether.Ether {
 
             // Check for rare corner exception
             if (tile.Walls[4] || tile.Walls[5] || tile.Walls[6] || tile.Walls[7]) {
-                if (tile.Walls[4])
-                    destination = tile.TopLeft;
-                else if (tile.Walls[5])
+                destination = tile.TopLeft;
+                float distSquared = Vector2.DistanceSquared(Position, tile.TopLeft);
+                if (tile.Walls[5] && Vector2.DistanceSquared(Position, tile.TopRight) < distSquared) {
                     destination = tile.TopRight;
-                else if (tile.Walls[6])
+                    distSquared = Vector2.DistanceSquared(Position, tile.TopRight);
+                }
+                if (tile.Walls[6] && Vector2.DistanceSquared(Position, tile.BottomRight) < distSquared) {
                     destination = tile.BottomRight;
-                else
+                    distSquared = Vector2.DistanceSquared(Position, tile.BottomRight);
+                }
+                if (tile.Walls[7] && Vector2.DistanceSquared(Position, tile.BottomLeft) < distSquared) {
                     destination = tile.BottomLeft;
+                }
 
                 if (Vector2.DistanceSquared(Position, destination) < (Map.cellSize / 2f) * (Map.cellSize / 2f)) {
                     Position = destination;
