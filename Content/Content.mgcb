@@ -404,7 +404,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/Heart.png;Textures/Gameplay/Heart.png
+/build:Textures/Gameplay/Heart.png
 
 #begin Textures/Gameplay/Laser.png
 /importer:TextureImporter
@@ -502,6 +502,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Gameplay/PowerMoveSpeedIncrease.png
 
+#begin Textures/Gameplay/PowerSecret.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Gameplay/PowerSecret.png
+
 #begin Textures/Gameplay/PowerShootSpeedDecrease.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -584,7 +596,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/YouDied.png;Textures/Gameplay/YouDied.png
+/build:Textures/Gameplay/YouDied.png
 
 #begin Textures/Gameplay/YouWon.png
 /importer:TextureImporter
@@ -596,7 +608,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Gameplay/YouWon.png;Textures/Gameplay/YouWon.png
+/build:Textures/Gameplay/YouWon.png
 
 #begin Textures/Intro/welcome_text.png
 /importer:TextureImporter

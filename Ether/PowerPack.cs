@@ -69,7 +69,6 @@ namespace Mono_Ether.Ether {
         static readonly Random _rand = new Random();
         static readonly float _inverseSpawnChance = 50;
         public static bool enabled = true;
-        private const int numTypes = 4;
         public static void Update() {
             if (!enabled)
                 return;
@@ -81,7 +80,7 @@ namespace Mono_Ether.Ether {
                 if (pos == Vector2.Zero)
                     return;
 
-                int powerTypeInt = _rand.Next(0, numTypes);
+                int powerTypeInt = _rand.Next(0, 5);
                 switch (powerTypeInt) {
                     case (0): // ShootSpeedIncrease
                         EntityManager.Add(new PowerPack(Art.PowerShootSpeedIncrease, pos, "ShootSpeedIncrease", 300));

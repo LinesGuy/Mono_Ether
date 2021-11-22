@@ -66,6 +66,7 @@ namespace Mono_Ether.Ether {
             EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
             if (Map.Filename == "Secret.txt") {
+                doomMode = true;
                 EnemySpawner.enabled = false;
                 PowerPackSpawner.enabled = false;
             }
