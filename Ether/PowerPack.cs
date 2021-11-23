@@ -80,7 +80,7 @@ namespace Mono_Ether.Ether {
                 if (pos == Vector2.Zero)
                     return;
 
-                int powerTypeInt = _rand.Next(0, 5);
+                int powerTypeInt = _rand.Next(4, 5);
                 switch (powerTypeInt) {
                     case (0): // ShootSpeedIncrease
                         EntityManager.Add(new PowerPack(Art.PowerShootSpeedIncrease, pos, "ShootSpeedIncrease", 300));
@@ -93,6 +93,9 @@ namespace Mono_Ether.Ether {
                         break;
                     case (3): // MoveSpeedDecrease
                         EntityManager.Add(new PowerPack(Art.PowerMoveSpeedDecrease, pos, "MoveSpeedDecrease", 300));
+                        break;
+                    case (4): // Doom
+                        EntityManager.Add(new PowerPack(Art.PowerSecret, pos, "Doom", 1800));
                         break;
                     default:
                         // this shouldn't happen

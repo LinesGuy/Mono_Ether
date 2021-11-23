@@ -15,6 +15,7 @@ namespace Mono_Ether.Ether {
         public int playerIndex;
         public int HighScore { get; private set; }
         private static readonly string highScoreFilename = "highscore.txt";
+        public bool DoomMovement = false;
 
         public PlayerShip() {
             Image = Art.Player;
@@ -53,7 +54,7 @@ namespace Mono_Ether.Ether {
 
             Vector2 direction = Vector2.Zero;
 
-            if (EtherRoot.Instance.doomMode) {
+            if (DoomMovement) {
                 if (this == EntityManager.Player1) {
                     if (Input.keyboard.IsKeyDown(Keys.A))
                         Orientation -= 0.025f;
@@ -86,7 +87,7 @@ namespace Mono_Ether.Ether {
             Velocity /= 1.5f;  // Friction
             Position += Velocity;
             // Change orientation if velocity is non-zero:
-            if (!EtherRoot.Instance.doomMode && Velocity.LengthSquared() > 0)
+            if (!DoomMovement && Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
 
             HandleTilemapCollision();

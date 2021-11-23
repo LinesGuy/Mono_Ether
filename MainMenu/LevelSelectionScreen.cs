@@ -45,7 +45,7 @@ namespace Mono_Ether.MainMenu {
                     GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelThree.txt"));
                     break;
                 case "Super secret stage????????":
-//                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
+                    //GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
                     break;
                 default:
                     break;
