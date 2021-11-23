@@ -90,9 +90,9 @@ namespace Mono_Ether.Ether {
             else if (destination == up)
                 Position.Y = destination.Y - 0.001f;
             else if (destination == right)
-                Position.X = destination.X;
+                Position.X = destination.X + 0.001f;
             else
-                Position.Y = destination.Y;
+                Position.Y = destination.Y + 0.001f;
 
             return;
         }
