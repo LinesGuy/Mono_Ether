@@ -8,7 +8,7 @@ namespace Mono_Ether.Ether {
 
         public Vector2 Position;
         public Vector2 Velocity;
-        protected float Orientation;
+        public float Orientation;
         public float Radius = 20;  // Used for circular collision detection
         public bool IsExpired;  // If true, entity will be removed on next update
 
@@ -40,14 +40,23 @@ namespace Mono_Ether.Ether {
 
             // Check for rare corner exception
             if (tile.Walls[4] || tile.Walls[5] || tile.Walls[6] || tile.Walls[7]) {
-                if (tile.Walls[4])
+                destination = tile.TopLeft;
+                float distSquared = float.MaxValue;
+                if (tile.Walls[4] && Vector2.DistanceSquared(Position, tile.TopLeft) < distSquared) {
                     destination = tile.TopLeft;
-                else if (tile.Walls[5])
+                    distSquared = Vector2.DistanceSquared(Position, tile.TopLeft);
+                }
+                if (tile.Walls[5] && Vector2.DistanceSquared(Position, tile.TopRight) < distSquared) {
                     destination = tile.TopRight;
-                else if (tile.Walls[6])
+                    distSquared = Vector2.DistanceSquared(Position, tile.TopRight);
+                }
+                if (tile.Walls[6] && Vector2.DistanceSquared(Position, tile.BottomRight) < distSquared) {
                     destination = tile.BottomRight;
-                else
+                    distSquared = Vector2.DistanceSquared(Position, tile.BottomRight);
+                }
+                if (tile.Walls[7] && Vector2.DistanceSquared(Position, tile.BottomLeft) < distSquared) {
                     destination = tile.BottomLeft;
+                }
 
                 if (Vector2.DistanceSquared(Position, destination) < (Map.cellSize / 2f) * (Map.cellSize / 2f)) {
                     Position = destination;
@@ -81,9 +90,9 @@ namespace Mono_Ether.Ether {
             else if (destination == up)
                 Position.Y = destination.Y - 0.001f;
             else if (destination == right)
-                Position.X = destination.X;
+                Position.X = destination.X + 0.001f;
             else
-                Position.Y = destination.Y;
+                Position.Y = destination.Y + 0.001f;
 
             return;
         }

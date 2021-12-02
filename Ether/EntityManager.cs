@@ -175,8 +175,14 @@ namespace Mono_Ether.Ether {
                 for (var i = 0; i < PowerPacks.Count; i++)
                     if (IsColliding(PowerPacks[i], player)) {
                         PowerPacks[i].WasPickedUp();
-                        player.activePowerPacks.Add(PowerPacks[i]);
                         PowerPacks[i].IsExpired = true;
+                        if (PowerPacks[i].PowerType == "Doom") {
+                            GameRoot.Instance.TransitionScreen(new DoomRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
+                            player.activePowerPacks.Add(new PowerPack(Art.PowerMoveSpeedIncrease, Vector2.Zero, "MoveSpeedIncrease", 3600));
+                            player.activePowerPacks.Add(new PowerPack(Art.PowerShootSpeedIncrease, Vector2.Zero, "ShootSpeedIncrease", 3600));
+                            continue;
+                        }
+                        player.activePowerPacks.Add(PowerPacks[i]);
                     }
             }
             #endregion Handle collisions between powerpacks and the player

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -15,6 +16,7 @@ namespace Mono_Ether.Ether {
         public int playerIndex;
         public int HighScore { get; private set; }
         private static readonly string highScoreFilename = "highscore.txt";
+        public bool DoomMovement = false;
 
         public PlayerShip() {
             Image = Art.Player;
@@ -50,17 +52,34 @@ namespace Mono_Ether.Ether {
                 else if (power.PowerType == "MoveSpeedDecrease")
                     acceleration /= 1.3f;
             }
+
             Vector2 direction = Vector2.Zero;
-            if (this == EntityManager.Player1) {
-                if (Input.keyboard.IsKeyDown(Keys.A))
-                    direction.X -= 1;
-                if (Input.keyboard.IsKeyDown(Keys.D))
-                    direction.X += 1;
-                if (Input.keyboard.IsKeyDown(Keys.W))
-                    direction.Y -= 1;
-                if (Input.keyboard.IsKeyDown(Keys.S))
-                    direction.Y += 1;
+
+            if (DoomMovement) {
+                if (this == EntityManager.Player1) {
+                    if (Input.keyboard.IsKeyDown(Keys.A))
+                        Orientation -= 0.025f;
+                    if (Input.keyboard.IsKeyDown(Keys.D))
+                        Orientation += 0.025f;
+                    if (Input.keyboard.IsKeyDown(Keys.W))
+                        direction += MathUtil.FromPolar(Orientation, 0.3f);
+                    if (Input.keyboard.IsKeyDown(Keys.S))
+                        direction -= MathUtil.FromPolar(Orientation, 0.2f);
+                }
+            } else {
+                
+                if (this == EntityManager.Player1) {
+                    if (Input.keyboard.IsKeyDown(Keys.A))
+                        direction.X -= 1;
+                    if (Input.keyboard.IsKeyDown(Keys.D))
+                        direction.X += 1;
+                    if (Input.keyboard.IsKeyDown(Keys.W))
+                        direction.Y -= 1;
+                    if (Input.keyboard.IsKeyDown(Keys.S))
+                        direction.Y += 1;
+                }
             }
+            
             if (direction.LengthSquared() > 1)
                 direction.Normalize();
             direction = direction.Rotate(-Camera.Orientation);
@@ -69,20 +88,21 @@ namespace Mono_Ether.Ether {
             Velocity /= 1.5f;  // Friction
             Position += Velocity;
             // Change orientation if velocity is non-zero:
-            if (Velocity.LengthSquared() > 0)
+            if (!DoomMovement && Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
-
+            if (DoomMovement && Map.GetTileFromWorld(Position).TileId == 4)
+                GameRoot.Instance.RemoveScreenTransition();
             HandleTilemapCollision();
             #endregion Movement
             #region Exhaust fire
             if (Velocity.LengthSquared() > 0.1f) {
-                Orientation = Velocity.ToAngle();
+                float orientation = Velocity.ToAngle();
                 double t = EtherRoot.CurrentGameTime.TotalGameTime.TotalSeconds;
                 Vector2 baseVel = Velocity.ScaleTo(-3);
                 Vector2 perpVel = new Vector2(baseVel.Y, -baseVel.X) * (0.6f * (float)Math.Sin(t * 10));
                 Color sideColor = new Color(200, 38, 9);   // Deep red
                 Color midColor = new Color(255, 187, 30);  // Orange-yellow
-                Vector2 pos = Position + MathUtil.FromPolar(Orientation, -25);
+                Vector2 pos = Position + MathUtil.FromPolar(orientation, -25);
                 const float alpha = 0.7f;
 
                 // Middle particle stream

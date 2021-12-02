@@ -10,6 +10,7 @@ namespace Mono_Ether.Ether {
         public static EtherRoot Instance { get; private set; }
         public bool paused = false;
         public bool editorMode = false;
+        public bool doomMode = false;
         private readonly string MapFileName;
         private Vector2 MapSize;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
@@ -35,10 +36,10 @@ namespace Mono_Ether.Ether {
                     break;
                 case "LevelThree.txt":
                     MapSize = new Vector2(64, 64);
-                    EntityManager.Add(Enemy.CreateBossThree(MapSize * Map.cellSize / 2f, 8));
                     break;
                 case "Secret.txt":
                     MapSize = new Vector2(32, 32);
+                    //doomMode = true;
                     break;
             }
         }
@@ -49,7 +50,7 @@ namespace Mono_Ether.Ether {
             // LOAD MAP, SET PLAYER POS, OPTIONAL BOSS BAR
             Hud.Reset();
             Map.LoadFromFile(MapFileName, MapSize);
-            if (Map.Filename.StartsWith("Level")) {
+            if (Map.Filename == "LevelOne.txt" || Map.Filename == "LevelTwo.txt" || Map.Filename == "LevelThree.txt") {
                 foreach (PlayerShip player in EntityManager.Players)
                     player.Position = new Vector2(Map.cellSize * 2);
                 Hud.bossBarEnabled = true;
@@ -62,13 +63,13 @@ namespace Mono_Ether.Ether {
             ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
             Microsoft.Xna.Framework.Audio.SoundEffect.MasterVolume = GameSettings.MasterVolume;
             PauseMenu.Initialize();
-            if (Map.Filename != "LevelThree.txt")
-                EnemySpawner.enabled = true;
-            else
-                EnemySpawner.enabled = false;
+            EnemySpawner.enabled = true;
             PowerPackSpawner.enabled = true;
-
-
+            if (Map.Filename == "Secret.txt") {
+                doomMode = true;
+                EnemySpawner.enabled = false;
+                PowerPackSpawner.enabled = false;
+            }
             BackgroundParticleManager.Populate(Map.WorldSize, 128);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sounds.Music);
@@ -128,25 +129,29 @@ namespace Mono_Ether.Ether {
         }
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
-
-            Map.Draw(spriteBatch);
-            BackgroundParticleManager.Draw(spriteBatch);
-            EntityManager.Draw(spriteBatch);
-            ParticleManager.Draw(spriteBatch);
-
+            
+            if (doomMode) {
+                spriteBatch.Begin();
+                Doom.Draw(spriteBatch);
+                spriteBatch.End();
+            } else {
+                spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
+                Map.Draw(spriteBatch);
+                BackgroundParticleManager.Draw(spriteBatch);
+                EntityManager.Draw(spriteBatch);
+                ParticleManager.Draw(spriteBatch);
+                spriteBatch.End();
+            }
+            spriteBatch.Begin();
             Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
-
-            spriteBatch.End();
-            // No BlendState.Additive from here
-            spriteBatch.Begin();
             if (PauseMenu.state != "hidden")
                 PauseMenu.Draw(spriteBatch);
             if (Tutorial.state != "none")
                 Tutorial.Draw(spriteBatch);
             FloatingTextManager.Draw(spriteBatch);
             Hud.Draw(spriteBatch);
+            
             if (!GameRoot.Instance.IsActive)
                 spriteBatch.DrawString(Fonts.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
             spriteBatch.End();

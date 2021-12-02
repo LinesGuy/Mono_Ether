@@ -15,14 +15,13 @@ namespace Mono_Ether.Ether {
         public bool IsBoss = false;
         public bool invincible = false;
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
-        public static int baseHealthMultiplier = 1;
         private static readonly Random rand = new Random();
 
         private Enemy(Texture2D image, Vector2 position, string type) {
             Image = image;
             Position = position;
             Type = type;
-            Health = baseHealthMultiplier;
+            Health = 1;
             Worth = rand.Next(1, 10);
             Radius = image.Width / 2f;
             Color = Color.Transparent;
@@ -48,7 +47,7 @@ namespace Mono_Ether.Ether {
         public void WasKilled(int PlayerIndex) {
             IsExpired = true;
             // End game if boss
-            if (Type == "BossOne" || Type == "BossTwo") {
+            if (IsBoss) {
                 Hud.transitionImage = "YouWon";
                 EntityManager.Enemies.Where(e => !e.IsBoss).ToList().ForEach(e => e.WasKilled(PlayerIndex));
                 EntityManager.Entities = EntityManager.Entities.Where(e => !(e is Enemy enemy)).ToList();
@@ -73,28 +72,6 @@ namespace Mono_Ether.Ether {
                     enemy.Color = Color.White;
                     enemy.invincible = true;
                     EntityManager.Add(enemy);
-                }
-            }
-            // If enemy type is BossThree, summon two child BossThree's
-            else if (Type.StartsWith("BossThree")) {
-                Hud.bossBarFullness -= 1f / MathF.Pow(2, 8);
-                if (Hud.bossBarFullness <= 0.005f) {
-                    Hud.bossBarFullness = 0f;
-                    Hud.transitionImage = "YouWon";
-                    EntityManager.Enemies.Where(e => !e.IsBoss).ToList().ForEach(e => e.WasKilled(PlayerIndex));
-                    EntityManager.Entities = EntityManager.Entities.Where(e => !(e is Enemy enemy)).ToList();
-                }
-                if (Type != "BossThree1") {
-                    int newSize = int.Parse(Type[^1].ToString()) - 1;
-                    for (int j = 0; j < 2; j++) {
-                        var enemy = CreateBossThree(Position, newSize);
-                        enemy.AddBehaviour(enemy.InvincibleForTime(6));
-                        enemy.Velocity = MathUtil.FromPolar(rand.NextFloat(0, MathF.PI * 2), 16f);
-                        enemy.timeUntilStart = 0;
-                        enemy.Color = Color.White;
-                        enemy.invincible = true;
-                        EntityManager.Add(enemy);
-                    }
                 }
             }
         }
@@ -259,16 +236,6 @@ namespace Mono_Ether.Ether {
                 yield return 0;
             }
         }
-        IEnumerable<int> InvincibleForTime(int frames) {
-            invincible = true;
-            for (int i = 0; i < frames; i++) {
-                yield return 0;
-            }
-            invincible = false;
-            while (true) {
-                yield return 0;
-            }
-        }
         #endregion IEnumerables
         #region CreateEnemies
         public static Enemy CreateBlueSeeker(Vector2 position) {
@@ -379,8 +346,17 @@ namespace Mono_Ether.Ether {
             }
             enemy.AddBehaviour(WalkInCircles());
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
-            
-            enemy.AddBehaviour(enemy.InvincibleForTime(6));
+            IEnumerable<int> InvincibleForTime(int frames) {
+                enemy.invincible = true;
+                for (int i = 0; i < frames; i++) {
+                    yield return 0;
+                }
+                enemy.invincible = false;
+                while (true) {
+                    yield return 0;
+                }
+            }
+            enemy.AddBehaviour(InvincibleForTime(6));
             enemy.Radius = 10f;
             return enemy;
         }
@@ -467,16 +443,6 @@ namespace Mono_Ether.Ether {
                 Radius = 20
             };
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
-            return enemy;
-        }
-        public static Enemy CreateBossThree(Vector2 position, int size) {
-            var enemy = new Enemy(Art.BossThree[size - 1], position, "BossThree" + size.ToString()) {
-                Radius = size * 25, // or just Art.BossThree[size].width
-                Health = (int)Math.Pow(size, 2),
-                IsBoss = true
-            };
-            enemy.AddBehaviour(enemy.MoveRandomly(2f));
-            enemy.AddBehaviour(enemy.RotateOrientationConstantly());
             return enemy;
         }
         #endregion CreateEnemies

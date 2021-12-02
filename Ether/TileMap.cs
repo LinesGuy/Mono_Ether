@@ -11,7 +11,7 @@ namespace Mono_Ether.Ether {
     public class Tile {
         public Vector2 pos;
         public int TileId;
-        public Boolean[] Walls = new Boolean[8];
+        public bool[] Walls = new bool[8];
         public Tile(Vector2 mapPos, int tileId) {
             pos = mapPos;
             TileId = tileId;
@@ -60,6 +60,8 @@ namespace Mono_Ether.Ether {
 
         public void UpdateWalls() {
             Walls = new Boolean[8]; // Set all walls to False (temp)
+            if (TileId <= 0)
+                return;
             // Update wall values based on surrounding tiles
             if (Map.GetTileFromMap(new Vector2(pos.X - 1, pos.Y)).TileId <= 0)
                 Walls[0] = true; // Left
