@@ -178,6 +178,8 @@ namespace Mono_Ether.Ether {
                         PowerPacks[i].IsExpired = true;
                         if (PowerPacks[i].PowerType == "Doom") {
                             GameRoot.Instance.TransitionScreen(new DoomRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
+                            player.activePowerPacks.Add(new PowerPack(Art.PowerMoveSpeedIncrease, Vector2.Zero, "MoveSpeedIncrease", 3600));
+                            player.activePowerPacks.Add(new PowerPack(Art.PowerShootSpeedIncrease, Vector2.Zero, "ShootSpeedIncrease", 3600));
                             continue;
                         }
                         player.activePowerPacks.Add(PowerPacks[i]);

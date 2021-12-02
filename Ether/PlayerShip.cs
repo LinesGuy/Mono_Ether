@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -89,7 +90,8 @@ namespace Mono_Ether.Ether {
             // Change orientation if velocity is non-zero:
             if (!DoomMovement && Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
-
+            if (DoomMovement && Map.GetTileFromWorld(Position).TileId == 4)
+                GameRoot.Instance.RemoveScreenTransition();
             HandleTilemapCollision();
             #endregion Movement
             #region Exhaust fire

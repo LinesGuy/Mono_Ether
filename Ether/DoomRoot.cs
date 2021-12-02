@@ -17,7 +17,6 @@ namespace Mono_Ether.Ether {
             switch (mapFileName) {
                 case "Secret.txt":
                     MapSize = new Vector2(32, 32);
-                    //doomMode = true;
                     break;
             }
         }
