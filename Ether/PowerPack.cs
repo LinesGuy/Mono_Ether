@@ -80,7 +80,7 @@ namespace Mono_Ether.Ether {
                 if (pos == Vector2.Zero)
                     return;
 
-                int powerTypeInt = _rand.Next(4, 5);
+                int powerTypeInt = _rand.Next(0, 5);
                 switch (powerTypeInt) {
                     case (0): // ShootSpeedIncrease
                         EntityManager.Add(new PowerPack(Art.PowerShootSpeedIncrease, pos, "ShootSpeedIncrease", 300));
