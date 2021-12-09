@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether.States {
-    public abstract class GameState : IGameState {
+    public abstract class GameState {
         protected readonly GraphicsDevice GraphicsDevice;
 
         protected GameState(GraphicsDevice graphicsDevice) {
