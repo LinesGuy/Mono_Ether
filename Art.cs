@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using System;
+using System.Linq;
+using System.Net.Mime;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether {
@@ -56,6 +59,8 @@ namespace Mono_Ether {
         public static Texture2D PowerMoveSpeedDecrease;
         public static Texture2D PowerShootSpeedIncrease;
         public static Texture2D PowerShootSpeedDecrease;
+
+        public static Texture2D[] ExplosionSmall;
         public static void Load(ContentManager content) {
             Pixel = content.Load<Texture2D>("Textures/Menu/pixel");
             Glow = content.Load<Texture2D>("Textures/Gameplay/Glow");
@@ -110,6 +115,8 @@ namespace Mono_Ether {
             PowerMoveSpeedDecrease = content.Load<Texture2D>("Textures/Gameplay/PowerMoveSpeedDecrease");
             PowerShootSpeedIncrease = content.Load<Texture2D>("Textures/Gameplay/PowerShootSpeedIncrease");
             PowerShootSpeedDecrease = content.Load<Texture2D>("Textures/Gameplay/PowerShootSpeedDecrease");
+
+            ExplosionSmall = Enumerable.Range(1, 4).Select(x => content.Load<Texture2D>("Textures/Gameplay/Explosions/Small_" + x)).ToArray();
         }
     }
 }

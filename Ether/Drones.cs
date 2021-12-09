@@ -67,7 +67,7 @@ namespace Mono_Ether.Ether {
                     Vector2 aim = Camera.GetMouseAimDirection(drone.Position);
                     if (cooldownRemaining > 0)
                         cooldownRemaining--;
-                    if (Input.mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0 && !EntityManager.Players[playerIndex].IsDead && !EtherRoot.Instance.editorMode) {
+                    if (Input.mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0 && !EntityManager.Players[playerIndex].IsDead && !EtherRoot.Instance.EditorMode) {
                         // Sound
                         Sounds.PlayerShoot.Play(GameSettings.SoundEffectVolume / 3f, Rand.NextFloat(-0.2f, 0.2f), 0);
                         cooldownRemaining = CooldownFrames;

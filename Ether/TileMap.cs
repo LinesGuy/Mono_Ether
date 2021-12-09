@@ -37,7 +37,7 @@ namespace Mono_Ether.Ether {
             }
             var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
             spriteBatch.Draw(texture, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-            if (EtherRoot.Instance.editorMode) {
+            if (EtherRoot.Instance.EditorMode) {
                 if (Walls[0]) spriteBatch.Draw(Art.CollisionLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
                 if (Walls[1]) spriteBatch.Draw(Art.CollisionUp, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
                 if (Walls[2]) spriteBatch.Draw(Art.CollisionRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
@@ -162,14 +162,14 @@ namespace Mono_Ether.Ether {
                 }
             }
             // Draw tile cursor is in if in editor mode
-            if (EtherRoot.Instance.editorMode) {
+            if (EtherRoot.Instance.EditorMode) {
                 var screenCoords = MapToScreen(Vector2.Floor(Camera.MouseWorldCoords() / cellSize));
                 spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), Camera.Orientation, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
             }
         }
 
         public static void Update() {
-            if (EtherRoot.Instance.editorMode) {
+            if (EtherRoot.Instance.EditorMode) {
                 // Press 'R' to save map
                 if (Input.WasKeyJustDown(Keys.R)) {
                     string filename = "susMap3.txt";

@@ -53,7 +53,7 @@ namespace Mono_Ether.Ether {
                         break;
                     case "Resume":
                         SlideOut();
-                        EtherRoot.Instance.paused = false;
+                        EtherRoot.Instance.Paused = false;
                         break;
 
                 }

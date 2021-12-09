@@ -126,7 +126,7 @@ namespace Mono_Ether.Ether {
             }
             #endregion Exhaust fire
             #region Shooting
-            if (!EtherRoot.Instance.editorMode) {
+            if (!EtherRoot.Instance.EditorMode) {
                 var aim = Camera.GetMouseAimDirection(Position);
                 if (Input.mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
                     // Play shooting sound

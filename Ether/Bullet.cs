@@ -45,6 +45,8 @@ namespace Mono_Ether.Ether {
                 Color color = new Color(235, 222, 77);
                 EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
             }
+            // Explosion
+            ExplosionManager.Add(new Explosion(Position));
         }
     }
 
