@@ -81,6 +81,8 @@ namespace Mono_Ether.Ether {
                     return;
 
                 int powerTypeInt = _rand.Next(0, 5);
+                if (EtherRoot.Instance._mapFileName != "debugMap.txt")
+                    powerTypeInt = _rand.Next(0, 4);
                 switch (powerTypeInt) {
                     case (0): // ShootSpeedIncrease
                         EntityManager.Add(new PowerPack(Art.PowerShootSpeedIncrease, pos, "ShootSpeedIncrease", 300));

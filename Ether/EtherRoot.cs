@@ -11,7 +11,7 @@ namespace Mono_Ether.Ether {
         public bool Paused = false;
         public bool EditorMode = false;
         private bool _doomMode = false;
-        private readonly string _mapFileName;
+        public readonly string _mapFileName;
         private readonly Vector2 _mapSize;
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
         public static GameTime CurrentGameTime;
