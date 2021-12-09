@@ -15,8 +15,7 @@ namespace Mono_Ether.MainMenu {
             buttonManager.AddButton(new LevelButton(1, "Tutorial"));
             buttonManager.AddButton(new LevelButton(2, "Level one"));
             buttonManager.AddButton(new LevelButton(3, "Level two"));
-            buttonManager.AddButton(new LevelButton(4, "Level three"));
-            buttonManager.AddButton(new LevelButton(5, "Super secret stage????????"));
+            //buttonManager.AddButton(new LevelButton(4, "Level three"));
         }
         public override void LoadContent(ContentManager content) {
 
@@ -43,9 +42,6 @@ namespace Mono_Ether.MainMenu {
                     break;
                 case "Level three":
                     ScreenManager.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelThree.txt"));
-                    break;
-                case "Super secret stage????????":
-                    //GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
                     break;
                 default:
                     break;
@@ -90,7 +86,6 @@ namespace Mono_Ether.MainMenu {
             if (Input.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 ScreenManager.RemoveScreenTransition();
         }
-
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             NewtonsBackground.Draw(spriteBatch);

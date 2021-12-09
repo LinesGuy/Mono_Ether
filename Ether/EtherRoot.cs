@@ -135,11 +135,15 @@ namespace Mono_Ether.Ether {
             if (_doomMode) {
                 Doom.Draw(spriteBatch);
             } else {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
                 Map.Draw(spriteBatch);
                 BackgroundParticleManager.Draw(spriteBatch);
                 EntityManager.Draw(spriteBatch);
                 ParticleManager.Draw(spriteBatch);
                 ExplosionManager.Draw(spriteBatch);
+                spriteBatch.End();
+                spriteBatch.Begin();
             }
             Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
