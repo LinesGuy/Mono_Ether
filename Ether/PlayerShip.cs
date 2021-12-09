@@ -91,7 +91,7 @@ namespace Mono_Ether.Ether {
             if (!DoomMovement && Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
             if (DoomMovement && Map.GetTileFromWorld(Position).TileId == 4)
-                GameRoot.Instance.RemoveScreenTransition();
+                ScreenManager.RemoveScreenTransition();
             HandleTilemapCollision();
             #endregion Movement
             #region Exhaust fire

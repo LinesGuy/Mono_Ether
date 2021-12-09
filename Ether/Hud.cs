@@ -25,7 +25,7 @@ namespace Mono_Ether.Ether {
             }
 
             // Top-left debug texts
-            if (GameRoot.Instance.dum_mode) {
+            if (GameRoot.Instance.DebugMode) {
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Camera XY: {EntityManager.Player1.Position.X:0.0}, {Camera.CameraPosition.Y:0.0}", new Vector2(0, 0), Color.White);
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Cursor XY: {Camera.MouseWorldCoords().X:0.0}, {Camera.MouseWorldCoords().Y:0.0}", new Vector2(0, 30), Color.White);
                 spriteBatch.DrawString(Fonts.NovaSquare24, $"Tile ID: {Map.GetTileFromMap(Map.WorldtoMap(Camera.MouseWorldCoords())).TileId}", new Vector2(0, 60), Color.White);
@@ -86,7 +86,7 @@ namespace Mono_Ether.Ether {
             if (transitionImage != null) {
                 transitionFrames++;
                 if (transitionFrames == 120)
-                    GameRoot.Instance.RemoveScreenTransition();
+                    ScreenManager.RemoveScreenTransition();
             }
         }
     }

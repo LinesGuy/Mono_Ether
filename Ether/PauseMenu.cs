@@ -49,7 +49,7 @@ namespace Mono_Ether.Ether {
             if (state == "visible") {
                 switch (buttonManager.GetClickedButton()) {
                     case "Exit":
-                        GameRoot.Instance.RemoveScreenTransition();
+                        ScreenManager.RemoveScreenTransition();
                         break;
                     case "Resume":
                         SlideOut();

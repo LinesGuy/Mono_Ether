@@ -20,7 +20,7 @@ namespace Mono_Ether.Ether {
             switch (mapFileName) {
                 case "debugMap.txt":
                     _mapSize = new Vector2(64, 64);
-                    GameRoot.Instance.dum_mode = true;
+                    GameRoot.Instance.DebugMode = true;
                     break;
                 case "Tutorial.txt":
                     _mapSize = new Vector2(32, 32);
@@ -133,19 +133,14 @@ namespace Mono_Ether.Ether {
             GraphicsDevice.Clear(Color.Black);
             
             if (_doomMode) {
-                spriteBatch.Begin();
                 Doom.Draw(spriteBatch);
-                spriteBatch.End();
             } else {
-                spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive, samplerState: SamplerState.PointClamp);
                 Map.Draw(spriteBatch);
                 BackgroundParticleManager.Draw(spriteBatch);
                 EntityManager.Draw(spriteBatch);
                 ParticleManager.Draw(spriteBatch);
                 ExplosionManager.Draw(spriteBatch);
-                spriteBatch.End();
             }
-            spriteBatch.Begin();
             Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
             spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
             if (PauseMenu.state != "hidden")
@@ -157,7 +152,6 @@ namespace Mono_Ether.Ether {
             
             if (!GameRoot.Instance.IsActive)
                 spriteBatch.DrawString(Fonts.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
-            spriteBatch.End();
         }
     }
 }

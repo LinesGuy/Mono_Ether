@@ -17,6 +17,7 @@ namespace Mono_Ether.Ether {
         static bool _isUpdating;
         static readonly List<Entity> AddedEntities = new List<Entity>();
         public static PlayerShip Player1 => Players[0];
+        public static PlayerShip Player2 => Players[1];
         public static Random rand = new Random();
         public static int Count => Entities.Count;
         public static void Killall() {
@@ -177,7 +178,7 @@ namespace Mono_Ether.Ether {
                         PowerPacks[i].WasPickedUp();
                         PowerPacks[i].IsExpired = true;
                         if (PowerPacks[i].PowerType == "Doom") {
-                            GameRoot.Instance.TransitionScreen(new DoomRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
+                            ScreenManager.TransitionScreen(new DoomRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
                             player.activePowerPacks.Add(new PowerPack(Art.PowerMoveSpeedIncrease, Vector2.Zero, "MoveSpeedIncrease", 3600));
                             player.activePowerPacks.Add(new PowerPack(Art.PowerShootSpeedIncrease, Vector2.Zero, "ShootSpeedIncrease", 3600));
                             continue;

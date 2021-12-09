@@ -30,19 +30,19 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = buttonManager.GetClickedButton();
             switch (clickedButton) {
                 case "Test stage":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "debugMap.txt"));
+                    ScreenManager.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "debugMap.txt"));
                     break;
                 case "Tutorial":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Tutorial.txt"));
+                    ScreenManager.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Tutorial.txt"));
                     break;
                 case "Level one":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelOne.txt"));
+                    ScreenManager.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelOne.txt"));
                     break;
                 case "Level two":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelTwo.txt"));
+                    ScreenManager.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelTwo.txt"));
                     break;
                 case "Level three":
-                    GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelThree.txt"));
+                    ScreenManager.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "LevelThree.txt"));
                     break;
                 case "Super secret stage????????":
                     //GameRoot.Instance.TransitionScreen(new Ether.EtherRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
@@ -88,17 +88,15 @@ namespace Mono_Ether.MainMenu {
             }
             // Esc to go back to title screen
             if (Input.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.Escape))
-                GameRoot.Instance.RemoveScreenTransition();
+                ScreenManager.RemoveScreenTransition();
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
             NewtonsBackground.Draw(spriteBatch);
             spriteBatch.DrawString(Fonts.NovaSquare24, "Level selection screen", Vector2.Zero, Color.White);
             spriteBatch.DrawString(Fonts.NovaSquare24, "Use arrow keys, drag the mouse or scroll the mouse wheel to scroll up/down", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);
-            spriteBatch.End();
         }
     }
 }

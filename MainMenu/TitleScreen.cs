@@ -25,16 +25,16 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = buttonManager.GetClickedButton();
             switch (clickedButton) {
                 case "play":
-                    GameRoot.Instance.TransitionScreen(new LevelSelectionScreen(GameRoot.Instance.myGraphics));
+                    ScreenManager.TransitionScreen(new LevelSelectionScreen(GameRoot.Instance.myGraphics));
                     break;
                 case "credits":
-                    GameRoot.Instance.TransitionScreen(new CreditsScreen(GameRoot.Instance.myGraphics));
+                    ScreenManager.TransitionScreen(new CreditsScreen(GameRoot.Instance.myGraphics));
                     break;
                 case "settings":
-                    GameRoot.Instance.TransitionScreen(new SettingsScreen(GameRoot.Instance.myGraphics));
+                    ScreenManager.TransitionScreen(new SettingsScreen(GameRoot.Instance.myGraphics));
                     break;
                 case "exit":
-                    GameRoot.Instance.RemoveScreenTransition();
+                    ScreenManager.RemoveScreenTransition();
                     break;
                 default:
                     break;
@@ -43,12 +43,10 @@ namespace Mono_Ether.MainMenu {
 
         public override void Draw(SpriteBatch spriteBatch) {
             //GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
             NewtonsBackground.Draw(spriteBatch);
             spriteBatch.DrawString(Fonts.NovaSquare24, "welcome to ether", Vector2.Zero, Color.White);
             spriteBatch.DrawString(Fonts.NovaSquare24, "(this background has nothing to do with the game I just thought it looked cool)", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);
-            spriteBatch.End();
         }
     }
 }

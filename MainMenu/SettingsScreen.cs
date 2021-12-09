@@ -31,7 +31,7 @@ namespace Mono_Ether.MainMenu {
             var clickedButton = buttonManager.GetClickedButton();
             if (clickedButton == "back") {
                 GameSettings.SaveSettings();
-                GameRoot.Instance.RemoveScreenTransition();
+                ScreenManager.RemoveScreenTransition();
             }
             foreach (Slider slider in Sliders.Values) {
                 slider.Update();
@@ -54,12 +54,10 @@ namespace Mono_Ether.MainMenu {
 
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin();
             foreach (Slider slider in Sliders.Values)
                 slider.Draw(spriteBatch);
             spriteBatch.DrawString(Fonts.NovaSquare24, "Settings", Vector2.Zero, Color.White);
             buttonManager.Draw(spriteBatch);
-            spriteBatch.End();
         }
     }
     class Slider {

@@ -23,7 +23,7 @@ namespace Mono_Ether.MainMenu {
         public override void Update(GameTime gameTime) {
             var clickedButton = buttonManager.GetClickedButton();
             if (clickedButton == "back")
-                GameRoot.Instance.RemoveScreenTransition();
+                ScreenManager.RemoveScreenTransition();
             if (Input.WasKeyJustDown(Keys.R)) {
                 Frame = 0;
                 Letters.Clear();
@@ -52,14 +52,12 @@ namespace Mono_Ether.MainMenu {
 
         public override void Draw(SpriteBatch spriteBatch) {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin();
 
             foreach (Letter letter in Letters) {
                 letter.Draw(spriteBatch);
             }
 
             buttonManager.Draw(spriteBatch);
-            spriteBatch.End();
         }
         private class Letter {
             public Vector2 Pos;
