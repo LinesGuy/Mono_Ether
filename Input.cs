@@ -11,8 +11,8 @@ namespace Mono_Ether {
             Keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
             Mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
         }
-        public static bool WasKeyJustDown(Keys key) => Keyboard.IsKeyDown(key) && !LastKeyboard.IsKeyDown(key);
-        public static bool WasKeyJustUp(Keys key) => Keyboard.IsKeyUp(key) && !LastKeyboard.IsKeyDown(key);
+        public static bool WasKeyJustDown(Keys key) => Keyboard.IsKeyDown(key) && LastKeyboard.IsKeyUp(key);
+        public static bool WasKeyJustUp(Keys key) => Keyboard.IsKeyUp(key) && LastKeyboard.IsKeyDown(key);
         public static bool WasLeftButtonJustDown => Mouse.LeftButton == ButtonState.Pressed && LastMouse.LeftButton == ButtonState.Released;
         public static bool WasLeftButtonJustUp => Mouse.LeftButton == ButtonState.Released && LastMouse.LeftButton == ButtonState.Pressed;
         public static bool WasRightButtonJustDown =>  Mouse.RightButton == ButtonState.Pressed && LastMouse.RightButton == ButtonState.Released;
