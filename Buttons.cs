@@ -27,9 +27,9 @@ namespace Mono_Ether {
             IsHovered = MyUtils.RectangleF(Pos.X - Size.X / 2f, Pos.Y - Size.Y / 2f, Size.X, Size.Y).Contains(Input.Mouse.Position); ;
         }
 
-        public void Draw(SpriteBatch batch) {
-            batch.Draw(GlobalAssets.Button, Pos, null, IsHovered ? _hoveredButtonColor : _unhoveredButtonColor, 0f, Size / 2f, 1f, 0, 0);
-            batch.DrawString(GlobalAssets.NovaSquare48, Text, Pos, IsHovered ? _hoveredFontColor : _unhoveredFontColor, 0f, GlobalAssets.NovaSquare48.MeasureString(Text) / 2f, 1f, 0, 0);
+        public void Draw(SpriteBatch batch, Vector2 offset) {
+            batch.Draw(GlobalAssets.Button, Pos + offset, null, IsHovered ? _hoveredButtonColor : _unhoveredButtonColor, 0f, Size / 2f, 1f, 0, 0);
+            batch.DrawStringCentered(GlobalAssets.NovaSquare48, Text, Pos + offset, IsHovered ? _hoveredFontColor : _unhoveredFontColor);
         }
     }
     public class ButtonManager {
@@ -41,9 +41,9 @@ namespace Mono_Ether {
             foreach (Button button in Buttons)
                 button.Update();
         }
-        public void Draw(SpriteBatch batch) {
+        public void Draw(SpriteBatch batch, Vector2 globalOffset) {
             foreach (Button button in Buttons)
-                button.Draw(batch);
+                button.Draw(batch, globalOffset);
         }
         public string PressedButton // null if no button is pressed
         {
