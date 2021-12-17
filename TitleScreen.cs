@@ -27,16 +27,16 @@ namespace Mono_Ether {
         private ButtonManager _titleButtonManager;
         private ButtonManager _levelButtonManager;
         private ButtonManager _carouselButtonManager;
-        private float _carouselOffset;
-        private int _framesSinceStart;
-        private int _framesSinceTransition;
+        private float _carouselOffset = 0;
+        private float _carouselOffsetVelocity = 0;
+        private int _framesSinceStart = 0;
+        private int _framesSinceTransition = 0;
         private string state;
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
 
         }
         public override void Initialize() {
-            _framesSinceStart = 0;
-            _framesSinceTransition = 0;
+            
             state = "Title press any key";
             _rand = new Random();
             /* Create button managers */
@@ -52,7 +52,6 @@ namespace Mono_Ether {
             List<string> levels = new List<string> {"Level One", "Level Two", "Level Three", "Level Four", "Level Five", "Level Six", "Level Seven ", "Level Eight", "Level Nine", "Level Ten" };
             for (int i = 0; i < levels.Count; i++)
                 _carouselButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X  - 300f * MathF.Exp(-i * i / 25f), GameSettings.ScreenSize.Y / 2f + i * 120f), levels[i]));
-            _carouselOffset = 0f;
             /* Create lists of small/big stars with random positions */
             _smallStars = new List<Vector2>();
             _bigStars = new List<Vector2>();
@@ -129,22 +128,13 @@ namespace Mono_Ether {
                     _levelButtonManager.Update();
                     _carouselButtonManager.Update();
                     HandleLevelButtonPresses();
-                    HandleCarouselButtonPresses();
+                    HandleCarousel();
                     break;
                 case "Level selection":
                     _levelButtonManager.Update();
-                    _carouselOffset += Input.DeltaScrollWheelValue / 500f;
-                    Debug.WriteLine(_carouselOffset);
-                    for (int i = 0; i < _carouselButtonManager.Buttons.Count; i++)
-                    {
-                        float j = i + _carouselOffset;
-                        _carouselButtonManager.Buttons[i].Pos = new Vector2(
-                            GameSettings.ScreenSize.X - 300f * MathF.Exp(-j * j / 25f),
-                            GameSettings.ScreenSize.Y / 2f + j * 120f);
-                    }
                     _carouselButtonManager.Update();
                     HandleLevelButtonPresses();
-                    HandleCarouselButtonPresses();
+                    HandleCarousel();
                     break;
                 case "Level selection -> Title":
                     if (_framesSinceTransition > 30f) {
@@ -230,8 +220,9 @@ namespace Mono_Ether {
             }
         }
 
-        private void HandleCarouselButtonPresses()
+        private void HandleCarousel()
         {
+            /* Handle Carousel Button Presses */
             switch (_carouselButtonManager.PressedButton)
             {
                 case "Level One":
@@ -239,6 +230,25 @@ namespace Mono_Ether {
 
                     break;
                 // TODO other levels
+            }
+            /* Update carousel offset */
+            var numButtons = _carouselButtonManager.Buttons.Count;
+            _carouselOffsetVelocity -= Input.DeltaScrollWheelValue / 1300f; // Scroll wheel
+            if (Input.WasKeyJustDown(Keys.Up)) _carouselOffsetVelocity += 0.1f;
+            if (Input.WasKeyJustDown(Keys.Down)) _carouselOffsetVelocity -= 0.1f;
+            _carouselOffsetVelocity *= 0.9f;
+            _carouselOffset += _carouselOffsetVelocity;
+            /* Ensure buttons don't go completely off-screen */
+            if (_carouselOffset > -1.5f)
+                _carouselOffset = MathHelper.Lerp(_carouselOffset, -1.5f, 0.2f);
+            if (_carouselOffset < 1.5f - numButtons)
+                _carouselOffset = MathHelper.Lerp(_carouselOffset, 1.5f - numButtons, 0.2f);
+            /* Update button positions */
+            for (int i = 0; i < numButtons; i++) {
+                float j = i + _carouselOffset;
+                _carouselButtonManager.Buttons[i].Pos = new Vector2(
+                    GameSettings.ScreenSize.X - 300f * MathF.Exp(-j * j / 25f),
+                    GameSettings.ScreenSize.Y / 2f + j * 120f);
             }
         }
         private void DrawBG(SpriteBatch batch) {
