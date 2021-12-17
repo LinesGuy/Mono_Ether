@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mono_Ether {
     public class TitleScreen : GameState {
@@ -25,6 +26,8 @@ namespace Mono_Ether {
         private Random _rand;
         private ButtonManager _titleButtonManager;
         private ButtonManager _levelButtonManager;
+        private ButtonManager _carouselButtonManager;
+        private float _carouselOffset;
         private int _framesSinceStart;
         private int _framesSinceTransition;
         private string state;
@@ -39,12 +42,17 @@ namespace Mono_Ether {
             /* Create button managers */
             _titleButtonManager = new ButtonManager();
             _levelButtonManager = new ButtonManager();
+            _carouselButtonManager = new ButtonManager();
             /* Add Title screen buttons */
             _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 300f, GameSettings.ScreenSize.Y - 100f), "Start"));
             _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 300f, GameSettings.ScreenSize.Y - 100f), "Exit"));
-            /* Add Level selection screen buttons */
-            _levelButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 300f, GameSettings.ScreenSize.Y - 100f), "Back"));
-            _levelButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 300f, GameSettings.ScreenSize.Y / 2f), "Level one"));
+            /* Add Level selection screen button */
+            _levelButtonManager.Buttons.Add(new Button(new Vector2(200f, GameSettings.ScreenSize.Y - 100f), "Back"));
+            /* Add carousel buttons */
+            List<string> levels = new List<string> {"Level One", "Level Two", "Level Three", "Level Four", "Level Five", "Level Six", "Level Seven ", "Level Eight", "Level Nine", "Level Ten" };
+            for (int i = 0; i < levels.Count; i++)
+                _carouselButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X  - 300f * MathF.Exp(-i * i / 25f), GameSettings.ScreenSize.Y / 2f + i * 120f), levels[i]));
+            _carouselOffset = 0f;
             /* Create lists of small/big stars with random positions */
             _smallStars = new List<Vector2>();
             _bigStars = new List<Vector2>();
@@ -118,10 +126,21 @@ namespace Mono_Ether {
                     }
                     _titleButtonManager.Update();
                     _levelButtonManager.Update();
+                    _carouselButtonManager.Update();
                     HandleLevelButtonPresses();
                     break;
                 case "Level selection":
                     _levelButtonManager.Update();
+                    _carouselOffset += Input.DeltaScrollWheelValue / 500f;
+                    Debug.WriteLine(_carouselOffset);
+                    for (int i = 0; i < _carouselButtonManager.Buttons.Count; i++)
+                    {
+                        float j = i + _carouselOffset;
+                        _carouselButtonManager.Buttons[i].Pos = new Vector2(
+                            GameSettings.ScreenSize.X - 300f * MathF.Exp(-j * j / 25f),
+                            GameSettings.ScreenSize.Y / 2f + j * 120f);
+                    }
+                    _carouselButtonManager.Update();
                     HandleLevelButtonPresses();
                     break;
                 case "Level selection -> Title":
@@ -131,6 +150,7 @@ namespace Mono_Ether {
                     }
                     _titleButtonManager.Update();
                     _levelButtonManager.Update();
+                    _carouselButtonManager.Update();
                     HandleTitleButtonPresses();
                     break;
                 case "Level selection -> level":
@@ -163,17 +183,20 @@ namespace Mono_Ether {
                     DrawBG(batch);
                     Draw_Logo(batch, new Vector2(0f, - 20f - GameSettings.ScreenSize.Y * (1 - MathF.Exp(-_framesSinceTransition / 5f))));
                     _titleButtonManager.Draw(batch, new Vector2(0f, 200f * (1 - MathF.Exp(-_framesSinceTransition / 5f))));
-                    _levelButtonManager.Draw(batch, new Vector2(GameSettings.ScreenSize.X * MathF.Exp(-_framesSinceTransition / 5f), 0f));
+                    _levelButtonManager.Draw(batch, new Vector2(-GameSettings.ScreenSize.X * MathF.Exp(-_framesSinceTransition / 5f), 0f));
+                    _carouselButtonManager.Draw(batch, new Vector2(GameSettings.ScreenSize.X * MathF.Exp(-_framesSinceTransition / 5f), 0f));
                     break;
                 case "Level selection":
                     DrawBG(batch);
-                    _levelButtonManager.Draw(batch, new Vector2(0f, 0f));
+                    _levelButtonManager.Draw(batch, Vector2.Zero);
+                    _carouselButtonManager.Draw(batch, Vector2.Zero);
                     break;
                 case "Level selection -> Title":
                     DrawBG(batch);
                     Draw_Logo(batch, new Vector2(0f, -20f - GameSettings.ScreenSize.Y * MathF.Exp(-_framesSinceTransition / 5f)));
                     _titleButtonManager.Draw(batch, new Vector2(0f, 200f * MathF.Exp(-_framesSinceTransition / 5f)));
-                    _levelButtonManager.Draw(batch, new Vector2(-GameSettings.ScreenSize.X * (1f - MathF.Exp(_framesSinceTransition / 5f)), 0f));
+                    _levelButtonManager.Draw(batch, new Vector2(GameSettings.ScreenSize.X * (1f - MathF.Exp(_framesSinceTransition / 10f)), 0f));
+                    _carouselButtonManager.Draw(batch, new Vector2(-GameSettings.ScreenSize.X * (1f - MathF.Exp(_framesSinceTransition / 10f)), 0f));
                     break;
                 case "Level selection -> level":
                     DrawBG(batch);
@@ -199,6 +222,16 @@ namespace Mono_Ether {
                     state = "Level selection -> Title";
                     _framesSinceTransition = 0;
                     break;
+            }
+        }
+
+        private void HandleCarouselButtonPresses()
+        {
+            switch (_carouselButtonManager.PressedButton)
+            {
+                case "Level One":
+                    break;
+                // TODO other levels
             }
         }
         private void DrawBG(SpriteBatch batch) {
