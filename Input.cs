@@ -13,10 +13,10 @@ namespace Mono_Ether {
         }
         public static bool WasKeyJustDown(Keys key) => Keyboard.IsKeyDown(key) && !LastKeyboard.IsKeyDown(key);
         public static bool WasKeyJustUp(Keys key) => Keyboard.IsKeyUp(key) && !LastKeyboard.IsKeyDown(key);
-        public static bool WasLeftButtonJustDown() => Mouse.LeftButton == ButtonState.Pressed && LastMouse.LeftButton == ButtonState.Released;
-        public static bool WasLeftButtonJustUp() => Mouse.LeftButton == ButtonState.Released && LastMouse.LeftButton == ButtonState.Pressed;
-        public static bool WasRightButtonJustDown() =>  Mouse.RightButton == ButtonState.Pressed && LastMouse.RightButton == ButtonState.Released;
-        public static bool WasRightButtonJustUp() => Mouse.RightButton == ButtonState.Released && LastMouse.RightButton == ButtonState.Pressed;
-        public static int DeltaScrollWheelValue() => LastMouse.ScrollWheelValue - Mouse.ScrollWheelValue;
+        public static bool WasLeftButtonJustDow => Mouse.LeftButton == ButtonState.Pressed && LastMouse.LeftButton == ButtonState.Released;
+        public static bool WasLeftButtonJustUp => Mouse.LeftButton == ButtonState.Released && LastMouse.LeftButton == ButtonState.Pressed;
+        public static bool WasRightButtonJustDown =>  Mouse.RightButton == ButtonState.Pressed && LastMouse.RightButton == ButtonState.Released;
+        public static bool WasRightButtonJustUp => Mouse.RightButton == ButtonState.Released && LastMouse.RightButton == ButtonState.Pressed;
+        public static int DeltaScrollWheelValue => LastMouse.ScrollWheelValue - Mouse.ScrollWheelValue;
     }
 }
