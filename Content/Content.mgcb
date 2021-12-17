@@ -27,6 +27,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/NovaSquare48.spritefont
 
+#begin SoundEffects/Click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/Click.wav
+
 #begin Textures/GlobalAssets/Button.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -104,6 +104,7 @@ namespace Mono_Ether {
                 case "Title press any key":
                     if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftButtonJustDown || Input.WasRightButtonJustDown) {
                         state = "Title press any key -> Title";
+                        GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
                         _framesSinceTransition = 0;
                     }
                     break;
@@ -128,6 +129,7 @@ namespace Mono_Ether {
                     _levelButtonManager.Update();
                     _carouselButtonManager.Update();
                     HandleLevelButtonPresses();
+                    HandleCarouselButtonPresses();
                     break;
                 case "Level selection":
                     _levelButtonManager.Update();
@@ -142,6 +144,7 @@ namespace Mono_Ether {
                     }
                     _carouselButtonManager.Update();
                     HandleLevelButtonPresses();
+                    HandleCarouselButtonPresses();
                     break;
                 case "Level selection -> Title":
                     if (_framesSinceTransition > 30f) {
@@ -209,6 +212,7 @@ namespace Mono_Ether {
                 case "Start":
                     state = "Title -> Level selection";
                     _framesSinceTransition = 0;
+                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
                     break;
                 case "Exit":
                     ScreenManager.RemoveScreen();
@@ -221,6 +225,7 @@ namespace Mono_Ether {
                 case "Back":
                     state = "Level selection -> Title";
                     _framesSinceTransition = 0;
+                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
                     break;
             }
         }
@@ -230,6 +235,8 @@ namespace Mono_Ether {
             switch (_carouselButtonManager.PressedButton)
             {
                 case "Level One":
+                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
+
                     break;
                 // TODO other levels
             }

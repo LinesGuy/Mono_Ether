@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using System.Security.Cryptography.X509Certificates;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether {
@@ -7,11 +9,13 @@ namespace Mono_Ether {
         public static Texture2D Pixel;
         public static SpriteFont NovaSquare24;
         public static SpriteFont NovaSquare48;
+        public static SoundEffect Click;
         public static void LoadContent(ContentManager content) {
             Button = content.Load<Texture2D>("Textures/GlobalAssets/Button");
             Pixel = content.Load<Texture2D>("Textures/GlobalAssets/Pixel");
             NovaSquare24 = content.Load<SpriteFont>("Fonts/NovaSquare24");
             NovaSquare48 = content.Load<SpriteFont>("Fonts/NovaSquare48");
+            Click = content.Load<SoundEffect>("SoundEffects/Click");
         }
     }
 }
