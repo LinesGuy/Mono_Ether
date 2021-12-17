@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Mono_Ether.MainMenu {
-    public class LevelSelectionScreen : States.GameState {
+    /*
+    public class LevelSelectionScreen : GameState {
         private ButtonManager buttonManager;
         private float buttonOffsetVelocity = 0f;
         public LevelSelectionScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
@@ -47,20 +48,20 @@ namespace Mono_Ether.MainMenu {
                     break;
             }
             // Up/down arrow keys to scroll through items
-            if (Input.keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
                 buttonOffsetVelocity -= 0.005f;
-            if (Input.keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
+            if (Input.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                 buttonOffsetVelocity += 0.005f;
-            // Scroll mouse wheel to scroll through items
+            // Scroll Mouse wheel to scroll through items
             buttonOffsetVelocity -= Input.DeltaScrollWheelValue() / 10000f;
-            // If user let go of mouse, apply mouse velocity to scroll offset velocity
+            // If user let go of Mouse, apply Mouse velocity to scroll offset velocity
             if (Input.WasLeftButtonJustUp())
-                buttonOffsetVelocity = (Input.mouse.Y - Input.lastMouse.Y) / LevelButton.RADIUS;
+                buttonOffsetVelocity = (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
             // If user is holding down left click, allow "dragging" of buttons
-            if (Input.mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
+            if (Input.Mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
 
                 foreach (LevelButton button in buttonManager.Buttons)
-                    button.Offset -= (Input.mouse.Y - Input.lastMouse.Y) / LevelButton.RADIUS;
+                    button.Offset -= (Input.Mouse.Y - Input.LastMouse.Y) / LevelButton.RADIUS;
             } else {
                 // Otherwise, apply offset velocity
                 foreach (LevelButton button in buttonManager.Buttons)
@@ -90,8 +91,9 @@ namespace Mono_Ether.MainMenu {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             NewtonsBackground.Draw(spriteBatch);
             spriteBatch.DrawString(Fonts.NovaSquare24, "Level selection screen", Vector2.Zero, Color.White);
-            spriteBatch.DrawString(Fonts.NovaSquare24, "Use arrow keys, drag the mouse or scroll the mouse wheel to scroll up/down", new Vector2(0, 28), Color.White);
+            spriteBatch.DrawString(Fonts.NovaSquare24, "Use arrow keys, drag the Mouse or scroll the Mouse wheel to scroll up/down", new Vector2(0, 28), Color.White);
             buttonManager.Draw(spriteBatch);
         }
     }
+    */
 }

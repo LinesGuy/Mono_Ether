@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Mono_Ether.Ether {
+    /*
     public static class Hud {
         public static string transitionImage;
         private static int transitionFrames;
@@ -18,10 +19,10 @@ namespace Mono_Ether.Ether {
         public static void Draw(SpriteBatch spriteBatch) {
             // bossbar
             if (bossBarEnabled) {
-                spriteBatch.Draw(Art.Pixel, bossBarRect, Color.Red);
+                spriteBatch.Draw(GlobalAssets.Pixel, bossBarRect, Color.Red);
                 Rectangle greenRect = bossBarRect;
                 greenRect.Width = (int)((GameRoot.ScreenSize.X - 40) * bossBarFullness);
-                spriteBatch.Draw(Art.Pixel, greenRect, Color.Green);
+                spriteBatch.Draw(GlobalAssets.Pixel, greenRect, Color.Green);
             }
 
             // Top-left debug texts
@@ -37,18 +38,18 @@ namespace Mono_Ether.Ether {
                 Vector2 pos = new Vector2(GameRoot.ScreenSize.X - 100 - i * 100, GameRoot.ScreenSize.Y - 100);
                 var power = EntityManager.Player1.activePowerPacks[i];
                 Texture2D icon = power.PowerType switch {
-                    ("ShootSpeedIncrease") => Art.PowerShootSpeedIncrease,
-                    ("ShootSpeedDecrease") => Art.PowerShootSpeedDecrease,
-                    ("MoveSpeedIncrease") => Art.PowerMoveSpeedIncrease,
-                    ("MoveSpeedDecrease") => Art.PowerMoveSpeedDecrease,
-                    _ => Art.Default,
+                    ("ShootSpeedIncrease") => GlobalAssets.PowerShootSpeedIncrease,
+                    ("ShootSpeedDecrease") => GlobalAssets.PowerShootSpeedDecrease,
+                    ("MoveSpeedIncrease") => GlobalAssets.PowerMoveSpeedIncrease,
+                    ("MoveSpeedDecrease") => GlobalAssets.PowerMoveSpeedDecrease,
+                    _ => GlobalAssets.Default,
                 };
                 // Draw time remaining coloured background
                 Color backgroundColor = new Color(60, 214, 91);
                 if (!power.isGood)
                     backgroundColor = new Color(214, 60, 60);
                 float remaining = (float)power.framesRemaining / (float)power.initialFramesRemaining;
-                spriteBatch.Draw(Art.Pixel, new Rectangle((int)pos.X, (int)(pos.Y + 96 * (1 - remaining)), 96, (int)(96 - 96 * (1 - remaining))), backgroundColor);
+                spriteBatch.Draw(GlobalAssets.Pixel, new Rectangle((int)pos.X, (int)(pos.Y + 96 * (1 - remaining)), 96, (int)(96 - 96 * (1 - remaining))), backgroundColor);
                 // Draw icon
                 spriteBatch.Draw(icon, pos, Color.White);
             }
@@ -56,7 +57,7 @@ namespace Mono_Ether.Ether {
             // ONLY APPLIES to player1
             for (int i = 0; i < EntityManager.Player1.lives; i++) {
                 Vector2 pos = new Vector2(0 + i * 100, GameRoot.ScreenSize.Y - 100);
-                spriteBatch.Draw(Art.Heart, pos, Color.White);
+                spriteBatch.Draw(GlobalAssets.Heart, pos, Color.White);
             }
             // Top-right score
             // ONLY APPLIES to player1
@@ -74,11 +75,11 @@ namespace Mono_Ether.Ether {
             if (transitionImage != null) {
                 int t = Math.Min(255, (int)(transitionFrames / 60f * 255f));
                 Texture2D texture = transitionImage switch {
-                    "YouDied" => Art.YouDied,
-                    "YouWon" => Art.YouWon,
-                    _ => Art.Default,
+                    "YouDied" => GlobalAssets.YouDied,
+                    "YouWon" => GlobalAssets.YouWon,
+                    _ => GlobalAssets.Default,
                 };
-                spriteBatch.Draw(texture, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, Art.YouDied.Size() / 2f, MathHelper.Lerp(1f, 1.5f, transitionFrames / 120f), SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, GameRoot.ScreenSize / 2f, null, new Color(255, 255, 255, t), 0f, GlobalAssets.YouDied.Size() / 2f, MathHelper.Lerp(1f, 1.5f, transitionFrames / 120f), SpriteEffects.None, 0);
 
             }
         }
@@ -90,4 +91,5 @@ namespace Mono_Ether.Ether {
             }
         }
     }
+    */
 }

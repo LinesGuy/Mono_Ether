@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
+    /*
     class Drone : Entity {
         public string Type;
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
@@ -14,7 +15,7 @@ namespace Mono_Ether.Ether {
             Position = EntityManager.Players[playerIndex].Position;
             Type = type;
             PlayerIndex = playerIndex;
-            Image = Art.Drone;
+            Image = GlobalAssets.Drone;
             Radius = Image.Width / 2f;
         }
         public override void Update() {
@@ -67,7 +68,7 @@ namespace Mono_Ether.Ether {
                     Vector2 aim = Camera.GetMouseAimDirection(drone.Position);
                     if (cooldownRemaining > 0)
                         cooldownRemaining--;
-                    if (Input.mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0 && !EntityManager.Players[playerIndex].IsDead && !EtherRoot.Instance.EditorMode) {
+                    if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0 && !EntityManager.Players[playerIndex].IsDead && !EtherRoot.Instance.EditorMode) {
                         // Sound
                         Sounds.PlayerShoot.Play(GameSettings.SoundEffectVolume / 3f, Rand.NextFloat(-0.2f, 0.2f), 0);
                         cooldownRemaining = CooldownFrames;
@@ -146,4 +147,5 @@ namespace Mono_Ether.Ether {
         }
         #endregion CreateDrones
     }
+    */
 }

@@ -4,6 +4,7 @@ using System;
 
 namespace Mono_Ether {
     static class Extensions {
+        /*
         public static float ToAngle(this Vector2 vector) {
             return (float)Math.Atan2(vector.Y, vector.X);
         }
@@ -38,5 +39,6 @@ namespace Mono_Ether {
         public static Vector2 Size(this Texture2D image) {
             return new Vector2(image.Width, image.Height);
         }
+        */
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 
 namespace Mono_Ether.Ether {
+    /*
     static class Camera {
         public static Vector2 CameraPosition = new Vector2(0, 0);
         public static float Zoom = 1;
@@ -12,13 +13,13 @@ namespace Mono_Ether.Ether {
         public static void Update() {
             // Freecam (disables lerp if used)
             Vector2 direction = Vector2.Zero;
-            if (Input.keyboard.IsKeyDown(Keys.Left))
+            if (Input.Keyboard.IsKeyDown(Keys.Left))
                 direction.X -= 1;
-            if (Input.keyboard.IsKeyDown(Keys.Right))
+            if (Input.Keyboard.IsKeyDown(Keys.Right))
                 direction.X += 1;
-            if (Input.keyboard.IsKeyDown(Keys.Up))
+            if (Input.Keyboard.IsKeyDown(Keys.Up))
                 direction.Y -= 1;
-            if (Input.keyboard.IsKeyDown(Keys.Down))
+            if (Input.Keyboard.IsKeyDown(Keys.Down))
                 direction.Y += 1;
             direction = direction.Rotate(-Orientation);
             if (direction != Vector2.Zero) {
@@ -26,11 +27,11 @@ namespace Mono_Ether.Ether {
                 CameraPosition += direction * 5 / Zoom;
             }
             // Zoom (Q and E)
-            if (Input.keyboard.IsKeyDown(Keys.Q))
+            if (Input.Keyboard.IsKeyDown(Keys.Q))
                 Zoom /= 1.03f;
-            if (Input.keyboard.IsKeyDown(Keys.E))
+            if (Input.Keyboard.IsKeyDown(Keys.E))
                 Zoom *= 1.03f;
-            // Zoom (mouse wheel)
+            // Zoom (Mouse wheel)
             if (Input.DeltaScrollWheelValue() < 0)
                 Zoom *= 1.1f;
             else if (Input.DeltaScrollWheelValue() > 0)
@@ -41,14 +42,14 @@ namespace Mono_Ether.Ether {
             if (Zoom < 0.1f)
                 Zoom = 0.1f;
             // Rotate
-            if (Input.keyboard.IsKeyDown(Keys.Z))
+            if (Input.Keyboard.IsKeyDown(Keys.Z))
                 Orientation += 0.01f;
-            if (Input.keyboard.IsKeyDown(Keys.X))
+            if (Input.Keyboard.IsKeyDown(Keys.X))
                 Orientation -= 0.01f;
             // Lerp
             if (_isLerping)
                 Lerp(EntityManager.Player1.Position);
-            else if (Input.keyboard.IsKeyDown(Keys.C))
+            else if (Input.Keyboard.IsKeyDown(Keys.C))
                 _isLerping = true;  // Press 'c' to enable lerp
         }
         private static void Lerp(Vector2 destination) {
@@ -58,10 +59,10 @@ namespace Mono_Ether.Ether {
         }
 
         public static Vector2 MouseWorldCoords() {
-            return ScreenToWorld(Input.mouse.Position.ToVector2());
+            return ScreenToWorld(Input.Mouse.Position.ToVector2());
         }
         public static Vector2 GetMouseAimDirection(Vector2 source) {
-            Vector2 direction = Camera.ScreenToWorld(Input.mouse.Position.ToVector2()) - source;
+            Vector2 direction = Camera.ScreenToWorld(Input.Mouse.Position.ToVector2()) - source;
 
             if (direction == Vector2.Zero)
                 return Vector2.Zero;
@@ -69,4 +70,5 @@ namespace Mono_Ether.Ether {
                 return Vector2.Normalize(direction);
         }
     }
+    */
 }

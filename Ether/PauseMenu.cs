@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether.Ether {
+    /*
     public static class PauseMenu {
         public static float yOffset = 0f;
         public static string state = "hidden";
@@ -21,11 +22,11 @@ namespace Mono_Ether.Ether {
                         state = "visible";
                         yOffset = 0f;
                         foreach (Button button in buttonManager.Buttons) {
-                            button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - Art.MenuButtonBlank.Height / 2f;
+                            button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - GlobalAssets.MenuButtonBlank.Height / 2f;
                         }
                     }
                     foreach (Button button in buttonManager.Buttons) {
-                        button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - Art.MenuButtonBlank.Height / 2f + yOffset;
+                        button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - GlobalAssets.MenuButtonBlank.Height / 2f + yOffset;
                     }
                     break;
                 case "slideOut":
@@ -35,11 +36,11 @@ namespace Mono_Ether.Ether {
                         state = "hidden";
                         yOffset = 1000f;
                         foreach (Button button in buttonManager.Buttons) {
-                            button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - Art.MenuButtonBlank.Height / 2f + yOffset;
+                            button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - GlobalAssets.MenuButtonBlank.Height / 2f + yOffset;
                         }
                     }
                     foreach (Button button in buttonManager.Buttons) {
-                        button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - Art.MenuButtonBlank.Height / 2f + yOffset;
+                        button.Pos.Y = GameRoot.ScreenSize.Y * 0.8f - GlobalAssets.MenuButtonBlank.Height / 2f + yOffset;
                     }
                     break;
                 default:
@@ -60,7 +61,7 @@ namespace Mono_Ether.Ether {
             }
         }
         public static void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(Art.PauseBg, GameRoot.ScreenSize / 2f + new Vector2(0, yOffset), null, Color.White, 0f, Art.PauseBg.Size() / 2f, 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(GlobalAssets.PauseBg, GameRoot.ScreenSize / 2f + new Vector2(0, yOffset), null, Color.White, 0f, GlobalAssets.PauseBg.Size() / 2f, 1f, SpriteEffects.None, 0);
             buttonManager.Draw(spriteBatch);
         }
         public static void SlideIn() {
@@ -74,4 +75,5 @@ namespace Mono_Ether.Ether {
             slideRemainingFrames = 30;
         }
     }
+    */
 }

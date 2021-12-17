@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
+    /*
     class Enemy : Entity {
         public int timeUntilStart = 60;
         public bool IsActive => timeUntilStart <= 0;
@@ -90,7 +91,7 @@ namespace Mono_Ether.Ether {
                 };
 
                 Color color = Color.Lerp(color1, color2, rand.NextFloat(0, 1));
-                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, Position, color, 190, 1.5f, state);
             }
         }
         private void AddBehaviour(IEnumerable<int> behaviour) {
@@ -239,19 +240,19 @@ namespace Mono_Ether.Ether {
         #endregion IEnumerables
         #region CreateEnemies
         public static Enemy CreateBlueSeeker(Vector2 position) {
-            var enemy = new Enemy(Art.BlueSeeker, position, "BlueSeeker");
+            var enemy = new Enemy(GlobalAssets.BlueSeeker, position, "BlueSeeker");
             enemy.AddBehaviour(enemy.FollowPlayerAStar(0.8f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public static Enemy CreatePurpleWanderer(Vector2 position) {
-            var enemy = new Enemy(Art.PurpleWanderer, position, "PurpleWanderer");
+            var enemy = new Enemy(GlobalAssets.PurpleWanderer, position, "PurpleWanderer");
             enemy.AddBehaviour(enemy.MoveRandomly());
             enemy.AddBehaviour(enemy.RotateOrientationConstantly());
             return enemy;
         }
         public static Enemy CreateSnake(Vector2 position) {
-            var enemy = new Enemy(Art.SnakeHead, position, "Snake");
+            var enemy = new Enemy(GlobalAssets.SnakeHead, position, "Snake");
 
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
@@ -265,12 +266,12 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateSnakeBody(Vector2 position) {
-            var enemy = new Enemy(Art.SnakeBody, position, "SnakeBody");
+            var enemy = new Enemy(GlobalAssets.SnakeBody, position, "SnakeBody");
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public static Enemy CreateBackAndForther(Vector2 position) {
-            Enemy enemy = new Enemy(Art.BackAndForther, position, "BackAndForther") {
+            Enemy enemy = new Enemy(GlobalAssets.BackAndForther, position, "BackAndForther") {
                 Orientation = new Random().Next(4) * MathF.PI / 2
             };
             IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
@@ -291,7 +292,7 @@ namespace Mono_Ether.Ether {
                 while (true) {
                     if (enemy.Velocity.LengthSquared() > 0.1f) {
                         Vector2 baseVel = enemy.Velocity.ScaleTo(-3).Rotate(rand.NextFloat(-0.3f, 0.3f));
-                        EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, enemy.Position, Color.OrangeRed * 0.7f, 60f, new Vector2(0.5f, 1),
+                        EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, enemy.Position, Color.OrangeRed * 0.7f, 60f, new Vector2(0.5f, 1),
                             new ParticleState(baseVel, ParticleType.Enemy));
                     }
                     yield return 0;
@@ -302,7 +303,7 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreatePinkWanderer(Vector2 position) {
-            var enemy = new Enemy(Art.PinkWanderer, position, "PinkWanderer");
+            var enemy = new Enemy(GlobalAssets.PinkWanderer, position, "PinkWanderer");
             IEnumerable<int> MoveOrthonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
                 while (true) {
                     Vector2 velocity = MathUtil.FromPolar(rand.Next(4) * MathF.PI / 2f, speed);
@@ -320,20 +321,20 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateGreenSeeker(Vector2 position) {
-            var enemy = new Enemy(Art.GreenSeeker, position, "GreenSeeker");
+            var enemy = new Enemy(GlobalAssets.GreenSeeker, position, "GreenSeeker");
             enemy.AddBehaviour(enemy.FollowPlayerAStar(1.2f));
             enemy.AddBehaviour(enemy.DodgeBullets(100f, 1.5f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public static Enemy CreatePinkSeeker(Vector2 position) {
-            var enemy = new Enemy(Art.PinkSeeker, position, "PinkSeeker");
+            var enemy = new Enemy(GlobalAssets.PinkSeeker, position, "PinkSeeker");
             enemy.AddBehaviour(enemy.FollowPlayerAStar(1.2f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
             return enemy;
         }
         public static Enemy CreatePinkSeekerChild(Vector2 position) {
-            var enemy = new Enemy(Art.PinkSeekerChild, position, "PinkSeekerChild");
+            var enemy = new Enemy(GlobalAssets.PinkSeekerChild, position, "PinkSeekerChild");
             IEnumerable<int> WalkInCircles() {
                 float orientation = rand.NextFloat(0, MathF.PI * 2f);
                 const float rotationSpeed = 0.1f;
@@ -361,7 +362,7 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBossOne(Vector2 position) {
-            var enemy = new Enemy(Art.BossOne, position, "BossOne") {
+            var enemy = new Enemy(GlobalAssets.BossOne, position, "BossOne") {
                 Health = 1000,
                 Radius = 400,
                 IsBoss = true
@@ -374,7 +375,7 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBossOneChild(Vector2 centre, float initialRadians) {
-            var enemy = new Enemy(Art.BossOneChild, centre, "BossOneChild") {
+            var enemy = new Enemy(GlobalAssets.BossOneChild, centre, "BossOneChild") {
                 invincible = true,
                 IsBoss = true,
                 Radius = 80
@@ -414,7 +415,7 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBossTwoHead(Vector2 position) {
-            var enemy = new Enemy(Art.BossTwoHead, position, "BossTwoHead") {
+            var enemy = new Enemy(GlobalAssets.BossTwoHead, position, "BossTwoHead") {
                 Health = 300,
                 Radius = 40,
                 IsBoss = true
@@ -426,7 +427,7 @@ namespace Mono_Ether.Ether {
                     yield return 0;
                 }
             }
-            enemy.AddBehaviour(Followcursor());*/
+            enemy.AddBehaviour(Followcursor());
             enemy.AddBehaviour(enemy.UpdateBossBar());
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
@@ -439,7 +440,7 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateBossTwoTail(Vector2 position) {
-            var enemy = new Enemy(Art.BossTwoTail, position, "BossTwoTail") {
+            var enemy = new Enemy(GlobalAssets.BossTwoTail, position, "BossTwoTail") {
                 Radius = 20
             };
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
@@ -447,4 +448,5 @@ namespace Mono_Ether.Ether {
         }
         #endregion CreateEnemies
     }
+    */
 }

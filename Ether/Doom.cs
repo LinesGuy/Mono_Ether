@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mono_Ether.Ether {
+    /*
     public static class Doom {
         const float fov = MathF.PI * 0.8f;
         const float stepDist = 4;
         const int maxSteps = 512;
         static readonly float maxDist = stepDist * maxSteps;
         public static void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(Art.Pixel, new Rectangle(0, 0, (int)(GameRoot.ScreenSize.X), (int)(GameRoot.ScreenSize.Y / 2f)), Color.CornflowerBlue);
-            spriteBatch.Draw(Art.Pixel, new Rectangle(0, (int)(GameRoot.ScreenSize.Y / 2f), (int)(GameRoot.ScreenSize.X), (int)(GameRoot.ScreenSize.Y / 2f)), new Color(32, 128, 32));
+            spriteBatch.Draw(GlobalAssets.Pixel, new Rectangle(0, 0, (int)(GameRoot.ScreenSize.X), (int)(GameRoot.ScreenSize.Y / 2f)), Color.CornflowerBlue);
+            spriteBatch.Draw(GlobalAssets.Pixel, new Rectangle(0, (int)(GameRoot.ScreenSize.Y / 2f), (int)(GameRoot.ScreenSize.X), (int)(GameRoot.ScreenSize.Y / 2f)), new Color(32, 128, 32));
             Vector2 p1Pos = EntityManager.Player1.Position;
             float p1Angle = EntityManager.Player1.Orientation;
             List<float> dists = new List<float>();
@@ -188,17 +189,18 @@ namespace Mono_Ether.Ether {
                 int tileId = tileIds[i];
                 float ed = dist / 32f;
                 if (texX >= 0) {
-                    Texture2D img = Art.TileGrass;
+                    Texture2D img = GlobalAssets.TileGrass;
                     if (tileId == 2)
-                        img = Art.TileDirt;
+                        img = GlobalAssets.TileDirt;
                     if (tileId == 3)
-                        img = Art.TileStone;
+                        img = GlobalAssets.TileStone;
                     if (tileId == 4)
-                        img = Art.TileSus;
+                        img = GlobalAssets.TileSus;
                     int c = (int)(255f * (1 - dist / maxDist));
-                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(Art.TileDirt.Width * texX), 0, 1, Art.TileDirt.Height), new Color(255, 255, 255 , c), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);
+                    spriteBatch.Draw(img, new Vector2(i, GameRoot.ScreenSize.Y / 2f), new Rectangle((int)(GlobalAssets.TileDirt.Width * texX), 0, 1, GlobalAssets.TileDirt.Height), new Color(255, 255, 255 , c), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);
                 }
             }
         }
     }
+    */
 }

@@ -2,6 +2,7 @@
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Mono_Ether.Ether {
+    /*
     public enum ParticleType { None, Enemy, Bullet, IgnoreGravity }
 
     public struct ParticleState {
@@ -67,4 +68,5 @@ namespace Mono_Ether.Ether {
             particle.State.Velocity = vel;
         }
     }
+    */
 }

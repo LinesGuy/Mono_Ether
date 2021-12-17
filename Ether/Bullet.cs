@@ -2,13 +2,14 @@
 using System;
 
 namespace Mono_Ether.Ether {
+    /*
     class Bullet : Entity {
         private int age;
         private readonly int lifespan;
         public readonly int PlayerIndex;
         private readonly Random rand = new Random();
         public Bullet(Vector2 position, Vector2 velocity, Color color, int playerIndex) {
-            Image = Art.Bullet;
+            Image = GlobalAssets.Bullet;
             Position = position;
             Velocity = velocity;
             PlayerIndex = playerIndex;
@@ -43,7 +44,7 @@ namespace Mono_Ether.Ether {
                 };
 
                 Color color = new Color(235, 222, 77);
-                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, Position, color, 190, 1.5f, state);
             }
             // Explosion
             ExplosionManager.Add(new Explosion(Position));
@@ -57,7 +58,7 @@ namespace Mono_Ether.Ether {
         static readonly Random Rand = new Random();
         static readonly float bullet_speed = 15f;
         public Starburst(Vector2 position, Vector2 destination, int playerIndex) {
-            Image = Art.StarBurst;
+            Image = GlobalAssets.StarBurst;
             Position = position;
             PlayerIndex = playerIndex;
             Velocity = Vector2.Normalize(destination - position) * bullet_speed;
@@ -80,4 +81,5 @@ namespace Mono_Ether.Ether {
             }
         }
     }
+    */
 }

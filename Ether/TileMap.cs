@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
+    /*
     public class Tile {
         public Vector2 pos;
         public int TileId;
@@ -21,16 +22,16 @@ namespace Mono_Ether.Ether {
             switch (TileId) // Get texture based on TextureID
             {
                 case 1:
-                    texture = Art.TileGrass;
+                    texture = GlobalAssets.TileGrass;
                     break;
                 case 2:
-                    texture = Art.TileDirt;
+                    texture = GlobalAssets.TileDirt;
                     break;
                 case 3:
-                    texture = Art.TileStone;
+                    texture = GlobalAssets.TileStone;
                     break;
                 case 4:
-                    texture = Art.TileSus;
+                    texture = GlobalAssets.TileSus;
                     break;
                 default:
                     return;
@@ -38,14 +39,14 @@ namespace Mono_Ether.Ether {
             var position = Map.MapToScreen(new Vector2(pos.X, pos.Y));
             spriteBatch.Draw(texture, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
             if (EtherRoot.Instance.EditorMode) {
-                if (Walls[0]) spriteBatch.Draw(Art.CollisionLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[1]) spriteBatch.Draw(Art.CollisionUp, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[2]) spriteBatch.Draw(Art.CollisionRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[3]) spriteBatch.Draw(Art.CollisionDown, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[4]) spriteBatch.Draw(Art.CollisionTopLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[5]) spriteBatch.Draw(Art.CollisionTopRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[6]) spriteBatch.Draw(Art.CollisionBottomRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
-                if (Walls[7]) spriteBatch.Draw(Art.CollisionBottomLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[0]) spriteBatch.Draw(GlobalAssets.CollisionLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[1]) spriteBatch.Draw(GlobalAssets.CollisionUp, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[2]) spriteBatch.Draw(GlobalAssets.CollisionRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[3]) spriteBatch.Draw(GlobalAssets.CollisionDown, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[4]) spriteBatch.Draw(GlobalAssets.CollisionTopLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[5]) spriteBatch.Draw(GlobalAssets.CollisionTopRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[6]) spriteBatch.Draw(GlobalAssets.CollisionBottomRight, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
+                if (Walls[7]) spriteBatch.Draw(GlobalAssets.CollisionBottomLeft, position, null, Color.White, Camera.Orientation, Vector2.Zero, Camera.Zoom, 0, 0);
             }
         }
 
@@ -147,7 +148,7 @@ namespace Mono_Ether.Ether {
         public static void Draw(SpriteBatch spriteBatch) {
             /* Instead of iterating over every tile in the 2d array, we only iterate over tiles that are visible by the
             camera (taking position and scaling into account), this significantly improves drawing performance,
-            especially when zoomed in. */
+            especially when zoomed in.
             List<Vector2> corners = new List<Vector2> { Camera.ScreenToWorld(Vector2.Zero), Camera.ScreenToWorld(GameRoot.ScreenSize), Camera.ScreenToWorld(new Vector2(GameRoot.ScreenSize.X, 0)), Camera.ScreenToWorld(new Vector2(0, GameRoot.ScreenSize.Y)) };
             List<float> xCoords = corners.Select(v => v.X).ToList();
             List<float> yCoords = corners.Select(v => v.Y).ToList();
@@ -164,7 +165,7 @@ namespace Mono_Ether.Ether {
             // Draw tile cursor is in if in editor mode
             if (EtherRoot.Instance.EditorMode) {
                 var screenCoords = MapToScreen(Vector2.Floor(Camera.MouseWorldCoords() / cellSize));
-                spriteBatch.Draw(Art.Pixel, screenCoords, null, new Color(255, 255, 255, 32), Camera.Orientation, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
+                spriteBatch.Draw(GlobalAssets.Pixel, screenCoords, null, new Color(255, 255, 255, 32), Camera.Orientation, Vector2.Zero, Camera.Zoom * cellSize, 0, 0);
             }
         }
 
@@ -188,15 +189,15 @@ namespace Mono_Ether.Ether {
                 }
                 var tile = GetTileFromWorld(Camera.MouseWorldCoords());
                 // Set Tile ID
-                if (Input.keyboard.IsKeyDown(Keys.D1))
+                if (Input.Keyboard.IsKeyDown(Keys.D1))
                     SelectedId = 1;
-                else if (Input.keyboard.IsKeyDown(Keys.D2))
+                else if (Input.Keyboard.IsKeyDown(Keys.D2))
                     SelectedId = 2;
-                else if (Input.keyboard.IsKeyDown(Keys.D3))
+                else if (Input.Keyboard.IsKeyDown(Keys.D3))
                     SelectedId = 3;
-                else if (Input.keyboard.IsKeyDown(Keys.D4))
+                else if (Input.Keyboard.IsKeyDown(Keys.D4))
                     SelectedId = 4;
-                else if (Input.keyboard.IsKeyDown(Keys.D0))
+                else if (Input.Keyboard.IsKeyDown(Keys.D0))
                     SelectedId = 0;
                 // Toggle cell walls
                 if (Input.WasKeyJustDown(Keys.J)) // Left
@@ -208,13 +209,13 @@ namespace Mono_Ether.Ether {
                 else if (Input.WasKeyJustDown(Keys.K)) // Down
                     tile.Walls[3] = !tile.Walls[3];
 
-                if (Input.mouse.LeftButton == ButtonState.Pressed) // Place last placed tile ID at cursor
+                if (Input.Mouse.LeftButton == ButtonState.Pressed) // Place last placed tile ID at cursor
                 {
                     tile.TileId = SelectedId;
                     tile.UpdateNeighbouringWalls();
                 }
 
-                if (Input.mouse.RightButton == ButtonState.Pressed) // Delete tile at cursor
+                if (Input.Mouse.RightButton == ButtonState.Pressed) // Delete tile at cursor
                 {
                     tile.TileId = 0;
                     tile.UpdateNeighbouringWalls();
@@ -222,4 +223,5 @@ namespace Mono_Ether.Ether {
             }
         }
     }
+    */
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
+    /*
     public class Node {
         public Node Parent;
         public Vector2 Position;
@@ -133,4 +134,5 @@ namespace Mono_Ether.Ether {
             return null;
         }
     }
+    */
 }

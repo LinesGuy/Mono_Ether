@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 
 namespace Mono_Ether.MainMenu {
-    public class CreditsScreen : States.GameState {
+    /*
+    public class CreditsScreen : GameState {
         private ButtonManager buttonManager;
         private readonly List<Letter> Letters = new List<Letter>();
         public static readonly Random rand = new Random();
@@ -80,4 +81,5 @@ namespace Mono_Ether.MainMenu {
             }
         }
     }
+    */
 }

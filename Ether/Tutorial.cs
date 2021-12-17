@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Mono_Ether.Ether {
+    /*
     public static class Tutorial {
         public static string state = "none";
         public static string tutorialText = "";
@@ -81,4 +82,5 @@ namespace Mono_Ether.Ether {
             spriteBatch.DrawString(Fonts.NovaSquare24, tutorialText, GameRoot.ScreenSize / 4f, Color.White);
         }
     }
+    */
 }

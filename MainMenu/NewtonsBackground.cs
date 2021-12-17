@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Mono_Ether.MainMenu {
+    /*
     public static class NewtonsBackground {
         // This is the code for the animated background in the title screen. It is very CPU intensive, makes the game very laggy, but it looks cool
         // also the code for it is like really complex so i figured i'd include it here
@@ -36,15 +37,15 @@ namespace Mono_Ether.MainMenu {
             }
             // Camera (arrow keys or WASD)
             Vector2 direction = Vector2.Zero;
-            if (Input.keyboard.IsKeyDown(Keys.Left) || Input.keyboard.IsKeyDown(Keys.A)) direction.X -= 1;
-            if (Input.keyboard.IsKeyDown(Keys.Right) || Input.keyboard.IsKeyDown(Keys.D)) direction.X += 1;
-            if (Input.keyboard.IsKeyDown(Keys.Up) || Input.keyboard.IsKeyDown(Keys.W)) direction.Y -= 1;
-            if (Input.keyboard.IsKeyDown(Keys.Down) || Input.keyboard.IsKeyDown(Keys.S)) direction.Y += 1;
+            if (Input.Keyboard.IsKeyDown(Keys.Left) || Input.Keyboard.IsKeyDown(Keys.A)) direction.X -= 1;
+            if (Input.Keyboard.IsKeyDown(Keys.Right) || Input.Keyboard.IsKeyDown(Keys.D)) direction.X += 1;
+            if (Input.Keyboard.IsKeyDown(Keys.Up) || Input.Keyboard.IsKeyDown(Keys.W)) direction.Y -= 1;
+            if (Input.Keyboard.IsKeyDown(Keys.Down) || Input.Keyboard.IsKeyDown(Keys.S)) direction.Y += 1;
             if (direction != Vector2.Zero) CameraPosition += direction * 5 / Zoom;
             // Zoom (Q and E)
-            if (Input.keyboard.IsKeyDown(Keys.Q))
+            if (Input.Keyboard.IsKeyDown(Keys.Q))
                 Zoom /= 1.03f;
-            if (Input.keyboard.IsKeyDown(Keys.E))
+            if (Input.Keyboard.IsKeyDown(Keys.E))
                 Zoom *= 1.03f;
             // Change pixel size (keys 1 through 5)
             if (Input.WasKeyJustDown(Keys.D1)) pixelSize = 1;
@@ -114,7 +115,7 @@ namespace Mono_Ether.MainMenu {
                     else if (cell == 3) color = Color.Blue;
                     else if (cell == 4) color = Color.Purple;
                     else if (cell == 5) color = Color.Orange;
-                    spriteBatch.Draw(Art.Pixel, new Vector2(x * pixelSize, y * pixelSize), null, color, 0f, Vector2.Zero, pixelSize, SpriteEffects.None, 0); // Draw the pixel
+                    spriteBatch.Draw(GlobalAssets.Pixel, new Vector2(x * pixelSize, y * pixelSize), null, color, 0f, Vector2.Zero, pixelSize, SpriteEffects.None, 0); // Draw the pixel
                 }
             }
             // spriteBatch.DrawString(Art.DebugFont, screen_to_world_pos(Input.Mouse.Position.ToVector2()).ToString(), Vector2.Zero, Color.White); // Mouse coordinates
@@ -123,4 +124,5 @@ namespace Mono_Ether.MainMenu {
             // computer science class shortly after watching half of a 30 minute video about fractals, so yeah the quality of code in this particular file wasn't that great
         }
     }
+    */
 }

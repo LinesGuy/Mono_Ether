@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether.MainMenu {
-    public class TitleScreen : States.GameState {
+    /*
+    public class TitleScreen : GameState {
         private ButtonManager buttonManager;
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
@@ -49,4 +50,5 @@ namespace Mono_Ether.MainMenu {
             buttonManager.Draw(spriteBatch);
         }
     }
+    */
 }

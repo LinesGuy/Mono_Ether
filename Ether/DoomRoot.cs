@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Mono_Ether.States;
 
 namespace Mono_Ether.Ether {
+    /*
     public class DoomRoot : GameState {
         public static DoomRoot Instance { get; private set; }
         public bool paused = false;
@@ -69,7 +69,7 @@ namespace Mono_Ether.Ether {
             spriteBatch.DrawString(Fonts.NovaSquare24, "FIND THE SUSSY IMPOSTOR TO CONTINUE", GameRoot.ScreenSize / 6f, Color.White);
 
             Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
-            spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
+            spriteBatch.Draw(GlobalAssets.Pointer, mousePos - new Vector2(16, 16), Color.White);
             if (PauseMenu.state != "hidden")
                 PauseMenu.Draw(spriteBatch);
             if (!GameRoot.Instance.IsActive)
@@ -77,4 +77,5 @@ namespace Mono_Ether.Ether {
             spriteBatch.End();
         }
     }
+    */
 }

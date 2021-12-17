@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Mono_Ether.Ether {
+    /*
     public class ParticleManager<T> {
         // This delegate will be called for each particle.
         private readonly Action<Particle> updateParticle;
@@ -116,4 +117,5 @@ namespace Mono_Ether.Ether {
             }
         }
     }
+    */
 }

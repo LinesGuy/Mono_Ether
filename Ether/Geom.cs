@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Mono_Ether.Ether {
+    /*
     class Geom : Entity {
         private readonly static Random rand = new Random();
         private int Age = 0;
         private const int Lifespan = 600;
         public Geom(Vector2 position) {
             Position = position;
-            Image = Art.Geom;
+            Image = GlobalAssets.Geom;
             Velocity = new Vector2(rand.Next(-10, 10), rand.Next(-10, 10));
         }
 
@@ -41,4 +42,5 @@ namespace Mono_Ether.Ether {
             Sounds.GeomPickup.Play(GameSettings.SoundEffectVolume, rand.NextFloat(-0.2f, 0.2f), 0);
         }
     }
+    */
 }

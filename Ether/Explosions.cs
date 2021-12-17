@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether.Ether {
+    /*
     public static class ExplosionManager
     {
         private static List<Explosion> Explosions;
@@ -46,7 +47,7 @@ namespace Mono_Ether.Ether {
 
         public Explosion(Vector2 pos)
         {
-            Images = Art.ExplosionSmall;
+            Images = GlobalAssets.ExplosionSmall;
             _radius = Images[0].Width;
             _color = new Color(128, 128, 128);
             _pos = pos;
@@ -63,4 +64,5 @@ namespace Mono_Ether.Ether {
             spriteBatch.Draw(Images[_age / 2], screenPos, null, _color, Camera.Orientation, new Vector2(_radius) / 2f, Camera.Zoom * 2f, 0, 0);
         }
     }
+    */
 }

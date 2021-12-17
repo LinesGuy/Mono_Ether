@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
+    /*
     class FloatingText {
         readonly string Text;
         Vector2 Velocity; // not be used for all types
@@ -75,4 +76,5 @@ namespace Mono_Ether.Ether {
             texts.Clear();
         }
     }
+    */
 }

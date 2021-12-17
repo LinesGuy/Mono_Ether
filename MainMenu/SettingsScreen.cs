@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 
 namespace Mono_Ether.MainMenu {
-    public class SettingsScreen : States.GameState {
+    /*
+    public class SettingsScreen : GameState {
         private ButtonManager buttonManager;
         private readonly Dictionary<string, Slider> Sliders = new Dictionary<string, Slider>();
         public SettingsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
@@ -74,7 +75,7 @@ namespace Mono_Ether.MainMenu {
             SliderPos = sliderPos;
             Text = text;
             Width = width;
-            Texture = Art.Default;
+            Texture = GlobalAssets.Default;
             framesSincePlay = 0;
             Value = startValue;
             BallPos = new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
@@ -83,13 +84,13 @@ namespace Mono_Ether.MainMenu {
         }
 
         public void Update() {
-            IsBeingHovered = Vector2.DistanceSquared(Input.mouse.Position.ToVector2(), BallPos) < Math.Pow(Art.SettingsSliderBall.Width / 2f, 2);
+            IsBeingHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), BallPos) < Math.Pow(GlobalAssets.SettingsSliderBall.Width / 2f, 2);
             if (IsBeingHovered && Input.WasLeftButtonJustDown())
                 IsBeingDragged = true;
             else if (Input.WasLeftButtonJustUp())
                 IsBeingDragged = false;
             if (IsBeingDragged) {
-                Value = (Input.mouse.X - Width / 2f) / Width;
+                Value = (Input.Mouse.X - Width / 2f) / Width;
                 Value = Math.Clamp(Value, 0f, 1f);
                 BallPos = new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
                 // sfx
@@ -103,17 +104,18 @@ namespace Mono_Ether.MainMenu {
             }
         }
         public void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(Art.SettingsSliderMiddle, new Rectangle((int)(SliderPos.X - Width / 2f), (int)(SliderPos.Y - Art.SettingsSliderMiddle.Height / 2f), (int)Width, (int)Art.SettingsSliderMiddle.Height), Color.White);
-            spriteBatch.Draw(Art.SettingsSliderLeft, new Vector2(SliderPos.X - Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderLeft.Height / 2f), Color.White);
-            spriteBatch.Draw(Art.SettingsSliderRight, new Vector2(SliderPos.X + Width / 2f - Art.SettingsSliderLeft.Width / 2f, SliderPos.Y - Art.SettingsSliderRight.Height / 2f), Color.White);
+            spriteBatch.Draw(GlobalAssets.SettingsSliderMiddle, new Rectangle((int)(SliderPos.X - Width / 2f), (int)(SliderPos.Y - GlobalAssets.SettingsSliderMiddle.Height / 2f), (int)Width, (int)GlobalAssets.SettingsSliderMiddle.Height), Color.White);
+            spriteBatch.Draw(GlobalAssets.SettingsSliderLeft, new Vector2(SliderPos.X - Width / 2f - GlobalAssets.SettingsSliderLeft.Width / 2f, SliderPos.Y - GlobalAssets.SettingsSliderLeft.Height / 2f), Color.White);
+            spriteBatch.Draw(GlobalAssets.SettingsSliderRight, new Vector2(SliderPos.X + Width / 2f - GlobalAssets.SettingsSliderLeft.Width / 2f, SliderPos.Y - GlobalAssets.SettingsSliderRight.Height / 2f), Color.White);
             spriteBatch.DrawString(Fonts.NovaSquare48, Text, new Vector2(SliderPos.X, SliderPos.Y - 75f), Color.White, 0f, Fonts.NovaSquare48.MeasureString(Text) / 2f, 1f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(Fonts.NovaSquare24, $"{Value * 100:0}%", new Vector2(SliderPos.X + Width / 2f + Art.SettingsSliderRight.Width + 35f, SliderPos.Y), Color.White, 0f, Fonts.NovaSquare24.MeasureString($"{Value * 100:0}%") / 2f, 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(Fonts.NovaSquare24, $"{Value * 100:0}%", new Vector2(SliderPos.X + Width / 2f + GlobalAssets.SettingsSliderRight.Width + 35f, SliderPos.Y), Color.White, 0f, Fonts.NovaSquare24.MeasureString($"{Value * 100:0}%") / 2f, 1f, SpriteEffects.None, 0);
             Color sliderBallColor;
             if (IsBeingHovered || IsBeingDragged)
                 sliderBallColor = new Color(0, 255, 0);
             else
                 sliderBallColor = new Color(0, 128, 0);
-            spriteBatch.Draw(Art.SettingsSliderBall, BallPos, null, sliderBallColor, 0, Art.SettingsSliderBall.Size() / 2f, 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(GlobalAssets.SettingsSliderBall, BallPos, null, sliderBallColor, 0, GlobalAssets.SettingsSliderBall.Size() / 2f, 1f, SpriteEffects.None, 0);
         }
     }
+    */
 }

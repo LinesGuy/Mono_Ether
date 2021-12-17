@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
+    /*
     class PlayerShip : Entity {
         public int lives;
         public int Score { get; private set; }
@@ -19,7 +20,7 @@ namespace Mono_Ether.Ether {
         public bool DoomMovement = false;
 
         public PlayerShip() {
-            Image = Art.Player;
+            Image = GlobalAssets.Player;
             Position = new Vector2(0, 0);
             Radius = 10;
             Geoms = 0;
@@ -57,25 +58,25 @@ namespace Mono_Ether.Ether {
 
             if (DoomMovement) {
                 if (this == EntityManager.Player1) {
-                    if (Input.keyboard.IsKeyDown(Keys.A))
+                    if (Input.Keyboard.IsKeyDown(Keys.A))
                         Orientation -= 0.025f;
-                    if (Input.keyboard.IsKeyDown(Keys.D))
+                    if (Input.Keyboard.IsKeyDown(Keys.D))
                         Orientation += 0.025f;
-                    if (Input.keyboard.IsKeyDown(Keys.W))
+                    if (Input.Keyboard.IsKeyDown(Keys.W))
                         direction += MathUtil.FromPolar(Orientation, 0.3f);
-                    if (Input.keyboard.IsKeyDown(Keys.S))
+                    if (Input.Keyboard.IsKeyDown(Keys.S))
                         direction -= MathUtil.FromPolar(Orientation, 0.2f);
                 }
             } else {
                 
                 if (this == EntityManager.Player1) {
-                    if (Input.keyboard.IsKeyDown(Keys.A))
+                    if (Input.Keyboard.IsKeyDown(Keys.A))
                         direction.X -= 1;
-                    if (Input.keyboard.IsKeyDown(Keys.D))
+                    if (Input.Keyboard.IsKeyDown(Keys.D))
                         direction.X += 1;
-                    if (Input.keyboard.IsKeyDown(Keys.W))
+                    if (Input.Keyboard.IsKeyDown(Keys.W))
                         direction.Y -= 1;
-                    if (Input.keyboard.IsKeyDown(Keys.S))
+                    if (Input.Keyboard.IsKeyDown(Keys.S))
                         direction.Y += 1;
                 }
             }
@@ -107,28 +108,28 @@ namespace Mono_Ether.Ether {
 
                 // Middle particle stream
                 Vector2 velMid = baseVel + Rand.NextVector2(0, 1);
-                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(velMid, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(Art.Glow, pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.Glow, pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(velMid, ParticleType.Enemy));
 
                 // Side particle streams
                 Vector2 vel1 = baseVel + perpVel + Rand.NextVector2(0, 0.3f);
                 Vector2 vel2 = baseVel - perpVel + Rand.NextVector2(0, 0.3f);
-                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel1, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel2, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(Art.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel1, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(Art.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel2, ParticleType.Enemy));
             }
             #endregion Exhaust fire
             #region Shooting
             if (!EtherRoot.Instance.EditorMode) {
                 var aim = Camera.GetMouseAimDirection(Position);
-                if (Input.mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
+                if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
                     // Play shooting sound
                     Sounds.PlayerShoot.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
                     // Cooldown calculations
@@ -214,7 +215,7 @@ namespace Mono_Ether.Ether {
                     Type = ParticleType.None,
                     LengthMultiplier = 1
                 };
-                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 1.5f, state);
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, Position, color, 190, 1.5f, state);
             }
 
             EnemySpawner.Reset();
@@ -233,4 +234,5 @@ namespace Mono_Ether.Ether {
             File.WriteAllText(highScoreFilename, score.ToString());
         }
     }
+    */
 }

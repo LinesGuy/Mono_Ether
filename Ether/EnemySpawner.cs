@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
+    /*
     static class EnemySpawner {
         static readonly Random _rand = new Random();
         static float _inverseSpawnChance = 60;
@@ -77,4 +78,5 @@ namespace Mono_Ether.Ether {
             _inverseSpawnChance = 60;
         }
     }
+    */
 }

@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Mono_Ether.States;
 
 namespace Mono_Ether.Ether {
+    /*
     public class EtherRoot : GameState {
         public static EtherRoot Instance { get; private set; }
         public bool Paused = false;
@@ -146,7 +146,7 @@ namespace Mono_Ether.Ether {
                 spriteBatch.Begin();
             }
             Vector2 mousePos = Camera.WorldToScreen(Camera.MouseWorldCoords());
-            spriteBatch.Draw(Art.Pointer, mousePos - new Vector2(16, 16), Color.White);
+            spriteBatch.Draw(GlobalAssets.Pointer, mousePos - new Vector2(16, 16), Color.White);
             if (PauseMenu.state != "hidden")
                 PauseMenu.Draw(spriteBatch);
             if (Tutorial.state != "none")
@@ -158,4 +158,5 @@ namespace Mono_Ether.Ether {
                 spriteBatch.DrawString(Fonts.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameRoot.ScreenSize / 4f, Color.White);
         }
     }
+    */
 }

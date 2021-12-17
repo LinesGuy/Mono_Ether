@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 
 namespace Mono_Ether.Ether {
+    /*
     class PowerPack : Entity {
         private int timeUntilStart = 60;
         public bool IsActive => timeUntilStart <= 0;
@@ -61,7 +62,7 @@ namespace Mono_Ether.Ether {
                 Color color = new Color(100, 200, 0); // Green
                 if (!isGood)
                     color = new Color(200, 100, 0); // Red
-                EtherRoot.ParticleManager.CreateParticle(Art.LineParticle, Position, color, 190, 10f, state);
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, Position, color, 190, 10f, state);
             }
         }
     }
@@ -85,19 +86,19 @@ namespace Mono_Ether.Ether {
                     powerTypeInt = _rand.Next(0, 4);
                 switch (powerTypeInt) {
                     case (0): // ShootSpeedIncrease
-                        EntityManager.Add(new PowerPack(Art.PowerShootSpeedIncrease, pos, "ShootSpeedIncrease", 300));
+                        EntityManager.Add(new PowerPack(GlobalAssets.PowerShootSpeedIncrease, pos, "ShootSpeedIncrease", 300));
                         break;
                     case (1): // ShootSpeedDecrease
-                        EntityManager.Add(new PowerPack(Art.PowerShootSpeedDecrease, pos, "ShootSpeedDecrease", 300));
+                        EntityManager.Add(new PowerPack(GlobalAssets.PowerShootSpeedDecrease, pos, "ShootSpeedDecrease", 300));
                         break;
                     case (2): // MoveSpeedIncrease
-                        EntityManager.Add(new PowerPack(Art.PowerMoveSpeedIncrease, pos, "MoveSpeedIncrease", 300));
+                        EntityManager.Add(new PowerPack(GlobalAssets.PowerMoveSpeedIncrease, pos, "MoveSpeedIncrease", 300));
                         break;
                     case (3): // MoveSpeedDecrease
-                        EntityManager.Add(new PowerPack(Art.PowerMoveSpeedDecrease, pos, "MoveSpeedDecrease", 300));
+                        EntityManager.Add(new PowerPack(GlobalAssets.PowerMoveSpeedDecrease, pos, "MoveSpeedDecrease", 300));
                         break;
                     case (4): // Doom
-                        EntityManager.Add(new PowerPack(Art.PowerSecret, pos, "Doom", 1800));
+                        EntityManager.Add(new PowerPack(GlobalAssets.PowerSecret, pos, "Doom", 1800));
                         break;
                     default:
                         // this shouldn't happen
@@ -107,4 +108,5 @@ namespace Mono_Ether.Ether {
             }
         }
     }
+    */
 }

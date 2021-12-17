@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Mono_Ether.Ether {
+    /*
     public class BackgroundParticle {
         public Vector2 Pos;
         public float Size;
@@ -30,9 +31,9 @@ namespace Mono_Ether.Ether {
 
         public void Draw(SpriteBatch spriteBatch) {
             var particlePos = Camera.WorldToScreen(Pos);
-            var radius = Art.BackgroundParticle.Width / 2f;
+            var radius = GlobalAssets.BackgroundParticle.Width / 2f;
             if (particlePos.X < GameRoot.ScreenSize.X + radius && particlePos.Y < GameRoot.ScreenSize.Y + radius && particlePos.X > 0 - radius && particlePos.Y > 0 - radius)
-                spriteBatch.Draw(Art.BackgroundParticle, Camera.WorldToScreen(Pos), null, Color.White * Brightness, Rotation, new Vector2(radius), Camera.Zoom * Size * Brightness, SpriteEffects.None, 0);
+                spriteBatch.Draw(GlobalAssets.BackgroundParticle, Camera.WorldToScreen(Pos), null, Color.White * Brightness, Rotation, new Vector2(radius), Camera.Zoom * Size * Brightness, SpriteEffects.None, 0);
         }
     }
 
@@ -59,4 +60,5 @@ namespace Mono_Ether.Ether {
             }
         }
     }
+    */
 }

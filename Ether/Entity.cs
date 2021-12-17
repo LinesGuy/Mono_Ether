@@ -2,8 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether.Ether {
+    /*
     internal abstract class Entity {
-        protected Texture2D Image = Art.Default;  // Tint of image
+        protected Texture2D Image = GlobalAssets.Default;  // Tint of image
         public Color Color = Color.White;
 
         public Vector2 Position;
@@ -97,4 +98,5 @@ namespace Mono_Ether.Ether {
             return;
         }
     }
+    */
 }
