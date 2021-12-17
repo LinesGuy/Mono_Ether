@@ -78,8 +78,7 @@ namespace Mono_Ether {
             buttonManager.Update();
             switch (buttonManager.PressedButton) {
                 case "Start":
-                    //ScreenManager.AddScreen(new GameScreen(GraphicsDevice));
-                    Debug.WriteLine("asdf");
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice));
                     break;
                 case "Exit":
                     ScreenManager.RemoveScreen();
@@ -88,7 +87,6 @@ namespace Mono_Ether {
     }
 
     public override void Draw(SpriteBatch batch) {
-        GraphicsDevice.Clear(Color.MediumPurple);
         /* Bg */
         batch.Draw(_bg, MyUtils.RectangleF(0, 0, GameSettings.ScreenSize.X, GameSettings.ScreenSize.Y), Color.White);
         /* Triangles */
