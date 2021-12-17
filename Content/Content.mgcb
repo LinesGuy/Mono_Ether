@@ -159,6 +159,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/TitleScreen/SubBar.png
 
+#begin Textures/TitleScreen/TreeBg.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/TitleScreen/TreeBg.png
+
+#begin Textures/TitleScreen/TreeLeaf.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/TitleScreen/TreeLeaf.png
+
 #begin Textures/TitleScreen/Triangle.png
 /importer:TextureImporter
 /processor:TextureProcessor
