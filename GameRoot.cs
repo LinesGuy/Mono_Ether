@@ -13,8 +13,7 @@ namespace Mono_Ether {
             IsMouseVisible = true;
         }
         protected override void Initialize() {
-            /* Allow user to resize the window */
-            Window.AllowUserResizing = true;
+            /* Handle screen resizing */
             Window.ClientSizeChanged += GameSettings.OnScreenResize;
             /* Load game settings from .txt file */
             GameSettings.LoadSettings();

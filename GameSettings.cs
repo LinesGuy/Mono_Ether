@@ -12,6 +12,7 @@ namespace Mono_Ether {
         public static bool DebugMode = false;
         public static bool VSync = false;
         public static bool ShowFPS = true;
+        public static bool AllowWindowResizing = true;
         public static float MasterVolume;
         public static float MusicVolume;
         public static float SoundEffectVolume;
@@ -20,14 +21,14 @@ namespace Mono_Ether {
             MediaPlayer.Volume = GameSettings.MasterVolume * GameSettings.MusicVolume;
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
-            GameRoot.Instance.Graphics.ApplyChanges();
             if (VSync) {
                 GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = true;
                 GameRoot.Instance.IsFixedTimeStep = true;
             } else {
                 GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = false;
                 GameRoot.Instance.IsFixedTimeStep = false;
-            }
+            } 
+            GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
         }
         public static void LoadSettings() {
             // TODO Use for-loop and dictionary to read settings
