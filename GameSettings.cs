@@ -21,13 +21,14 @@ namespace Mono_Ether {
             MediaPlayer.Volume = GameSettings.MasterVolume * GameSettings.MusicVolume;
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
+            GameRoot.Instance.Graphics.ApplyChanges();
             if (VSync) {
                 GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = true;
                 GameRoot.Instance.IsFixedTimeStep = true;
             } else {
                 GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = false;
                 GameRoot.Instance.IsFixedTimeStep = false;
-            } 
+            }
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
         }
         public static void LoadSettings() {
@@ -43,7 +44,7 @@ namespace Mono_Ether {
                 File.WriteAllText(SettingsFilename, "0.05\n0.05\n0.8");
                 LoadSettings();
             }
-            GameSettings.ApplyChanges();
+            ApplyChanges();
         }
         public static void SaveSettings() {
             // TODO Use for-loop and dictionary to save settings
