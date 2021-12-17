@@ -45,5 +45,18 @@ namespace Mono_Ether {
             foreach (Button button in Buttons)
                 button.Draw(batch);
         }
+        public string PressedButton // null if no button is pressed
+        {
+            get
+            {
+                if (!Input.WasLeftButtonJustDown)
+                    return null;
+                foreach (Button button in Buttons) {
+                    if (button.IsHovered)
+                        return button.Text;
+                }
+                return null;
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Mono_Ether {
             CurrentScreen.Initialize();
             CurrentScreen.LoadContent(GameRoot.Instance.Content);
         }
-        /*private static void RemoveScreen()
+        public static void RemoveScreen()
         {
             CurrentScreen.UnloadContent();
             _screenStack.Pop();
@@ -17,6 +17,6 @@ namespace Mono_Ether {
             {
                 GameRoot.Instance.Exit();
             }
-        }*/
+        }
     }
 }
