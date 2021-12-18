@@ -2,9 +2,11 @@
 
 namespace Mono_Ether {
     public static class ScreenManager {
-        private static Stack<GameState> _screenStack = new Stack<GameState>();
+        private static readonly Stack<GameState> _screenStack = new Stack<GameState>();
         public static GameState CurrentScreen => _screenStack.Peek();
         public static void AddScreen(GameState screen) {
+            if (_screenStack.Count > 0)
+                CurrentScreen.Pause();
             _screenStack.Push(screen);
             CurrentScreen.LoadContent(GameRoot.Instance.Content);
             CurrentScreen.Initialize();
@@ -14,9 +16,9 @@ namespace Mono_Ether {
             CurrentScreen.UnloadContent();
             _screenStack.Pop();
             if (_screenStack.Count == 0)
-            {
                 GameRoot.Instance.Exit();
-            }
+            else
+                CurrentScreen.Resume();
         }
     }
 }
