@@ -6,8 +6,8 @@ namespace Mono_Ether {
         public static GameState CurrentScreen => _screenStack.Peek();
         public static void AddScreen(GameState screen) {
             _screenStack.Push(screen);
-            CurrentScreen.Initialize();
             CurrentScreen.LoadContent(GameRoot.Instance.Content);
+            CurrentScreen.Initialize();
         }
         public static void RemoveScreen()
         {

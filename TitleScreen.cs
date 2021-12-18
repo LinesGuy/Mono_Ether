@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Mono_Ether {
     public class TitleScreen : GameState {
@@ -20,29 +21,23 @@ namespace Mono_Ether {
         private Texture2D _triangle;
         private Texture2D _treeBg;
         private Texture2D _treeLeaf;
+        private Song _music;
 
-        private List<Vector2> _smallStars;
-        private List<Vector2> _bigStars;
-        private Random _rand;
-        private ButtonManager _titleButtonManager;
-        private ButtonManager _levelButtonManager;
-        private ButtonManager _carouselButtonManager;
+        private List<Vector2> _smallStars = new List<Vector2>();
+        private List<Vector2> _bigStars = new List<Vector2>();
+        private readonly Random _rand = new Random();
+        private ButtonManager _titleButtonManager = new ButtonManager();
+        private ButtonManager _levelButtonManager = new ButtonManager();
+        private ButtonManager _carouselButtonManager = new ButtonManager();
         private float _carouselOffset = 0;
         private float _carouselOffsetVelocity = 0;
         private int _framesSinceStart = 0;
         private int _framesSinceTransition = 0;
-        private string state;
+        private string state = "Title press any key";
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
 
         }
         public override void Initialize() {
-            
-            state = "Title press any key";
-            _rand = new Random();
-            /* Create button managers */
-            _titleButtonManager = new ButtonManager();
-            _levelButtonManager = new ButtonManager();
-            _carouselButtonManager = new ButtonManager();
             /* Add Title screen buttons */
             _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 300f, GameSettings.ScreenSize.Y - 100f), "Start"));
             _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 300f, GameSettings.ScreenSize.Y - 100f), "Exit"));
@@ -53,16 +48,15 @@ namespace Mono_Ether {
             for (int i = 0; i < levels.Count; i++)
                 _carouselButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X  - 300f * MathF.Exp(-i * i / 25f), GameSettings.ScreenSize.Y / 2f + i * 120f), levels[i]));
             /* Create lists of small/big stars with random positions */
-            _smallStars = new List<Vector2>();
-            _bigStars = new List<Vector2>();
             for (var i = 0; i < 150; i++)
                 _smallStars.Add(new Vector2(_rand.Next(0, (int)GameSettings.ScreenSize.X), _rand.Next(0, (int)(GameSettings.ScreenSize.Y))));
             for (var i = 0; i < 5; i++)
                 _bigStars.Add(new Vector2(_rand.Next(0, (int)GameSettings.ScreenSize.X), _rand.Next(0, (int)GameSettings.ScreenSize.Y)));
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(_music);
         }
 
         public override void LoadContent(ContentManager content) {
-            /* Load textures */
             _smallStar = content.Load<Texture2D>("Textures/TitleScreen/SmallStar");
             _bigStar = content.Load<Texture2D>("Textures/TitleScreen/BigStar");
             _bg = content.Load<Texture2D>("Textures/TitleScreen/Bg");
@@ -75,10 +69,10 @@ namespace Mono_Ether {
             _triangle = content.Load<Texture2D>("Textures/TitleScreen/Triangle");
             _treeBg = content.Load<Texture2D>("Textures/TitleScreen/TreeBg");
             _treeLeaf = content.Load<Texture2D>("Textures/TitleScreen/TreeLeaf");
+            _music = content.Load<Song>("Songs/TitleScreen");
         }
 
         public override void UnloadContent() {
-            /* Unload textures */
             _smallStar.Dispose();
             _bigStar.Dispose();
             _bg.Dispose();
@@ -91,6 +85,7 @@ namespace Mono_Ether {
             _triangle.Dispose();
             _treeBg.Dispose();
             _treeLeaf.Dispose();
+            _music.Dispose();
         }
 
         public override void Update(GameTime gameTime) {
@@ -252,40 +247,45 @@ namespace Mono_Ether {
             }
         }
         private void DrawBG(SpriteBatch batch) {
+            Vector2 offset = new Vector2(-Input.Mouse.X / GameSettings.ScreenSize.X - 0.5f,
+                -Input.Mouse.Y / GameSettings.ScreenSize.Y - 0.5f) * 10f;
             /* Bg */
             batch.Draw(_bg, MyUtils.RectangleF(0, 0, GameSettings.ScreenSize.X, GameSettings.ScreenSize.Y), Color.White);
             /* SmallStars */
             foreach (var starPos in _smallStars)
-                batch.Draw(_smallStar, starPos, null, GetTransparentColor(0.5f + MathF.Sin(starPos.X + _framesSinceStart / 60f) * 0.5f), 0f, _smallStar.Size() / 2f, 1f + MathF.Sin(starPos.X) / 3f, 0, 0);
+                batch.Draw(_smallStar, starPos + offset, null, GetTransparentColor(0.5f + MathF.Sin(starPos.X + _framesSinceStart / 60f) * 0.5f), 0f, _smallStar.Size() / 2f, 1f + MathF.Sin(starPos.X) / 3f, 0, 0);
             /* BigStars */
             foreach (var starPos in _bigStars)
-                batch.Draw(_bigStar, starPos, null, GetTransparentColor(0.5f + MathF.Sin(starPos.X + _framesSinceStart / 60f) * 0.5f), starPos.X + _framesSinceStart / 60f, _bigStar.Size() / 2f, 0.5f + MathF.Sin(starPos.X) / 3f, 0, 0);
+                batch.Draw(_bigStar, starPos + offset, null, GetTransparentColor(0.5f + MathF.Sin(starPos.X + _framesSinceStart / 60f) * 0.5f), starPos.X + _framesSinceStart / 60f, _bigStar.Size() / 2f, 0.5f + MathF.Sin(starPos.X) / 3f, 0, 0);
             /* Trees */
-            batch.Draw(_treeBg, new Vector2(GameSettings.ScreenSize.X / 2f - 550f, GameSettings.ScreenSize.Y / 2f), null, Color.White, 0f, _treeBg.Size() / 2f, 1f, 0, 0);
-            batch.Draw(_treeBg, new Vector2(GameSettings.ScreenSize.X / 2f + 550f, GameSettings.ScreenSize.Y / 2f), null, Color.White, 0f, _treeBg.Size() / 2f, 1f, SpriteEffects.FlipHorizontally, 0);
+            batch.Draw(_treeBg, new Vector2(GameSettings.ScreenSize.X / 2f - 550f, GameSettings.ScreenSize.Y / 2f) + offset, null, Color.White, 0f, _treeBg.Size() / 2f, 1f, 0, 0);
+            batch.Draw(_treeBg, new Vector2(GameSettings.ScreenSize.X / 2f + 550f, GameSettings.ScreenSize.Y / 2f) + offset, null, Color.White, 0f, _treeBg.Size() / 2f, 1f, SpriteEffects.FlipHorizontally, 0);
             /* Tree Leaves */
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 120f), null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 60f) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 115f), null, Color.White, -0.4f + MathF.Sin(_framesSinceStart / 50f + 1) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 110f), null, Color.White, 0.3f + MathF.Sin(_framesSinceStart / 70f) / 2.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 120f), null, Color.White, 3.5f + MathF.Sin(_framesSinceStart / 65f + 1) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 115f), null, Color.White, 2.9f + MathF.Sin(_framesSinceStart / 55f) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 680f, GameSettings.ScreenSize.Y / 2f - 20f), null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f + 1) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 680f, GameSettings.ScreenSize.Y / 2f - 20f), null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 85f) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 120f), null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 50f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 115f), null, Color.White, -3.4f + MathF.Sin(_framesSinceStart / 60f + 1) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 110f), null, Color.White, 3.3f + MathF.Sin(_framesSinceStart / 65f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 120f), null, Color.White, 0.5f + MathF.Sin(_framesSinceStart / 70f + 1) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 115f), null, Color.White, 0.9f + MathF.Sin(_framesSinceStart / 85f) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 680f, GameSettings.ScreenSize.Y / 2f - 20f), null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 55f + 1) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 680f, GameSettings.ScreenSize.Y / 2f - 20f), null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 60f) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, -0.4f + MathF.Sin(_framesSinceStart / 50f + 1) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 110f) + offset, null, Color.White, 0.3f + MathF.Sin(_framesSinceStart / 70f) / 2.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 3.5f + MathF.Sin(_framesSinceStart / 65f + 1) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, 2.9f + MathF.Sin(_framesSinceStart / 55f) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f + 1) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 85f) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 50f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, -3.4f + MathF.Sin(_framesSinceStart / 60f + 1) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 110f) + offset, null, Color.White, 3.3f + MathF.Sin(_framesSinceStart / 65f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 0.5f + MathF.Sin(_framesSinceStart / 70f + 1) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, 0.9f + MathF.Sin(_framesSinceStart / 85f) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 55f + 1) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
             /* SubBars */
             for (int i = 0; i < 6; i++)
-                batch.Draw(_subBar, new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y - 203f + MathF.Exp((_framesSinceStart + i * 20) % 120 / 16f)), null, Color.White, 0f, _subBar.Size() / 2f, 1f, 0, 0);
+                batch.Draw(_subBar, new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y - 203f + MathF.Exp((_framesSinceStart + i * 20) % 120 / 16f) + offset.Y), null, Color.White, 0f, _subBar.Size() / 2f, 1f, 0, 0);
             /* MainBar */
-            batch.Draw(_mainBar, new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y - 203f), null, Color.White, 0f, _mainBar.Size() / 2f, 1f, 0, 0);
+            batch.Draw(_mainBar, new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y - 203f + offset.Y), null, Color.White, 0f, _mainBar.Size() / 2f, 1f, 0, 0);
         }
 
-        private void Draw_Logo(SpriteBatch batch, Vector2 offset) {
+        private void Draw_Logo(SpriteBatch batch, Vector2 offset)
+        {
+            offset += new Vector2(-Input.Mouse.X / GameSettings.ScreenSize.X - 0.5f,
+                -Input.Mouse.Y / GameSettings.ScreenSize.Y - 0.5f) * 20f;
             /* Triangles */
             for (int i = 0; i < 5; i++)
                 batch.Draw(_triangle, GameSettings.ScreenSize / 2f + new Vector2(0f, 161f) + offset, null, GetTransparentColor(255 / (i / 2 + 1)), MathF.Sin(_framesSinceStart / 250f + i * 10) / 5f, new Vector2(_triangle.Width / 2f, _triangle.Height), 1f + MathF.Sin(_framesSinceStart / 260f + i * 17) / 10f, 0, 0);

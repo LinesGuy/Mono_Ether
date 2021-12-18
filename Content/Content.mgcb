@@ -27,6 +27,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/NovaSquare48.spritefont
 
+#begin Songs/Settings.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/Settings.mp3
+
+#begin Songs/TitleScreen.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/TitleScreen.mp3
+
 #begin SoundEffects/Click.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
