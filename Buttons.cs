@@ -12,7 +12,6 @@ namespace Mono_Ether {
         public Vector2 Size => GlobalAssets.Button.Size();
         public string Text;
         private readonly Color _hoveredButtonColor, _unhoveredButtonColor, _hoveredFontColor, _unhoveredFontColor;
-        public bool LastHovered = false;
         public bool IsHovered = false;
         public Button(Vector2 pos, string text) {
             Pos = pos;
@@ -23,7 +22,6 @@ namespace Mono_Ether {
             _unhoveredFontColor = Color.Black;
         }
         public void Update() {
-            LastHovered = IsHovered;
             IsHovered = MyUtils.RectangleF(Pos.X - Size.X / 2f, Pos.Y - Size.Y / 2f, Size.X, Size.Y).Contains(Input.Mouse.Position); ;
         }
 
