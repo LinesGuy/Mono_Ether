@@ -4,27 +4,29 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Mono_Ether {
     public class SettingsScreen : GameState
     {
-        private ButtonManager buttonManager = new ButtonManager();
-        private SliderManager sliderManager = new SliderManager();
+        private readonly ButtonManager buttonManager = new ButtonManager();
+        private readonly SliderManager sliderManager = new SliderManager();
         private Song _music;
         public SettingsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
 
         }
         public override void Initialize() {
             GameSettings.LoadSettings();
-            buttonManager.Buttons.Add(new Button(new Vector2(100f, GameSettings.ScreenSize.Y - 100f), "Back"));
-            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 200f), 400f, "Master volume", GameSettings.MasterVolume));
-            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 400f), 400f, "SFX volume", GameSettings.SoundEffectVolume));
-            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 600f), 400f, "Music volume", GameSettings.MusicVolume));
+            buttonManager.Buttons.Add(new Button(new Vector2(150f, GameSettings.ScreenSize.Y - 100f), "Back"));
+            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 200f), 400f, SliderType.MASTER, GameSettings.MasterVolume));
+            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 400f), 400f, SliderType.SFX, GameSettings.SoundEffectVolume));
+            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 600f), 400f, SliderType.MUSIC, GameSettings.MusicVolume));
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_music);
+        }
+        public override void Pause() {
+        }
+        public override void Resume() {
         }
 
         public override void LoadContent(ContentManager content)
@@ -34,8 +36,9 @@ namespace Mono_Ether {
         }
 
         public override void UnloadContent() {
-            Slider._sliderBall.Dispose();
-            _music.Dispose();
+            MediaPlayer.Stop();
+            Slider._sliderBall = null;
+            _music = null;
         }
 
         public override void Update(GameTime gameTime) {
@@ -46,67 +49,79 @@ namespace Mono_Ether {
                 GameSettings.SaveSettings();
                 ScreenManager.RemoveScreen();
             }
+
+            foreach (Slider slider in sliderManager.Sliders)
+            {
+                if (slider.IsBeingDragged)
+                {
+                    switch (slider.Type) {
+                        case SliderType.MASTER:
+                            GameSettings.MasterVolume = slider.Value;
+                            break;
+                        case SliderType.SFX:
+                            GameSettings.SoundEffectVolume = slider.Value;
+                            break;
+                        case SliderType.MUSIC:
+                            GameSettings.MusicVolume = slider.Value;
+                            break;
+                    }
+                    GameSettings.ApplyChanges();
+                }
+            }
         }
         public override void Draw(SpriteBatch batch) {
             GraphicsDevice.Clear(Color.Black);
-            batch.DrawString(GlobalAssets.NovaSquare48, "asdf", Vector2.Zero, Color.White); // TODO remove this
             sliderManager.Draw(batch);
+            buttonManager.Draw(batch);
         }
     }
-
     public class Slider
     {
         public static Texture2D _sliderBall;
-        public Vector2 Pos; // Centre of slider
+        private int _clickSfxDelay;
+        public Vector2 SliderPos; // Centre of slider
         public float Width;
-        public string Text;
+        public SliderType Type;
         public float Value;
         public bool IsHovered = false;
-        private bool _isBeingDragged = false;
-        private Vector2 _sliderPos => new Vector2(Pos.X + Width * Value / 2f, Pos.Y);
+        public bool IsBeingDragged = false;
+        private Vector2 _sliderBallPos => new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
         private const float Radius = 20f;
-        public Slider(Vector2 pos, float width, string text, float value = 0.5f)
+        public Slider(Vector2 sliderPos, float width, SliderType type, float value = 0.5f)
         {
-            Pos = pos;
+            SliderPos = sliderPos;
             Width = width;
-            Text = text;
+            Type = type;
             Value = value;
         }
 
         public void Update()
         {
-            IsHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), _sliderPos) < Radius * Radius;
-            if (!_isBeingDragged && IsHovered && Input.WasLeftButtonJustDown)
-                _isBeingDragged = true;
-            if (_isBeingDragged && Input.WasLeftButtonJustUp)
+            IsHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), _sliderBallPos) < Radius * Radius;
+            if (!IsBeingDragged && IsHovered && Input.WasLeftButtonJustDown)
+                IsBeingDragged = true;
+            if (IsBeingDragged)
             {
                 if (Input.WasLeftButtonJustUp)
-                {
-                    _isBeingDragged = false;
-                    GameSettings.SaveSettings();
+                    IsBeingDragged = false;
+                Value = (Input.Mouse.X - Width / 2f) / Width;
+                Value = Math.Clamp(Value, 0f, 1f);
+                _clickSfxDelay++;
+                if (_clickSfxDelay >= 6) {
+                    _clickSfxDelay = 0;
+                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 1f, 0); // TODO replace Click with PlayerShoot
                 }
-
-                switch (Text)
-                {
-                    case "Master Volume":
-                        GameSettings.MasterVolume = Value;
-                        break;
-                    case "SFX Volume":
-                        GameSettings.SoundEffectVolume = Value;
-                        break;
-                    case "Music Volume":
-                        GameSettings.MusicVolume = Value;
-                        break;
-                }
-
             }
+                
         }
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(GlobalAssets.Pixel, Pos, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
-            batch.Draw(_sliderBall, _sliderPos, null, IsHovered ? Color.LightCyan : Color.White, 0f, _sliderBall.Size() / 2f, 1f, 0, 0); // Ball
-            // TODO text
+            batch.Draw(GlobalAssets.Pixel, SliderPos, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
+            batch.Draw(_sliderBall, _sliderBallPos, null, IsHovered ? Color.LightCyan : Color.White, 0f, _sliderBall.Size() / 2f, 1f, 0, 0); // Ball
+            batch.DrawStringCentered(GlobalAssets.NovaSquare24, MyUtils.SliderTypeToName(Type), SliderPos + new Vector2(0f, -50f), Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"{Value:0.00}", SliderPos + new Vector2(Width / 2f + 50f, -GlobalAssets.NovaSquare24.MeasureString("a").Y / 2f),
+                Color.White);
         }
     }
     public class SliderManager
@@ -121,83 +136,4 @@ namespace Mono_Ether {
                 slider.Draw(batch);
         }
     }
-    /*
-    private static class NewtonsBackground {
-        public static int pixelSize = 8; // Increase = less detail, more performance
-        public static List<Vector2> polynomial = new List<Vector2> { new Vector2(1, 3), new Vector2(-1, 0) };
-        public static List<Complex> solutions = new List<Complex> { new Complex(1, 0), new Complex(-0.809, -0.588), new Complex(0.309, 0.951), new Complex(0.309, -0.951), new Complex(-0.809, 0.588) };
-        public static float offset;
-        public static Vector2 CameraPosition = new Vector2(1, 0);
-        public static float Zoom = 200;
-        public static Vector2 ScreenToWorld(Vector2 screenPos) { return (screenPos - GameSettings.ScreenSize / 2) / Zoom + CameraPosition; }
-        public static void Update() {
-            solutions = new List<Complex>();
-            offset += 0.005f;
-            for (int i = 0; i < 5; i++) {
-                float z = (float)i / 5 * MathF.PI * 2;
-                solutions.Add(new Complex(Math.Cos(z + offset), Math.Sin(z + offset)));
-            }
-        }
-        public static void Draw(SpriteBatch spriteBatch) {
-            List<List<int>> grid = new List<List<int>>();
-            List<int> zeroRow = new List<int>();
-            for (int x = 0; x < GameSettings.ScreenSize.X; x += pixelSize)
-                zeroRow.Add(0);
-            for (int y = 0; y < (int)GameSettings.ScreenSize.Y; y += pixelSize)
-                grid.Add(zeroRow);
-            Parallel.For(0, (int)(GameSettings.ScreenSize.Y / pixelSize), z => {
-                var y = z * pixelSize;
-                List<int> row = new List<int>();
-                for (int x = 0; x < GameSettings.ScreenSize.X; x += pixelSize) {
-                    Vector2 coords = ScreenToWorld(new Vector2(x, y)); // Get pixel coordinates on screen and convert to cartesian coordinates
-                    coords = new Vector2(coords.X * MathF.Cos(offset) - coords.Y * MathF.Sin(offset), coords.X * MathF.Sin(offset) + coords.Y * MathF.Cos(offset)); // rotate for fancy effect (not canonically part of newton method fractal)
-                    Complex coordsComplex = new Complex(coords.X, coords.Y); // Convert cartesian to complex
-                    Complex newtonCoordsComplex = coordsComplex; // Variable for storing newton iteration result
-                    for (int i = 0; i <= 2; i++) { // Default iterations = 2
-                        Complex polySum = Complex.Zero; // f(x)
-                        Complex derSum = Complex.Zero; // f'(x)
-                        foreach (var term in polynomial) { // Calculate f(x) and f'(x) values
-                            polySum += term.X * Complex.Pow(newtonCoordsComplex, term.Y);
-                            derSum += term.X * term.Y * Complex.Pow(newtonCoordsComplex, term.Y - 1);
-                        }
-                        newtonCoordsComplex -= polySum / derSum; // x = x - f(x) / f'(x)
-                    }
-                    Vector2 newtonCoords = new Vector2((float)newtonCoordsComplex.Real, (float)newtonCoordsComplex.Imaginary); // Convert complex to cartesian
-                    Complex bestSol = Complex.Zero; // Variable for storing nearest solution so far
-                    float bestDist = float.PositiveInfinity; // Distance (squared) of nearest solution so far
-                    foreach (var sol in solutions) { // Find nearest root
-                        var dist = Vector2.DistanceSquared(new Vector2((float)sol.Real, (float)sol.Imaginary), newtonCoords); // Distance squared can be calculated faster than actual distance and does not affect method
-                        if (dist < bestDist) // Check if this root is closer than the current closer root
-                        {
-                            bestDist = dist;
-                            bestSol = sol;
-                        }
-                    }
-                    // Colour pixel based on which root was nearest
-                    int color = 0;
-                    for (int i = 0; i < solutions.Count; i++)
-                        if (bestSol == solutions[i]) {
-                            color = i + 1;
-                            break;
-                        }
-                    row.Add(color); // Add pixel to row
-                }
-                grid[z] = row; // Add row of pixels to grid
-            });
-            for (int y = 0; y < (int)(GameSettings.ScreenSize.Y / pixelSize); y++) {
-                for (int x = 0; x < (int)(GameSettings.ScreenSize.X / pixelSize); x++) {
-                    var cell = grid[y][x];
-                    // Get colour based on colour code
-                    Color color = Color.Black;
-                    if (cell == 1) color = Color.Red;
-                    else if (cell == 2) color = Color.Green;
-                    else if (cell == 3) color = Color.Blue;
-                    else if (cell == 4) color = Color.Purple;
-                    else if (cell == 5) color = Color.Orange;
-                    spriteBatch.Draw(GlobalAssets.Pixel, new Vector2(x * pixelSize, y * pixelSize), null, color, 0f, Vector2.Zero, pixelSize, SpriteEffects.None, 0); // Draw the pixel
-                }
-            }
-        }
-    }
-    */
 }
