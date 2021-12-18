@@ -10,7 +10,7 @@ namespace Mono_Ether {
         public const string SettingsFilename = "settings.txt"; // TODO rename to Settings.txt
         public static Vector2 ScreenSize = new Vector2(1366, 768); // TODO allow this to change
         public static bool DebugMode = false;
-        public static bool VSync = false;
+        public static bool VSync = true;
         public static bool ShowFPS = true;
         public static bool AllowWindowResizing = true;
         public static float MasterVolume;
@@ -21,7 +21,7 @@ namespace Mono_Ether {
             MediaPlayer.Volume = GameSettings.MasterVolume * GameSettings.MusicVolume;
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
-            GameRoot.Instance.Graphics.ApplyChanges();
+            
             if (VSync) {
                 GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = true;
                 GameRoot.Instance.IsFixedTimeStep = true;
@@ -30,6 +30,7 @@ namespace Mono_Ether {
                 GameRoot.Instance.IsFixedTimeStep = false;
             }
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
+            GameRoot.Instance.Graphics.ApplyChanges();
         }
         public static void LoadSettings() {
             // TODO Use for-loop and dictionary to read settings
