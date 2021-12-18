@@ -9,29 +9,43 @@ using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Mono_Ether {
-    public class SettingsScreen : GameState {
-        //private ButtonManager buttonManager = new ButtonManager();
+    public class SettingsScreen : GameState
+    {
+        private ButtonManager buttonManager = new ButtonManager();
         private SliderManager sliderManager = new SliderManager();
         private Song _music;
         public SettingsScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
 
         }
         public override void Initialize() {
-            sliderManager.Sliders.Add(new Slider(new Vector2(200f), 75f, "asdf", 0.5f));
+            GameSettings.LoadSettings();
+            buttonManager.Buttons.Add(new Button(new Vector2(100f, GameSettings.ScreenSize.Y - 100f), "Back"));
+            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 200f), 400f, "Master volume", GameSettings.MasterVolume));
+            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 400f), 400f, "SFX volume", GameSettings.SoundEffectVolume));
+            sliderManager.Sliders.Add(new Slider(new Vector2(400f, 600f), 400f, "Music volume", GameSettings.MusicVolume));
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_music);
         }
 
-        public override void LoadContent(ContentManager content) {
+        public override void LoadContent(ContentManager content)
+        {
+            Slider._sliderBall = content.Load<Texture2D>("Textures/SettingsScreen/SliderBall");
             _music = content.Load<Song>("Songs/Settings");
         }
 
         public override void UnloadContent() {
+            Slider._sliderBall.Dispose();
             _music.Dispose();
         }
 
         public override void Update(GameTime gameTime) {
+            buttonManager.Update();
             sliderManager.Update();
+            if (buttonManager.PressedButton == "Back")
+            {
+                GameSettings.SaveSettings();
+                ScreenManager.RemoveScreen();
+            }
         }
         public override void Draw(SpriteBatch batch) {
             GraphicsDevice.Clear(Color.Black);
@@ -42,14 +56,15 @@ namespace Mono_Ether {
 
     public class Slider
     {
+        public static Texture2D _sliderBall;
         public Vector2 Pos; // Centre of slider
         public float Width;
         public string Text;
         public float Value;
-        public bool LastHovered = false;
         public bool IsHovered = false;
+        private bool _isBeingDragged = false;
         private Vector2 _sliderPos => new Vector2(Pos.X + Width * Value / 2f, Pos.Y);
-        private const float Radius = 10f;
+        private const float Radius = 20f;
         public Slider(Vector2 pos, float width, string text, float value = 0.5f)
         {
             Pos = pos;
@@ -60,14 +75,37 @@ namespace Mono_Ether {
 
         public void Update()
         {
-            LastHovered = IsHovered;
             IsHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), _sliderPos) < Radius * Radius;
+            if (!_isBeingDragged && IsHovered && Input.WasLeftButtonJustDown)
+                _isBeingDragged = true;
+            if (_isBeingDragged && Input.WasLeftButtonJustUp)
+            {
+                if (Input.WasLeftButtonJustUp)
+                {
+                    _isBeingDragged = false;
+                    GameSettings.SaveSettings();
+                }
+
+                switch (Text)
+                {
+                    case "Master Volume":
+                        GameSettings.MasterVolume = Value;
+                        break;
+                    case "SFX Volume":
+                        GameSettings.SoundEffectVolume = Value;
+                        break;
+                    case "Music Volume":
+                        GameSettings.MusicVolume = Value;
+                        break;
+                }
+
+            }
         }
 
         public void Draw(SpriteBatch batch)
         {
             batch.Draw(GlobalAssets.Pixel, Pos, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
-            batch.Draw(GlobalAssets.Pixel, _sliderPos, null, IsHovered ? Color.Green : Color.Red, 0f, new Vector2(0.5f), new Vector2(Radius * 2f), 0, 0); // Ball
+            batch.Draw(_sliderBall, _sliderPos, null, IsHovered ? Color.LightCyan : Color.White, 0f, _sliderBall.Size() / 2f, 1f, 0, 0); // Ball
             // TODO text
         }
     }
