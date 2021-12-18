@@ -17,8 +17,8 @@ namespace Mono_Ether {
         public static float MusicVolume;
         public static float SoundEffectVolume;
         public static void ApplyChanges() {
-            SoundEffect.MasterVolume = GameSettings.MasterVolume * GameSettings.SoundEffectVolume;
-            MediaPlayer.Volume = GameSettings.MasterVolume * GameSettings.MusicVolume;
+            SoundEffect.MasterVolume = MasterVolume * SoundEffectVolume;
+            MediaPlayer.Volume = MasterVolume * MusicVolume;
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
             
