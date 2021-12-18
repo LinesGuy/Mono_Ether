@@ -33,10 +33,7 @@ namespace Mono_Ether {
         }
     }
     public class ButtonManager {
-        public List<Button> Buttons;
-        public ButtonManager() {
-            Buttons = new List<Button>();
-        }
+        public List<Button> Buttons = new List<Button>();
         public void Update() {
             foreach (Button button in Buttons)
                 button.Update();

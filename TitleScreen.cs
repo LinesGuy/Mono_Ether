@@ -39,8 +39,10 @@ namespace Mono_Ether {
         }
         public override void Initialize() {
             /* Add Title screen buttons */
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 300f, GameSettings.ScreenSize.Y - 100f), "Start"));
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 300f, GameSettings.ScreenSize.Y - 100f), "Exit"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 500f, GameSettings.ScreenSize.Y - 100f), "Start"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 162.5f, GameSettings.ScreenSize.Y - 100f), "Settings"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 162.5f, GameSettings.ScreenSize.Y - 100f), "Credits"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 500f, GameSettings.ScreenSize.Y - 100f), "Exit"));
             /* Add Level selection screen button */
             _levelButtonManager.Buttons.Add(new Button(new Vector2(200f, GameSettings.ScreenSize.Y - 100f), "Back"));
             /* Add carousel buttons */
@@ -198,6 +200,12 @@ namespace Mono_Ether {
                     state = "Title -> Level selection";
                     _framesSinceTransition = 0;
                     GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
+                    break;
+                case "Settings":
+                    // TODO state = ?
+                    // _framesSinceTransition = 0;
+                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
+                    ScreenManager.AddScreen(new SettingsScreen(GraphicsDevice));
                     break;
                 case "Exit":
                     ScreenManager.RemoveScreen();
