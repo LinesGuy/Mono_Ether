@@ -40,6 +40,10 @@ namespace Mono_Ether {
             foreach (Button button in Buttons)
                 button.Draw(batch, globalOffset);
         }
+        public void Draw(SpriteBatch batch) {
+            foreach (Button button in Buttons)
+                button.Draw(batch, Vector2.Zero);
+        }
         public string PressedButton // null if no button is pressed
         {
             get
