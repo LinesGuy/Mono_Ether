@@ -58,6 +58,14 @@ namespace Mono_Ether {
             MediaPlayer.Play(_music);
         }
 
+        public override void Pause()
+        {
+
+        }
+        public override void Resume()
+        {
+            MediaPlayer.Play(_music);
+        }
         public override void LoadContent(ContentManager content) {
             _smallStar = content.Load<Texture2D>("Textures/TitleScreen/SmallStar");
             _bigStar = content.Load<Texture2D>("Textures/TitleScreen/BigStar");
@@ -75,19 +83,19 @@ namespace Mono_Ether {
         }
 
         public override void UnloadContent() {
-            _smallStar.Dispose();
-            _bigStar.Dispose();
-            _bg.Dispose();
-            _mainBar.Dispose();
-            _subBar.Dispose();
-            _byChris.Dispose();
-            _etherText.Dispose();
-            _etherOutline.Dispose();
-            _mono.Dispose();
-            _triangle.Dispose();
-            _treeBg.Dispose();
-            _treeLeaf.Dispose();
-            _music.Dispose();
+            _smallStar = null;
+            _bigStar = null;
+            _bg = null;
+            _mainBar = null;
+            _subBar = null;
+            _byChris = null;
+            _etherText = null;
+            _etherOutline = null;
+            _mono = null;
+            _triangle = null;
+            _treeBg = null;
+            _treeLeaf = null;
+            _music = null;
         }
 
         public override void Update(GameTime gameTime) {

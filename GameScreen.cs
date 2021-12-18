@@ -12,6 +12,14 @@ namespace Mono_Ether {
 
         }
 
+        public override void Pause()
+        {
+
+        }
+        public override void Resume() {
+
+        }
+
         public override void LoadContent(ContentManager content) {
             /* Load textures */
 
