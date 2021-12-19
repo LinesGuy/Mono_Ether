@@ -17,7 +17,7 @@ namespace Mono_Ether {
         }
         public override void Initialize() {
             GameSettings.LoadSettings();
-            buttonManager.Buttons.Add(new Button(new Vector2(150f, GameSettings.ScreenSize.Y - 100f), "Back"));
+            buttonManager.Buttons.Add(new Button(new Vector2(200f, GameSettings.ScreenSize.Y - 100f), new Vector2(200, 120), "Back"));
             sliderManager.Sliders.Add(new Slider(new Vector2(400f, 200f), 400f, SliderType.MASTER, GameSettings.MasterVolume));
             sliderManager.Sliders.Add(new Slider(new Vector2(400f, 400f), 400f, SliderType.SFX, GameSettings.SoundEffectVolume));
             sliderManager.Sliders.Add(new Slider(new Vector2(400f, 600f), 400f, SliderType.MUSIC, GameSettings.MusicVolume));
@@ -85,7 +85,7 @@ namespace Mono_Ether {
         public float Value;
         public bool IsHovered = false;
         public bool IsBeingDragged = false;
-        private Vector2 _sliderBallPos => new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
+        private Vector2 SliderBallPos => new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
         private const float Radius = 20f;
         public Slider(Vector2 sliderPos, float width, SliderType type, float value = 0.5f)
         {
@@ -97,7 +97,7 @@ namespace Mono_Ether {
 
         public void Update()
         {
-            IsHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), _sliderBallPos) < Radius * Radius;
+            IsHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), SliderBallPos) < Radius * Radius;
             if (!IsBeingDragged && IsHovered && Input.WasLeftButtonJustDown)
                 IsBeingDragged = true;
             if (IsBeingDragged)
@@ -112,13 +112,12 @@ namespace Mono_Ether {
                     GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 1f, 0); // TODO replace Click with PlayerShoot
                 }
             }
-                
         }
 
         public void Draw(SpriteBatch batch)
         {
             batch.Draw(GlobalAssets.Pixel, SliderPos, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
-            batch.Draw(_sliderBall, _sliderBallPos, null, IsHovered ? Color.LightCyan : Color.White, 0f, _sliderBall.Size() / 2f, 1f, 0, 0); // Ball
+            batch.Draw(_sliderBall, SliderBallPos, null, IsHovered ? Color.LightCyan : Color.White, 0f, _sliderBall.Size() / 2f, 1f, 0, 0); // Ball
             batch.DrawStringCentered(GlobalAssets.NovaSquare24, MyUtils.SliderTypeToName(Type), SliderPos + new Vector2(0f, -50f), Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"{Value:0.00}", SliderPos + new Vector2(Width / 2f + 50f, -GlobalAssets.NovaSquare24.MeasureString("a").Y / 2f),
                 Color.White);

@@ -23,12 +23,12 @@ namespace Mono_Ether {
         private Texture2D _treeLeaf;
         private Song _music;
 
-        private List<Vector2> _smallStars = new List<Vector2>();
-        private List<Vector2> _bigStars = new List<Vector2>();
+        private readonly List<Vector2> _smallStars = new List<Vector2>();
+        private readonly List<Vector2> _bigStars = new List<Vector2>();
         private readonly Random _rand = new Random();
-        private ButtonManager _titleButtonManager = new ButtonManager();
-        private ButtonManager _levelButtonManager = new ButtonManager();
-        private ButtonManager _carouselButtonManager = new ButtonManager();
+        private readonly ButtonManager _titleButtonManager = new ButtonManager();
+        private readonly ButtonManager _levelButtonManager = new ButtonManager();
+        private readonly ButtonManager _carouselButtonManager = new ButtonManager();
         private float _carouselOffset = 0;
         private float _carouselOffsetVelocity = 0;
         private int _framesSinceStart = 0;
@@ -39,16 +39,16 @@ namespace Mono_Ether {
         }
         public override void Initialize() {
             /* Add Title screen buttons */
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 500f, GameSettings.ScreenSize.Y - 100f), "Start"));
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 162.5f, GameSettings.ScreenSize.Y - 100f), "Settings"));
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 162.5f, GameSettings.ScreenSize.Y - 100f), "Credits"));
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 500f, GameSettings.ScreenSize.Y - 100f), "Exit"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 500f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Start"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 162.5f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Settings"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 162.5f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Credits"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 500f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Exit"));
             /* Add Level selection screen button */
-            _levelButtonManager.Buttons.Add(new Button(new Vector2(200f, GameSettings.ScreenSize.Y - 100f), "Back"));
+            _levelButtonManager.Buttons.Add(new Button(new Vector2(200f, GameSettings.ScreenSize.Y - 100f), new Vector2(200, 120), "Back"));
             /* Add carousel buttons */
             List<string> levels = new List<string> {"Level One", "Level Two", "Level Three", "Level Four", "Level Five", "Level Six", "Level Seven ", "Level Eight", "Level Nine", "Level Ten" };
             for (int i = 0; i < levels.Count; i++)
-                _carouselButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X  - 300f * MathF.Exp(-i * i / 25f), GameSettings.ScreenSize.Y / 2f + i * 120f), levels[i]));
+                _carouselButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X  - 300f * MathF.Exp(-i * i / 25f), GameSettings.ScreenSize.Y / 2f + i * 120f), new Vector2(500, 120), levels[i]));
             /* Create lists of small/big stars with random positions */
             for (var i = 0; i < 150; i++)
                 _smallStars.Add(new Vector2(_rand.Next(0, (int)GameSettings.ScreenSize.X), _rand.Next(0, (int)(GameSettings.ScreenSize.Y))));
