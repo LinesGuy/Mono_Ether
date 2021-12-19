@@ -45,7 +45,7 @@
 /processorParam:Quality=Best
 /build:SoundEffects/Click.wav
 
-#begin Textures/GlobalAssets/Button.png
+#begin Textures/GlobalAssets/ButtonCorner1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -55,7 +55,43 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/GlobalAssets/Button.png
+/build:Textures/GlobalAssets/ButtonCorner1.png
+
+#begin Textures/GlobalAssets/ButtonCorner2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GlobalAssets/ButtonCorner2.png
+
+#begin Textures/GlobalAssets/ButtonSide.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GlobalAssets/ButtonSide.png
+
+#begin Textures/GlobalAssets/ButtonTop.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GlobalAssets/ButtonTop.png
 
 #begin Textures/GlobalAssets/pixel.png
 /importer:TextureImporter
