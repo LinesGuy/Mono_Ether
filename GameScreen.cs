@@ -12,7 +12,7 @@ namespace Mono_Ether {
 
         }
 
-        public override void Pause()
+        public override void Suspend()
         {
 
         }

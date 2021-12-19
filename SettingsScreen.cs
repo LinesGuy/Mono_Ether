@@ -24,7 +24,7 @@ namespace Mono_Ether {
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_music);
         }
-        public override void Pause() {
+        public override void Suspend() {
         }
         public override void Resume() {
         }

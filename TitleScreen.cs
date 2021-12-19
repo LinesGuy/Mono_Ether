@@ -58,7 +58,7 @@ namespace Mono_Ether {
             MediaPlayer.Play(_music);
         }
 
-        public override void Pause()
+        public override void Suspend()
         {
 
         }

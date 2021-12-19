@@ -9,7 +9,7 @@ namespace Mono_Ether {
             GraphicsDevice = graphicsDevice;
         }
         public abstract void Initialize();
-        public abstract void Pause();
+        public abstract void Suspend();
         public abstract void Resume();
         public abstract void LoadContent(ContentManager content);
         public abstract void UnloadContent();
