@@ -2,10 +2,11 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.Xna.Framework.Media;
+using System.Linq;
+using static Mono_Ether.GameSettings;
 
 namespace Mono_Ether {
     public class TitleScreen : GameState {
@@ -21,7 +22,7 @@ namespace Mono_Ether {
         private Texture2D _triangle;
         private Texture2D _treeBg;
         private Texture2D _treeLeaf;
-        private Song _music;
+        private Song _titleMusic;
 
         private readonly List<Vector2> _smallStars = new List<Vector2>();
         private readonly List<Vector2> _bigStars = new List<Vector2>();
@@ -29,42 +30,49 @@ namespace Mono_Ether {
         private readonly ButtonManager _titleButtonManager = new ButtonManager();
         private readonly ButtonManager _levelButtonManager = new ButtonManager();
         private readonly ButtonManager _carouselButtonManager = new ButtonManager();
-        private float _carouselOffset = 0;
-        private float _carouselOffsetVelocity = 0;
-        private int _framesSinceStart = 0;
-        private int _framesSinceTransition = 0;
-        private string state = "Title press any key";
+        private readonly ButtonManager _settingsButtonManager = new ButtonManager();
+        private readonly SliderManager _settingsSliderManager = new SliderManager();
+        private float _carouselOffset;
+        private float _carouselOffsetVelocity;
+        private int _framesSinceStart;
+        private int _framesSinceTransition;
+        private const int TransitionFrames = 30;
+        private string _state;
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
 
         }
         public override void Initialize() {
+            _state = "Title press any key";
             /* Add Title screen buttons */
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 500f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Start"));
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f - 162.5f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Settings"));
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 162.5f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Credits"));
-            _titleButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X / 2f + 500f, GameSettings.ScreenSize.Y - 100f), new Vector2(300, 120), "Exit"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X / 2f - 500f, ScreenSize.Y - 100f), new Vector2(300, 120), "Start"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X / 2f - 162.5f, ScreenSize.Y - 100f), new Vector2(300, 120), "Settings"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X / 2f + 162.5f, ScreenSize.Y - 100f), new Vector2(300, 120), "Credits"));
+            _titleButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X / 2f + 500f, ScreenSize.Y - 100f), new Vector2(300, 120), "Exit"));
             /* Add Level selection screen button */
-            _levelButtonManager.Buttons.Add(new Button(new Vector2(200f, GameSettings.ScreenSize.Y - 100f), new Vector2(200, 120), "Back"));
+            _levelButtonManager.Buttons.Add(new Button(new Vector2(200f, ScreenSize.Y - 100f), new Vector2(200, 120), "Back"));
             /* Add carousel buttons */
-            List<string> levels = new List<string> {"Level One", "Level Two", "Level Three", "Level Four", "Level Five", "Level Six", "Level Seven ", "Level Eight", "Level Nine", "Level Ten" };
+            List<string> levels = new List<string> { "Level One", "Level Two", "Level Three", "Level Four", "Level Five", "Level Six", "Level Seven ", "Level Eight", "Level Nine", "Level Ten" };
             for (int i = 0; i < levels.Count; i++)
-                _carouselButtonManager.Buttons.Add(new Button(new Vector2(GameSettings.ScreenSize.X  - 300f * MathF.Exp(-i * i / 25f), GameSettings.ScreenSize.Y / 2f + i * 120f), new Vector2(500, 120), levels[i]));
+                _carouselButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X - 300f * MathF.Exp(-i * i / 25f), ScreenSize.Y / 2f + i * 120f), new Vector2(500, 120), levels[i]));
+            /* Add settings window buttons and sliders */
+            _settingsButtonManager.Buttons.Add(new Button(new Vector2(200f, ScreenSize.Y - 100f), new Vector2(200, 120), "Back"));
+            _settingsSliderManager.Sliders.Add(new Slider(new Vector2(400f, 200f), 400f, SliderType.Master, MasterVolume));
+            _settingsSliderManager.Sliders.Add(new Slider(new Vector2(400f, 400f), 400f, SliderType.Sfx, SoundEffectVolume));
+            _settingsSliderManager.Sliders.Add(new Slider(new Vector2(400f, 600f), 400f, SliderType.Music, MusicVolume));
             /* Create lists of small/big stars with random positions */
             for (var i = 0; i < 150; i++)
-                _smallStars.Add(new Vector2(_rand.Next(0, (int)GameSettings.ScreenSize.X), _rand.Next(0, (int)(GameSettings.ScreenSize.Y))));
+                _smallStars.Add(new Vector2(_rand.Next(0, (int)ScreenSize.X), _rand.Next(0, (int)ScreenSize.Y)));
             for (var i = 0; i < 5; i++)
-                _bigStars.Add(new Vector2(_rand.Next(0, (int)GameSettings.ScreenSize.X), _rand.Next(0, (int)GameSettings.ScreenSize.Y)));
+                _bigStars.Add(new Vector2(_rand.Next(0, (int)ScreenSize.X), _rand.Next(0, (int)ScreenSize.Y)));
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(_music);
+            MediaPlayer.Play(_titleMusic);
         }
 
-        public override void Suspend()
-        {
+        public override void Suspend() {
 
         }
-        public override void Resume()
-        {
-            MediaPlayer.Play(_music);
+        public override void Resume() {
+            MediaPlayer.Play(_titleMusic);
         }
         public override void LoadContent(ContentManager content) {
             _smallStar = content.Load<Texture2D>("Textures/TitleScreen/SmallStar");
@@ -79,7 +87,7 @@ namespace Mono_Ether {
             _triangle = content.Load<Texture2D>("Textures/TitleScreen/Triangle");
             _treeBg = content.Load<Texture2D>("Textures/TitleScreen/TreeBg");
             _treeLeaf = content.Load<Texture2D>("Textures/TitleScreen/TreeLeaf");
-            _music = content.Load<Song>("Songs/TitleScreen");
+            _titleMusic = content.Load<Song>("Songs/TitleScreen");
         }
 
         public override void UnloadContent() {
@@ -95,7 +103,7 @@ namespace Mono_Ether {
             _triangle = null;
             _treeBg = null;
             _treeLeaf = null;
-            _music = null;
+            _titleMusic = null;
         }
 
         public override void Update(GameTime gameTime) {
@@ -104,143 +112,187 @@ namespace Mono_Ether {
                 Initialize();
             _framesSinceStart++;
             _framesSinceTransition++;
-            switch (state) {
+            switch (_state) {
                 case "Title press any key":
                     if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftButtonJustDown || Input.WasRightButtonJustDown) {
-                        state = "Title press any key -> Title";
-                        GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
-                        _framesSinceTransition = 0;
+                        SetState("Title press any key -> Title");
+                        GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     }
                     break;
                 case "Title press any key -> Title":
-                    if (_framesSinceTransition > 30f) {
-                        state = "Title";
-                        _framesSinceTransition = 0;
-                    }
-                    _titleButtonManager.Update();
-                    HandleTitleButtonPresses();
+                    if (_framesSinceTransition > TransitionFrames)
+                        SetState("Title");
+                    HandleTitleButtons();
                     break;
                 case "Title":
-                    _titleButtonManager.Update();
-                    HandleTitleButtonPresses();
+                    HandleTitleButtons();
                     break;
                 case "Title -> Level selection":
-                    if (_framesSinceTransition > 30f) {
-                        state = "Level selection";
-                        _framesSinceTransition = 0;
-                    }
-                    _titleButtonManager.Update();
-                    _levelButtonManager.Update();
-                    _carouselButtonManager.Update();
-                    HandleLevelButtonPresses();
-                    HandleCarousel();
+                    if (_framesSinceTransition > TransitionFrames)
+                        SetState("Level selection");
+                    HandleLevelButtons();
+                    break;
+                case "Title -> Settings":
+                    if (_framesSinceTransition > TransitionFrames)
+                        SetState("Settings");
+                    HandleSettingsWindow();
+                    break;
+                case "Settings":
+                    HandleSettingsWindow();
+                    break;
+                case "Settings -> Title":
+                    if (_framesSinceTransition > TransitionFrames)
+                        SetState("Title");
+                    HandleTitleButtons();
                     break;
                 case "Level selection":
-                    _levelButtonManager.Update();
-                    _carouselButtonManager.Update();
-                    HandleLevelButtonPresses();
-                    HandleCarousel();
+                    HandleLevelButtons();
                     break;
                 case "Level selection -> Title":
-                    if (_framesSinceTransition > 30f) {
-                        state = "Title";
-                        _framesSinceTransition = 0;
-                    }
-                    _titleButtonManager.Update();
-                    _levelButtonManager.Update();
-                    _carouselButtonManager.Update();
-                    HandleTitleButtonPresses();
+                    if (_framesSinceTransition > TransitionFrames)
+                        SetState("Title");
+                    HandleTitleButtons();
                     break;
                 case "Level selection -> level":
                     break;
             }
         }
         public override void Draw(SpriteBatch batch) {
-            switch (state) {
+            switch (_state) {
                 case "Title press any key":
-                    DrawBG(batch);
+                    DrawBg(batch);
                     Draw_Logo(batch, new Vector2(0, 20f));
                     /* Press any key to start */
                     if (_framesSinceTransition % 60 < 40)
-                        batch.DrawStringCentered(GlobalAssets.NovaSquare48, "PRESS ANY KEY", new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y - 100f), Color.White);
-                    /* Screen flash */
+                        batch.DrawStringCentered(GlobalAssets.NovaSquare48, "PRESS ANY KEY", new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 100f), Color.White);
+                    /* Screen intro flash */
                     if (_framesSinceStart <= 60)
-                        batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, GameSettings.ScreenSize.X, GameSettings.ScreenSize.Y), GetTransparentColor((60 - _framesSinceStart) / 60f));
+                        batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, ScreenSize.X, ScreenSize.Y), GetTransparentColor((60 - _framesSinceStart) / 60f));
                     break;
                 case "Title press any key -> Title":
-                    DrawBG(batch);
-                    Draw_Logo(batch, new Vector2(0, -20f + 40f / MathF.Exp(_framesSinceTransition / 5f)));
-                    _titleButtonManager.Draw(batch, new Vector2(0f, 200f / MathF.Exp(_framesSinceTransition / 5f)));
+                    DrawBg(batch);
+                    Draw_Logo(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, -20f), _framesSinceTransition));
+                    _titleButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, 200f), Vector2.Zero, _framesSinceTransition));
                     break;
                 case "Title":
-                    DrawBG(batch);
+                    DrawBg(batch);
                     Draw_Logo(batch, new Vector2(0, -20f));
-                    _titleButtonManager.Draw(batch, Vector2.Zero);
+                    _titleButtonManager.Draw(batch);
                     break;
                 case "Title -> Level selection":
-                    DrawBG(batch);
-                    Draw_Logo(batch, new Vector2(0f, - 20f - GameSettings.ScreenSize.Y * (1 - MathF.Exp(-_framesSinceTransition / 5f))));
-                    _titleButtonManager.Draw(batch, new Vector2(0f, 200f * (1 - MathF.Exp(-_framesSinceTransition / 5f))));
-                    _levelButtonManager.Draw(batch, new Vector2(-GameSettings.ScreenSize.X * MathF.Exp(-_framesSinceTransition / 5f), 0f));
-                    _carouselButtonManager.Draw(batch, new Vector2(GameSettings.ScreenSize.X * MathF.Exp(-_framesSinceTransition / 5f), 0f));
+                    DrawBg(batch);
+                    Draw_Logo(batch, MyUtils.EInterpolate(new Vector2(0f, -20f), new Vector2(0f, -ScreenSize.Y), _framesSinceTransition));
+                    _titleButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, 200f), _framesSinceTransition));
+                    _levelButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(-400f, 0f), Vector2.Zero, _framesSinceTransition));
+                    _carouselButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(600f, 0f), Vector2.Zero, _framesSinceTransition));
+                    break;
+                case "Title -> Settings":
+                    DrawBg(batch);
+                    Draw_Logo(batch, new Vector2(0, -20f));
+                    _settingsSliderManager.Draw(batch);
+                    _settingsButtonManager.Draw(batch);
+                    break;
+                case "Settings -> Title":
+                    DrawBg(batch);
+                    Draw_Logo(batch, new Vector2(0, -20f));
+                    _settingsSliderManager.Draw(batch);
+                    _settingsButtonManager.Draw(batch);
+                    break;
+                case "Settings":
+                    DrawBg(batch);
+                    Draw_Logo(batch, new Vector2(0, -20f));
+                    _settingsSliderManager.Draw(batch);
+                    _settingsButtonManager.Draw(batch);
                     break;
                 case "Level selection":
-                    DrawBG(batch);
+                    DrawBg(batch);
                     _levelButtonManager.Draw(batch, Vector2.Zero);
                     _carouselButtonManager.Draw(batch, Vector2.Zero);
                     break;
                 case "Level selection -> Title":
-                    DrawBG(batch);
-                    Draw_Logo(batch, new Vector2(0f, -20f - GameSettings.ScreenSize.Y * MathF.Exp(-_framesSinceTransition / 5f)));
-                    _titleButtonManager.Draw(batch, new Vector2(0f, 200f * MathF.Exp(-_framesSinceTransition / 5f)));
-                    _levelButtonManager.Draw(batch, new Vector2(GameSettings.ScreenSize.X * (1f - MathF.Exp(_framesSinceTransition / 10f)), 0f));
-                    _carouselButtonManager.Draw(batch, new Vector2(-GameSettings.ScreenSize.X * (1f - MathF.Exp(_framesSinceTransition / 10f)), 0f));
+                    DrawBg(batch);
+                    Draw_Logo(batch, MyUtils.EInterpolate(new Vector2(0f, -ScreenSize.Y), new Vector2(0f, -20f), _framesSinceTransition));
+                    _titleButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, 200f), Vector2.Zero, _framesSinceTransition));
+                    _levelButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(-400f, 0f), _framesSinceTransition));
+                    _carouselButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(600f, 0f), _framesSinceTransition));
                     break;
                 case "Level selection -> level":
-                    DrawBG(batch);
+                    DrawBg(batch);
                     break;
             }
         }
 
-        private void HandleTitleButtonPresses() {
-            switch (_titleButtonManager.PressedButton) {
+        private void SetState(string state) {
+            _state = state;
+            _framesSinceTransition = 0;
+        }
+
+        private void HandleTitleButtons() {
+            _titleButtonManager.Buttons.ForEach(b => b.Update());
+                switch (_titleButtonManager.PressedButton) {
                 case "Start":
-                    state = "Title -> Level selection";
+                    _state = "Title -> Level selection";
                     _framesSinceTransition = 0;
-                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
+                    GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     break;
                 case "Settings":
-                    // TODO state = ?
-                    // _framesSinceTransition = 0;
-                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
-                    ScreenManager.AddScreen(new SettingsScreen(GraphicsDevice));
+                    _state = "Title -> Settings";
+                    _framesSinceTransition = 0;
+                    GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
+                    LoadSettings();
+                    //ScreenManager.AddScreen(new SettingsScreen(GraphicsDevice));
                     break;
                 case "Exit":
                     ScreenManager.RemoveScreen();
                     break;
             }
         }
-        private void HandleLevelButtonPresses()
-        {
-            switch (_levelButtonManager.PressedButton) {
-                case "Back":
-                    state = "Level selection -> Title";
-                    _framesSinceTransition = 0;
-                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
-                    break;
+        private void HandleSettingsWindow() {
+            _settingsButtonManager.Buttons.ForEach(b => b.Update());
+            if (_settingsButtonManager.PressedButton == "Back") {
+                SaveSettings();
+                SetState("Settings -> Title");
+            }
+
+            foreach (var slider in _settingsSliderManager.Sliders)
+                slider.Update();
+            foreach (var slider in _settingsSliderManager.Sliders.Where(slider => slider.IsBeingDragged))
+            {
+                switch (slider.Type) {
+                    case SliderType.Master:
+                        MasterVolume = slider.Value;
+                        break;
+                    case SliderType.Sfx:
+                        SoundEffectVolume = slider.Value;
+                        break;
+                    case SliderType.Music:
+                        MusicVolume = slider.Value;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                ApplyChanges();
             }
         }
-
-        private void HandleCarousel()
+        private void HandleLevelButtons()
         {
+            /* Handle level button presses */
+            _levelButtonManager.Buttons.ForEach(b => b.Update());
+            switch (_levelButtonManager.PressedButton) {
+                case "Back":
+                    _state = "Level selection -> Title";
+                    _framesSinceTransition = 0;
+                    GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
+                    break;
+            }
             /* Handle Carousel Button Presses */
-            switch (_carouselButtonManager.PressedButton)
-            {
+            _carouselButtonManager.Buttons.ForEach(b => b.Update());
+            switch (_carouselButtonManager.PressedButton) {
                 case "Level One":
-                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 0f, 0f);
+                    GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
 
                     break;
-                // TODO other levels
+                    // TODO other levels
             }
             /* Update carousel offset */
             var numButtons = _carouselButtonManager.Buttons.Count;
@@ -256,17 +308,17 @@ namespace Mono_Ether {
                 _carouselOffset = MathHelper.Lerp(_carouselOffset, 1.5f - numButtons, 0.2f);
             /* Update button positions */
             for (int i = 0; i < numButtons; i++) {
-                float j = i + _carouselOffset;
+                var j = i + _carouselOffset;
                 _carouselButtonManager.Buttons[i].Pos = new Vector2(
-                    GameSettings.ScreenSize.X - 300f * MathF.Exp(-j * j / 25f),
-                    GameSettings.ScreenSize.Y / 2f + j * 120f);
+                    ScreenSize.X - 300f * MathF.Exp(-j * j / 25f),
+                    ScreenSize.Y / 2f + j * 120f);
             }
         }
-        private void DrawBG(SpriteBatch batch) {
-            Vector2 offset = new Vector2(-Input.Mouse.X / GameSettings.ScreenSize.X - 0.5f,
-                -Input.Mouse.Y / GameSettings.ScreenSize.Y - 0.5f) * 10f;
+        private void DrawBg(SpriteBatch batch) {
+            Vector2 offset = new Vector2(-Input.Mouse.X / ScreenSize.X - 0.5f,
+                -Input.Mouse.Y / ScreenSize.Y - 0.5f) * 10f;
             /* Bg */
-            batch.Draw(_bg, MyUtils.RectangleF(0, 0, GameSettings.ScreenSize.X, GameSettings.ScreenSize.Y), Color.White);
+            batch.Draw(_bg, MyUtils.RectangleF(0, 0, ScreenSize.X, ScreenSize.Y), Color.White);
             /* SmallStars */
             foreach (var starPos in _smallStars)
                 batch.Draw(_smallStar, starPos + offset, null, GetTransparentColor(0.5f + MathF.Sin(starPos.X + _framesSinceStart / 60f) * 0.5f), 0f, _smallStar.Size() / 2f, 1f + MathF.Sin(starPos.X) / 3f, 0, 0);
@@ -274,52 +326,51 @@ namespace Mono_Ether {
             foreach (var starPos in _bigStars)
                 batch.Draw(_bigStar, starPos + offset, null, GetTransparentColor(0.5f + MathF.Sin(starPos.X + _framesSinceStart / 60f) * 0.5f), starPos.X + _framesSinceStart / 60f, _bigStar.Size() / 2f, 0.5f + MathF.Sin(starPos.X) / 3f, 0, 0);
             /* Trees */
-            batch.Draw(_treeBg, new Vector2(GameSettings.ScreenSize.X / 2f - 550f, GameSettings.ScreenSize.Y / 2f) + offset, null, Color.White, 0f, _treeBg.Size() / 2f, 1f, 0, 0);
-            batch.Draw(_treeBg, new Vector2(GameSettings.ScreenSize.X / 2f + 550f, GameSettings.ScreenSize.Y / 2f) + offset, null, Color.White, 0f, _treeBg.Size() / 2f, 1f, SpriteEffects.FlipHorizontally, 0);
+            batch.Draw(_treeBg, new Vector2(ScreenSize.X / 2f - 550f, ScreenSize.Y / 2f) + offset, null, Color.White, 0f, _treeBg.Size() / 2f, 1f, 0, 0);
+            batch.Draw(_treeBg, new Vector2(ScreenSize.X / 2f + 550f, ScreenSize.Y / 2f) + offset, null, Color.White, 0f, _treeBg.Size() / 2f, 1f, SpriteEffects.FlipHorizontally, 0);
             /* Tree Leaves */
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 60f) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, -0.4f + MathF.Sin(_framesSinceStart / 50f + 1) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 110f) + offset, null, Color.White, 0.3f + MathF.Sin(_framesSinceStart / 70f) / 2.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 3.5f + MathF.Sin(_framesSinceStart / 65f + 1) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, 2.9f + MathF.Sin(_framesSinceStart / 55f) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f + 1) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f - 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 85f) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 50f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, -3.4f + MathF.Sin(_framesSinceStart / 60f + 1) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 110f) + offset, null, Color.White, 3.3f + MathF.Sin(_framesSinceStart / 65f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 0.5f + MathF.Sin(_framesSinceStart / 70f + 1) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 484f, GameSettings.ScreenSize.Y / 2f - 115f) + offset, null, Color.White, 0.9f + MathF.Sin(_framesSinceStart / 85f) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 55f + 1) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
-            batch.Draw(_treeLeaf, new Vector2(GameSettings.ScreenSize.X / 2f + 680f, GameSettings.ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f - 484f, ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 60f) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f - 484f, ScreenSize.Y / 2f - 115f) + offset, null, Color.White, -0.4f + MathF.Sin(_framesSinceStart / 50f + 1) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f - 484f, ScreenSize.Y / 2f - 110f) + offset, null, Color.White, 0.3f + MathF.Sin(_framesSinceStart / 70f) / 2.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f - 484f, ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 3.5f + MathF.Sin(_framesSinceStart / 65f + 1) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f - 484f, ScreenSize.Y / 2f - 115f) + offset, null, Color.White, 2.9f + MathF.Sin(_framesSinceStart / 55f) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f - 680f, ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f + 1) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f - 680f, ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 85f) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 484f, ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 50f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 484f, ScreenSize.Y / 2f - 115f) + offset, null, Color.White, -3.4f + MathF.Sin(_framesSinceStart / 60f + 1) / 3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 484f, ScreenSize.Y / 2f - 110f) + offset, null, Color.White, 3.3f + MathF.Sin(_framesSinceStart / 65f) / 2.9f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 484f, ScreenSize.Y / 2f - 120f) + offset, null, Color.White, 0.5f + MathF.Sin(_framesSinceStart / 70f + 1) / 4f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 484f, ScreenSize.Y / 2f - 115f) + offset, null, Color.White, 0.9f + MathF.Sin(_framesSinceStart / 85f) / 3.5f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 680f, ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 3.1f + MathF.Sin(_framesSinceStart / 55f + 1) / 3.3f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
+            batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 680f, ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 0.1f + MathF.Sin(_framesSinceStart / 75f) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
             /* SubBars */
             for (int i = 0; i < 6; i++)
-                batch.Draw(_subBar, new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y - 203f + MathF.Exp((_framesSinceStart + i * 20) % 120 / 16f) + offset.Y), null, Color.White, 0f, _subBar.Size() / 2f, 1f, 0, 0);
+                batch.Draw(_subBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + MathF.Exp((_framesSinceStart + i * 20) % 120 / 16f) + offset.Y), null, Color.White, 0f, _subBar.Size() / 2f, 1f, 0, 0);
             /* MainBar */
-            batch.Draw(_mainBar, new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y - 203f + offset.Y), null, Color.White, 0f, _mainBar.Size() / 2f, 1f, 0, 0);
+            batch.Draw(_mainBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + offset.Y), null, Color.White, 0f, _mainBar.Size() / 2f, 1f, 0, 0);
         }
 
-        private void Draw_Logo(SpriteBatch batch, Vector2 offset)
-        {
-            offset += new Vector2(-Input.Mouse.X / GameSettings.ScreenSize.X - 0.5f,
-                -Input.Mouse.Y / GameSettings.ScreenSize.Y - 0.5f) * 20f;
+        private void Draw_Logo(SpriteBatch batch, Vector2 offset) {
+            offset += new Vector2(-Input.Mouse.X / ScreenSize.X - 0.5f,
+                -Input.Mouse.Y / ScreenSize.Y - 0.5f) * 20f;
             /* Triangles */
             for (int i = 0; i < 5; i++)
-                batch.Draw(_triangle, GameSettings.ScreenSize / 2f + new Vector2(0f, 161f) + offset, null, GetTransparentColor(255 / (i / 2 + 1)), MathF.Sin(_framesSinceStart / 250f + i * 10) / 5f, new Vector2(_triangle.Width / 2f, _triangle.Height), 1f + MathF.Sin(_framesSinceStart / 260f + i * 17) / 10f, 0, 0);
+                batch.Draw(_triangle, ScreenSize / 2f + new Vector2(0f, 161f) + offset, null, GetTransparentColor(255 / (i / 2 + 1)), MathF.Sin(_framesSinceStart / 250f + i * 10) / 5f, new Vector2(_triangle.Width / 2f, _triangle.Height), 1f + MathF.Sin(_framesSinceStart / 260f + i * 17) / 10f, 0, 0);
             /* EtherOut (Blue -> Pink -> White) */
-            batch.Draw(_etherOutline, GameSettings.ScreenSize / 2f + new Vector2(-6f, -48f) + offset, null, Color.CornflowerBlue, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherOutline.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
-            batch.Draw(_etherOutline, GameSettings.ScreenSize / 2f + new Vector2(6f, -56f) + offset, null, Color.Violet, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherOutline.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
-            batch.Draw(_etherOutline, GameSettings.ScreenSize / 2f + new Vector2(0f, -52f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherOutline.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
+            batch.Draw(_etherOutline, ScreenSize / 2f + new Vector2(-6f, -48f) + offset, null, Color.CornflowerBlue, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherOutline.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
+            batch.Draw(_etherOutline, ScreenSize / 2f + new Vector2(6f, -56f) + offset, null, Color.Violet, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherOutline.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
+            batch.Draw(_etherOutline, ScreenSize / 2f + new Vector2(0f, -52f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherOutline.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
             /* Ether */
-            batch.Draw(_etherText, GameSettings.ScreenSize / 2f + new Vector2(0f, -52f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherText.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
+            batch.Draw(_etherText, ScreenSize / 2f + new Vector2(0f, -52f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 150f) / 16f, _etherText.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 110f) / 20f, 0, 0);
             /* Mono */
-            batch.Draw(_mono, GameSettings.ScreenSize / 2f + new Vector2(0f, -231f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 120f) / 20f, _mono.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 130f) / 20f, 0, 0);
+            batch.Draw(_mono, ScreenSize / 2f + new Vector2(0f, -231f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 120f) / 20f, _mono.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 130f) / 20f, 0, 0);
             /* ByChris */
-            batch.Draw(_byChris, GameSettings.ScreenSize / 2f + new Vector2(0f, 125f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 90f) / 30f, _byChris.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 80f) / 20f, 0, 0);
+            batch.Draw(_byChris, ScreenSize / 2f + new Vector2(0f, 125f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 90f) / 30f, _byChris.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 80f) / 20f, 0, 0);
         }
-        private Color GetTransparentColor(float brightness) {
+        private static Color GetTransparentColor(float brightness) {
             return new Color(brightness, brightness, brightness, brightness);
         }
-        private Color GetTransparentColor(int brightness) {
+        private static Color GetTransparentColor(int brightness) {
             return new Color(brightness, brightness, brightness, brightness);
         }
     }

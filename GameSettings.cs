@@ -17,8 +17,7 @@ namespace Mono_Ether {
         public static float MusicVolume;
         public static float SoundEffectVolume;
         public static void ApplyChanges() {
-            SoundEffect.MasterVolume = MasterVolume * SoundEffectVolume;
-            MediaPlayer.Volume = MasterVolume * MusicVolume;
+            ApplyVolumeChanges();
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
             
@@ -31,6 +30,11 @@ namespace Mono_Ether {
             }
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
             GameRoot.Instance.Graphics.ApplyChanges();
+        }
+        public static void ApplyVolumeChanges(float multiplier = 1f)
+        {
+            SoundEffect.MasterVolume = MasterVolume * SoundEffectVolume * multiplier;
+            MediaPlayer.Volume = MasterVolume * MusicVolume * multiplier;
         }
         public static void LoadSettings() {
             // TODO Use for-loop and dictionary to read settings
@@ -52,7 +56,7 @@ namespace Mono_Ether {
             File.WriteAllText(SettingsFilename, $"{MasterVolume}\n{MusicVolume}\n{SoundEffectVolume}");
         }
 
-        public static void OnScreenResize(Object sender, EventArgs e) {
+        public static void OnScreenResize(object sender, EventArgs e) {
             ScreenSize.X = GameRoot.Instance.Window.ClientBounds.Width;
             ScreenSize.Y = GameRoot.Instance.Window.ClientBounds.Height;
         }

@@ -9,6 +9,7 @@ namespace Mono_Ether {
         public static Texture2D ButtonCorner2;
         public static Texture2D ButtonTop;
         public static Texture2D ButtonSide;
+        public static Texture2D SliderBall;
         public static Texture2D Pixel;
         public static SpriteFont NovaSquare24;
         public static SpriteFont NovaSquare48;
@@ -18,6 +19,7 @@ namespace Mono_Ether {
             ButtonCorner2 = content.Load<Texture2D>("Textures/GlobalAssets/ButtonCorner2");
             ButtonTop = content.Load<Texture2D>("Textures/GlobalAssets/ButtonTop");
             ButtonSide = content.Load<Texture2D>("Textures/GlobalAssets/ButtonSide");
+            SliderBall = content.Load<Texture2D>("Textures/GlobalAssets/SliderBall");
             Pixel = content.Load<Texture2D>("Textures/GlobalAssets/Pixel");
             NovaSquare24 = content.Load<SpriteFont>("Fonts/NovaSquare24");
             NovaSquare48 = content.Load<SpriteFont>("Fonts/NovaSquare48");
