@@ -106,11 +106,11 @@ namespace Mono_Ether {
                 }
             }
         }
-        public void Draw(SpriteBatch batch) {
-            batch.Draw(GlobalAssets.Pixel, SliderPos, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
-            batch.Draw(GlobalAssets.SliderBall, SliderBallPos, null, IsHovered ? Color.LightCyan : Color.White, 0f, GlobalAssets.SliderBall.Size() / 2f, 1f, 0, 0); // Ball
-            batch.DrawStringCentered(GlobalAssets.NovaSquare24, MyUtils.SliderTypeToName(Type), SliderPos + new Vector2(0f, -50f), Color.White);
-            batch.DrawString(GlobalAssets.NovaSquare24, $"{Value:0.00}", SliderPos + new Vector2(Width / 2f + 50f, -GlobalAssets.NovaSquare24.MeasureString("a").Y / 2f),
+        public void Draw(SpriteBatch batch, Vector2 offset) {
+            batch.Draw(GlobalAssets.Pixel, SliderPos + offset, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
+            batch.Draw(GlobalAssets.SliderBall, SliderBallPos + offset, null, IsHovered ? Color.LightCyan : Color.White, 0f, GlobalAssets.SliderBall.Size() / 2f, 1f, 0, 0); // Ball
+            batch.DrawStringCentered(GlobalAssets.NovaSquare24, MyUtils.SliderTypeToName(Type), SliderPos + new Vector2(0f, -50f) + offset, Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"{Value:0.00}", SliderPos + new Vector2(Width / 2f + 50f, -GlobalAssets.NovaSquare24.MeasureString("a").Y / 2f) + offset,
                 Color.White);
         }
     }
@@ -118,7 +118,11 @@ namespace Mono_Ether {
         public List<Slider> Sliders = new List<Slider>();
         public void Draw(SpriteBatch batch) {
             foreach (Slider slider in Sliders)
-                slider.Draw(batch);
+                slider.Draw(batch, Vector2.Zero);
+        }
+        public void Draw(SpriteBatch batch, Vector2 globalOffset) {
+            foreach (Slider slider in Sliders)
+                slider.Draw(batch, globalOffset);
         }
     }
 }

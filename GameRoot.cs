@@ -46,7 +46,7 @@ namespace Mono_Ether {
             /* Draw current screen */
             ScreenManager.CurrentScreen.Draw(_batch);
             /* Draw FPS (if enabled) */
-            if (GameSettings.ShowFPS) {
+            if (GameSettings.ShowFps) {
                 var Font = GlobalAssets.NovaSquare24;
                 var Text = $"{(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}FPS";
                 _batch.DrawString(Font, Text, GameSettings.ScreenSize - Font.MeasureString(Text) - new Vector2(10f, 5f), Color.White);

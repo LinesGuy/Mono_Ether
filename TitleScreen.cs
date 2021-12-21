@@ -38,9 +38,7 @@ namespace Mono_Ether {
         private int _framesSinceTransition;
         private const int TransitionFrames = 30;
         private string _state;
-        public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
-
-        }
+        public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) { }
         public override void Initialize() {
             _state = "Title press any key";
             /* Add Title screen buttons */
@@ -55,10 +53,10 @@ namespace Mono_Ether {
             for (int i = 0; i < levels.Count; i++)
                 _carouselButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X - 300f * MathF.Exp(-i * i / 25f), ScreenSize.Y / 2f + i * 120f), new Vector2(500, 120), levels[i]));
             /* Add settings window buttons and sliders */
-            _settingsButtonManager.Buttons.Add(new Button(new Vector2(200f, ScreenSize.Y - 100f), new Vector2(200, 120), "Back"));
-            _settingsSliderManager.Sliders.Add(new Slider(new Vector2(400f, 200f), 400f, SliderType.Master, MasterVolume));
-            _settingsSliderManager.Sliders.Add(new Slider(new Vector2(400f, 400f), 400f, SliderType.Sfx, SoundEffectVolume));
-            _settingsSliderManager.Sliders.Add(new Slider(new Vector2(400f, 600f), 400f, SliderType.Music, MusicVolume));
+            _settingsButtonManager.Buttons.Add(new Button(ScreenSize / 2f + new Vector2(0f, 250f), new Vector2(200, 120), "Back"));
+            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, -200f), 400f, SliderType.Master, MasterVolume));
+            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, -50f), 400f, SliderType.Sfx, SoundEffectVolume));
+            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, 100f), 400f, SliderType.Music, MusicVolume));
             /* Create lists of small/big stars with random positions */
             for (var i = 0; i < 150; i++)
                 _smallStars.Add(new Vector2(_rand.Next(0, (int)ScreenSize.X), _rand.Next(0, (int)ScreenSize.Y)));
@@ -67,10 +65,7 @@ namespace Mono_Ether {
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_titleMusic);
         }
-
-        public override void Suspend() {
-
-        }
+        public override void Suspend() { }
         public override void Resume() {
             MediaPlayer.Play(_titleMusic);
         }
@@ -114,43 +109,41 @@ namespace Mono_Ether {
             _framesSinceTransition++;
             switch (_state) {
                 case "Title press any key":
-                    if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftButtonJustDown || Input.WasRightButtonJustDown) {
+                    if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftButtonJustDown) {
                         SetState("Title press any key -> Title");
                         GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     }
                     break;
                 case "Title press any key -> Title":
-                    if (_framesSinceTransition > TransitionFrames)
-                        SetState("Title");
+                    if (_framesSinceTransition > TransitionFrames) SetState("Title");
                     HandleTitleButtons();
                     break;
                 case "Title":
+                    if (Input.WasRightButtonJustDown) {
+                        SetState("Title press any key");
+                    }
                     HandleTitleButtons();
                     break;
                 case "Title -> Level selection":
-                    if (_framesSinceTransition > TransitionFrames)
-                        SetState("Level selection");
+                    if (_framesSinceTransition > TransitionFrames) SetState("Level selection");
                     HandleLevelButtons();
                     break;
                 case "Title -> Settings":
-                    if (_framesSinceTransition > TransitionFrames)
-                        SetState("Settings");
+                    if (_framesSinceTransition > TransitionFrames) SetState("Settings");
                     HandleSettingsWindow();
                     break;
                 case "Settings":
                     HandleSettingsWindow();
                     break;
                 case "Settings -> Title":
-                    if (_framesSinceTransition > TransitionFrames)
-                        SetState("Title");
+                    if (_framesSinceTransition > TransitionFrames) SetState("Title");
                     HandleTitleButtons();
                     break;
                 case "Level selection":
                     HandleLevelButtons();
                     break;
                 case "Level selection -> Title":
-                    if (_framesSinceTransition > TransitionFrames)
-                        SetState("Title");
+                    if (_framesSinceTransition > TransitionFrames) SetState("Title");
                     HandleTitleButtons();
                     break;
                 case "Level selection -> level":
@@ -161,7 +154,7 @@ namespace Mono_Ether {
             switch (_state) {
                 case "Title press any key":
                     DrawBg(batch);
-                    Draw_Logo(batch, new Vector2(0, 20f));
+                    DrawLogo(batch, new Vector2(0, 20f));
                     /* Press any key to start */
                     if (_framesSinceTransition % 60 < 40)
                         batch.DrawStringCentered(GlobalAssets.NovaSquare48, "PRESS ANY KEY", new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 100f), Color.White);
@@ -171,36 +164,42 @@ namespace Mono_Ether {
                     break;
                 case "Title press any key -> Title":
                     DrawBg(batch);
-                    Draw_Logo(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, -20f), _framesSinceTransition));
+                    DrawLogo(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, -20f), _framesSinceTransition));
                     _titleButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, 200f), Vector2.Zero, _framesSinceTransition));
                     break;
                 case "Title":
                     DrawBg(batch);
-                    Draw_Logo(batch, new Vector2(0, -20f));
+                    DrawLogo(batch, new Vector2(0, -20f));
                     _titleButtonManager.Draw(batch);
                     break;
                 case "Title -> Level selection":
                     DrawBg(batch);
-                    Draw_Logo(batch, MyUtils.EInterpolate(new Vector2(0f, -20f), new Vector2(0f, -ScreenSize.Y), _framesSinceTransition));
+                    DrawLogo(batch, MyUtils.EInterpolate(new Vector2(0f, -20f), new Vector2(0f, -ScreenSize.Y), _framesSinceTransition));
                     _titleButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, 200f), _framesSinceTransition));
                     _levelButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(-400f, 0f), Vector2.Zero, _framesSinceTransition));
                     _carouselButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(600f, 0f), Vector2.Zero, _framesSinceTransition));
                     break;
                 case "Title -> Settings":
                     DrawBg(batch);
-                    Draw_Logo(batch, new Vector2(0, -20f));
-                    _settingsSliderManager.Draw(batch);
-                    _settingsButtonManager.Draw(batch);
+                    DrawLogo(batch, new Vector2(0, -20f));
+                    _titleButtonManager.Draw(batch);
+                    batch.Draw(GlobalAssets.Pixel, MyUtils.EInterpolate(new Vector2(ScreenSize.X / 2f, ScreenSize.Y * 1.5f), ScreenSize / 2f, _framesSinceTransition), null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
+                    _settingsSliderManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, ScreenSize.Y), Vector2.Zero, _framesSinceTransition));
+                    _settingsButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, ScreenSize.Y), Vector2.Zero, _framesSinceTransition));
                     break;
                 case "Settings -> Title":
                     DrawBg(batch);
-                    Draw_Logo(batch, new Vector2(0, -20f));
-                    _settingsSliderManager.Draw(batch);
-                    _settingsButtonManager.Draw(batch);
+                    DrawLogo(batch, new Vector2(0, -20f));
+                    _titleButtonManager.Draw(batch);
+                    batch.Draw(GlobalAssets.Pixel, MyUtils.EInterpolate(ScreenSize / 2f, new Vector2(ScreenSize.X / 2f, ScreenSize.Y * 1.5f), _framesSinceTransition), null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
+                    _settingsSliderManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, ScreenSize.Y), _framesSinceTransition));
+                    _settingsButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, ScreenSize.Y), _framesSinceTransition));
                     break;
                 case "Settings":
                     DrawBg(batch);
-                    Draw_Logo(batch, new Vector2(0, -20f));
+                    DrawLogo(batch, new Vector2(0, -20f));
+                    _titleButtonManager.Draw(batch);
+                    batch.Draw(GlobalAssets.Pixel, ScreenSize / 2f, null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
                     _settingsSliderManager.Draw(batch);
                     _settingsButtonManager.Draw(batch);
                     break;
@@ -211,7 +210,7 @@ namespace Mono_Ether {
                     break;
                 case "Level selection -> Title":
                     DrawBg(batch);
-                    Draw_Logo(batch, MyUtils.EInterpolate(new Vector2(0f, -ScreenSize.Y), new Vector2(0f, -20f), _framesSinceTransition));
+                    DrawLogo(batch, MyUtils.EInterpolate(new Vector2(0f, -ScreenSize.Y), new Vector2(0f, -20f), _framesSinceTransition));
                     _titleButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, 200f), Vector2.Zero, _framesSinceTransition));
                     _levelButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(-400f, 0f), _framesSinceTransition));
                     _carouselButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(600f, 0f), _framesSinceTransition));
@@ -221,15 +220,13 @@ namespace Mono_Ether {
                     break;
             }
         }
-
         private void SetState(string state) {
             _state = state;
             _framesSinceTransition = 0;
         }
-
         private void HandleTitleButtons() {
             _titleButtonManager.Buttons.ForEach(b => b.Update());
-                switch (_titleButtonManager.PressedButton) {
+            switch (_titleButtonManager.PressedButton) {
                 case "Start":
                     _state = "Title -> Level selection";
                     _framesSinceTransition = 0;
@@ -253,11 +250,9 @@ namespace Mono_Ether {
                 SaveSettings();
                 SetState("Settings -> Title");
             }
-
             foreach (var slider in _settingsSliderManager.Sliders)
                 slider.Update();
-            foreach (var slider in _settingsSliderManager.Sliders.Where(slider => slider.IsBeingDragged))
-            {
+            foreach (var slider in _settingsSliderManager.Sliders.Where(slider => slider.IsBeingDragged)) {
                 switch (slider.Type) {
                     case SliderType.Master:
                         MasterVolume = slider.Value;
@@ -274,26 +269,31 @@ namespace Mono_Ether {
                 ApplyChanges();
             }
         }
+
         private void HandleLevelButtons()
         {
             /* Handle level button presses */
             _levelButtonManager.Buttons.ForEach(b => b.Update());
-            switch (_levelButtonManager.PressedButton) {
+            switch (_levelButtonManager.PressedButton)
+            {
                 case "Back":
                     _state = "Level selection -> Title";
                     _framesSinceTransition = 0;
                     GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     break;
             }
+
             /* Handle Carousel Button Presses */
             _carouselButtonManager.Buttons.ForEach(b => b.Update());
-            switch (_carouselButtonManager.PressedButton) {
+            switch (_carouselButtonManager.PressedButton)
+            {
                 case "Level One":
                     GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
 
                     break;
-                    // TODO other levels
+                // TODO other levels
             }
+
             /* Update carousel offset */
             var numButtons = _carouselButtonManager.Buttons.Count;
             _carouselOffsetVelocity -= Input.DeltaScrollWheelValue / 1300f; // Scroll wheel
@@ -307,7 +307,8 @@ namespace Mono_Ether {
             if (_carouselOffset < 1.5f - numButtons)
                 _carouselOffset = MathHelper.Lerp(_carouselOffset, 1.5f - numButtons, 0.2f);
             /* Update button positions */
-            for (int i = 0; i < numButtons; i++) {
+            for (int i = 0; i < numButtons; i++)
+            {
                 var j = i + _carouselOffset;
                 _carouselButtonManager.Buttons[i].Pos = new Vector2(
                     ScreenSize.X - 300f * MathF.Exp(-j * j / 25f),
@@ -349,8 +350,7 @@ namespace Mono_Ether {
             /* MainBar */
             batch.Draw(_mainBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + offset.Y), null, Color.White, 0f, _mainBar.Size() / 2f, 1f, 0, 0);
         }
-
-        private void Draw_Logo(SpriteBatch batch, Vector2 offset) {
+        private void DrawLogo(SpriteBatch batch, Vector2 offset) {
             offset += new Vector2(-Input.Mouse.X / ScreenSize.X - 0.5f,
                 -Input.Mouse.Y / ScreenSize.Y - 0.5f) * 20f;
             /* Triangles */
@@ -367,11 +367,7 @@ namespace Mono_Ether {
             /* ByChris */
             batch.Draw(_byChris, ScreenSize / 2f + new Vector2(0f, 125f) + offset, null, Color.White, MathF.Sin(_framesSinceStart / 90f) / 30f, _byChris.Size() / 2f, 1.5f + MathF.Sin(_framesSinceStart / 80f) / 20f, 0, 0);
         }
-        private static Color GetTransparentColor(float brightness) {
-            return new Color(brightness, brightness, brightness, brightness);
-        }
-        private static Color GetTransparentColor(int brightness) {
-            return new Color(brightness, brightness, brightness, brightness);
-        }
+        private static Color GetTransparentColor(float brightness) => new Color(brightness, brightness, brightness, brightness);
+        private static Color GetTransparentColor(int brightness) => new Color(brightness, brightness, brightness, brightness);
     }
 }

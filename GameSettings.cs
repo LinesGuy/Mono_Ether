@@ -11,7 +11,7 @@ namespace Mono_Ether {
         public static Vector2 ScreenSize = new Vector2(1366, 768); // TODO allow this to change
         public static bool DebugMode = false;
         public static bool VSync = true;
-        public static bool ShowFPS = true;
+        public static bool ShowFps = true;
         public static bool AllowWindowResizing = true;
         public static float MasterVolume;
         public static float MusicVolume;
@@ -20,7 +20,7 @@ namespace Mono_Ether {
             ApplyVolumeChanges();
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
-            
+
             if (VSync) {
                 GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = true;
                 GameRoot.Instance.IsFixedTimeStep = true;
@@ -31,8 +31,7 @@ namespace Mono_Ether {
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
             GameRoot.Instance.Graphics.ApplyChanges();
         }
-        public static void ApplyVolumeChanges(float multiplier = 1f)
-        {
+        public static void ApplyVolumeChanges(float multiplier = 1f) {
             SoundEffect.MasterVolume = MasterVolume * SoundEffectVolume * multiplier;
             MediaPlayer.Volume = MasterVolume * MusicVolume * multiplier;
         }
@@ -55,7 +54,6 @@ namespace Mono_Ether {
             // TODO Use for-loop and dictionary to save settings
             File.WriteAllText(SettingsFilename, $"{MasterVolume}\n{MusicVolume}\n{SoundEffectVolume}");
         }
-
         public static void OnScreenResize(object sender, EventArgs e) {
             ScreenSize.X = GameRoot.Instance.Window.ClientBounds.Width;
             ScreenSize.Y = GameRoot.Instance.Window.ClientBounds.Height;
