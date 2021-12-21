@@ -87,7 +87,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/GlobalAssets/ButtonTop.png
 
-#begin Textures/GlobalAssets/pixel.png
+#begin Textures/GlobalAssets/Default.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -97,7 +97,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/GlobalAssets/pixel.png
+/build:Textures/GlobalAssets/Default.png
+
+#begin Textures/GlobalAssets/Pixel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GlobalAssets/Pixel.png
 
 #begin Textures/GlobalAssets/SliderBall.png
 /importer:TextureImporter
