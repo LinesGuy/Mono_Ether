@@ -27,7 +27,6 @@ namespace Mono_Ether {
                 //_isLerping = false;
                 Position += direction * 5 / Zoom;
             }
-
             /* Zoom (Q and E) */
             if (Input.Keyboard.IsKeyDown(Keys.Q))
                 Zoom /= 1.03f;

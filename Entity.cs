@@ -2,12 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether {
-    public abstract class Entity {
+    public abstract class Entity
+    {
         protected Texture2D Image = GlobalAssets.Default;
         private readonly Color _color = Color.White;
         public Vector2 Position;
         public Vector2 Velocity;
         public float Orientation;
+        public readonly float Radius;
         public bool IsExpired;
         private Vector2 Size => Image.Size();
         public abstract void Update(GameTime gameTime);
