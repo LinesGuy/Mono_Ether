@@ -39,6 +39,18 @@
 /processorParam:Quality=Best
 /build:SoundEffects/Click.wav
 
+#begin Textures/GameScreen/PlayerShip.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/PlayerShip.png
+
 #begin Textures/GlobalAssets/ButtonCorner1.png
 /importer:TextureImporter
 /processor:TextureProcessor
