@@ -21,9 +21,9 @@ namespace Mono_Ether {
             Text = text;
             _rotOffset = (float) _random.NextDouble() * MathF.PI * 2f;
         }
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            _rotOffset += 0.05f;
+            _rotOffset += (float)gameTime.ElapsedGameTime.TotalSeconds * 3f;
             IsHovered = MyUtils.RectangleF(Pos.X - Size.X / 2f, Pos.Y - Size.Y / 2f, Size.X, Size.Y).Contains(Input.Mouse.Position); ;
         }
 

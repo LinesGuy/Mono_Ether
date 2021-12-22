@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Mono_Ether {
     public class GameRoot : Game {
@@ -26,21 +27,19 @@ namespace Mono_Ether {
             /* Add Title screen to screen stack */
             ScreenManager.AddScreen(new TitleScreen(GraphicsDevice));
             /* If debug mode is enabled, skip straight to the testing stage */
-            // TODO implement
-            //if (GameSettings.DebugMode)
-            //ScreenManager.AddScreen(new Ether.EtherRoot(GraphicsDevice, "debugMap.txt"));
+            if (GameSettings.DebugMode) {
+                MediaPlayer.Stop();
+                ScreenManager.AddScreen(new GameScreen(GraphicsDevice));
+            }
         }
-
         protected override void UnloadContent() {
             /* This is empty as this is only ever called when the game is closed */
         }
-
         protected override void Update(GameTime gameTime) {
             Input.Update();
             ScreenManager.CurrentScreen.Update(gameTime);
             base.Update(gameTime);
         }
-
         protected override void Draw(GameTime gameTime) {
             _batch.Begin();
             /* Draw current screen */
