@@ -65,7 +65,10 @@ namespace Mono_Ether {
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_titleMusic);
         }
-        public override void Suspend() { }
+
+        public override void Suspend() {
+            MediaPlayer.Stop();
+        }
         public override void Resume() {
             MediaPlayer.Play(_titleMusic);
         }
@@ -155,7 +158,7 @@ namespace Mono_Ether {
                     DrawBg(batch);
                     DrawLogo(batch, new Vector2(0, 20f));
                     /* Press any key to start */
-                    if (_timeSinceTransition.TotalSeconds % 1d < 2d/3d)
+                    if (_timeSinceTransition.TotalSeconds % 1d < 2d / 3d)
                         batch.DrawStringCentered(GlobalAssets.NovaSquare48, "PRESS ANY KEY", new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 100f), Color.White);
                     /* Screen intro flash */
                     if (_timeSinceTransition.Seconds < 1)

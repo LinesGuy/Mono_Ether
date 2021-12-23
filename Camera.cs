@@ -6,11 +6,9 @@ namespace Mono_Ether {
         public Vector2 Position = Vector2.Zero;
         public float Zoom = 1f;
         public float Orientation = 0f;
-        //private bool _isLerping = true;
-
+        public bool IsLerping = true;
         public Vector2 WorldToScreen(Vector2 worldPosition) => ((worldPosition - Position) * Zoom).Rotate(Orientation) + GameSettings.ScreenSize / 2f;
         public Vector2 ScreenToWorld(Vector2 screenPos) => (screenPos - GameSettings.ScreenSize / 2).Rotate(-Orientation) / Zoom + Position;
-        public Camera() { }
         public void Update() {
             /* Freecam (disables lerp if used) */
             Vector2 direction = Vector2.Zero;
@@ -24,7 +22,7 @@ namespace Mono_Ether {
                 direction.Y += 1;
             direction = direction.Rotate(-Orientation);
             if (direction != Vector2.Zero) {
-                //_isLerping = false;
+                IsLerping = false;
                 Position += direction * 5 / Zoom;
             }
             /* Zoom (Q and E) */
@@ -47,26 +45,15 @@ namespace Mono_Ether {
                 Orientation += 0.01f;
             if (Input.Keyboard.IsKeyDown(Keys.X))
                 Orientation -= 0.01f;
-            /* Lerp */
-            /* TODO implement lerp in GameScreen.Update()
-            if (_isLerping)
-            {
-              // TODO lerp to average of all player positions  
-                Lerp(new Vector2(
-                    EntityManager
-                    ));
-            }
-            else if (Input.Keyboard.IsKeyDown(Keys.C))
-                _isLerping = true;  // Press 'c' to enable lerp
-            */
+            /* Press 'c' to enable lerp */
+            if (!IsLerping && Input.Keyboard.IsKeyDown(Keys.C))
+                IsLerping = true;  // 
         }
-        // TODO remove
-        /*private void Lerp(Vector2 destination) {
-            // Lerps (moves) the camera towards a given destination
-            float lerp_speed = 0.1f; // Higher values (between 0 and 1) move towards destination faster
-            Position = (1 - lerp_speed) * Position + destination * lerp_speed;
-        }*/
-
+        public void LerpTo(Vector2 destination)
+        {
+            const float lerpSpeed = 0.1f; // Higher values (between 0 and 1) move towards destination faster
+            Position = (1 - lerpSpeed) * Position + destination * lerpSpeed;
+        }
         public Vector2 MouseWorldCoords() {
             return ScreenToWorld(Input.Mouse.Position.ToVector2());
         }
