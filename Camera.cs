@@ -70,7 +70,6 @@ namespace Mono_Ether {
         public Vector2 MouseWorldCoords() {
             return ScreenToWorld(Input.Mouse.Position.ToVector2());
         }
-
         public Vector2 GetMouseAimDirection(Vector2 source) {
             Vector2 direction = ScreenToWorld(Input.Mouse.Position.ToVector2()) - source;
 
