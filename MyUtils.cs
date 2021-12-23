@@ -15,6 +15,7 @@ namespace Mono_Ether {
         public static float NextFloat(this Random rand, float minValue, float maxValue) => (float)rand.NextDouble() * (maxValue - minValue) + minValue;
         public static Vector2 ScaleTo(this Vector2 vector, float length) => vector * (length / vector.Length());
         public static float TaxicabDistanceTo(this Vector2 a, Vector2 b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+        public static Vector2 FromPolar(float angle, float magnitude) => magnitude * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         public static Vector2 NextVector2(this Random rand, float minLength, float maxLength) {
             double theta = rand.NextDouble() * 2 * Math.PI;
             float length = rand.NextFloat(minLength, maxLength);
