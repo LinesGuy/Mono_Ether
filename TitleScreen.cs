@@ -281,7 +281,7 @@ namespace Mono_Ether {
             _carouselButtonManager.Buttons.ForEach(b => b.Update(gameTime));
             switch (_carouselButtonManager.PressedButton) {
                 case "Level One":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice));
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "debugMap.txt")); // TODO replace with level one
                     GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     break;
                     // TODO other levels

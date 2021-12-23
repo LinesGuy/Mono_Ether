@@ -10,6 +10,7 @@ namespace Mono_Ether {
     public class TileMap {
         private readonly Tile[][] _grid;
         public Vector2 GridSize => new Vector2(_grid[0].Length, _grid.Length);
+        public Vector2 WorldSize => GridSize * Tile.Length;
         public TileMap(string fileName) {
             var lines = File.ReadAllLines(@"Content/TileMapData/" + fileName).Where(l => l != "").ToArray();
             var columns = int.Parse(lines[0].Split("x")[0]);
@@ -68,7 +69,6 @@ namespace Mono_Ether {
         private static Texture2D[] _textures;
         public static Vector2 Size => _textures[0].Size();
         public static float Length => Size.X;
-        private Texture2D _texture;
         public int Id;
         public readonly Vector2 Pos;
         public Vector2 WorldPos => Pos * Length;
@@ -80,12 +80,14 @@ namespace Mono_Ether {
 
         }
         public static void LoadContent(ContentManager content) {
-            List<Texture2D> textureList = new List<Texture2D>();
-            textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/PinkNeon"));
-            textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/BlueNeon"));
-            textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/GreenNeon"));
-            textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/RedNeon"));
-            textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/PurpleNeon"));
+            List<Texture2D> textureList = new List<Texture2D>
+            {
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/PinkNeon"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/BlueNeon"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/GreenNeon"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/RedNeon"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/PurpleNeon")
+            };
             //textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/ASDFASDF"));
             _textures = textureList.ToArray();
         }

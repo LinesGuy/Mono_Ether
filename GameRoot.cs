@@ -29,7 +29,7 @@ namespace Mono_Ether {
             /* If debug mode is enabled, skip straight to the testing stage */
             if (GameSettings.DebugMode) {
                 MediaPlayer.Stop();
-                ScreenManager.AddScreen(new GameScreen(GraphicsDevice));
+                ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "debugMap.txt"));
             }
         }
         protected override void UnloadContent() {

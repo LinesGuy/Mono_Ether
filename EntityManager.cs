@@ -24,7 +24,10 @@ namespace Mono_Ether {
         private void AddEntity(Entity entity) {
             Entities.Add(entity);
             if (entity is PlayerShip player)
+            {
+                player.PlayerShipIndex = Players.Count;
                 Players.Add(player);
+            }
             else if (entity is Enemy enemy)
                 Enemies.Add(enemy);
             //else if (entity is Bullet bullet)

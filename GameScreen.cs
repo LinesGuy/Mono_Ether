@@ -5,14 +5,15 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Mono_Ether {
     public class GameScreen : GameState {
         private readonly EntityManager _entityManager = new EntityManager();
-        private readonly TileMap _tileMap = new TileMap("debugMap.txt");
+        private readonly TileMap _tileMap;
         private readonly Camera _camera = new Camera();
         private string _mode = "Playing";
-        public GameScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
-
+        public GameScreen(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice)
+        {
+            _tileMap = new TileMap(mapFileName);
         }
         public override void Initialize() {
-            _entityManager.Add(new PlayerShip());
+            _entityManager.Add(new PlayerShip() { Position = _tileMap.WorldSize / 2 });
         }
         public override void Suspend() {
 
@@ -33,7 +34,6 @@ namespace Mono_Ether {
         public override void Update(GameTime gameTime) {
             /* Handle user inputs */
             _camera.Update();
-
             _entityManager.Update(gameTime);
         }
         public override void Draw(SpriteBatch batch) {
