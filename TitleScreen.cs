@@ -149,6 +149,7 @@ namespace Mono_Ether {
             }
         }
         public override void Draw(SpriteBatch batch) {
+            batch.Begin();
             switch (_state) {
                 case "Title press any key":
                     DrawBg(batch);
@@ -217,6 +218,7 @@ namespace Mono_Ether {
                     DrawBg(batch);
                     break;
             }
+            batch.End();
         }
         private void SetState(string state) {
             _state = state;
