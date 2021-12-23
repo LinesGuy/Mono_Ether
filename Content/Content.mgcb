@@ -27,6 +27,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/NovaSquare48.spritefont
 
+#begin Songs/GameScreen.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/GameScreen.mp3
+
 #begin Songs/TitleScreen.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
