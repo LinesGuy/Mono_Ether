@@ -41,10 +41,10 @@ namespace Mono_Ether {
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime) {
-            _batch.Begin();
             /* Draw current screen */
             ScreenManager.CurrentScreen.Draw(_batch);
             /* Draw FPS (if enabled) */
+            _batch.Begin();
             if (GameSettings.ShowFps) {
                 var Font = GlobalAssets.NovaSquare24;
                 var Text = $"{(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}FPS";
