@@ -6,11 +6,11 @@ namespace Mono_Ether {
     {
         protected Texture2D Image = GlobalAssets.Default;
         private readonly Color _color = Color.White;
-        public Vector2 Position;
-        public Vector2 Velocity;
-        public float Orientation;
+        public Vector2 Position = Vector2.Zero;
+        public Vector2 Velocity = Vector2.Zero;
+        public float Orientation = 0f;
         public readonly float Radius;
-        public bool IsExpired;
+        public bool IsExpired = false;
         private Vector2 Size => Image.Size();
         public abstract void Update(GameTime gameTime);
         public virtual void Draw(SpriteBatch batch, Camera camera) {
