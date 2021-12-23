@@ -97,7 +97,7 @@ namespace Mono_Ether {
             if (IsBeingDragged) {
                 if (Input.WasLeftMouseJustUp)
                     IsBeingDragged = false;
-                Value = (Input.Mouse.X - Width / 2f) / Width;
+                Value = (Input.Mouse.X - SliderPos.X + Width / 2f) / Width;
                 Value = Math.Clamp(Value, 0f, 1f);
                 _clickSfxDelay++;
                 if (_clickSfxDelay >= 6) {
