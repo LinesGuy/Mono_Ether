@@ -47,6 +47,12 @@ namespace Mono_Ether {
             if (Input.WasKeyJustDown(Keys.Escape)) ScreenManager.RemoveScreen();
             /* Update all entity positions and handle collisions */
             _entityManager.Update(gameTime);
+            // TODO temp code to summon many particles
+            if (Input.Keyboard.IsKeyDown(Keys.P))
+            {
+                for (int i = 0; i < 1000; i++)
+                    _particleManager.Add(new Particle(Particle.Laser, Color.White, new Vector2(100f), new Vector2(5f), 0.99f, TimeSpan.FromSeconds(3)));
+            }
             _particleManager.Update(gameTime);
         }
         public override void Draw(SpriteBatch batch) {
