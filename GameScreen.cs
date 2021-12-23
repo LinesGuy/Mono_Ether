@@ -5,7 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Mono_Ether {
     public class GameScreen : GameState {
         private readonly EntityManager _entityManager = new EntityManager();
+        private readonly TileMap _tileMap = new TileMap("debugMap.txt");
         private readonly Camera _camera = new Camera();
+        private string _mode = "Playing";
         public GameScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
 
         }
@@ -21,10 +23,12 @@ namespace Mono_Ether {
         public override void LoadContent(ContentManager content) {
             /* Load textures */
             PlayerShip.Texture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
+            Tile.LoadContent(content);
         }
         public override void UnloadContent() {
             /* Unload textures */
             PlayerShip.Texture = null;
+            Tile.UnloadContent();
         }
         public override void Update(GameTime gameTime) {
             /* Handle user inputs */
@@ -34,8 +38,13 @@ namespace Mono_Ether {
         }
         public override void Draw(SpriteBatch batch) {
             GraphicsDevice.Clear(Color.Black); // TODO remove
-            batch.DrawString(GlobalAssets.NovaSquare24, "asdf", Vector2.Zero, Color.White); // TODO remove
+            batch.Begin(samplerState: SamplerState.PointClamp);
             _entityManager.Draw(batch, _camera);
+            _tileMap.Draw(batch, _camera, _mode == "Editor");
+            batch.End();
+            batch.Begin();
+
+            batch.End();
         }
     }
 }
