@@ -1,6 +1,8 @@
 # Mono_Ether
 project for my college computer science coursework
 
+currently being rewritten over at https://github.com/LinesGuy/Mono_Ether/tree/Rewrite
+
 # Demos
 All videos shown here are downscaled to 480p and have no sound(game resolution is 1366x768 and has sound)
 
