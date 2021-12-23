@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -53,6 +54,9 @@ namespace Mono_Ether {
                 Orientation = Velocity.ToAngle();
             #endregion
             #region Exhaust fire
+
+            if (Velocity.LengthSquared() > 0.1f)
+                ParticleTemplates.ExhaustFire(Position, Orientation + MathF.PI);
             /* TODO add exhaust fire
             if (Velocity.LengthSquared() > 0.1f) {
                 float orientation = Velocity.ToAngle();
@@ -68,7 +72,7 @@ namespace Mono_Ether {
                 Vector2 velMid = baseVel + Rand.NextVector2(0, 1);
                 EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(velMid, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.Glow, pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LaserGlow, pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(velMid, ParticleType.Enemy));
 
                 // Side particle streams
@@ -78,9 +82,9 @@ namespace Mono_Ether {
                     new ParticleState(vel1, ParticleType.Enemy));
                 EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel2, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LaserGlow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel1, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.Glow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
+                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LaserGlow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
                     new ParticleState(vel2, ParticleType.Enemy));
             }
             */
