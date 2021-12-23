@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,17 +8,20 @@ namespace Mono_Ether {
     public class GameScreen : GameState {
         private readonly EntityManager _entityManager = new EntityManager();
         private readonly TileMap _tileMap;
-        private readonly Camera _camera = new Camera();
         private string _mode = "Playing";
         public GameScreen(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
             /* Load tile map data from filename */
             _tileMap = new TileMap(mapFileName);
         }
         public override void Initialize() {
-            /* Add player one */
-            _entityManager.Add(new PlayerShip() { Position = _tileMap.WorldSize / 2 });
-            /* Set camera initial position to player position */
-            _camera.Position = _entityManager.Players.First().Position;
+            /* Add two players */
+            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X * 2f / 3f, GameSettings.ScreenSize.Y)));
+            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X * 2f / 3f, 0, GameSettings.ScreenSize.X / 3f, GameSettings.ScreenSize.Y)));
+            /* Add four players */
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 100f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(0f, 100f), MyUtils.ViewportF(0, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
         }
         public override void Suspend() {
 
@@ -37,26 +40,31 @@ namespace Mono_Ether {
         public override void Update(GameTime gameTime) {
             // TODO remove esc to return
             if (Input.WasKeyJustDown(Keys.Escape)) ScreenManager.RemoveScreen();
-            /* Handle camera position based on user input */
-            _camera.Update();
             /* Update all entity positions and handle collisions */
             _entityManager.Update(gameTime);
-            /* Lerp camera if enabled */
-            if (_camera.IsLerping) {
-                // TODO lerp to average of all player pos', not just player1
-                _camera.LerpTo(_entityManager.Players.First().Position);
-            }
         }
         public override void Draw(SpriteBatch batch) {
-            GraphicsDevice.Clear(Color.Black); // TODO remove
-            batch.Begin(samplerState: SamplerState.PointClamp);
-            /* Draw all entities (inc players, bullets, powerpacks etc) */
-            _entityManager.Draw(batch, _camera);
-            /* Draw tilemap with tile boundaries if in editor mode */
-            _tileMap.Draw(batch, _camera, _mode == "Editor");
-            batch.End();
+            //GraphicsDevice.Clear(Color.Black); // TODO remove
+            foreach (PlayerShip player in _entityManager.Players) {
+                GraphicsDevice.SetRenderTarget(player.PlayerCamera.Screen);
+                batch.Begin(samplerState: SamplerState.PointClamp);
+                Color backgroundColor = player.Index switch {
+                    PlayerIndex.One => new Color(32, 0, 0),
+                    PlayerIndex.Two => new Color(0, 32, 0),
+                    PlayerIndex.Three => new Color(0, 0, 32),
+                    PlayerIndex.Four => new Color(32, 0, 32),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, player.PlayerCamera.ScreenSize.X, player.PlayerCamera.ScreenSize.Y), backgroundColor);
+                _entityManager.Draw(batch, player.PlayerCamera); /* Draw all entities (inc players, bullets, powerpacks etc) */
+                _tileMap.Draw(batch, player.PlayerCamera, _mode == "Editor"); /* Draw tilemap with tile boundaries if in editor mode */
+                batch.End();
+            }
+            GraphicsDevice.SetRenderTarget(null);
             batch.Begin();
-
+            foreach (PlayerShip player in _entityManager.Players) {
+                batch.Draw(player.PlayerCamera.Screen, player.PlayerCamera.CameraViewport.Bounds, Color.White);
+            }
             batch.End();
         }
     }

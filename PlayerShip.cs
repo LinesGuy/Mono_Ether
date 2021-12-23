@@ -5,8 +5,11 @@ using Microsoft.Xna.Framework.Input;
 namespace Mono_Ether {
     public class PlayerShip : Entity {
         public static Texture2D Texture;
-        public int PlayerShipIndex;
-        public PlayerShip() {
+        public PlayerIndex Index;
+        public Camera PlayerCamera;
+        public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
+            Position = position;
+            PlayerCamera = new Camera(graphicsDevice, cameraViewport);
             Image = Texture;
         }
         public override void Update(GameTime gameTime) {
@@ -15,7 +18,7 @@ namespace Mono_Ether {
             const float acceleration = 5f;
             // TODO apply speed powerpacks
             Vector2 direction = Vector2.Zero;
-            if (PlayerShipIndex == 0) {
+            if (Index == PlayerIndex.One) {
                 if (Input.Keyboard.IsKeyDown(Keys.A))
                     direction.X -= 1;
                 if (Input.Keyboard.IsKeyDown(Keys.D))
@@ -23,6 +26,18 @@ namespace Mono_Ether {
                 if (Input.Keyboard.IsKeyDown(Keys.W))
                     direction.Y -= 1;
                 if (Input.Keyboard.IsKeyDown(Keys.S))
+                    direction.Y += 1;
+            } else if (Index == PlayerIndex.Two)
+            {
+                direction += Input.GamePad.ThumbSticks.Left;
+                direction.Y = -direction.Y; // Joystick up = negative Y
+                if (Input.GamePad.DPad.Left == ButtonState.Pressed)
+                    direction.X -= 1;
+                if (Input.GamePad.DPad.Right == ButtonState.Pressed)
+                    direction.X += 1;
+                if (Input.GamePad.DPad.Up == ButtonState.Pressed)
+                    direction.Y -= 1;
+                if (Input.GamePad.DPad.Down == ButtonState.Pressed)
                     direction.Y += 1;
             }
 
@@ -109,7 +124,7 @@ namespace Mono_Ether {
                 if (cooldownRemaining > 0)
                     cooldownRemaining--;
 
-                if (Input.WasRightButtonJustDown()) {
+                if (Input.WasRightMouseJustDown()) {
                     EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
                 }
             }
@@ -125,6 +140,8 @@ namespace Mono_Ether {
             activePowerPacks = activePowerPacks.Where(x => !x.isExpended).ToList();
             */
             #endregion Power packs
+            /* Update player camera */
+            PlayerCamera.Update(Position, Index);
         }
     }
 }

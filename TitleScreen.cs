@@ -110,7 +110,7 @@ namespace Mono_Ether {
             _timeSinceTransition += gameTime.ElapsedGameTime;
             switch (_state) {
                 case "Title press any key":
-                    if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftButtonJustDown) {
+                    if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftMouseJustDown) {
                         SetState("Title press any key -> Title");
                         GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     }
@@ -120,7 +120,7 @@ namespace Mono_Ether {
                     HandleTitleButtons(gameTime);
                     break;
                 case "Title":
-                    if (Input.WasRightButtonJustDown) {
+                    if (Input.WasRightMouseJustDown) {
                         SetState("Title press any key");
                     }
                     HandleTitleButtons(gameTime);
@@ -340,9 +340,9 @@ namespace Mono_Ether {
             batch.Draw(_treeLeaf, new Vector2(ScreenSize.X / 2f + 680f, ScreenSize.Y / 2f - 20f) + offset, null, Color.White, 0.1f + MathF.Sin((float)_timeSinceStart.TotalSeconds / 1.15f) / 2.7f, new Vector2(0, _treeLeaf.Height), 1f, 0, 0);
             /* SubBars */
             for (int i = 0; i < 6; i++)
-                batch.Draw(_subBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + MathF.Exp(((float)_timeSinceStart.TotalSeconds * 30f + i * 20) % 120 / 16f) + offset.Y), null, Color.White, 0f, _subBar.Size() / 2f, 1f, 0, 0);
+                batch.Draw(_subBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + MathF.Exp(((float)_timeSinceStart.TotalSeconds * 30f + i * 20) % 120 / 16f) + offset.Y), null, Color.White, 0f, _subBar.Size() / 2f, new Vector2(ScreenSize.X / _subBar.Width, 1f), 0, 0);
             /* MainBar */
-            batch.Draw(_mainBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + offset.Y), null, Color.White, 0f, _mainBar.Size() / 2f, 1f, 0, 0);
+            batch.Draw(_mainBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + offset.Y), null, Color.White, 0f, _mainBar.Size() / 2f, new Vector2(ScreenSize.X / _mainBar.Width, 1f), 0, 0);
         }
         private void DrawLogo(SpriteBatch batch, Vector2 offset) {
             offset += new Vector2(-Input.Mouse.X / ScreenSize.X - 0.5f,

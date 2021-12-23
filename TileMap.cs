@@ -36,11 +36,11 @@ namespace Mono_Ether {
              * anything else, it will draw AT MOST twice as many tiles than is actually visible, but for most other angles it will draw far
              * less than this. Even in the worst case scenario this is significantly more efficient than drawing all tiles.
              */
-            var corners = new Vector2[] {
+            var corners = new[] {
                 camera.ScreenToWorld(Vector2.Zero), // Top-left
-                camera.ScreenToWorld(GameSettings.ScreenSize), // Bottom-right
-                camera.ScreenToWorld(new Vector2(GameSettings.ScreenSize.X, 0)), // Top-right
-                camera.ScreenToWorld(new Vector2(0, GameSettings.ScreenSize.Y)) // Bottom-left
+                camera.ScreenToWorld(camera.ScreenSize), // Bottom-right
+                camera.ScreenToWorld(new Vector2(camera.ScreenSize.X, 0)), // Top-right
+                camera.ScreenToWorld(new Vector2(0, camera.ScreenSize.Y)) // Bottom-left
             };
             var xCoords = corners.Select(v => v.X).ToList();
             var yCoords = corners.Select(v => v.Y).ToList();

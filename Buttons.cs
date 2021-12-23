@@ -64,7 +64,7 @@ namespace Mono_Ether {
         {
             get
             {
-                if (!Input.WasLeftButtonJustDown)
+                if (!Input.WasLeftMouseJustDown)
                     return null;
                 foreach (Button button in Buttons) {
                     if (button.IsHovered)
@@ -92,10 +92,10 @@ namespace Mono_Ether {
         }
         public void Update() {
             IsHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), SliderBallPos) < Radius * Radius;
-            if (!IsBeingDragged && IsHovered && Input.WasLeftButtonJustDown)
+            if (!IsBeingDragged && IsHovered && Input.WasLeftMouseJustDown)
                 IsBeingDragged = true;
             if (IsBeingDragged) {
-                if (Input.WasLeftButtonJustUp)
+                if (Input.WasLeftMouseJustUp)
                     IsBeingDragged = false;
                 Value = (Input.Mouse.X - Width / 2f) / Width;
                 Value = Math.Clamp(Value, 0f, 1f);

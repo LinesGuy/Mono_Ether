@@ -25,7 +25,14 @@ namespace Mono_Ether {
             Entities.Add(entity);
             if (entity is PlayerShip player)
             {
-                player.PlayerShipIndex = Players.Count;
+                player.Index = Players.Count switch
+                {
+                    0 => PlayerIndex.One,
+                    1 => PlayerIndex.Two,
+                    2 => PlayerIndex.Three,
+                    3 => PlayerIndex.Four,
+                    _ => player.Index
+                };
                 Players.Add(player);
             }
             else if (entity is Enemy enemy)
