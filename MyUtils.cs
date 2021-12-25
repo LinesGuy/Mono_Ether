@@ -17,5 +17,6 @@ namespace Mono_Ether {
         public static float TaxicabDistanceTo(this Vector2 a, Vector2 b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
         public static Vector2 FromPolar(float angle, float magnitude) => magnitude * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         public static float GetTimeScalar(GameTime gameTime) => (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
+        public static Vector2 NextVector2(this Random rand, float minLength, float maxLength) => FromPolar(rand.NextFloat(0f, MathHelper.TwoPi), rand.NextFloat(minLength, maxLength));
     }
 }

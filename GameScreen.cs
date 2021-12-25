@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,12 +35,10 @@ namespace Mono_Ether {
         }
         public override void LoadContent(ContentManager content) {
             PlayerShip.Texture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
-            Particle.LoadContent(content);
             Tile.LoadContent(content);
         }
         public override void UnloadContent() {
             PlayerShip.Texture = null;
-            Particle.UnloadContent();
             Tile.UnloadContent();
         }
         public override void Update(GameTime gameTime) {
@@ -50,8 +49,8 @@ namespace Mono_Ether {
             // TODO temp code to summon many particles
             if (Input.Keyboard.IsKeyDown(Keys.P))
             {
-                for (int i = 0; i < 1000; i++)
-                    _particleManager.Add(new Particle(Particle.Laser, Color.White, new Vector2(100f), new Vector2(5f), 0.99f, TimeSpan.FromSeconds(3)));
+                //for (int i = 0; i < 1000; i++)
+                    //_particleManager.Add(new Particle(Particle.Laser, Color.White, new Vector2(100f), new Vector2(5f), 0.99f, TimeSpan.FromSeconds(3)));
             }
             _particleManager.Update(gameTime);
         }

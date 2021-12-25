@@ -20,34 +20,31 @@ namespace Mono_Ether {
             const float acceleration = 5f;
             // TODO apply speed powerpacks
             var direction = Vector2.Zero;
-            switch (Index)
-            {
-                case PlayerIndex.One:
-                {
-                    if (Input.Keyboard.IsKeyDown(Keys.A))
-                        direction.X -= 1;
-                    if (Input.Keyboard.IsKeyDown(Keys.D))
-                        direction.X += 1;
-                    if (Input.Keyboard.IsKeyDown(Keys.W))
-                        direction.Y -= 1;
-                    if (Input.Keyboard.IsKeyDown(Keys.S))
-                        direction.Y += 1;
-                    break;
-                }
-                case PlayerIndex.Two:
-                {
-                    direction += Input.GamePad.ThumbSticks.Left;
-                    direction.Y = -direction.Y; // Joystick up = negative Y
-                    if (Input.GamePad.DPad.Left == ButtonState.Pressed)
-                        direction.X -= 1;
-                    if (Input.GamePad.DPad.Right == ButtonState.Pressed)
-                        direction.X += 1;
-                    if (Input.GamePad.DPad.Up == ButtonState.Pressed)
-                        direction.Y -= 1;
-                    if (Input.GamePad.DPad.Down == ButtonState.Pressed)
-                        direction.Y += 1;
-                    break;
-                }
+            switch (Index) {
+                case PlayerIndex.One: {
+                        if (Input.Keyboard.IsKeyDown(Keys.A))
+                            direction.X -= 1;
+                        if (Input.Keyboard.IsKeyDown(Keys.D))
+                            direction.X += 1;
+                        if (Input.Keyboard.IsKeyDown(Keys.W))
+                            direction.Y -= 1;
+                        if (Input.Keyboard.IsKeyDown(Keys.S))
+                            direction.Y += 1;
+                        break;
+                    }
+                case PlayerIndex.Two: {
+                        direction += Input.GamePad.ThumbSticks.Left;
+                        direction.Y = -direction.Y; // Joystick up = negative Y
+                        if (Input.GamePad.DPad.Left == ButtonState.Pressed)
+                            direction.X -= 1;
+                        if (Input.GamePad.DPad.Right == ButtonState.Pressed)
+                            direction.X += 1;
+                        if (Input.GamePad.DPad.Up == ButtonState.Pressed)
+                            direction.Y -= 1;
+                        if (Input.GamePad.DPad.Down == ButtonState.Pressed)
+                            direction.Y += 1;
+                        break;
+                    }
             }
 
             if (direction.LengthSquared() > 1)
@@ -65,8 +62,8 @@ namespace Mono_Ether {
             _exhaustFireBuffer += gameTime.ElapsedGameTime;
             if (_exhaustFireBuffer > TimeSpan.FromMilliseconds(16)) {
                 _exhaustFireBuffer -= TimeSpan.FromMilliseconds(16);
-                if (Velocity.LengthSquared() > 0.1) {
-                    ParticleTemplates.ExhaustFire(Position, Orientation + MathF.PI);
+                if (direction.LengthSquared() >= 0.1f) {
+                    ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI);
                 }
             }
 

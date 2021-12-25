@@ -9,9 +9,9 @@ namespace Mono_Ether {
         public List<Entity> Entities = new List<Entity>();
         public List<PlayerShip> Players = new List<PlayerShip>();
         public List<Enemy> Enemies = new List<Enemy>();
-        private bool _isUpdating = false;
+        private bool _isUpdating;
 
-        private List<Entity> _addedEntities = new List<Entity>();
+        private readonly List<Entity> _addedEntities = new List<Entity>();
         public EntityManager() {
 
         }
