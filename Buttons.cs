@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether {
@@ -78,16 +75,16 @@ namespace Mono_Ether {
         private int _clickSfxDelay;
         public Vector2 SliderPos; // Centre of slider
         public float Width;
-        public SliderType Type;
+        public string Text;
         public float Value;
         public bool IsHovered;
         public bool IsBeingDragged;
         private Vector2 SliderBallPos => new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
         private const float Radius = 20f;
-        public Slider(Vector2 sliderPos, float width, SliderType type, float value = 0.5f) {
+        public Slider(Vector2 sliderPos, float width, string text, float value = 0.5f) {
             SliderPos = sliderPos;
             Width = width;
-            Type = type;
+            Text = text;
             Value = value;
         }
         public void Update() {
@@ -109,7 +106,7 @@ namespace Mono_Ether {
         public void Draw(SpriteBatch batch, Vector2 offset) {
             batch.Draw(GlobalAssets.Pixel, SliderPos + offset, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
             batch.Draw(GlobalAssets.SliderBall, SliderBallPos + offset, null, IsHovered ? Color.LightCyan : Color.White, 0f, GlobalAssets.SliderBall.Size() / 2f, 1f, 0, 0); // Ball
-            batch.DrawStringCentered(GlobalAssets.NovaSquare24, MyUtils.SliderTypeToName(Type), SliderPos + new Vector2(0f, -50f) + offset, Color.White);
+            batch.DrawStringCentered(GlobalAssets.NovaSquare24, Text, SliderPos + new Vector2(0f, -50f) + offset, Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"{Value:0.00}", SliderPos + new Vector2(Width / 2f + 50f, -GlobalAssets.NovaSquare24.MeasureString("a").Y / 2f) + offset,
                 Color.White);
         }
@@ -117,11 +114,11 @@ namespace Mono_Ether {
     public class SliderManager {
         public List<Slider> Sliders = new List<Slider>();
         public void Draw(SpriteBatch batch) {
-            foreach (Slider slider in Sliders)
+            foreach (var slider in Sliders)
                 slider.Draw(batch, Vector2.Zero);
         }
         public void Draw(SpriteBatch batch, Vector2 globalOffset) {
-            foreach (Slider slider in Sliders)
+            foreach (var slider in Sliders)
                 slider.Draw(batch, globalOffset);
         }
     }
@@ -136,12 +133,12 @@ namespace Mono_Ether {
             State = state;
             Text = text;
         }
-        public void Update(GameTime gameTime) {
+        public void Update() {
             IsHovered = MyUtils.RectangleF(Pos.X - Size.X / 2f, Pos.Y - Size.Y / 2f, Size.X, Size.Y).Contains(Input.Mouse.Position);
         }
         public void Draw(SpriteBatch batch, Vector2 offset) {
-            batch.Draw(State ? GlobalAssets.SwitchOn : GlobalAssets.SwitchOff, Pos, null, Color.White, 0f, Size / 2f, 1f, 0, 0);
-            batch.DrawString(GlobalAssets.NovaSquare24, Text, Pos + new Vector2(75f, -GlobalAssets.NovaSquare24.MeasureString(Text).Y / 2f), Color.White);
+            batch.Draw(State ? GlobalAssets.SwitchOn : GlobalAssets.SwitchOff, Pos + offset, null, Color.White, 0f, Size / 2f, 1f, 0, 0);
+            batch.DrawString(GlobalAssets.NovaSquare24, Text, Pos + new Vector2(75f, -GlobalAssets.NovaSquare24.MeasureString(Text).Y / 2f) + offset, Color.White);
         }
     }
     public class SwitcherManager

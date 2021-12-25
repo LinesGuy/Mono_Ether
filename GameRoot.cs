@@ -66,8 +66,8 @@ namespace Mono_Ether {
             _drawHistory.Enqueue(_drawStopwatch.ElapsedTicks / 167000f);
             if (_drawHistory.Count > HistogramLength) _drawHistory.Dequeue();
             /* Draw FPS (if enabled) */
-            _batch.Begin();
             if (GameSettings.ShowFps) {
+                _batch.Begin();
                 var Font = GlobalAssets.NovaSquare24;
                 var Text = $"{(int)(1 / gameTime.ElapsedGameTime.TotalSeconds)}FPS";
                 _batch.DrawString(Font, Text,
@@ -78,15 +78,14 @@ namespace Mono_Ether {
                 Text = $"{(int)(_updateStopwatch.ElapsedTicks / 1670f)}% update";
                 _batch.DrawString(Font, Text,
                     GameSettings.ScreenSize - Font.MeasureString(Text) + new Vector2(-10f, -63f), Color.White);
+                /* Histogram */
+                for (var i = 0; i < _drawHistory.Count; i++) {
+                    _batch.Draw(GlobalAssets.Pixel, new Vector2(HistogramLength - i, GameSettings.ScreenSize.Y), null, Color.CornflowerBlue, 0f, Vector2.One, new Vector2(1f, 100f * _updateHistory.ToList()[i]), 0, 0);
+                    _batch.Draw(GlobalAssets.Pixel, new Vector2(HistogramLength - i, GameSettings.ScreenSize.Y - 100f * _updateHistory.ToList()[i]), null, Color.Red, 0f, Vector2.One, new Vector2(1f, 100f * _drawHistory.ToList()[i]), 0, 0);
+                }
+                _batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0f, GameSettings.ScreenSize.Y - 100f, HistogramLength, 2f), Color.White);
+                _batch.End();
             }
-
-            for (int i = 0; i < _drawHistory.Count; i++)
-            {
-                _batch.Draw(GlobalAssets.Pixel, new Vector2(HistogramLength - i, GameSettings.ScreenSize.Y), null, Color.CornflowerBlue, 0f, Vector2.One, new Vector2(1f, 100f * _updateHistory.ToList()[i]), 0, 0);
-                _batch.Draw(GlobalAssets.Pixel, new Vector2(HistogramLength - i, GameSettings.ScreenSize.Y - 100f * _updateHistory.ToList()[i]), null, Color.Red, 0f, Vector2.One, new Vector2(1f, 100f * _drawHistory.ToList()[i]), 0, 0);
-            }
-            _batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF( 0f, GameSettings.ScreenSize.Y - 100f, HistogramLength, 2f), Color.White);
-            _batch.End();
             base.Draw(gameTime);
         }
     }

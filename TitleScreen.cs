@@ -55,13 +55,13 @@ namespace Mono_Ether {
                 _carouselButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X - 300f * MathF.Exp(-i * i / 25f), ScreenSize.Y / 2f + i * 120f), new Vector2(500, 120), levels[i]));
             /* Add settings window buttons, sliders and switchers */
             _settingsButtonManager.Buttons.Add(new Button(ScreenSize / 2f + new Vector2(0f, 250f), new Vector2(200, 120), "Back"));
-            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, -200f), 400f, SliderType.Master, MasterVolume));
-            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, -50f), 400f, SliderType.Sfx, SoundEffectVolume));
-            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, 100f), 400f, SliderType.Music, MusicVolume));
-            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, -200f), DebugMode, "Debug mode"));
-            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, -100f), VSync, "VSync"));
-            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, 0f), ShowFps, "Show FPS"));
-            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, 100f), AllowWindowResizing, "Allow window resizing"));
+            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-325f, -200f), 400f, "Master volume", MasterVolume));
+            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-325f, -50f), 400f, "SFX volume", SoundEffectVolume));
+            _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-325f, 100f), 400f, "Music volume", MusicVolume));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, -200f), DebugMode, "Debug mode"));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, -100f), VSync, "VSync"));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, 0f), ShowFps, "Show FPS"));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, 100f), AllowWindowResizing, "Allow window resizing"));
             /* Create lists of small/big stars with random positions */
             for (var i = 0; i < 150; i++)
                 _smallStars.Add(new Vector2(_rand.Next(0, (int)ScreenSize.X), _rand.Next(0, (int)ScreenSize.Y)));
@@ -158,6 +158,7 @@ namespace Mono_Ether {
         }
         public override void Draw(SpriteBatch batch) {
             batch.Begin();
+            Vector2 offset;
             switch (_state) {
                 case "Title press any key":
                     DrawBg(batch);
@@ -190,17 +191,23 @@ namespace Mono_Ether {
                     DrawBg(batch);
                     DrawLogo(batch, new Vector2(0, -20f));
                     _titleButtonManager.Draw(batch);
-                    batch.Draw(GlobalAssets.Pixel, MyUtils.EInterpolate(new Vector2(ScreenSize.X / 2f, ScreenSize.Y * 1.5f), ScreenSize / 2f, _timeSinceTransition.Milliseconds), null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
-                    _settingsSliderManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, ScreenSize.Y), Vector2.Zero, _timeSinceTransition.Milliseconds));
-                    _settingsButtonManager.Draw(batch, MyUtils.EInterpolate(new Vector2(0f, ScreenSize.Y), Vector2.Zero, _timeSinceTransition.Milliseconds));
+                    offset = MyUtils.EInterpolate(new Vector2(0f, ScreenSize.Y), Vector2.Zero,
+                        _timeSinceTransition.Milliseconds);
+                    batch.Draw(GlobalAssets.Pixel, ScreenSize / 2f + offset, null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
+                    _settingsSliderManager.Draw(batch, offset);
+                    _settingsButtonManager.Draw(batch, offset);
+                    _settingsSwitcherManager.Draw(batch, offset);
                     break;
                 case "Settings -> Title":
                     DrawBg(batch);
                     DrawLogo(batch, new Vector2(0, -20f));
                     _titleButtonManager.Draw(batch);
-                    batch.Draw(GlobalAssets.Pixel, MyUtils.EInterpolate(ScreenSize / 2f, new Vector2(ScreenSize.X / 2f, ScreenSize.Y * 1.5f), _timeSinceTransition.Milliseconds), null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
-                    _settingsSliderManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, ScreenSize.Y), _timeSinceTransition.Milliseconds));
-                    _settingsButtonManager.Draw(batch, MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, ScreenSize.Y), _timeSinceTransition.Milliseconds));
+                    offset = MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, ScreenSize.Y),
+                        _timeSinceTransition.Milliseconds);
+                    batch.Draw(GlobalAssets.Pixel, ScreenSize / 2f + offset, null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
+                    _settingsSliderManager.Draw(batch, offset);
+                    _settingsButtonManager.Draw(batch, offset);
+                    _settingsSwitcherManager.Draw(batch, offset);
                     break;
                 case "Settings":
                     DrawBg(batch);
@@ -263,14 +270,14 @@ namespace Mono_Ether {
             foreach (var slider in _settingsSliderManager.Sliders) {
                 slider.Update();
                 if (!slider.IsBeingDragged) continue;
-                switch (slider.Type) {
-                    case SliderType.Master:
+                switch (slider.Text) {
+                    case "Master volume":
                         MasterVolume = slider.Value;
                         break;
-                    case SliderType.Sfx:
+                    case "SFX volume":
                         SoundEffectVolume = slider.Value;
                         break;
-                    case SliderType.Music:
+                    case "Music volume":
                         MusicVolume = slider.Value;
                         break;
                     default:
@@ -278,7 +285,7 @@ namespace Mono_Ether {
                 }
                 ApplyChanges();
             }
-            _settingsSwitcherManager.Switchers.ForEach(s => s.Update(gameTime));
+            _settingsSwitcherManager.Switchers.ForEach(s => s.Update());
             if (!Input.WasLeftMouseJustDown) return;
             foreach (var switcher in _settingsSwitcherManager.Switchers.Where(switcher => switcher.IsHovered))
             {

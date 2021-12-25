@@ -19,27 +19,35 @@ namespace Mono_Ether {
             #region Movement
             const float acceleration = 5f;
             // TODO apply speed powerpacks
-            Vector2 direction = Vector2.Zero;
-            if (Index == PlayerIndex.One) {
-                if (Input.Keyboard.IsKeyDown(Keys.A))
-                    direction.X -= 1;
-                if (Input.Keyboard.IsKeyDown(Keys.D))
-                    direction.X += 1;
-                if (Input.Keyboard.IsKeyDown(Keys.W))
-                    direction.Y -= 1;
-                if (Input.Keyboard.IsKeyDown(Keys.S))
-                    direction.Y += 1;
-            } else if (Index == PlayerIndex.Two) {
-                direction += Input.GamePad.ThumbSticks.Left;
-                direction.Y = -direction.Y; // Joystick up = negative Y
-                if (Input.GamePad.DPad.Left == ButtonState.Pressed)
-                    direction.X -= 1;
-                if (Input.GamePad.DPad.Right == ButtonState.Pressed)
-                    direction.X += 1;
-                if (Input.GamePad.DPad.Up == ButtonState.Pressed)
-                    direction.Y -= 1;
-                if (Input.GamePad.DPad.Down == ButtonState.Pressed)
-                    direction.Y += 1;
+            var direction = Vector2.Zero;
+            switch (Index)
+            {
+                case PlayerIndex.One:
+                {
+                    if (Input.Keyboard.IsKeyDown(Keys.A))
+                        direction.X -= 1;
+                    if (Input.Keyboard.IsKeyDown(Keys.D))
+                        direction.X += 1;
+                    if (Input.Keyboard.IsKeyDown(Keys.W))
+                        direction.Y -= 1;
+                    if (Input.Keyboard.IsKeyDown(Keys.S))
+                        direction.Y += 1;
+                    break;
+                }
+                case PlayerIndex.Two:
+                {
+                    direction += Input.GamePad.ThumbSticks.Left;
+                    direction.Y = -direction.Y; // Joystick up = negative Y
+                    if (Input.GamePad.DPad.Left == ButtonState.Pressed)
+                        direction.X -= 1;
+                    if (Input.GamePad.DPad.Right == ButtonState.Pressed)
+                        direction.X += 1;
+                    if (Input.GamePad.DPad.Up == ButtonState.Pressed)
+                        direction.Y -= 1;
+                    if (Input.GamePad.DPad.Down == ButtonState.Pressed)
+                        direction.Y += 1;
+                    break;
+                }
             }
 
             if (direction.LengthSquared() > 1)
@@ -47,7 +55,7 @@ namespace Mono_Ether {
             //direction = direction.Rotate(-camera.Orientation); // TODO workaround?
 
             Velocity += acceleration * direction * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
-            Velocity /= 1f + 0.5f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
+            Velocity /= 1f + 0.4f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             Position += Velocity * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             /* Update entity orientation if velocity is non-zero */
             if (Velocity.LengthSquared() > 0)
@@ -61,7 +69,6 @@ namespace Mono_Ether {
                     ParticleTemplates.ExhaustFire(Position, Orientation + MathF.PI);
                 }
             }
-
 
             /* TODO add exhaust fire
             if (Velocity.LengthSquared() > 0.1f) {

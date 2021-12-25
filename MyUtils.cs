@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Mono_Ether {
-    public enum SliderType { Master, Sfx, Music }
     internal static class MyUtils {
         public static Viewport ViewportF(float x, float y, float width, float height) => new Viewport((int)x, (int)y, (int)width, (int)height);
         public static Rectangle RectangleF(float x, float y, float width, float height) => new Rectangle((int)x, (int)y, (int)width, (int)height);
@@ -16,18 +16,6 @@ namespace Mono_Ether {
         public static Vector2 ScaleTo(this Vector2 vector, float length) => vector * (length / vector.Length());
         public static float TaxicabDistanceTo(this Vector2 a, Vector2 b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
         public static Vector2 FromPolar(float angle, float magnitude) => magnitude * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-        public static Vector2 NextVector2(this Random rand, float minLength, float maxLength) {
-            double theta = rand.NextDouble() * 2 * Math.PI;
-            float length = rand.NextFloat(minLength, maxLength);
-            return new Vector2(length * (float)Math.Cos(theta), length * (float)Math.Sin(theta));
-        }
-        public static string SliderTypeToName(SliderType type) {
-            return type switch {
-                SliderType.Master => "Master volume",
-                SliderType.Sfx => "Sound volume",
-                SliderType.Music => "Music volume",
-                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-            };
-        }
+        public static float GetTimeScalar(GameTime gameTime) => (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
     }
 }
