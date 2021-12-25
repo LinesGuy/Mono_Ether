@@ -4,13 +4,15 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether {
-    static class GlobalAssets {
+    public static class GlobalAssets {
         public static Texture2D Default;
         public static Texture2D ButtonCorner1;
         public static Texture2D ButtonCorner2;
         public static Texture2D ButtonTop;
         public static Texture2D ButtonSide;
         public static Texture2D SliderBall;
+        public static Texture2D SwitchOff;
+        public static Texture2D SwitchOn;
         public static Texture2D Pixel;
         
         public static SpriteFont NovaSquare24;
@@ -24,6 +26,8 @@ namespace Mono_Ether {
             ButtonTop = content.Load<Texture2D>("Textures/GlobalAssets/ButtonTop");
             ButtonSide = content.Load<Texture2D>("Textures/GlobalAssets/ButtonSide");
             SliderBall = content.Load<Texture2D>("Textures/GlobalAssets/SliderBall");
+            SwitchOff = content.Load<Texture2D>("Textures/GlobalAssets/SwitchOff");
+            SwitchOn = content.Load<Texture2D>("Textures/GlobalAssets/SwitchOn");
             Pixel = content.Load<Texture2D>("Textures/GlobalAssets/Pixel");
 
             NovaSquare24 = content.Load<SpriteFont>("Fonts/NovaSquare24");

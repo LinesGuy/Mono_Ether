@@ -32,6 +32,7 @@ namespace Mono_Ether {
         private readonly ButtonManager _carouselButtonManager = new ButtonManager();
         private readonly ButtonManager _settingsButtonManager = new ButtonManager();
         private readonly SliderManager _settingsSliderManager = new SliderManager();
+        private readonly SwitcherManager _settingsSwitcherManager = new SwitcherManager();
         private float _carouselOffset;
         private float _carouselOffsetVelocity;
         private TimeSpan _timeSinceStart = TimeSpan.Zero;
@@ -52,11 +53,15 @@ namespace Mono_Ether {
             List<string> levels = new List<string> { "Level One", "Level Two", "Level Three", "Level Four", "Level Five", "Level Six", "Level Seven ", "Level Eight", "Level Nine", "Level Ten" };
             for (int i = 0; i < levels.Count; i++)
                 _carouselButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X - 300f * MathF.Exp(-i * i / 25f), ScreenSize.Y / 2f + i * 120f), new Vector2(500, 120), levels[i]));
-            /* Add settings window buttons and sliders */
+            /* Add settings window buttons, sliders and switchers */
             _settingsButtonManager.Buttons.Add(new Button(ScreenSize / 2f + new Vector2(0f, 250f), new Vector2(200, 120), "Back"));
             _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, -200f), 400f, SliderType.Master, MasterVolume));
             _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, -50f), 400f, SliderType.Sfx, SoundEffectVolume));
             _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-275f, 100f), 400f, SliderType.Music, MusicVolume));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, -200f), DebugMode, "Debug mode"));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, -100f), VSync, "VSync"));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, 0f), ShowFps, "Show FPS"));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(275, 100f), AllowWindowResizing, "Allow window resizing"));
             /* Create lists of small/big stars with random positions */
             for (var i = 0; i < 150; i++)
                 _smallStars.Add(new Vector2(_rand.Next(0, (int)ScreenSize.X), _rand.Next(0, (int)ScreenSize.Y)));
@@ -204,6 +209,7 @@ namespace Mono_Ether {
                     batch.Draw(GlobalAssets.Pixel, ScreenSize / 2f, null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
                     _settingsSliderManager.Draw(batch);
                     _settingsButtonManager.Draw(batch);
+                    _settingsSwitcherManager.Draw(batch);
                     break;
                 case "Level selection":
                     DrawBg(batch);
@@ -246,15 +252,17 @@ namespace Mono_Ether {
                     break;
             }
         }
+
         private void HandleSettingsWindow(GameTime gameTime) {
             _settingsButtonManager.Buttons.ForEach(b => b.Update(gameTime));
             if (_settingsButtonManager.PressedButton == "Back") {
                 SaveSettings();
                 SetState("Settings -> Title");
             }
-            foreach (var slider in _settingsSliderManager.Sliders)
+
+            foreach (var slider in _settingsSliderManager.Sliders) {
                 slider.Update();
-            foreach (var slider in _settingsSliderManager.Sliders.Where(slider => slider.IsBeingDragged)) {
+                if (!slider.IsBeingDragged) continue;
                 switch (slider.Type) {
                     case SliderType.Master:
                         MasterVolume = slider.Value;
@@ -268,6 +276,28 @@ namespace Mono_Ether {
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                ApplyChanges();
+            }
+            _settingsSwitcherManager.Switchers.ForEach(s => s.Update(gameTime));
+            if (!Input.WasLeftMouseJustDown) return;
+            foreach (var switcher in _settingsSwitcherManager.Switchers.Where(switcher => switcher.IsHovered))
+            {
+                switch (switcher.Text)
+                {
+                    case "Debug mode":
+                        DebugMode = !DebugMode;
+                        break;
+                    case "VSync":
+                        VSync = !VSync;
+                        break;
+                    case "Show FPS":
+                        ShowFps = !ShowFps;
+                        break;
+                    case "Allow window resizing":
+                        AllowWindowResizing = !AllowWindowResizing;
+                        break;
+                }
+                switcher.State = !switcher.State;
                 ApplyChanges();
             }
         }

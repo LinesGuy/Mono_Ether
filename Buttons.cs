@@ -80,8 +80,8 @@ namespace Mono_Ether {
         public float Width;
         public SliderType Type;
         public float Value;
-        public bool IsHovered = false;
-        public bool IsBeingDragged = false;
+        public bool IsHovered;
+        public bool IsBeingDragged;
         private Vector2 SliderBallPos => new Vector2(SliderPos.X + (Value - 0.5f) * Width, SliderPos.Y);
         private const float Radius = 20f;
         public Slider(Vector2 sliderPos, float width, SliderType type, float value = 0.5f) {
@@ -123,6 +123,37 @@ namespace Mono_Ether {
         public void Draw(SpriteBatch batch, Vector2 globalOffset) {
             foreach (Slider slider in Sliders)
                 slider.Draw(batch, globalOffset);
+        }
+    }
+    public class Switcher {
+        public Vector2 Pos;
+        public string Text;
+        public bool State;
+        public bool IsHovered;
+        public Vector2 Size => GlobalAssets.SwitchOff.Size();
+        public Switcher(Vector2 pos, bool state, string text) {
+            Pos = pos;
+            State = state;
+            Text = text;
+        }
+        public void Update(GameTime gameTime) {
+            IsHovered = MyUtils.RectangleF(Pos.X - Size.X / 2f, Pos.Y - Size.Y / 2f, Size.X, Size.Y).Contains(Input.Mouse.Position);
+        }
+        public void Draw(SpriteBatch batch, Vector2 offset) {
+            batch.Draw(State ? GlobalAssets.SwitchOn : GlobalAssets.SwitchOff, Pos, null, Color.White, 0f, Size / 2f, 1f, 0, 0);
+            batch.DrawString(GlobalAssets.NovaSquare24, Text, Pos + new Vector2(75f, -GlobalAssets.NovaSquare24.MeasureString(Text).Y / 2f), Color.White);
+        }
+    }
+    public class SwitcherManager
+    {
+        public List<Switcher> Switchers = new List<Switcher>();
+        public void Draw(SpriteBatch batch, Vector2 globalOffset) {
+            foreach (Switcher switchers in Switchers)
+               switchers.Draw(batch, globalOffset);
+        }
+        public void Draw(SpriteBatch batch) {
+            foreach (Switcher switchers in Switchers)
+                switchers.Draw(batch, Vector2.Zero);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -17,10 +18,11 @@ namespace Mono_Ether {
         }
         public Vector2 WorldToScreen(Vector2 worldPosition) => ((worldPosition - Position) * Zoom).Rotate(Orientation) + ScreenSize / 2f;
         public Vector2 ScreenToWorld(Vector2 screenPos) => (screenPos - ScreenSize / 2f).Rotate(-Orientation) / Zoom + Position;
-        public void Update(Vector2 playerPosition, PlayerIndex playerIndex) {
+        public void Update(GameTime gameTime, Vector2 playerPosition, PlayerIndex playerIndex) {
             /* Freecam (disables lerp if used) */
             Vector2 direction = Vector2.Zero;
-            if (playerIndex == PlayerIndex.One) {
+            if (playerIndex == PlayerIndex.One)
+            {
                 if (Input.Keyboard.IsKeyDown(Keys.Left))
                     direction.X -= 1;
                 if (Input.Keyboard.IsKeyDown(Keys.Right))
@@ -29,11 +31,11 @@ namespace Mono_Ether {
                     direction.Y -= 1;
                 if (Input.Keyboard.IsKeyDown(Keys.Down))
                     direction.Y += 1;
-                direction *= 5;
+                direction *= 5 * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             } else if (playerIndex == PlayerIndex.Two) {
                 direction += Input.GamePad.ThumbSticks.Right;
                 direction.Y = -direction.Y;
-                direction *= 10f;
+                direction *= 10f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             }
             direction = direction.Rotate(-Orientation);
             if (direction != Vector2.Zero) {
@@ -44,20 +46,20 @@ namespace Mono_Ether {
             if (playerIndex == PlayerIndex.One) {
                 // Q and E
                 if (Input.Keyboard.IsKeyDown(Keys.Q))
-                    Zoom /= 1.03f;
+                    Zoom /= 1f + 0.03f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
                 if (Input.Keyboard.IsKeyDown(Keys.E))
-                    Zoom *= 1.03f;
+                    Zoom *= 1f + 0.03f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
                 // Mouse Wheel
                 if (Input.DeltaScrollWheelValue < 0)
-                    Zoom *= 1.1f;
+                    Zoom *= 1f + 0.1f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
                 else if (Input.DeltaScrollWheelValue > 0)
-                    Zoom /= 1.1f;
+                    Zoom /= 1f + 0.1f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             } else if (playerIndex == PlayerIndex.Two) {
                 // Shoulder buttons
                 if (Input.GamePad.IsButtonDown(Buttons.LeftShoulder))
-                    Zoom /= 1.03f;
+                    Zoom /= 1f + 0.03f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
                 if (Input.GamePad.IsButtonDown(Buttons.RightShoulder))
-                    Zoom *= 1.03f;
+                    Zoom *= 1f + 0.03f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             }
             /* Zoom bounds */
             if (Zoom > 3f)
@@ -67,18 +69,18 @@ namespace Mono_Ether {
             /* Rotate */
             if (playerIndex == PlayerIndex.One) {
                 if (Input.Keyboard.IsKeyDown(Keys.Z))
-                    Orientation += 0.01f;
+                    Orientation += 0.01f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
                 if (Input.Keyboard.IsKeyDown(Keys.X))
-                    Orientation -= 0.01f;
+                    Orientation -= 0.01f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             } else if (playerIndex == PlayerIndex.Two) {
                 if (Input.GamePad.IsButtonDown(Buttons.LeftStick))
-                    Orientation += 0.01f;
+                    Orientation += 0.01f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
                 if (Input.GamePad.IsButtonDown(Buttons.RightStick))
-                    Orientation -= 0.01f;
+                    Orientation -= 0.01f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             }
             /* Lerp */
             if (IsLerping) {
-                const float lerpSpeed = 0.1f; // Higher values (between 0 and 1) move towards destination faster
+                float lerpSpeed = 0.1f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67)); // Higher values (between 0 and 1) move towards destination faster
                 Position = (1 - lerpSpeed) * Position + playerPosition * lerpSpeed;
             }
             else

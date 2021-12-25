@@ -1,13 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Mono_Ether {
     public class PlayerShip : Entity {
         public static Texture2D Texture;
         public PlayerIndex Index;
         public Camera PlayerCamera;
+        private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
             Position = position;
             PlayerCamera = new Camera(graphicsDevice, cameraViewport);
@@ -28,8 +29,7 @@ namespace Mono_Ether {
                     direction.Y -= 1;
                 if (Input.Keyboard.IsKeyDown(Keys.S))
                     direction.Y += 1;
-            } else if (Index == PlayerIndex.Two)
-            {
+            } else if (Index == PlayerIndex.Two) {
                 direction += Input.GamePad.ThumbSticks.Left;
                 direction.Y = -direction.Y; // Joystick up = negative Y
                 if (Input.GamePad.DPad.Left == ButtonState.Pressed)
@@ -46,17 +46,23 @@ namespace Mono_Ether {
                 direction.Normalize();
             //direction = direction.Rotate(-camera.Orientation); // TODO workaround?
 
-            Velocity += acceleration * direction;
-            Velocity /= 1.5f;
-            Position += Velocity;
+            Velocity += acceleration * direction * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
+            Velocity /= 1f + 0.5f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
+            Position += Velocity * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             /* Update entity orientation if velocity is non-zero */
             if (Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
             #endregion
             #region Exhaust fire
+            _exhaustFireBuffer += gameTime.ElapsedGameTime;
+            if (_exhaustFireBuffer > TimeSpan.FromMilliseconds(16)) {
+                _exhaustFireBuffer -= TimeSpan.FromMilliseconds(16);
+                if (Velocity.LengthSquared() > 0.1) {
+                    ParticleTemplates.ExhaustFire(Position, Orientation + MathF.PI);
+                }
+            }
 
-            if (Velocity.LengthSquared() > 0.1f)
-                ParticleTemplates.ExhaustFire(Position, Orientation + MathF.PI);
+
             /* TODO add exhaust fire
             if (Velocity.LengthSquared() > 0.1f) {
                 float orientation = Velocity.ToAngle();
@@ -145,7 +151,7 @@ namespace Mono_Ether {
             */
             #endregion Power packs
             /* Update player camera */
-            PlayerCamera.Update(Position, Index);
+            PlayerCamera.Update(gameTime, Position, Index);
         }
     }
 }

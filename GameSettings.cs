@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Mono_Ether {
@@ -21,13 +22,10 @@ namespace Mono_Ether {
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
 
-            if (VSync) {
-                GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = true;
-                GameRoot.Instance.IsFixedTimeStep = true;
-            } else {
-                GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = false;
-                GameRoot.Instance.IsFixedTimeStep = false;
-            }
+            GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = VSync;
+            GameRoot.Instance.IsFixedTimeStep = VSync;
+            Debug.WriteLine(GameRoot.Instance.TargetElapsedTime);
+
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
             GameRoot.Instance.Graphics.ApplyChanges();
         }

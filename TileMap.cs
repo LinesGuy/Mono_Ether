@@ -44,14 +44,13 @@ namespace Mono_Ether {
             };
             var xCoords = corners.Select(v => v.X).ToList();
             var yCoords = corners.Select(v => v.Y).ToList();
-            int startCol = Math.Max(0, (int)(xCoords.Min() / Tile.Length));
+            var startCol = Math.Max(0, (int)(xCoords.Min() / Tile.Length));
             var endCol = Math.Min(GridSize.X, 1 + (int)(xCoords.Max() / Tile.Length));
             var startRow = Math.Max(0, (int)(yCoords.Min() / Tile.Length));
             var endRow = Math.Min(GridSize.Y, 1 + (int)(yCoords.Max() / Tile.Length));
-            for (int row = startRow; row < endRow; row++) {
-                for (int col = startCol; col < endCol; col++) {
-                    var tile = _grid[row][col];
-                    tile.Draw(batch, camera);
+            for (var row = startRow; row < endRow; row++) {
+                for (var col = startCol; col < endCol; col++) { 
+                    _grid[row][col].Draw(batch, camera);
                 }
             }
             /* TODO probably working but verify
