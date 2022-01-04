@@ -9,6 +9,7 @@ namespace Mono_Ether {
     public class GameScreen : GameState {
         private readonly EntityManager _entityManager = new EntityManager();
         private readonly ParticleManager _particleManager = new ParticleManager();
+        private readonly EnemySpawner _enemySpawner = new EnemySpawner();
         private readonly TileMap _tileMap;
         private readonly string _mode = "Playing";
         public GameScreen(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
