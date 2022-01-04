@@ -126,9 +126,13 @@ namespace Mono_Ether {
                 Position = (1 - lerpSpeed) * Position + playerPosition * lerpSpeed;
             } else {
                 switch (playerIndex) {
-                    case PlayerIndex.One when Input.Keyboard.IsKeyDown(Keys.C):
-                    case PlayerIndex.Two when Input.GamePad.IsButtonDown(Buttons.Back):
-                        IsLerping = true; /* Press 'c' to enable lerp */
+                    case PlayerIndex.One:
+                        if (Input.Keyboard.IsKeyDown(Keys.C))
+                            IsLerping = true; /* Press 'c' to enable lerp */
+                        break;
+                    case PlayerIndex.Two:
+                        if (Input.GamePad.IsButtonDown(Buttons.Back))
+                            IsLerping = true; 
                         break;
                     case PlayerIndex.Three:
                         break;

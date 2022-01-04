@@ -7,7 +7,7 @@ namespace Mono_Ether {
     public class PlayerShip : Entity {
         public static Texture2D Texture;
         public PlayerIndex Index;
-        public Camera PlayerCamera;
+        public readonly Camera PlayerCamera;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
             Position = position;
@@ -35,13 +35,13 @@ namespace Mono_Ether {
                 case PlayerIndex.Two: {
                         direction += Input.GamePad.ThumbSticks.Left;
                         direction.Y = -direction.Y; // Joystick up = negative Y
-                        if (Input.GamePad.DPad.Left == ButtonState.Pressed)
+                        if (Input.GamePad.DPad.Left == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.J))
                             direction.X -= 1;
-                        if (Input.GamePad.DPad.Right == ButtonState.Pressed)
+                        if (Input.GamePad.DPad.Right == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.L))
                             direction.X += 1;
-                        if (Input.GamePad.DPad.Up == ButtonState.Pressed)
+                        if (Input.GamePad.DPad.Up == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.I))
                             direction.Y -= 1;
-                        if (Input.GamePad.DPad.Down == ButtonState.Pressed)
+                        if (Input.GamePad.DPad.Down == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.K))
                             direction.Y += 1;
                         break;
                     }
