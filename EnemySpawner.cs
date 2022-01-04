@@ -37,7 +37,29 @@ namespace Mono_Ether {
                 Debug.WriteLine("Skipping enemy spawn");
                 return;
             }
-            
+            switch (_rand.Next(7)) {
+                case (0):
+                    EntityManager.Add(Enemy.CreateBlueSeeker(pos));
+                    break;
+                case (1):
+                    EntityManager.Add(Enemy.CreatePurpleWanderer(pos));
+                    break;
+                case (2):
+                    EntityManager.Add(Enemy.CreateSnake(pos));
+                    break;
+                case (3):
+                    EntityManager.Add(Enemy.CreateBackAndForther(pos));
+                    break;
+                case (4):
+                    EntityManager.Add(Enemy.CreatePinkWanderer(pos));
+                    break;
+                case (5):
+                    EntityManager.Add(Enemy.CreateGreenSeeker(pos));
+                    break;
+                case (6):
+                    EntityManager.Add(Enemy.CreatePinkSeeker(pos));
+                    break;
+            }
         }
     }
 }
