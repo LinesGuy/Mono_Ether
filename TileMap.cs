@@ -63,7 +63,7 @@ namespace Mono_Ether {
         }
         public Tile GetTileFromMap(Vector2 mapPos) {
             var (x, y) = mapPos;
-            if (x < 0 || x >= WorldSize.X || y < 0 || y >= WorldSize.Y)
+            if (x < 0 || x >= GridSize.X || y < 0 || y >= GridSize.Y)
                 return new Tile(Vector2.Zero, -1);
             return _grid[(int)y][(int)x];
         }

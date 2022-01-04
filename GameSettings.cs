@@ -11,9 +11,9 @@ namespace Mono_Ether {
         public const string SettingsFilename = "settings.txt"; // TODO rename to Settings.txt
         public static Vector2 ScreenSize = new Vector2(1800, 900); // TODO allow this to change
         public static bool DebugMode = false;
-        public static bool VSync = true;
+        //public static bool VSync = true;
         public static bool ShowFps = true;
-        public static bool AllowWindowResizing = true;
+        public static bool AllowWindowResizing = false;
         public static float MasterVolume;
         public static float MusicVolume;
         public static float SoundEffectVolume;
@@ -22,9 +22,8 @@ namespace Mono_Ether {
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
 
-            GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = VSync;
-            GameRoot.Instance.IsFixedTimeStep = VSync;
-            Debug.WriteLine(GameRoot.Instance.TargetElapsedTime);
+            //GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = VSync;
+            //GameRoot.Instance.IsFixedTimeStep = VSync;
 
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
             GameRoot.Instance.Graphics.ApplyChanges();

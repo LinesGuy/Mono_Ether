@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 
 namespace Mono_Ether {
     public class PlayerShip : Entity {
@@ -17,7 +18,7 @@ namespace Mono_Ether {
         public override void Update(GameTime gameTime) {
             // TODO do nothing if dead
             #region Movement
-            const float acceleration = 5f;
+            const float acceleration = 3f;
             // TODO apply speed powerpacks
             var direction = Vector2.Zero;
             switch (Index) {
@@ -52,7 +53,8 @@ namespace Mono_Ether {
             //direction = direction.Rotate(-camera.Orientation); // TODO workaround?
 
             Velocity += acceleration * direction * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
-            Velocity /= 1f + 0.4f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
+            if (Velocity.LengthSquared() > 144) Velocity = Velocity.ScaleTo(12f);
+            Velocity /= 1f + 0.05f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             Position += Velocity * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             /* Update entity orientation if velocity is non-zero */
             if (Velocity.LengthSquared() > 0)
@@ -63,7 +65,8 @@ namespace Mono_Ether {
             if (_exhaustFireBuffer > TimeSpan.FromMilliseconds(16)) {
                 _exhaustFireBuffer -= TimeSpan.FromMilliseconds(16);
                 if (direction.LengthSquared() >= 0.1f) {
-                    ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI);
+                    for (int i = 0; i < 3; i++)
+                        ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI);
                 }
             }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
@@ -13,9 +14,9 @@ namespace Mono_Ether {
         private Stopwatch _updateStopwatch;
         private Stopwatch _drawStopwatch;
         private const int HistogramLength = 300;
-        private Queue<float> _updateHistory = new Queue<float>(HistogramLength);
-        private Queue<float> _drawHistory = new Queue<float>(HistogramLength);
-
+        private float[] _updateHistory = new float[HistogramLength];
+        private float[] _drawHistory = new float[HistogramLength];
+        private int _historyIndex;
         public GameRoot() {
             Instance = this;
             Graphics = new GraphicsDeviceManager(this);
@@ -54,8 +55,12 @@ namespace Mono_Ether {
             ScreenManager.CurrentScreen.Update(gameTime);
             base.Update(gameTime);
             _updateStopwatch.Stop();
-            _updateHistory.Enqueue(_updateStopwatch.ElapsedTicks / 167000f);
-            if (_updateHistory.Count > HistogramLength) _updateHistory.Dequeue();
+            if (!GameSettings.ShowFps) return;
+            _updateHistory[_historyIndex] = _updateStopwatch.ElapsedTicks / 167000f;
+            _updateHistory[(_historyIndex + 30) % HistogramLength] = 0;
+            _drawHistory[(_historyIndex + 30) % HistogramLength] = 0;
+            _historyIndex++;
+            if (_historyIndex >= HistogramLength) _historyIndex = 0;
         }
 
         protected override void Draw(GameTime gameTime) {
@@ -63,8 +68,7 @@ namespace Mono_Ether {
             /* Draw current screen */
             ScreenManager.CurrentScreen.Draw(_batch);
             _drawStopwatch.Stop();
-            _drawHistory.Enqueue(_drawStopwatch.ElapsedTicks / 167000f);
-            if (_drawHistory.Count > HistogramLength) _drawHistory.Dequeue();
+            _drawHistory[_historyIndex] = _drawStopwatch.ElapsedTicks / 167000f;
             /* Draw FPS (if enabled) */
             if (GameSettings.ShowFps) {
                 _batch.Begin();
@@ -79,9 +83,9 @@ namespace Mono_Ether {
                 _batch.DrawString(Font, Text,
                     GameSettings.ScreenSize - Font.MeasureString(Text) + new Vector2(-10f, -63f), Color.White);
                 /* Histogram */
-                for (var i = 0; i < _drawHistory.Count; i++) {
-                    _batch.Draw(GlobalAssets.Pixel, new Vector2(HistogramLength - i, GameSettings.ScreenSize.Y), null, Color.CornflowerBlue, 0f, Vector2.One, new Vector2(1f, 100f * _updateHistory.ToList()[i]), 0, 0);
-                    _batch.Draw(GlobalAssets.Pixel, new Vector2(HistogramLength - i, GameSettings.ScreenSize.Y - 100f * _updateHistory.ToList()[i]), null, Color.Red, 0f, Vector2.One, new Vector2(1f, 100f * _drawHistory.ToList()[i]), 0, 0);
+                for (var i = 0; i < _updateHistory.Length; i++) {
+                    _batch.Draw(GlobalAssets.Pixel, new Vector2(i, GameSettings.ScreenSize.Y), null, Color.CornflowerBlue, 0f, Vector2.One, new Vector2(1f, 100f * _updateHistory.ToList()[i]), 0, 0);
+                    _batch.Draw(GlobalAssets.Pixel, new Vector2(i, GameSettings.ScreenSize.Y - 100f * _updateHistory.ToList()[i]), null, Color.Red, 0f, Vector2.One, new Vector2(1f, 100f * _drawHistory.ToList()[i]), 0, 0);
                 }
                 _batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0f, GameSettings.ScreenSize.Y - 100f, HistogramLength, 2f), Color.White);
                 _batch.End();

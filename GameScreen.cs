@@ -1,9 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Mono_Ether {
     public class GameScreen : GameState {
@@ -16,12 +15,11 @@ namespace Mono_Ether {
             /* Load tile map data from filename */
             _tileMap = new TileMap(mapFileName);
         }
-        public override void Initialize()
-        {
+        public override void Initialize() {
             ParticleManager.Instance = _particleManager;
             /* Add two players */
-            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X * 2f / 3f, GameSettings.ScreenSize.Y)));
-            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X * 2f / 3f, 0, GameSettings.ScreenSize.X / 3f, GameSettings.ScreenSize.Y)));
+            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X * 2f / 3f, GameSettings.ScreenSize.Y)));
+            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X * 2f / 3f, 0, GameSettings.ScreenSize.X / 3f, GameSettings.ScreenSize.Y)));
             /* Add four players */
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
@@ -36,24 +34,31 @@ namespace Mono_Ether {
         }
         public override void LoadContent(ContentManager content) {
             PlayerShip.Texture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
+            Particle.PointParticle = content.Load<Texture2D>("Textures/GameScreen/Particles/Point");
             Tile.LoadContent(content);
+            Enemy.LoadContent(content);
         }
         public override void UnloadContent() {
             PlayerShip.Texture = null;
+            Particle.PointParticle = null;
             Tile.UnloadContent();
+            Enemy.UnloadContent();
         }
         public override void Update(GameTime gameTime) {
             // TODO remove esc to return
-            if (Input.WasKeyJustDown(Keys.Escape)) ScreenManager.RemoveScreen();
+            if (Input.WasKeyJustDown(Keys.Escape)) {
+                ScreenManager.RemoveScreen();
+                return;
+            }
             /* Update all entity positions and handle collisions */
             _entityManager.Update(gameTime);
             // TODO temp code to summon many particles
-            if (Input.Keyboard.IsKeyDown(Keys.P))
-            {
+            if (Input.Keyboard.IsKeyDown(Keys.P)) {
                 //for (int i = 0; i < 1000; i++)
-                    //_particleManager.Add(new Particle(Particle.Laser, Color.White, new Vector2(100f), new Vector2(5f), 0.99f, TimeSpan.FromSeconds(3)));
+                //_particleManager.Add(new Particle(Particle.Laser, Color.White, new Vector2(100f), new Vector2(5f), 0.99f, TimeSpan.FromSeconds(3)));
             }
             _particleManager.Update(gameTime);
+            //_enemySpawner.Update(_entityManager, _tileMap); // TODO enable
         }
         public override void Draw(SpriteBatch batch) {
             //GraphicsDevice.Clear(Color.Black); // TODO remove

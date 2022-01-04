@@ -11,8 +11,7 @@ namespace Mono_Ether {
         private static readonly Random _rand = new Random();
         public static float InverseSpawnChance = 60;
         public static bool Enabled = true;
-
-        public static void Update(GameTime gameTime, EntityManager entityManager, TileMap tileMap)
+        public void Update(EntityManager entityManager, TileMap tileMap)
         {
             if (!Enabled) return;
             /* Get valid spawn position */
@@ -37,29 +36,10 @@ namespace Mono_Ether {
                 Debug.WriteLine("Skipping enemy spawn");
                 return;
             }
-            switch (_rand.Next(7)) {
-                case (0):
-                    EntityManager.Add(Enemy.CreateBlueSeeker(pos));
-                    break;
-                case (1):
-                    EntityManager.Add(Enemy.CreatePurpleWanderer(pos));
-                    break;
-                case (2):
-                    EntityManager.Add(Enemy.CreateSnake(pos));
-                    break;
-                case (3):
-                    EntityManager.Add(Enemy.CreateBackAndForther(pos));
-                    break;
-                case (4):
-                    EntityManager.Add(Enemy.CreatePinkWanderer(pos));
-                    break;
-                case (5):
-                    EntityManager.Add(Enemy.CreateGreenSeeker(pos));
-                    break;
-                case (6):
-                    EntityManager.Add(Enemy.CreatePinkSeeker(pos));
-                    break;
-            }
+
+            var enemyTypes = Enum.GetValues(typeof(EnemyType));
+            var enemyType = (EnemyType)enemyTypes.GetValue(_rand.Next(enemyTypes.Length))!;
+            entityManager.Add(Enemy.CreateEnemy(enemyType, spawnPos));
         }
     }
 }

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace Mono_Ether {
     public abstract class Particle {
+        public static Texture2D PointParticle;
         protected Vector2 Position;
         protected Color Color;
-        protected static TimeSpan LifeSpan = TimeSpan.FromSeconds(1);
-        protected TimeSpan Age = TimeSpan.Zero;
+
         private static readonly Random Rand = new Random();
-        protected Vector2 Velocity = Rand.NextVector2(0f, 0.21f);
+        protected Vector2 Velocity;
         protected float Friction = Rand.NextFloat(0.95f, 1f);
         public bool IsExpired;
         protected Particle(Vector2 position, Color color) {
@@ -18,9 +18,6 @@ namespace Mono_Ether {
             Color = color;
         }
         public virtual void Update(GameTime gameTime) {
-            Age += gameTime.ElapsedGameTime;
-            if (Age > LifeSpan)
-                IsExpired = true;
             Position += Velocity;
             Velocity *= Friction;
         }
@@ -29,34 +26,41 @@ namespace Mono_Ether {
     }
 
     public class SmallParticle : Particle {
+        protected TimeSpan Age = TimeSpan.Zero;
+        private readonly TimeSpan _lifeSpan = TimeSpan.FromSeconds(0.3);
+        private static readonly Random _rand = new Random();
+        private Color _transparentColor;
+        public override void Update(GameTime gameTime) {
+            Age += gameTime.ElapsedGameTime;
+            if (Age > _lifeSpan)
+                IsExpired = true;
+            _transparentColor = Color * (float) (1 - Age / _lifeSpan);
+            base.Update(gameTime);
+        }
         public SmallParticle(Vector2 position, Color color) : base(position, color) {
             Position = position;
             Color = color;
+            Velocity = _rand.NextVector2(0f, 0.2f);
         }
         public override void Draw(SpriteBatch batch, Camera camera) {
-            batch.Draw(GlobalAssets.Pixel, camera.WorldToScreen(Position), null, Color, 0f, Vector2.One / 2f, 1f, 0, 0);
+            batch.Draw(PointParticle, camera.WorldToScreen(Position), null, _transparentColor, 0f, PointParticle.Size() / 2f, 1f, 0, 0);
         }
     }
     public class BigParticle : Particle {
-        private TimeSpan _timeSinceSpawn = TimeSpan.Zero;
-        private static readonly TimeSpan TimeBetweenSpawns = TimeSpan.FromMilliseconds(50);
-        public BigParticle(Vector2 position, Color color, Vector2 velocity, float friction, TimeSpan lifeSpan) : base(position, color) {
+        public BigParticle(Vector2 position, Color color, Vector2 velocity, float friction) : base(position, color) {
             Velocity = velocity;
             Friction = friction;
-            LifeSpan = lifeSpan;
         }
-        public override void Update(GameTime gameTime) {
-            _timeSinceSpawn += gameTime.ElapsedGameTime;
-            if (_timeSinceSpawn > TimeBetweenSpawns)
-            {
-                _timeSinceSpawn -= TimeBetweenSpawns;
-                ParticleManager.Instance.Add(new SmallParticle(Position, Color));
-            }
-            
-            base.Update(gameTime);
+        public override void Update(GameTime gameTime)
+        {
+            ParticleManager.Instance.Add(new SmallParticle(Position, Color));
+            if (Velocity.LengthSquared() < 0.5f)
+                IsExpired = true;
+            Position += Velocity;
+            Velocity *= Friction;
         }
         public override void Draw(SpriteBatch batch, Camera camera) {
-            batch.Draw(GlobalAssets.Pixel, camera.WorldToScreen(Position), null, Color, 0f, Vector2.One / 2f, 1f, 0, 0);
+            //batch.Draw(PointParticle, camera.WorldToScreen(Position), null, Color * (float)(1 - Age / LifeSpan), 0f, Vector2.One / 2f, 1.5f, 0, 0);
         }
     }
 
@@ -97,10 +101,12 @@ namespace Mono_Ether {
     public static class ParticleTemplates {
         private static readonly Random Random = new Random();
         public static void ExhaustFire(Vector2 position, float orientation) {
-            var perpendicularPositionOffset = Random.NextFloat(-0.17f, 0.17f);
+            var orientationOffset = Random.NextFloat(-0.3f, 0.3f);
+            var positionOffset = Random.NextVector2(0f, 10f);
+            Color color = new Color(0.2f, 0.8f - MathF.Abs(orientationOffset), 1f);
             ParticleManager.Instance.Add(new BigParticle(
-                position + MyUtils.FromPolar(orientation, 17f), Color.CornflowerBlue,
-                MyUtils.FromPolar(orientation + perpendicularPositionOffset, 5f), 0.97f, TimeSpan.FromSeconds(1)));
+                position + positionOffset, color,
+                MyUtils.FromPolar(orientation + orientationOffset, Random.NextFloat(1f, 6f)), 0.99f));
         }
     }
 }
