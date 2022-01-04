@@ -23,10 +23,10 @@ namespace Mono_Ether {
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X * 2f / 3f, GameSettings.ScreenSize.Y)));
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X * 2f / 3f, 0, GameSettings.ScreenSize.X / 3f, GameSettings.ScreenSize.Y)));
             /* Add four players */
-            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
-            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
-            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 100f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
-            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(0f, 100f), MyUtils.ViewportF(0, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 100f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(0f, 100f), MyUtils.ViewportF(0, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
         }
         public override void Suspend() {
 

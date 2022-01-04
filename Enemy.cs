@@ -17,7 +17,7 @@ namespace Mono_Ether {
         private readonly List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>();
         private static readonly Random _rand = new Random();
         private Enemy(EnemyType type, Vector2 position) {
-            if (type == EnemyType.BlueSeeker) Image = BlueSeeker;
+            switch (t Image = BlueSeeker;
             Type = type;
             Position = position;
             Health = 1; // TODO difficulty
