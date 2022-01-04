@@ -117,7 +117,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/GameScreen/Particles/LaserGlow.png
 
-#begin Textures/GameScreen/Particles/PointGlow.png
+#begin Textures/GameScreen/Particles/Point.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -127,7 +127,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/GameScreen/Particles/PointGlow.png
+/build:Textures/GameScreen/Particles/Point.png
 
 #begin Textures/GameScreen/PlayerShip.png
 /importer:TextureImporter
