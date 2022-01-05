@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace Mono_Ether {
     public class GameScreen : GameState {
@@ -17,9 +18,11 @@ namespace Mono_Ether {
         }
         public override void Initialize() {
             ParticleManager.Instance = _particleManager;
+            /* Add one player */
+            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X, GameSettings.ScreenSize.Y)));
             /* Add two players */
-            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X * 2f / 3f, GameSettings.ScreenSize.Y)));
-            _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X * 2f / 3f, 0, GameSettings.ScreenSize.X / 3f, GameSettings.ScreenSize.Y)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X * 2f / 3f, GameSettings.ScreenSize.Y)));
+            //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X * 2f / 3f, 0, GameSettings.ScreenSize.X / 3f, GameSettings.ScreenSize.Y)));
             /* Add four players */
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
@@ -58,12 +61,13 @@ namespace Mono_Ether {
                 //_particleManager.Add(new Particle(Particle.Laser, Color.White, new Vector2(100f), new Vector2(5f), 0.99f, TimeSpan.FromSeconds(3)));
             }
             _particleManager.Update(gameTime);
-            //_enemySpawner.Update(_entityManager, _tileMap); // TODO enable
+            _enemySpawner.Update(_entityManager, _tileMap);
         }
         public override void Draw(SpriteBatch batch) {
             //GraphicsDevice.Clear(Color.Black); // TODO remove
-            foreach (PlayerShip player in _entityManager.Players) {
-                GraphicsDevice.SetRenderTarget(player.PlayerCamera.Screen);
+            //foreach (PlayerShip player in _entityManager.Players) {
+            var player = _entityManager.Players.First();
+                //GraphicsDevice.SetRenderTarget(player.PlayerCamera.Screen);
                 batch.Begin(samplerState: SamplerState.PointClamp);
                 Color backgroundColor = player.Index switch {
                     PlayerIndex.One => new Color(16, 0, 0),
@@ -77,13 +81,14 @@ namespace Mono_Ether {
                 _tileMap.Draw(batch, player.PlayerCamera, _mode == "Editor"); /* Draw tilemap with tile boundaries if in editor mode */
                 _particleManager.Draw(batch, player.PlayerCamera);
                 batch.End();
-            }
-            GraphicsDevice.SetRenderTarget(null);
+            //}
+            /*GraphicsDevice.SetRenderTarget(null);
             batch.Begin();
             foreach (PlayerShip player in _entityManager.Players) {
                 batch.Draw(player.PlayerCamera.Screen, player.PlayerCamera.CameraViewport.Bounds, Color.White);
             }
-            batch.End();
+            batch.End();*/
+            // TODO enable splitscreen?
         }
     }
 }

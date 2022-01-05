@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Mono_Ether {
     public class EntityManager {
+        public static EntityManager Instance;
         public List<Entity> Entities = new List<Entity>();
         public List<PlayerShip> Players = new List<PlayerShip>();
         public List<Enemy> Enemies = new List<Enemy>();
@@ -13,7 +14,7 @@ namespace Mono_Ether {
 
         private readonly List<Entity> _addedEntities = new List<Entity>();
         public EntityManager() {
-
+            Instance = this;
         }
         public void Add(Entity entity) {
             if (!_isUpdating)
@@ -23,10 +24,8 @@ namespace Mono_Ether {
         }
         private void AddEntity(Entity entity) {
             Entities.Add(entity);
-            if (entity is PlayerShip player)
-            {
-                player.Index = Players.Count switch
-                {
+            if (entity is PlayerShip player) {
+                player.Index = Players.Count switch {
                     0 => PlayerIndex.One,
                     1 => PlayerIndex.Two,
                     2 => PlayerIndex.Three,
@@ -34,8 +33,7 @@ namespace Mono_Ether {
                     _ => player.Index
                 };
                 Players.Add(player);
-            }
-            else if (entity is Enemy enemy)
+            } else if (entity is Enemy enemy)
                 Enemies.Add(enemy);
             //else if (entity is Bullet bullet)
             //Bullets.Add(bullet);
@@ -65,9 +63,8 @@ namespace Mono_Ether {
             Enemies = Enemies.Where(x => !x.IsExpired).ToList();
             //PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
         }
-        private bool IsColliding(Entity a, Entity b) => !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < Math.Pow(a.Radius + b.Radius, 2);
-        private void HandleCollisions()
-        {
+        //private bool IsColliding(Entity a, Entity b) => !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < Math.Pow(a.Radius + b.Radius, 2);
+        private void HandleCollisions() {
             return; // TODO
         }
         public void Draw(SpriteBatch batch, Camera camera) {

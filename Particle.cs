@@ -56,8 +56,7 @@ namespace Mono_Ether {
             ParticleManager.Instance.Add(new SmallParticle(Position, Color));
             if (Velocity.LengthSquared() < 0.5f)
                 IsExpired = true;
-            Position += Velocity;
-            Velocity *= Friction;
+            base.Update(gameTime);
         }
         public override void Draw(SpriteBatch batch, Camera camera) {
             //batch.Draw(PointParticle, camera.WorldToScreen(Position), null, Color * (float)(1 - Age / LifeSpan), 0f, Vector2.One / 2f, 1.5f, 0, 0);

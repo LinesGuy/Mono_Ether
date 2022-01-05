@@ -52,7 +52,7 @@ namespace Mono_Ether {
                 direction.Normalize();
             //direction = direction.Rotate(-camera.Orientation); // TODO workaround?
 
-            Velocity += acceleration * direction * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
+            Velocity += acceleration * direction;
             if (Velocity.LengthSquared() > 144) Velocity = Velocity.ScaleTo(12f);
             Velocity /= 1f + 0.05f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             Position += Velocity * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));

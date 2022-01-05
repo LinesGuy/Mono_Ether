@@ -14,8 +14,8 @@ namespace Mono_Ether {
         private Stopwatch _updateStopwatch;
         private Stopwatch _drawStopwatch;
         private const int HistogramLength = 300;
-        private float[] _updateHistory = new float[HistogramLength];
-        private float[] _drawHistory = new float[HistogramLength];
+        private readonly float[] _updateHistory = new float[HistogramLength];
+        private readonly float[] _drawHistory = new float[HistogramLength];
         private int _historyIndex;
         public GameRoot() {
             Instance = this;
