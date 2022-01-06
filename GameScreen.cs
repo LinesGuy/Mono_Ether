@@ -80,7 +80,9 @@ namespace Mono_Ether {
                 _entityManager.Draw(batch, player.PlayerCamera); /* Draw all entities (inc players, bullets, powerpacks etc) */
                 _tileMap.Draw(batch, player.PlayerCamera, _mode == "Editor"); /* Draw tilemap with tile boundaries if in editor mode */
                 _particleManager.Draw(batch, player.PlayerCamera);
-                batch.End();
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
+            batch.End();
             //}
             /*GraphicsDevice.SetRenderTarget(null);
             batch.Begin();
@@ -89,6 +91,8 @@ namespace Mono_Ether {
             }
             batch.End();*/
             // TODO enable splitscreen?
+            /* Debug */
+            
         }
     }
 }

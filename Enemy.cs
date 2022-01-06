@@ -116,6 +116,7 @@ namespace Mono_Ether {
                         if (path.Count <= 0) break;
                         /* Move towards player */
                         Velocity += (path[0] - Position).ScaleTo(acceleration);
+                        
                         yield return 0;
                     }
                 }

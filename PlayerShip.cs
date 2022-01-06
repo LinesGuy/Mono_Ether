@@ -59,6 +59,7 @@ namespace Mono_Ether {
             /* Update entity orientation if velocity is non-zero */
             if (Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
+            HandleTilemapCollision();
             #endregion
             #region Exhaust fire
             _exhaustFireBuffer += gameTime.ElapsedGameTime;

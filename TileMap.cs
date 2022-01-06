@@ -10,8 +10,8 @@ using System.Linq;
 namespace Mono_Ether {
     public class TileMap {
         public static TileMap Instance;
-        private readonly Tile[][] _grid;
-        public Vector2 GridSize => new Vector2(_grid[0].Length, _grid.Length);
+        public readonly Tile[][] Grid;
+        public Vector2 GridSize => new Vector2(Grid[0].Length, Grid.Length);
         public Vector2 WorldSize => GridSize * Tile.Length;
         public TileMap(string fileName) {
             Instance = this;
@@ -30,8 +30,10 @@ namespace Mono_Ether {
                 gridList.Add(rowList);
                 y++;
             }
-
-            _grid = gridList.Select(r => r.ToArray()).ToArray(); // 2D list to 2D array
+            Grid = gridList.Select(r => r.ToArray()).ToArray(); // 2D list to 2D array
+            foreach (var row in Grid)
+                foreach (var tile in row)
+                    tile.UpdateWalls();
         }
 
         public void Draw(SpriteBatch batch, Camera camera, bool editorMode) {
@@ -56,7 +58,7 @@ namespace Mono_Ether {
             var endRow = Math.Min(GridSize.Y, 1 + (int)(yCoords.Max() / Tile.Length));
             for (var row = startRow; row < endRow; row++) {
                 for (var col = startCol; col < endCol; col++) {
-                    _grid[row][col].Draw(batch, camera);
+                    Grid[row][col].Draw(batch, camera);
                 }
             }
             /* TODO probably working but verify
@@ -72,7 +74,7 @@ namespace Mono_Ether {
             var (x, y) = mapPos;
             if (x < 0 || x >= GridSize.X || y < 0 || y >= GridSize.Y)
                 return new Tile(Vector2.Zero, -1);
-            return _grid[(int)y][(int)x];
+            return Grid[(int)y][(int)x];
         }
 
         public Tile GetTileFromWorld(Vector2 worldPos) {
@@ -100,6 +102,7 @@ namespace Mono_Ether {
             }
         }
         public List<Vector2> AStar(Vector2 start, Vector2 end) {
+            start = new Vector2((int)(start.X / Tile.Length) * Tile.Length + Tile.Length / 2f, (int)(start.Y / Tile.Length) * Tile.Length + Tile.Length / 2f);
             /* List of pending nodes to check, initially containing the start node */
             var openList = new List<Node> { new Node(position: start) };
             /* List of nodes that have already been checked */
@@ -149,6 +152,13 @@ namespace Mono_Ether {
                     path.Reverse();
                     /* The first position is the entity's current position, so we remove it */
                     path.RemoveAt(0);
+                    if (Vector2.Distance(EntityManager.Instance.Players.First().PlayerCamera.MouseWorldCoords(), start) < 30f) {
+                        Debug.WriteLine("asdf");
+                        foreach (var line in path) {
+                            Debug.WriteLine(line);
+                        }
+                    }
+                        
                     return path;
                 }
 
@@ -222,9 +232,7 @@ namespace Mono_Ether {
         public Tile(Vector2 mapPos, int id) {
             Pos = mapPos;
             Id = id;
-
         }
-
         public static void LoadContent(ContentManager content) {
             List<Texture2D> textureList = new List<Texture2D>
             {
@@ -237,11 +245,50 @@ namespace Mono_Ether {
             //textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/ASDFASDF"));
             _textures = textureList.ToArray();
         }
-
         public static void UnloadContent() {
             _textures = null;
         }
+        public Vector2 TopLeft { get => Pos * Length; }
+        public Vector2 Top { get => new Vector2(TopLeft.X +Length / 2f, TopLeft.Y); }
+        public Vector2 TopRight { get => new Vector2(TopLeft.X +Length, TopLeft.Y); }
+        public Vector2 Right { get => new Vector2(TopLeft.X +Length, TopLeft.Y +Length / 2f); }
+        public Vector2 BottomRight { get => new Vector2(TopLeft.X +Length, TopLeft.Y +Length); }
+        public Vector2 Bottom { get => new Vector2(TopLeft.X +Length / 2f, TopLeft.Y +Length); }
+        public Vector2 BottomLeft { get => new Vector2(TopLeft.X, TopLeft.Y +Length); }
+        public Vector2 Left { get => new Vector2(TopLeft.X, TopLeft.Y +Length / 2f); }
+        public void UpdateWalls() {
+            if (Id <= 0) {
+                SolidWalls = new bool[4];
+                SolidCorners = new bool[4];
+                return;
+            }
 
+            // Update wall values based on surrounding tiles
+            SolidWalls[0] = TileMap.Instance.GetTileFromMap(new Vector2(Pos.X - 1, Pos.Y)).Id <= 0; // Left
+            SolidWalls[1] = TileMap.Instance.GetTileFromMap(new Vector2(Pos.X, Pos.Y - 1)).Id <= 0; // Top
+            SolidWalls[2] = TileMap.Instance.GetTileFromMap(new Vector2(Pos.X + 1, Pos.Y)).Id <= 0; // Right
+            SolidWalls[3] = TileMap.Instance.GetTileFromMap(new Vector2(Pos.X, Pos.Y + 1)).Id <= 0; // Bottom
+
+            SolidCorners[0] = !SolidWalls[0] && !SolidWalls[1]; // Top left
+            SolidCorners[1] = !SolidWalls[1] && !SolidWalls[2]; // Top right
+            SolidCorners[2] = !SolidWalls[2] && !SolidWalls[3]; // Bottom right
+            SolidCorners[3] = !SolidWalls[3] && !SolidWalls[0]; // Bottom left
+        }
+        public void UpdateNeighbouringWalls() {
+            // Updates this tile's walls and all 8 surrounding tile's walls
+            List<Vector2> offsets = new List<Vector2>
+            {
+                new Vector2(-1, -1), new Vector2(0, -1), new Vector2(1, -1),
+                new Vector2(-1,  0), new Vector2(0,  0), new Vector2(1,  0),
+                new Vector2(-1,  1), new Vector2(0,  1), new Vector2(1,  1)
+            };
+            foreach (var offset in offsets) {
+                Vector2 offsetPos = Pos + offset;
+                if (offsetPos.X < 0 || offsetPos.Y < 0 || offsetPos.X >= TileMap.Instance.GridSize.X || offsetPos.Y >= TileMap.Instance.GridSize.Y)
+                    continue;
+                TileMap.Instance.Grid[(int)offsetPos.Y][(int)offsetPos.X].UpdateWalls();
+            }
+        }
         public void Draw(SpriteBatch batch, Camera camera) {
             if (Id == 0) return;
             batch.Draw(_textures[Id - 1], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation,
