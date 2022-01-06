@@ -58,6 +58,7 @@ namespace Mono_Ether {
 
             Position += Velocity;
             Velocity *= 0.8f;
+            HandleTilemapCollision();
         }
         public static void LoadContent(ContentManager content) {
             _blueSeeker = content.Load<Texture2D>("Textures/GameScreen/Enemies/BlueSeeker");
