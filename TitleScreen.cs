@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using static Mono_Ether.GameSettings;
 
-namespace Mono_Ether {
-    public class TitleScreen : GameState {
+namespace Mono_Ether
+{
+    public class TitleScreen : GameState
+    {
         private Texture2D _smallStar;
         private Texture2D _bigStar;
         private Texture2D _bg;
@@ -22,6 +24,7 @@ namespace Mono_Ether {
         private Texture2D _triangle;
         private Texture2D _treeBg;
         private Texture2D _treeLeaf;
+        private Texture2D _menuCursor;
         private Song _titleMusic;
 
         private readonly List<Vector2> _smallStars = new List<Vector2>();
@@ -38,9 +41,11 @@ namespace Mono_Ether {
         private TimeSpan _timeSinceStart = TimeSpan.Zero;
         private TimeSpan _timeSinceTransition = TimeSpan.Zero;
         private readonly TimeSpan _transitionTime = TimeSpan.FromSeconds(0.5);
+        private List<Vector2> _mouseHistory = new List<Vector2>();
         private string _state;
         public TitleScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) { }
-        public override void Initialize() {
+        public override void Initialize()
+        {
             _state = "Title press any key";
             /* Add Title screen buttons */
             _titleButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X / 2f - 500f, ScreenSize.Y - 100f), new Vector2(300, 120), "Start"));
@@ -67,17 +72,24 @@ namespace Mono_Ether {
                 _smallStars.Add(new Vector2(_rand.Next(0, (int)ScreenSize.X), _rand.Next(0, (int)ScreenSize.Y)));
             for (var i = 0; i < 5; i++)
                 _bigStars.Add(new Vector2(_rand.Next(0, (int)ScreenSize.X), _rand.Next(0, (int)ScreenSize.Y)));
+            /* Play music */
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_titleMusic);
+            /* Populate mouse history queue */
+            for (var i = 0; i < 10; i++)
+                _mouseHistory.Add(Input.Mouse.Position.ToVector2());
         }
 
-        public override void Suspend() {
+        public override void Suspend()
+        {
             MediaPlayer.Stop();
         }
-        public override void Resume() {
+        public override void Resume()
+        {
             MediaPlayer.Play(_titleMusic);
         }
-        public override void LoadContent(ContentManager content) {
+        public override void LoadContent(ContentManager content)
+        {
             _smallStar = content.Load<Texture2D>("Textures/TitleScreen/SmallStar");
             _bigStar = content.Load<Texture2D>("Textures/TitleScreen/BigStar");
             _bg = content.Load<Texture2D>("Textures/TitleScreen/Bg");
@@ -90,9 +102,11 @@ namespace Mono_Ether {
             _triangle = content.Load<Texture2D>("Textures/TitleScreen/Triangle");
             _treeBg = content.Load<Texture2D>("Textures/TitleScreen/TreeBg");
             _treeLeaf = content.Load<Texture2D>("Textures/TitleScreen/TreeLeaf");
+            _menuCursor = content.Load<Texture2D>("Textures/TitleScreen/MenuCursor");
             _titleMusic = content.Load<Song>("Songs/TitleScreen");
         }
-        public override void UnloadContent() {
+        public override void UnloadContent()
+        {
             _smallStar = null;
             _bigStar = null;
             _bg = null;
@@ -106,28 +120,36 @@ namespace Mono_Ether {
             _treeBg = null;
             _treeLeaf = null;
             _titleMusic = null;
+            _menuCursor = null;
         }
-        public override void Update(GameTime gameTime) {
+
+        public override void Update(GameTime gameTime)
+        {
             /* Reset scene if user pressed R */
             if (Input.WasKeyJustUp(Keys.R))
                 Initialize();
             _timeSinceStart += gameTime.ElapsedGameTime;
             _timeSinceTransition += gameTime.ElapsedGameTime;
-            switch (_state) {
+            switch (_state)
+            {
                 case "Title press any key":
-                    if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftMouseJustDown) {
+                    if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftMouseJustDown)
+                    {
                         SetState("Title press any key -> Title");
                         GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     }
+
                     break;
                 case "Title press any key -> Title":
                     if (_timeSinceTransition > _transitionTime) SetState("Title");
                     HandleTitleButtons(gameTime);
                     break;
                 case "Title":
-                    if (Input.WasRightMouseJustDown) {
+                    if (Input.WasRightMouseJustDown)
+                    {
                         SetState("Title press any key");
                     }
+
                     HandleTitleButtons(gameTime);
                     break;
                 case "Title -> Level selection":
@@ -155,11 +177,17 @@ namespace Mono_Ether {
                 case "Level selection -> level":
                     break;
             }
+
+            _mouseHistory = _mouseHistory.Skip(1).ToList();
+            _mouseHistory.Add(Input.Mouse.Position.ToVector2());
         }
-        public override void Draw(SpriteBatch batch) {
+
+        public override void Draw(SpriteBatch batch)
+        {
             batch.Begin();
             Vector2 offset;
-            switch (_state) {
+            switch (_state)
+            {
                 case "Title press any key":
                     DrawBg(batch);
                     DrawLogo(batch, new Vector2(0, 20f));
@@ -234,15 +262,21 @@ namespace Mono_Ether {
                     DrawBg(batch);
                     break;
             }
+            /* Cursor */
+            for (var i = 0; i < 10; i++)
+                batch.Draw(_menuCursor, _mouseHistory[i], Color.White * (i / 10f));
             batch.End();
         }
-        private void SetState(string state) {
+        private void SetState(string state)
+        {
             _state = state;
             _timeSinceTransition = TimeSpan.Zero;
         }
-        private void HandleTitleButtons(GameTime gameTime) {
+        private void HandleTitleButtons(GameTime gameTime)
+        {
             _titleButtonManager.Buttons.ForEach(b => b.Update(gameTime));
-            switch (_titleButtonManager.PressedButton) {
+            switch (_titleButtonManager.PressedButton)
+            {
                 case "Start":
                     SetState("Title -> Level selection");
                     _timeSinceTransition = TimeSpan.Zero;
@@ -260,17 +294,21 @@ namespace Mono_Ether {
             }
         }
 
-        private void HandleSettingsWindow(GameTime gameTime) {
+        private void HandleSettingsWindow(GameTime gameTime)
+        {
             _settingsButtonManager.Buttons.ForEach(b => b.Update(gameTime));
-            if (_settingsButtonManager.PressedButton == "Back") {
+            if (_settingsButtonManager.PressedButton == "Back")
+            {
                 SaveSettings();
                 SetState("Settings -> Title");
             }
 
-            foreach (var slider in _settingsSliderManager.Sliders) {
+            foreach (var slider in _settingsSliderManager.Sliders)
+            {
                 slider.Update();
                 if (!slider.IsBeingDragged) continue;
-                switch (slider.Text) {
+                switch (slider.Text)
+                {
                     case "Master volume":
                         MasterVolume = slider.Value;
                         break;
@@ -308,10 +346,12 @@ namespace Mono_Ether {
                 ApplyChanges();
             }
         }
-        private void HandleLevelButtons(GameTime gameTime) {
+        private void HandleLevelButtons(GameTime gameTime)
+        {
             /* Handle level button presses */
             _levelButtonManager.Buttons.ForEach(b => b.Update(gameTime));
-            switch (_levelButtonManager.PressedButton) {
+            switch (_levelButtonManager.PressedButton)
+            {
                 case "Back":
                     SetState("Level selection -> Title");
                     GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
@@ -319,7 +359,8 @@ namespace Mono_Ether {
             }
             /* Handle Carousel Button Presses */
             _carouselButtonManager.Buttons.ForEach(b => b.Update(gameTime));
-            switch (_carouselButtonManager.PressedButton) {
+            switch (_carouselButtonManager.PressedButton)
+            {
                 case "Level One":
                     ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "debugMap.txt")); // TODO replace with level one
                     GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
@@ -339,14 +380,16 @@ namespace Mono_Ether {
             if (_carouselOffset < 1.5f - numButtons)
                 _carouselOffset = MathHelper.Lerp(_carouselOffset, 1.5f - numButtons, 0.2f);
             /* Update button positions */
-            for (int i = 0; i < numButtons; i++) {
+            for (int i = 0; i < numButtons; i++)
+            {
                 var j = i + _carouselOffset;
                 _carouselButtonManager.Buttons[i].Pos = new Vector2(
                     ScreenSize.X - 300f * MathF.Exp(-j * j / 25f),
                     ScreenSize.Y / 2f + j * 120f);
             }
         }
-        private void DrawBg(SpriteBatch batch) {
+        private void DrawBg(SpriteBatch batch)
+        {
             Vector2 offset = new Vector2(-Input.Mouse.X / ScreenSize.X - 0.5f,
                 -Input.Mouse.Y / ScreenSize.Y - 0.5f) * 10f;
             /* Bg */
@@ -381,7 +424,8 @@ namespace Mono_Ether {
             /* MainBar */
             batch.Draw(_mainBar, new Vector2(ScreenSize.X / 2f, ScreenSize.Y - 203f + offset.Y), null, Color.White, 0f, _mainBar.Size() / 2f, new Vector2(ScreenSize.X / _mainBar.Width, 1f), 0, 0);
         }
-        private void DrawLogo(SpriteBatch batch, Vector2 offset) {
+        private void DrawLogo(SpriteBatch batch, Vector2 offset)
+        {
             offset += new Vector2(-Input.Mouse.X / ScreenSize.X - 0.5f,
                 -Input.Mouse.Y / ScreenSize.Y - 0.5f) * 20f;
             /* Triangles */

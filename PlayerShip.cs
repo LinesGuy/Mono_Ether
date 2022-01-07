@@ -161,9 +161,11 @@ namespace Mono_Ether {
             /* Update player camera */
             PlayerCamera.Update(gameTime, Position, Index);
         }
-        public override void Draw(SpriteBatch batch, Camera camera) {
+        public override void Draw(SpriteBatch batch, Camera camera)
+        {
             if (Index == PlayerIndex.One)
-                batch.Draw(GlobalAssets.SliderBall, Input.Mouse.Position.ToVector2(), null, Color.White, 0f, GlobalAssets.SliderBall.Size() / 2f, 0, 0);
+                batch.Draw(GlobalAssets.SliderBall, Input.Mouse.Position.ToVector2(), null, Color.White, 0f,
+                    GlobalAssets.SliderBall.Size() / 2f, 1f, 0, 0);
             base.Draw(batch, camera);
         }
     }
