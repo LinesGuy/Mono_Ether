@@ -36,13 +36,13 @@ namespace Mono_Ether {
 
         }
         public override void LoadContent(ContentManager content) {
-            PlayerShip.Texture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
+            PlayerShip.LoadContent(content);
             Particle.PointParticle = content.Load<Texture2D>("Textures/GameScreen/Particles/Point");
             Tile.LoadContent(content);
             Enemy.LoadContent(content);
         }
         public override void UnloadContent() {
-            PlayerShip.Texture = null;
+            PlayerShip.UnloadContent();
             Particle.PointParticle = null;
             Tile.UnloadContent();
             Enemy.UnloadContent();
@@ -55,11 +55,6 @@ namespace Mono_Ether {
             }
             /* Update all entity positions and handle collisions */
             _entityManager.Update(gameTime);
-            // TODO temp code to summon many particles
-            if (Input.Keyboard.IsKeyDown(Keys.P)) {
-                //for (int i = 0; i < 1000; i++)
-                //_particleManager.Add(new Particle(Particle.Laser, Color.White, new Vector2(100f), new Vector2(5f), 0.99f, TimeSpan.FromSeconds(3)));
-            }
             _particleManager.Update(gameTime);
             _enemySpawner.Update(_entityManager, _tileMap);
         }
@@ -67,19 +62,19 @@ namespace Mono_Ether {
             //GraphicsDevice.Clear(Color.Black); // TODO remove
             //foreach (PlayerShip player in _entityManager.Players) {
             var player = _entityManager.Players.First();
-                //GraphicsDevice.SetRenderTarget(player.PlayerCamera.Screen);
-                batch.Begin(samplerState: SamplerState.PointClamp);
-                Color backgroundColor = player.Index switch {
-                    PlayerIndex.One => new Color(16, 0, 0),
-                    PlayerIndex.Two => new Color(0, 16, 0),
-                    PlayerIndex.Three => new Color(0, 0, 16),
-                    PlayerIndex.Four => new Color(16, 0, 16),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-                batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, player.PlayerCamera.ScreenSize.X, player.PlayerCamera.ScreenSize.Y), backgroundColor);
-                _entityManager.Draw(batch, player.PlayerCamera); /* Draw all entities (inc players, bullets, powerpacks etc) */
-                _tileMap.Draw(batch, player.PlayerCamera, _mode == "Editor"); /* Draw tilemap with tile boundaries if in editor mode */
-                _particleManager.Draw(batch, player.PlayerCamera);
+            //GraphicsDevice.SetRenderTarget(player.PlayerCamera.Screen);
+            batch.Begin(samplerState: SamplerState.PointClamp);
+            Color backgroundColor = player.Index switch {
+                PlayerIndex.One => new Color(16, 0, 0),
+                PlayerIndex.Two => new Color(0, 16, 0),
+                PlayerIndex.Three => new Color(0, 0, 16),
+                PlayerIndex.Four => new Color(16, 0, 16),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, player.PlayerCamera.ScreenSize.X, player.PlayerCamera.ScreenSize.Y), backgroundColor);
+            _entityManager.Draw(batch, player.PlayerCamera); /* Draw all entities (inc players, bullets, powerpacks etc) */
+            _tileMap.Draw(batch, player.PlayerCamera, _mode == "Editor"); /* Draw tilemap with tile boundaries if in editor mode */
+            _particleManager.Draw(batch, player.PlayerCamera);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
             batch.End();
@@ -91,8 +86,6 @@ namespace Mono_Ether {
             }
             batch.End();*/
             // TODO enable splitscreen?
-            /* Debug */
-            
         }
     }
 }

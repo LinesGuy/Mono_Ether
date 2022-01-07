@@ -93,6 +93,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/GameScreen/Enemies/PurpleWanderer.png
 
+#begin Textures/GameScreen/GameCursor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/GameCursor.png
+
 #begin Textures/GameScreen/Particles/Laser.png
 /importer:TextureImporter
 /processor:TextureProcessor

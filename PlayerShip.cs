@@ -1,19 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Diagnostics;
 
 namespace Mono_Ether {
     public class PlayerShip : Entity {
-        public static Texture2D Texture;
+        public static Texture2D ShipTexture;
+        public static Texture2D GameCursor;
         public PlayerIndex Index;
         public readonly Camera PlayerCamera;
+        private float _cursorRotation;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
             Position = position;
             PlayerCamera = new Camera(graphicsDevice, cameraViewport);
-            Image = Texture;
+            Image = ShipTexture;
+        }
+
+        public static void LoadContent(ContentManager content) {
+            ShipTexture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
+            GameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
+        }
+
+        public static void UnloadContent() {
+            ShipTexture = null;
+            GameCursor = null;
         }
         public override void Update(GameTime gameTime) {
             // TODO do nothing if dead
@@ -147,6 +159,8 @@ namespace Mono_Ether {
                 }
             }
             */
+            /* Update cursor rotation */
+            _cursorRotation += 0.05f;
             #endregion Shooting
             #region Power packs
             /* TODO add powerpacks
@@ -161,11 +175,10 @@ namespace Mono_Ether {
             /* Update player camera */
             PlayerCamera.Update(gameTime, Position, Index);
         }
-        public override void Draw(SpriteBatch batch, Camera camera)
-        {
+        public override void Draw(SpriteBatch batch, Camera camera) {
             if (Index == PlayerIndex.One)
-                batch.Draw(GlobalAssets.SliderBall, Input.Mouse.Position.ToVector2(), null, Color.White, 0f,
-                    GlobalAssets.SliderBall.Size() / 2f, 1f, 0, 0);
+                batch.Draw(GameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
+                    GameCursor.Size() / 2f, 1f, 0, 0);
             base.Draw(batch, camera);
         }
     }
