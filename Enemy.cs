@@ -22,7 +22,7 @@ namespace Mono_Ether {
             Position = position;
             Health = 1; // TODO difficulty
             Radius = Image.Width / 2f;
-            EnemyColor = Color.Transparent; // TODO remove this?
+            EntityColor = Color.Transparent; // TODO remove this?
         }
         public static Enemy CreateEnemy(EnemyType type, Vector2 position) {
             var enemy = new Enemy(type, position);
@@ -48,7 +48,7 @@ namespace Mono_Ether {
         public override void Update(GameTime gameTime) {
             if (TimeUntilStart > 0) {
                 TimeUntilStart--;
-                EnemyColor = Color.White * (1 - TimeUntilStart / 60f);
+                EntityColor = Color.White * (1 - TimeUntilStart / 60f);
                 return;
             }
             /* Apply enemy behaviors */

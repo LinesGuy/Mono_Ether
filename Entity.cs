@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Mono_Ether {
     public abstract class Entity {
         protected Texture2D Image = GlobalAssets.Default;
-        public Color EnemyColor = Color.White;
+        public Color EntityColor = Color.White;
         public Vector2 Position = Vector2.Zero;
         public Vector2 Velocity = Vector2.Zero;
         public float Orientation = 0f;
@@ -14,7 +14,7 @@ namespace Mono_Ether {
         public abstract void Update(GameTime gameTime);
         public virtual void Draw(SpriteBatch batch, Camera camera) {
             Vector2 screenPos = camera.WorldToScreen(Position);
-            batch.Draw(Image, screenPos, null, EnemyColor, Orientation + camera.Orientation, Size / 2f, camera.Zoom, 0, 0);
+            batch.Draw(Image, screenPos, null, EntityColor, Orientation + camera.Orientation, Size / 2f, camera.Zoom, 0, 0);
         }
         public virtual void HandleTilemapCollision() {
             /* Get tile that the entity is currently in */

@@ -9,21 +9,38 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Mono_Ether {
     public class Bullet : Entity
     {
-        public static Texture2D BulletTexture;
-        public static Texture2D BulletGlowTexture;
+        private static Texture2D _bulletTexture;
+        private static Texture2D _bulletGlowTexture; // TODO add bullet glow
+        public PlayerIndex ParentPlayerIndex;
+        private int _age;
+        private const int Lifespan = 120;
+        public Bullet(Vector2 position, Vector2 velocity, Color color, PlayerIndex playerIndex)
+        {
+            Image = _bulletTexture;
+            Position = position;
+            Velocity = velocity;
+            EntityColor = color;
+            ParentPlayerIndex = playerIndex;
+            Orientation = Velocity.ToAngle();
+            Radius = 9; // Min(image width, image height)
+        }
         public override void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            Position += Velocity;
+            /* Delete bullet after lifespan reached */
+            _age++;
+            if (_age > Lifespan)
+                IsExpired = true;
         }
-        public void LoadContent(ContentManager content)
+        public static void LoadContent(ContentManager content)
         {
-            BulletTexture = content.Load<Texture2D>("Textures/GameScreen/Bullet");
-            BulletGlowTexture = content.Load<Texture2D>("Textures/GameScreen/BulletGlow");
+            _bulletTexture = content.Load<Texture2D>("Textures/GameScreen/Bullet");
+            _bulletGlowTexture = content.Load<Texture2D>("Textures/GameScreen/BulletGlow");
         }
-        public void UnloadContent()
+        public static void UnloadContent()
         {
-            BulletTexture = null;
-            BulletGlowTexture = null;
+            _bulletTexture = null;
+            _bulletGlowTexture = null;
         }
     }
 }

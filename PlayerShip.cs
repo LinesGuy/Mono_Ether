@@ -3,29 +3,36 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether {
     public class PlayerShip : Entity {
-        public static Texture2D ShipTexture;
-        public static Texture2D GameCursor;
+        private static Texture2D _shipTexture;
+        private static Texture2D _gameCursor;
+        private static SoundEffect _shotSoundEffect; // TODO array, also move to bullet.cs?
         public PlayerIndex Index;
         public readonly Camera PlayerCamera;
+        private int _shotCooldownRemaining;
+        private const int ShotCooldown = 6;
         private float _cursorRotation;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
+        private static readonly Random Rand  = new Random();
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
             Position = position;
             PlayerCamera = new Camera(graphicsDevice, cameraViewport);
-            Image = ShipTexture;
+            Image = _shipTexture;
         }
 
         public static void LoadContent(ContentManager content) {
-            ShipTexture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
-            GameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
+            _shipTexture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
+            _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
+            _shotSoundEffect = content.Load<SoundEffect>("SoundEffects/PlayerShoot/Shoot-01");
         }
 
         public static void UnloadContent() {
-            ShipTexture = null;
-            GameCursor = null;
+            _shipTexture = null;
+            _gameCursor = null;
+            _shotSoundEffect = null;
         }
         public override void Update(GameTime gameTime) {
             // TODO do nothing if dead
@@ -116,13 +123,13 @@ namespace Mono_Ether {
             */
             #endregion
             #region Shooting
-            /* TODO add shooting
-            if (!EtherRoot.Instance.EditorMode) {
-                var aim = Camera.GetMouseAimDirection(Position);
-                if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0) {
-                    // Play shooting sound
-                    Sounds.PlayerShoot.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
-                    // Cooldown calculations
+            if (GameScreen.Instance.Mode == GameMode.Playing)
+            {
+                var aim = PlayerCamera.MouseWorldCoords() - Position; // ARBITRARY MAGNITUDE, scale later
+                if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && _shotCooldownRemaining == 0) {
+                    /* Play shooting sound */
+                    _shotSoundEffect.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
+                    /* TODO Cooldown calculations
                     float cooldownRemainingMultiplier = 1f;
                     foreach (var power in activePowerPacks) {
                         if (power.PowerType == "ShootSpeedIncrease")
@@ -131,34 +138,38 @@ namespace Mono_Ether {
                             cooldownRemainingMultiplier *= 1.3f;
                     }
                     cooldownRemaining = (int)((float)CooldownFrames * cooldownRemainingMultiplier);
+                    */
+                    _shotCooldownRemaining = ShotCooldown; // TODO replace with above
+                    _shotCooldownRemaining--;
                     var aimAngle = aim.ToAngle();
                     const int bulletCount = 3;
                     for (var i = 0; i < bulletCount; i++) {
                         var randomSpread = Rand.NextFloat(-0.04f, 0.04f) + Rand.NextFloat(-0.04f, 0.04f);
-                        var offsetAngle = aimAngle + MathUtil.Interpolate(-.2f, .2f, i / (bulletCount - 0.999f));
-                        var offset = MathUtil.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
-                        var vel = MathUtil.FromPolar(aimAngle + randomSpread, 18f);
-                        Color bulletColor;
+                        var offsetAngle = aimAngle + MathHelper.Lerp(-.2f, .2f, i / (bulletCount - 0.999f));
+                        var offset = MyUtils.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
+                        var vel = MyUtils.FromPolar(aimAngle + randomSpread, 18f);
+                        var bulletColor = new Color(239, 247, 74);
+                        /* TODO base bullet color from cooldown remaining multiplier
                         if (cooldownRemainingMultiplier < 1f)
                             bulletColor = new Color(3, 252, 252); // Baby blue
                         else if (cooldownRemainingMultiplier > 1f)
                             bulletColor = new Color(252, 123, 3); // Orange
                         else
                             bulletColor = new Color(239, 247, 74); // Yellow
-                        EntityManager.Add(new Bullet(Position + offset, vel, bulletColor, playerIndex));
+                        */
+                        EntityManager.Instance.Add(new Bullet(Position + offset, vel, bulletColor, Index));
                     }
                     // Knockback (dumb)
                     //Camera.CameraPosition += MathUtil.FromPolar(aimangle + MathF.PI, 5f);
                 }
-
-                if (cooldownRemaining > 0)
-                    cooldownRemaining--;
-
-                if (Input.WasRightMouseJustDown()) {
+                /* Decrement cooldown */
+                if (_shotCooldownRemaining > 0)
+                    _shotCooldownRemaining--;
+                /* TODO starburst
+                if (Input.WasRightMouseJustDown)
                     EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
-                }
+                */
             }
-            */
             /* Update cursor rotation */
             _cursorRotation += 0.05f;
             #endregion Shooting
@@ -177,8 +188,8 @@ namespace Mono_Ether {
         }
         public override void Draw(SpriteBatch batch, Camera camera) {
             if (Index == PlayerIndex.One)
-                batch.Draw(GameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
-                    GameCursor.Size() / 2f, 1f, 0, 0);
+                batch.Draw(_gameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
+                    _gameCursor.Size() / 2f, 1f, 0, 0);
             base.Draw(batch, camera);
         }
     }

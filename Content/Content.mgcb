@@ -45,6 +45,30 @@
 /processorParam:Quality=Best
 /build:SoundEffects/Click.wav
 
+#begin SoundEffects/PlayerShoot/Shoot-01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PlayerShoot/Shoot-01.wav
+
+#begin SoundEffects/PlayerShoot/Shoot-02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PlayerShoot/Shoot-02.wav
+
+#begin SoundEffects/PlayerShoot/Shoot-03.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PlayerShoot/Shoot-03.wav
+
+#begin SoundEffects/PlayerShoot/Shoot-04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PlayerShoot/Shoot-04.wav
+
 #begin Textures/GameScreen/Bullet.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -6,17 +6,20 @@ using System;
 using System.Linq;
 
 namespace Mono_Ether {
+    public enum GameMode { Playing, Paused, Editor }
     public class GameScreen : GameState {
+        public static GameScreen Instance;
         private readonly EntityManager _entityManager = new EntityManager();
         private readonly ParticleManager _particleManager = new ParticleManager();
         private readonly EnemySpawner _enemySpawner = new EnemySpawner();
         private readonly TileMap _tileMap;
-        private readonly string _mode = "Playing";
+        public readonly GameMode Mode = GameMode.Playing;
         public GameScreen(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
             /* Load tile map data from filename */
             _tileMap = new TileMap(mapFileName);
         }
         public override void Initialize() {
+            Instance = this;
             ParticleManager.Instance = _particleManager;
             /* Add one player */
             _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X, GameSettings.ScreenSize.Y)));
@@ -37,12 +40,14 @@ namespace Mono_Ether {
         }
         public override void LoadContent(ContentManager content) {
             PlayerShip.LoadContent(content);
+            Bullet.LoadContent(content);
             Particle.PointParticle = content.Load<Texture2D>("Textures/GameScreen/Particles/Point");
             Tile.LoadContent(content);
             Enemy.LoadContent(content);
         }
         public override void UnloadContent() {
             PlayerShip.UnloadContent();
+            Bullet.UnloadContent();
             Particle.PointParticle = null;
             Tile.UnloadContent();
             Enemy.UnloadContent();
@@ -73,7 +78,7 @@ namespace Mono_Ether {
             };
             batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, player.PlayerCamera.ScreenSize.X, player.PlayerCamera.ScreenSize.Y), backgroundColor);
             _entityManager.Draw(batch, player.PlayerCamera); /* Draw all entities (inc players, bullets, powerpacks etc) */
-            _tileMap.Draw(batch, player.PlayerCamera, _mode == "Editor"); /* Draw tilemap with tile boundaries if in editor mode */
+            _tileMap.Draw(batch, player.PlayerCamera, Mode == GameMode.Editor); /* Draw tilemap with tile boundaries if in editor mode */
             _particleManager.Draw(batch, player.PlayerCamera);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
