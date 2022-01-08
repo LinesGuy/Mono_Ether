@@ -77,6 +77,19 @@ namespace Mono_Ether {
                 i++;
             }
             #endregion
+            #region Enemies <-> Bullets
+            foreach (var enemy in Enemies) {
+                foreach (var bullet in Bullets) {
+                    if (IsColliding(enemy, bullet))
+                    {
+                        // TODO check invincible
+                        bullet.Expire();
+                        enemy.WasShot(bullet.ParentPlayerIndex);
+                    }
+                }
+            }
+
+            #endregion
         }
         public void Draw(SpriteBatch batch, Camera camera) {
             foreach (Entity entity in Entities)

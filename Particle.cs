@@ -34,8 +34,7 @@ namespace Mono_Ether {
             Age += gameTime.ElapsedGameTime;
             if (Age > _lifeSpan)
                 IsExpired = true;
-            _transparentColor = Color * (float) (1 - Age / _lifeSpan);
-            base.Update(gameTime);
+            _transparentColor = Color * (float)(1 - Age / _lifeSpan);
         }
         public SmallParticle(Vector2 position, Color color) : base(position, color) {
             Position = position;
@@ -51,10 +50,9 @@ namespace Mono_Ether {
             Velocity = velocity;
             Friction = friction;
         }
-        public override void Update(GameTime gameTime)
-        {
+        public override void Update(GameTime gameTime) {
             ParticleManager.Instance.Add(new SmallParticle(Position, Color));
-            if (Velocity.LengthSquared() < 0.5f)
+            if (Velocity.LengthSquared() < 1.5f)
                 IsExpired = true;
             base.Update(gameTime);
         }
@@ -65,47 +63,70 @@ namespace Mono_Ether {
 
     public class ParticleManager {
         public static ParticleManager Instance;
-        public Particle[] Particles = new Particle[10000];
-        private int _index;
+        public BigParticle[] BigParticles = new BigParticle[10000];
+        public SmallParticle[] SmallParticles = new SmallParticle[10000];
+        private int _bigIndex;
+        private int _smallIndex;
         private readonly List<Particle> _addedParticles = new List<Particle>();
         private bool _isUpdating;
         public void Add(Particle particle) {
             if (!_isUpdating) {
-                Particles[_index] = particle;
-                _index++;
-                if (_index == Particles.Length)
-                    _index = 0;
+                if (particle is BigParticle bigParticle) {
+                    BigParticles[_bigIndex] = bigParticle;
+                    _bigIndex++;
+                    if (_bigIndex == BigParticles.Length)
+                        _bigIndex = 0;
+                } else if (particle is SmallParticle smallParticle) {
+                    SmallParticles[_smallIndex] = smallParticle;
+                    _smallIndex++;
+                    if (_smallIndex == SmallParticles.Length)
+                        _smallIndex = 0;
+                }
             } else
                 _addedParticles.Add(particle);
         }
         public void Update(GameTime gameTime) {
             _isUpdating = true;
             // TODO remove particles inside walls?
-            foreach (var particle in Particles)
+            foreach (var particle in BigParticles)
+                particle?.Update(gameTime);
+            foreach (var particle in SmallParticles)
                 particle?.Update(gameTime);
             _isUpdating = false;
             _addedParticles.ForEach(Add);
             _addedParticles.Clear();
-            for (var i = 0; i < Particles.Length; i++) {
-                var particle = Particles[i];
-                if (particle is { IsExpired: true }) Particles[i] = null;
-            }
+            for (var i = 0; i < BigParticles.Length; i++)
+                if (BigParticles[i] != null && BigParticles[i].IsExpired)
+                    BigParticles[i] = null;
+            for (var i = 0; i < SmallParticles.Length; i++)
+                if (SmallParticles[i] != null && SmallParticles[i].IsExpired)
+                    SmallParticles[i] = null;
         }
         public void Draw(SpriteBatch batch, Camera camera) {
-            foreach (var particle in Particles) {
+            foreach (var particle in BigParticles)
                 particle?.Draw(batch, camera);
-            }
+            foreach (var particle in SmallParticles)
+                particle?.Draw(batch, camera);
         }
     }
     public static class ParticleTemplates {
         private static readonly Random Random = new Random();
-        public static void ExhaustFire(Vector2 position, float orientation) {
+        public static void ExhaustFire(Vector2 position, float orientation) { // TODO add count parameter
             var orientationOffset = Random.NextFloat(-0.3f, 0.3f);
             var positionOffset = Random.NextVector2(0f, 10f);
-            Color color = new Color(0.2f, 0.8f - MathF.Abs(orientationOffset), 1f);
+            var color = new Color(0.2f, 0.8f - MathF.Abs(orientationOffset), 1f);
             ParticleManager.Instance.Add(new BigParticle(
                 position + positionOffset, color,
                 MyUtils.FromPolar(orientation + orientationOffset, Random.NextFloat(1f, 6f)), 0.99f));
+        }
+        public static void Explosion(Vector2 position, float minSpeed, float maxSpeed, int count) { // TODO add color parameter
+            for (var i = 0; i < count; i++) {
+                var orientation = Random.NextFloat(0f, MathF.PI * 2f);
+                var speed = Random.NextFloat(minSpeed, maxSpeed);
+                var color = new Color(255, 255, 0); // TODO
+                ParticleManager.Instance.Add(new BigParticle(
+                    position, color, MyUtils.FromPolar(orientation, speed), 0.99f));
+            }
         }
     }
 }

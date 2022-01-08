@@ -122,7 +122,7 @@ namespace Mono_Ether {
                         if (path.Count <= 0) break;
                         /* Move towards player */
                         Velocity += (path[0] - Position).ScaleTo(acceleration);
-                        
+
                         yield return 0;
                     }
                 }
@@ -160,6 +160,25 @@ namespace Mono_Ether {
                 Orientation += speed;
                 yield return 0;
             }
+        }
+
+        public void WasShot(PlayerIndex playerIndex) {
+            Health--;
+            if (Health <= 0)
+                WasKilled(playerIndex);
+            // TODO floating text (damage)
+            // TODO was shot sound (if not killed)
+        }
+
+        private void WasKilled(PlayerIndex playerIndex) {
+            IsExpired = true;
+            /* Add score to player */
+            //EntityManager.Instance.Players[playerIndex].Score += Worth;
+            // TODO summon geom
+            // TODO floating text (worth)
+            // TODO play sound
+            /* Summon particles */
+            ParticleTemplates.Explosion(Position, 5f, 10f, 30);
         }
     }
 }
