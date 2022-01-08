@@ -42,6 +42,11 @@ namespace Mono_Ether {
             }
             return enemy;
         }
+        public void HandleCollision(Enemy other) {
+            var delta = Position - other.Position;
+            /* Push current enemy away from other enemy. The closer they are, the harder the push */
+            Velocity += 10 * delta / (delta.LengthSquared() + 1);
+        }
         private void AddBehaviour(IEnumerable<int> behaviour) {
             behaviors.Add(behaviour.GetEnumerator());
         }
