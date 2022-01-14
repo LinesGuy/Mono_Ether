@@ -81,7 +81,6 @@ namespace Mono_Ether {
             _entityManager.Update(gameTime);
             _particleManager.Update(gameTime);
             _enemySpawner.Update(_entityManager, _tileMap);
-            _starField.Update();
         }
         public override void Draw(SpriteBatch batch) {
             //GraphicsDevice.Clear(Color.Black); // TODO remove
