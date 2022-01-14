@@ -8,6 +8,8 @@ using System.Linq;
 namespace Mono_Ether {
     public enum GameMode { Playing, Paused, Editor }
     public class GameScreen : GameState {
+        private static Texture2D _gameCursor;
+        private float _cursorRotation;
         public static GameScreen Instance;
         private readonly EntityManager _entityManager = new EntityManager();
         private readonly ParticleManager _particleManager = new ParticleManager();
@@ -43,6 +45,7 @@ namespace Mono_Ether {
             PlayerShip.LoadContent(content);
             Bullet.LoadContent(content);
             Particle.PointParticle = content.Load<Texture2D>("Textures/GameScreen/Particles/Point");
+            _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
             Tile.LoadContent(content);
             Enemy.LoadContent(content);
         }
@@ -50,10 +53,13 @@ namespace Mono_Ether {
             PlayerShip.UnloadContent();
             Bullet.UnloadContent();
             Particle.PointParticle = null;
+            _gameCursor = null;
             Tile.UnloadContent();
             Enemy.UnloadContent();
         }
         public override void Update(GameTime gameTime) {
+            /* Update cursor rotation */
+            _cursorRotation += 0.05f;
             if (Input.WasKeyJustDown(Keys.Escape)) {
                 switch (Mode) {
                     case GameMode.Playing:
@@ -62,10 +68,11 @@ namespace Mono_Ether {
                         break;
                     case GameMode.Paused:
                         Mode = GameMode.Playing;
-                        _pauseWindow.Unpause();
+                        _pauseWindow.UnPause();
                         break;
                 }
             }
+            _pauseWindow.Update(gameTime);
             if (Mode == GameMode.Paused)
                 return;
             /* Update all entity positions and handle collisions */
@@ -94,6 +101,9 @@ namespace Mono_Ether {
             batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
             if (_pauseWindow.Visible)
                 _pauseWindow.Draw(batch);
+            /* Draw cursor */
+            batch.Draw(_gameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
+                _gameCursor.Size() / 2f, 1f, 0, 0);
             batch.End();
             //}
             /*GraphicsDevice.SetRenderTarget(null);

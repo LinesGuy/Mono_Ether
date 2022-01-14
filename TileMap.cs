@@ -115,11 +115,13 @@ namespace Mono_Ether {
                 iterations++;
                 /* Occasionally print how many iterations we've done */
                 if (iterations % (MaxIterations / 5) == 0) {
-                    Debug.WriteLine($"Current iterations: {iterations}");
+                    if (GameSettings.DebugMode)
+                        Debug.WriteLine($"Current iterations: {iterations}");
                 }
                 /* End after threshold */
                 if (iterations > MaxIterations) {
-                    Debug.WriteLine($"Ending AStar early after {iterations} iterations");
+                    if (GameSettings.DebugMode)
+                        Debug.WriteLine($"Ending AStar early after {iterations} iterations");
                     return null;
                 }
                 /* Get the next node to check from the open list */

@@ -1,15 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
-using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether {
     public class PlayerShip : Entity {
         private static Texture2D _shipTexture;
-        private static Texture2D _gameCursor;
         private static SoundEffect _shotSoundEffect; // TODO array, also move to bullet.cs?
         private const string HighScoreFilename = "highscore.txt";
         public PlayerIndex Index;
@@ -17,28 +16,23 @@ namespace Mono_Ether {
         public readonly Camera PlayerCamera;
         private int _shotCooldownRemaining;
         private const int ShotCooldown = 6;
-        private float _cursorRotation;
         public float Multiplier = 1;
         public int Geoms;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
         int framesUntilRespawn;
-        private static readonly Random Rand  = new Random();
+        private static readonly Random Rand = new Random();
         public bool IsDead => framesUntilRespawn > 0;
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
             Position = position;
             PlayerCamera = new Camera(graphicsDevice, cameraViewport);
             Image = _shipTexture;
         }
-
         public static void LoadContent(ContentManager content) {
             _shipTexture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
-            _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
             _shotSoundEffect = content.Load<SoundEffect>("SoundEffects/PlayerShoot/Shoot-01");
         }
-
         public static void UnloadContent() {
             _shipTexture = null;
-            _gameCursor = null;
             _shotSoundEffect = null;
         }
         public override void Update(GameTime gameTime) {
@@ -133,8 +127,7 @@ namespace Mono_Ether {
             */
             #endregion
             #region Shooting
-            if (GameScreen.Instance.Mode == GameMode.Playing)
-            {
+            if (GameScreen.Instance.Mode == GameMode.Playing) {
                 var aim = PlayerCamera.MouseWorldCoords() - Position; // ARBITRARY MAGNITUDE, scale later
                 if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && _shotCooldownRemaining == 0) {
                     /* Play shooting sound */
@@ -180,8 +173,6 @@ namespace Mono_Ether {
                     EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
                 */
             }
-            /* Update cursor rotation */
-            _cursorRotation += 0.05f;
             #endregion Shooting
             #region Power packs
             /* TODO add powerpacks
@@ -197,13 +188,11 @@ namespace Mono_Ether {
             PlayerCamera.Update(gameTime, Position, Index);
         }
 
-        public void Kill()
-        {
+        public void Kill() {
             ParticleTemplates.Explosion(Position, 5f, 20f, 100);
             framesUntilRespawn = 60;
             Lives--;
-            if (Lives < 0)
-            {
+            if (Lives < 0) {
                 framesUntilRespawn = 99999;
                 // transition to death
             }
@@ -213,9 +202,6 @@ namespace Mono_Ether {
         public override void Draw(SpriteBatch batch, Camera camera) {
             if (IsDead)
                 return;
-            if (Index == PlayerIndex.One)
-                batch.Draw(_gameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
-                    _gameCursor.Size() / 2f, 1f, 0, 0);
             base.Draw(batch, camera);
         }
         private int LoadHighScore() {
