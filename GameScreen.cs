@@ -12,8 +12,9 @@ namespace Mono_Ether {
         private readonly EntityManager _entityManager = new EntityManager();
         private readonly ParticleManager _particleManager = new ParticleManager();
         private readonly EnemySpawner _enemySpawner = new EnemySpawner();
+        private readonly PauseWindow _pauseWindow = new PauseWindow();
         private readonly TileMap _tileMap;
-        public readonly GameMode Mode = GameMode.Playing;
+        public GameMode Mode = GameMode.Playing;
         public GameScreen(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
             /* Load tile map data from filename */
             _tileMap = new TileMap(mapFileName);
@@ -53,11 +54,20 @@ namespace Mono_Ether {
             Enemy.UnloadContent();
         }
         public override void Update(GameTime gameTime) {
-            // TODO remove esc to return
             if (Input.WasKeyJustDown(Keys.Escape)) {
-                ScreenManager.RemoveScreen();
-                return;
+                switch (Mode) {
+                    case GameMode.Playing:
+                        Mode = GameMode.Paused;
+                        _pauseWindow.Pause();
+                        break;
+                    case GameMode.Paused:
+                        Mode = GameMode.Playing;
+                        _pauseWindow.Unpause();
+                        break;
+                }
             }
+            if (Mode == GameMode.Paused)
+                return;
             /* Update all entity positions and handle collisions */
             _entityManager.Update(gameTime);
             _particleManager.Update(gameTime);
@@ -82,6 +92,8 @@ namespace Mono_Ether {
             _particleManager.Draw(batch, player.PlayerCamera);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
+            if (_pauseWindow.Visible)
+                _pauseWindow.Draw(batch);
             batch.End();
             //}
             /*GraphicsDevice.SetRenderTarget(null);

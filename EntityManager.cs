@@ -78,8 +78,11 @@ namespace Mono_Ether {
             }
             #endregion
             #region Enemies <-> Bullets
-            foreach (var enemy in Enemies) {
-                foreach (var bullet in Bullets) {
+
+            foreach (var enemy in Enemies)
+            {
+                foreach (var bullet in Bullets)
+                {
                     if (IsColliding(enemy, bullet))
                     {
                         // TODO check invincible
@@ -90,6 +93,79 @@ namespace Mono_Ether {
             }
 
             #endregion
+            #region Players <-> Enemies
+            foreach (PlayerShip player in Players) {
+                if (player.IsDead)
+                    continue;
+                foreach (var enemy in Enemies) {
+                    if (enemy.IsActive && IsColliding(player, enemy)) {
+                        player.Kill();
+                        foreach (var enemy2 in Enemies) {
+                            enemy2.Suicide();
+                        }
+                        break;
+                    }
+                }
+            }
+            #endregion Handle collisions between the players and enemies
+            /*
+            #region Handle collisions between walls and enemies
+            for (var i = 0; i < Enemies.Count; i++) {
+                Enemies[i].HandleTilemapCollision();
+                if (Enemies[i].Type == "Snake" || Enemies[i].Type == "BossTwoHead") {
+                    for (int j = 1; j < Enemies[i].tail.Count; j++) {
+                        Enemies[i].tail[j].HandleTilemapCollision();
+                    }
+                }
+            }
+
+            #endregion Handle collisions between walls and enemies + the player
+            #region Handle collisions walls and bullets
+            for (var i = 0; i < Bullets.Count; i++)
+                Bullets[i].HandleTilemapCollision();
+            #endregion Same as above but for bullets
+            #region Handle collisions between powerpacks and the player
+            foreach (PlayerShip player in Players) {
+                for (var i = 0; i < PowerPacks.Count; i++)
+                    if (IsColliding(PowerPacks[i], player)) {
+                        PowerPacks[i].WasPickedUp();
+                        PowerPacks[i].IsExpired = true;
+                        if (PowerPacks[i].PowerType == "Doom") {
+                            ScreenManager.TransitionScreen(new DoomRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
+                            player.activePowerPacks.Add(new PowerPack(Art.PowerMoveSpeedIncrease, Vector2.Zero, "MoveSpeedIncrease", 3600));
+                            player.activePowerPacks.Add(new PowerPack(Art.PowerShootSpeedIncrease, Vector2.Zero, "ShootSpeedIncrease", 3600));
+                            continue;
+                        }
+                        player.activePowerPacks.Add(PowerPacks[i]);
+                    }
+            }
+            #endregion Handle collisions between powerpacks and the player
+            #region Handle players and geoms
+            foreach (Geom geom in Geoms) {
+                for (int i = 0; i < Players.Count; i++) {
+                    PlayerShip player = Players[i];
+                    if (IsColliding(geom, player)) {
+                        geom.Pickup(i);
+                    }
+                    if (Vector2.DistanceSquared(player.Position, geom.Position) < 150f * 150f)
+                        geom.Velocity += (player.Position - geom.Position).ScaleTo(1.3f);
+                }
+            }
+            #endregion  Handle players and geoms
+            #region Handle geom drones and geoms
+            List<Drone> geomDrones = Drones.Where(drone => drone.Type == "geomCollector").ToList();
+            foreach (Geom geom in Geoms) {
+                for (int i = 0; i < geomDrones.Count; i++) {
+                    Drone drone = geomDrones[i];
+                    if (IsColliding(geom, drone)) {
+                        geom.Pickup(drone.PlayerIndex);
+                    }
+                    if (Vector2.DistanceSquared(drone.Position, geom.Position) < 150f * 150f)
+                        geom.Velocity += (drone.Position - geom.Position).ScaleTo(1.3f);
+                }
+            }
+            #endregion  Handle players and geoms
+            */
         }
         public void Draw(SpriteBatch batch, Camera camera) {
             foreach (Entity entity in Entities)

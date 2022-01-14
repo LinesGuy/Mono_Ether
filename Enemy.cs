@@ -17,6 +17,7 @@ namespace Mono_Ether {
         public EnemyType Type;
         private readonly List<IEnumerator<int>> behaviors = new List<IEnumerator<int>>();
         private static readonly Random Rand = new Random();
+        public bool IsActive => TimeUntilStart == 0;
         private Enemy(EnemyType type, Vector2 position) {
             Type = type;
             Position = position;
@@ -178,6 +179,11 @@ namespace Mono_Ether {
             // TODO floating text (worth)
             // TODO play sound
             /* Summon particles */
+            ParticleTemplates.Explosion(Position, 5f, 10f, 30);
+        }
+        public void Suicide()
+        {
+            IsExpired = true;
             ParticleTemplates.Explosion(Position, 5f, 10f, 30);
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether {
@@ -10,13 +11,19 @@ namespace Mono_Ether {
         private static Texture2D _shipTexture;
         private static Texture2D _gameCursor;
         private static SoundEffect _shotSoundEffect; // TODO array, also move to bullet.cs?
+        private const string HighScoreFilename = "highscore.txt";
         public PlayerIndex Index;
+        public int Lives = 3;
         public readonly Camera PlayerCamera;
         private int _shotCooldownRemaining;
         private const int ShotCooldown = 6;
         private float _cursorRotation;
+        public float Multiplier = 1;
+        public int Geoms;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
+        int framesUntilRespawn;
         private static readonly Random Rand  = new Random();
+        public bool IsDead => framesUntilRespawn > 0;
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
             Position = position;
             PlayerCamera = new Camera(graphicsDevice, cameraViewport);
@@ -35,7 +42,10 @@ namespace Mono_Ether {
             _shotSoundEffect = null;
         }
         public override void Update(GameTime gameTime) {
-            // TODO do nothing if dead
+            if (IsDead) {
+                framesUntilRespawn--;
+                return;
+            }
             #region Movement
             const float acceleration = 3f;
             // TODO apply speed powerpacks
@@ -186,11 +196,35 @@ namespace Mono_Ether {
             /* Update player camera */
             PlayerCamera.Update(gameTime, Position, Index);
         }
+
+        public void Kill()
+        {
+            ParticleTemplates.Explosion(Position, 5f, 20f, 100);
+            framesUntilRespawn = 60;
+            Lives--;
+            if (Lives < 0)
+            {
+                framesUntilRespawn = 99999;
+                // transition to death
+            }
+            // reset powerpacks
+            // save highscore
+        }
         public override void Draw(SpriteBatch batch, Camera camera) {
+            if (IsDead)
+                return;
             if (Index == PlayerIndex.One)
                 batch.Draw(_gameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
                     _gameCursor.Size() / 2f, 1f, 0, 0);
             base.Draw(batch, camera);
+        }
+        private int LoadHighScore() {
+            // Return saved score if it exists, or return 0 if there is none
+            return File.Exists(HighScoreFilename) && int.TryParse(File.ReadAllText(HighScoreFilename), out int score) ? score : 0;
+        }
+        private void SaveHighScore(int score) {
+            // Saves the score to the highscore file, note that this does not check the saved score is greater than the new score.
+            File.WriteAllText(HighScoreFilename, score.ToString());
         }
     }
 }
