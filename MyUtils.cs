@@ -18,5 +18,6 @@ namespace Mono_Ether {
         public static Vector2 FromPolar(float angle, float magnitude) => magnitude * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         public static float GetTimeScalar(GameTime gameTime) => (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
         public static Vector2 NextVector2(this Random rand, float minLength, float maxLength) => FromPolar(rand.NextFloat(0f, MathHelper.TwoPi), rand.NextFloat(minLength, maxLength));
+        public static void DrawLine(SpriteBatch batch, Vector2 start, Vector2 end, Color color, float width) => batch.Draw(GlobalAssets.Pixel, start, null, color, MathF.Atan2(end.Y - start.Y, end.X - start.X), new Vector2(0, 0.5f), new Vector2(MathF.Sqrt(MathF.Pow(end.X - start.X, 2) + MathF.Pow(end.Y - start.Y, 2)), width), 0, 0);
     }
 }

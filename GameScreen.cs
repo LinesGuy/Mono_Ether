@@ -15,6 +15,7 @@ namespace Mono_Ether {
         private readonly ParticleManager _particleManager = new ParticleManager();
         private readonly EnemySpawner _enemySpawner = new EnemySpawner();
         private readonly PauseWindow _pauseWindow = new PauseWindow();
+        private readonly StarField _starField = new StarField();
         private readonly TileMap _tileMap;
         public GameMode Mode = GameMode.Playing;
         public GameScreen(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
@@ -24,6 +25,7 @@ namespace Mono_Ether {
         public override void Initialize() {
             Instance = this;
             ParticleManager.Instance = _particleManager;
+            _starField.Populate(_tileMap.WorldSize, 500);
             /* Add one player */
             _entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2, MyUtils.ViewportF(0, 0, GameSettings.ScreenSize.X, GameSettings.ScreenSize.Y)));
             /* Add two players */
@@ -79,6 +81,7 @@ namespace Mono_Ether {
             _entityManager.Update(gameTime);
             _particleManager.Update(gameTime);
             _enemySpawner.Update(_entityManager, _tileMap);
+            _starField.Update();
         }
         public override void Draw(SpriteBatch batch) {
             //GraphicsDevice.Clear(Color.Black); // TODO remove
@@ -95,6 +98,7 @@ namespace Mono_Ether {
             };
             batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, player.PlayerCamera.ScreenSize.X, player.PlayerCamera.ScreenSize.Y), backgroundColor);
             _entityManager.Draw(batch, player.PlayerCamera); /* Draw all entities (inc players, bullets, powerpacks etc) */
+            _starField.Draw(batch, player.PlayerCamera);
             _tileMap.Draw(batch, player.PlayerCamera, Mode == GameMode.Editor); /* Draw tilemap with tile boundaries if in editor mode */
             _particleManager.Draw(batch, player.PlayerCamera);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);

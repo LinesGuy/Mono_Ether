@@ -5,6 +5,7 @@ using System;
 
 namespace Mono_Ether {
     public class Camera {
+        public Vector2 LastPosition = Vector2.Zero;
         public Vector2 Position = Vector2.Zero;
         public float Zoom = 1f;
         public float Orientation;
@@ -26,6 +27,7 @@ namespace Mono_Ether {
 
         public void Update(GameTime gameTime, Vector2 playerPosition, PlayerIndex playerIndex) {
             var timeScalar = MyUtils.GetTimeScalar(gameTime);
+            LastPosition = Position;
             /* Freecam (disables lerp if used) */
             var direction = Vector2.Zero;
             switch (playerIndex) {
