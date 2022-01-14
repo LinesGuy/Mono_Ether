@@ -22,7 +22,7 @@ namespace Mono_Ether {
             public void Draw(SpriteBatch batch, Camera camera)
             {
                 var offsetPos = (camera.WorldToScreen(_position) - camera.ScreenSize / 2f) * _distance + camera.ScreenSize / 2f;
-                MyUtils.DrawLine(batch, offsetPos, offsetPos + (camera.LastPosition - camera.Position) * _distance, Color.Gray, 2f);
+                MyUtils.DrawLine(batch, offsetPos, offsetPos + (camera.LastPosition - camera.Position) * _distance, Color.LightGray, 1f);
                 // camera.WorldToScreen(_position + (camera.LastPosition - camera.Position))
             }
         }
