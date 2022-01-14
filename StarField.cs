@@ -15,7 +15,7 @@ namespace Mono_Ether {
             }
             public void Draw(SpriteBatch batch, Camera camera) {
                 var offsetPos = (camera.WorldToScreen(_position) - camera.ScreenSize / 2f) * _distance + camera.ScreenSize / 2f;
-                MyUtils.DrawLine(batch, offsetPos, offsetPos + (camera.LastPosition - camera.Position) * _distance, Color.LightGray, 1f);
+                MyUtils.DrawLine(batch, offsetPos, offsetPos + (camera.LastPosition - camera.Position).Rotate(camera.Orientation) * _distance * camera.Zoom, Color.LightGray, 1f);
             }
         }
         private readonly List<Star> Stars = new List<Star>();
