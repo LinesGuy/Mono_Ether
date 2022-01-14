@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Mono_Ether {
     public class Bullet : Entity {
@@ -41,6 +42,40 @@ namespace Mono_Ether {
         public static void UnloadContent() {
             _bulletTexture = null;
             _bulletGlowTexture = null;
+        }
+    }
+    public class Starburst : Entity {
+        private static Texture2D _starBurstTexture;
+        private int _age;
+        private readonly int _lifespan;
+        private readonly PlayerIndex _parentPlayerIndex;
+        private static readonly Random Random = new Random();
+        private const float BulletSpeed = 15f;
+        public Starburst(Vector2 position, Vector2 destination, PlayerIndex playerIndex) {
+            Image = _starBurstTexture;
+            Position = position;
+            _parentPlayerIndex = playerIndex;
+            Velocity = Vector2.Normalize(destination - position) * BulletSpeed;
+            Orientation = Velocity.ToAngle();
+            _lifespan = (int)((destination - position).Length() / BulletSpeed);
+        }
+        public static void LoadContent(ContentManager content) {
+            _starBurstTexture = content.Load<Texture2D>("Textures/GameScreen/StarBurst");
+        }
+        public static void UnloadContent() {
+            _starBurstTexture = null;
+        }
+        public override void Update(GameTime gameTime) {
+            Position += Velocity;
+            Orientation += 0.3f;
+            _age++;
+            if (_age <= _lifespan && TileMap.Instance.GetTileFromWorld(Position).Id <= 0) return;
+            Position -= Velocity;
+            IsExpired = true;
+            for (var i = 0; i < 50; i++) {
+                var bulletVelocity = MyUtils.FromPolar(Random.NextFloat((float)-Math.PI, (float)Math.PI), Random.NextFloat(8f, 16f));
+                EntityManager.Instance.Add(new Bullet(Position, bulletVelocity, new Color(128, 128, 0), _parentPlayerIndex));
+            }
         }
     }
 }

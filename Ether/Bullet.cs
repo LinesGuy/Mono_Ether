@@ -7,7 +7,7 @@ namespace Mono_Ether.Ether {
         private int age;
         private readonly int lifespan;
         public readonly int PlayerIndex;
-        private readonly Random rand = new Random();
+        private re adonly Random rand = new Random();
         public Bullet(Vector2 position, Vector2 velocity, Color color, int playerIndex) {
             Image = GlobalAssets.Bullet;
             Position = position;

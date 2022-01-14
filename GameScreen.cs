@@ -46,6 +46,7 @@ namespace Mono_Ether {
         public override void LoadContent(ContentManager content) {
             PlayerShip.LoadContent(content);
             Bullet.LoadContent(content);
+            Starburst.LoadContent(content);
             Particle.PointParticle = content.Load<Texture2D>("Textures/GameScreen/Particles/Point");
             _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
             Tile.LoadContent(content);
@@ -54,6 +55,7 @@ namespace Mono_Ether {
         public override void UnloadContent() {
             PlayerShip.UnloadContent();
             Bullet.UnloadContent();
+            Starburst.UnloadContent();
             Particle.PointParticle = null;
             _gameCursor = null;
             Tile.UnloadContent();

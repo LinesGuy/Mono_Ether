@@ -168,10 +168,9 @@ namespace Mono_Ether {
                 /* Decrement cooldown */
                 if (_shotCooldownRemaining > 0)
                     _shotCooldownRemaining--;
-                /* TODO starburst
+                /* Right click to summon a starburst */
                 if (Input.WasRightMouseJustDown)
-                    EntityManager.Add(new Starburst(Position, Camera.MouseWorldCoords(), playerIndex));
-                */
+                    EntityManager.Instance.Add(new Starburst(Position, PlayerCamera.MouseWorldCoords(), Index));
             }
             #endregion Shooting
             #region Power packs
