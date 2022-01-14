@@ -73,7 +73,7 @@ namespace Mono_Ether {
 
             if (direction.LengthSquared() > 1)
                 direction.Normalize();
-            //direction = direction.Rotate(-camera.Orientation); // TODO workaround?
+            direction = direction.Rotate(-PlayerCamera.Orientation);
 
             Velocity += acceleration * direction;
             if (Velocity.LengthSquared() > 144) Velocity = Velocity.ScaleTo(12f);
