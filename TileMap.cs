@@ -50,15 +50,22 @@ namespace Mono_Ether {
                 camera.ScreenToWorld(new Vector2(camera.ScreenSize.X, 0)), // Top-right
                 camera.ScreenToWorld(new Vector2(0, camera.ScreenSize.Y)) // Bottom-left
             };
+
             var xCoords = corners.Select(v => v.X).ToList();
             var yCoords = corners.Select(v => v.Y).ToList();
-            var startCol = Math.Max(0, (int)(xCoords.Min() / Tile.Length));
-            var endCol = Math.Min(GridSize.X, 1 + (int)(xCoords.Max() / Tile.Length));
-            var startRow = Math.Max(0, (int)(yCoords.Min() / Tile.Length));
-            var endRow = Math.Min(GridSize.Y, 1 + (int)(yCoords.Max() / Tile.Length));
-            for (var row = startRow; row < endRow; row++) {
-                for (var col = startCol; col < endCol; col++) {
-                    Grid[row][col].Draw(batch, camera);
+            const int extraTiles = 1; // Num of tiles outside of camera to render to prevent parallax'd tiles from "popping in"
+            var startCol = Math.Max(0, (int)(xCoords.Min() / Tile.Length) - extraTiles);
+            var endCol = Math.Min(GridSize.X, 1 + (int)(xCoords.Max() / Tile.Length) + extraTiles);
+            var startRow = Math.Max(0, (int)(yCoords.Min() / Tile.Length) - extraTiles);
+            var endRow = Math.Min(GridSize.Y, 1 + (int)(yCoords.Max() / Tile.Length) + extraTiles);
+            for (var layer = 0; layer < 3; layer++)
+            {
+                for (var row = startRow; row < endRow; row++)
+                {
+                    for (var col = startCol; col < endCol; col++)
+                    {
+                        Grid[row][col].Draw(batch, camera, layer);
+                    }
                 }
             }
             /* TODO probably working but verify
@@ -294,6 +301,27 @@ namespace Mono_Ether {
         public void Draw(SpriteBatch batch, Camera camera) {
             if (Id == 0) return;
             batch.Draw(_textures[Id - 1], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation,
+                Vector2.Zero, camera.Zoom, 0, 0);
+        }
+        public void Draw(SpriteBatch batch, Camera camera, int layer) {
+            if (Id == 0) return;
+            float zoom = 1f;
+            float transparency = 1f;
+            switch (layer)
+            {
+                case 0:
+                    zoom = 1f;
+                    break;
+                case 1:
+                    zoom = 0.975f;
+                    transparency = 0.5f;
+                    break;
+                case 2:
+                    zoom = 0.95f;
+                    transparency = 0.25f;
+                    break;
+            }
+            batch.Draw(_textures[Id - 1], (camera.WorldToScreen(TileMap.MapToWorld(Pos)) - camera.ScreenSize / 2f) * zoom + camera.ScreenSize / 2f, null, Color.White * transparency, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
         }
     }

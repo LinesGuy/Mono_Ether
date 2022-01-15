@@ -19,9 +19,9 @@ namespace Mono_Ether {
         public float Multiplier = 1;
         public int Geoms;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
-        int framesUntilRespawn;
+        private int _framesUntilRespawn;
         private static readonly Random Rand = new Random();
-        public bool IsDead => framesUntilRespawn > 0;
+        public bool IsDead => _framesUntilRespawn > 0;
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
             Position = position;
             PlayerCamera = new Camera(graphicsDevice, cameraViewport);
@@ -37,7 +37,7 @@ namespace Mono_Ether {
         }
         public override void Update(GameTime gameTime) {
             if (IsDead) {
-                framesUntilRespawn--;
+                _framesUntilRespawn--;
                 return;
             }
             #region Movement
@@ -189,10 +189,10 @@ namespace Mono_Ether {
 
         public void Kill() {
             ParticleTemplates.Explosion(Position, 5f, 20f, 100);
-            framesUntilRespawn = 60;
+            _framesUntilRespawn = 60;
             Lives--;
             if (Lives < 0) {
-                framesUntilRespawn = 99999;
+                _framesUntilRespawn = 99999;
                 // transition to death
             }
             // reset powerpacks
