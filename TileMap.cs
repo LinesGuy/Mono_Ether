@@ -58,13 +58,13 @@ namespace Mono_Ether {
             var endCol = Math.Min(GridSize.X, 1 + (int)(xCoords.Max() / Tile.Length) + extraTiles);
             var startRow = Math.Max(0, (int)(yCoords.Min() / Tile.Length) - extraTiles);
             var endRow = Math.Min(GridSize.Y, 1 + (int)(yCoords.Max() / Tile.Length) + extraTiles);
-            for (var layer = 0; layer < 3; layer++)
+            for (var layer = 0; layer < 4; layer++)
             {
                 for (var row = startRow; row < endRow; row++)
                 {
                     for (var col = startCol; col < endCol; col++)
                     {
-                        Grid[row][col].Draw(batch, camera, layer);
+                        Grid[row][col].Draw(batch, camera, layer/ 5f);
                     }
                 }
             }
@@ -303,24 +303,10 @@ namespace Mono_Ether {
             batch.Draw(_textures[Id - 1], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
         }
-        public void Draw(SpriteBatch batch, Camera camera, int layer) {
+        public void Draw(SpriteBatch batch, Camera camera, float parallax) {
             if (Id == 0) return;
-            float zoom = 1f;
-            float transparency = 1f;
-            switch (layer)
-            {
-                case 0:
-                    zoom = 1f;
-                    break;
-                case 1:
-                    zoom = 0.975f;
-                    transparency = 0.5f;
-                    break;
-                case 2:
-                    zoom = 0.95f;
-                    transparency = 0.25f;
-                    break;
-            }
+            float zoom = 1f - parallax / 10;
+            float transparency = 1 - parallax;
             batch.Draw(_textures[Id - 1], (camera.WorldToScreen(TileMap.MapToWorld(Pos)) - camera.ScreenSize / 2f) * zoom + camera.ScreenSize / 2f, null, Color.White * transparency, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
         }
