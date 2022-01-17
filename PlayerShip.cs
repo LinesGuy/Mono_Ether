@@ -9,7 +9,7 @@ using System.IO;
 namespace Mono_Ether {
     public class PlayerShip : Entity {
         private static Texture2D _shipTexture;
-        private static SoundEffect _shotSoundEffect; // TODO array, also move to bullet.cs?
+        public static SoundEffect ShotSoundEffect; // TODO array, also move to bullet.cs?
         private const string HighScoreFilename = "highscore.txt";
         public PlayerIndex Index;
         public int Lives = 3;
@@ -29,11 +29,11 @@ namespace Mono_Ether {
         }
         public static void LoadContent(ContentManager content) {
             _shipTexture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
-            _shotSoundEffect = content.Load<SoundEffect>("SoundEffects/PlayerShoot/Shoot-01");
+            ShotSoundEffect = content.Load<SoundEffect>("SoundEffects/PlayerShoot/Shoot-01");
         }
         public static void UnloadContent() {
             _shipTexture = null;
-            _shotSoundEffect = null;
+            ShotSoundEffect = null;
         }
         public override void Update(GameTime gameTime) {
             if (IsDead) {
@@ -131,7 +131,7 @@ namespace Mono_Ether {
                 var aim = PlayerCamera.MouseWorldCoords() - Position; // ARBITRARY MAGNITUDE, scale later
                 if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && _shotCooldownRemaining == 0) {
                     /* Play shooting sound */
-                    _shotSoundEffect.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
+                    ShotSoundEffect.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
                     /* TODO Cooldown calculations
                     float cooldownRemainingMultiplier = 1f;
                     foreach (var power in activePowerPacks) {

@@ -36,6 +36,9 @@ namespace Mono_Ether {
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 0f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, 0, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 100f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(0f, 100f), MyUtils.ViewportF(0, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
+            /* Give each player a shooter drone */
+            foreach (var player in EntityManager.Instance.Players)
+                EntityManager.Instance.Add(Drone.CreateShooter(player.Index));
         }
         public override void Suspend() {
 
@@ -51,6 +54,7 @@ namespace Mono_Ether {
             _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
             Tile.LoadContent(content);
             Enemy.LoadContent(content);
+            Drone.LoadContent(content);
         }
         public override void UnloadContent() {
             PlayerShip.UnloadContent();
@@ -60,6 +64,7 @@ namespace Mono_Ether {
             _gameCursor = null;
             Tile.UnloadContent();
             Enemy.UnloadContent();
+            Drone.UnloadContent();
         }
         public override void Update(GameTime gameTime) {
             /* Update cursor rotation */

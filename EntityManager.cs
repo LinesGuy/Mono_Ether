@@ -12,11 +12,15 @@ namespace Mono_Ether {
         public List<Enemy> Enemies = new List<Enemy>();
         public List<Bullet> Bullets = new List<Bullet>();
 
+
         private bool _isUpdating;
         private readonly List<Entity> _addedEntities = new List<Entity>();
         public EntityManager() {
             Instance = this;
         }
+
+        public IEnumerable<Geom> Geoms { get; set; }
+
         public void Add(Entity entity) {
             if (!_isUpdating)
                 AddEntity(entity);

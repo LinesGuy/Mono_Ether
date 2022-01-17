@@ -15,7 +15,7 @@ namespace Mono_Ether {
         public int Health;
         public int Worth;
         public EnemyType Type;
-        private readonly List<IEnumerator<int>> behaviors = new List<IEnumerator<int>>();
+        private readonly List<IEnumerator<int>> _behaviors = new List<IEnumerator<int>>();
         private static readonly Random Rand = new Random();
         public bool IsActive => TimeUntilStart == 0;
         private Enemy(EnemyType type, Vector2 position) {
@@ -49,7 +49,7 @@ namespace Mono_Ether {
             Velocity += 10 * delta / (delta.LengthSquared() + 1);
         }
         private void AddBehaviour(IEnumerable<int> behaviour) {
-            behaviors.Add(behaviour.GetEnumerator());
+            _behaviors.Add(behaviour.GetEnumerator());
         }
         public override void Update(GameTime gameTime) {
             if (TimeUntilStart > 0) {
@@ -58,9 +58,9 @@ namespace Mono_Ether {
                 return;
             }
             /* Apply enemy behaviors */
-            for (int i = 0; i < behaviors.Count; i++)
-                if (!behaviors[i].MoveNext())
-                    behaviors.RemoveAt(i--);
+            for (int i = 0; i < _behaviors.Count; i++)
+                if (!_behaviors[i].MoveNext())
+                    _behaviors.RemoveAt(i--);
 
             Position += Velocity;
             Velocity *= 0.8f;
