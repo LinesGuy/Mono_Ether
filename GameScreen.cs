@@ -81,6 +81,25 @@ namespace Mono_Ether {
                         break;
                 }
             }
+
+            if (Input.WasKeyJustDown(Keys.P))
+            {
+                switch (Mode)
+                {
+                    case GameMode.Playing:
+                        Mode = GameMode.Editor;
+                        EnemySpawner.Enabled = false;
+                        // disable power pack spawner TODO
+                        _entityManager.Enemies.ForEach(e => e.IsExpired = true);
+                        // Clear powerpacks TODO
+                        break;
+                    case GameMode.Editor:
+                        Mode = GameMode.Playing;
+                        EnemySpawner.Enabled = true;
+                        // enable power pack spanwer TODO
+                        break;
+                }
+            }
             _pauseWindow.Update(gameTime);
             if (Mode == GameMode.Paused)
                 return;
@@ -88,6 +107,7 @@ namespace Mono_Ether {
             _entityManager.Update(gameTime);
             _particleManager.Update(gameTime);
             _enemySpawner.Update(_entityManager, _tileMap);
+            _tileMap.Update(Mode == GameMode.Editor);
         }
         public override void Draw(SpriteBatch batch) {
             //GraphicsDevice.Clear(Color.Black); // TODO remove

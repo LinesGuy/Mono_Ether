@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 namespace Mono_Ether {
     public class TileMap {
         public static TileMap Instance;
         public readonly Tile[][] Grid;
+        private static int _selectedTileId = 1;
         public Vector2 GridSize => new Vector2(Grid[0].Length, Grid.Length);
         public Vector2 WorldSize => GridSize * Tile.Length;
         public TileMap(string fileName) {
@@ -35,7 +37,30 @@ namespace Mono_Ether {
                 foreach (var tile in row)
                     tile.UpdateWalls();
         }
-
+        public void Update(bool editorMode) {
+            if (!editorMode) return;
+            /* TODO press r to save map */
+            var tile = GetTileFromWorld(EntityManager.Instance.Players[0].PlayerCamera.MouseWorldCoords());
+            // Set Tile ID
+            if (Input.Keyboard.IsKeyDown(Keys.D1))
+                _selectedTileId = 1;
+            else if (Input.Keyboard.IsKeyDown(Keys.D2))
+                _selectedTileId = 2;
+            else if (Input.Keyboard.IsKeyDown(Keys.D3))
+                _selectedTileId = 3;
+            else if (Input.Keyboard.IsKeyDown(Keys.D4))
+                _selectedTileId = 4;
+            else if (Input.Keyboard.IsKeyDown(Keys.D0))
+                _selectedTileId = 0;
+            if (Input.Mouse.LeftButton == ButtonState.Pressed) { // Place last placed tile ID at cursor
+                tile.Id = _selectedTileId;
+                tile.UpdateNeighbouringWalls();
+            }
+            if (Input.Mouse.RightButton == ButtonState.Pressed) { // Delete tile at cursor
+                tile.Id = 0;
+                tile.UpdateNeighbouringWalls();
+            }
+        }
         public void Draw(SpriteBatch batch, Camera camera, bool editorMode) {
             /* Don't draw every tile in the grid. Instead, create an array of the coordinates of all four corners of the SCREEN, start from
              * the top-left most coordinate and iterate until the bottom-right most coordinate. If the camera orientation is a multiple of
@@ -58,13 +83,18 @@ namespace Mono_Ether {
             var endCol = Math.Min(GridSize.X, 1 + (int)(xCoords.Max() / Tile.Length) + extraTiles);
             var startRow = Math.Max(0, (int)(yCoords.Min() / Tile.Length) - extraTiles);
             var endRow = Math.Min(GridSize.Y, 1 + (int)(yCoords.Max() / Tile.Length) + extraTiles);
-            for (var layer = 0; layer < 4; layer++)
-            {
-                for (var row = startRow; row < endRow; row++)
-                {
-                    for (var col = startCol; col < endCol; col++)
-                    {
-                        Grid[row][col].Draw(batch, camera, layer/ 5f);
+            if (editorMode) {
+                for (var row = startRow; row < endRow; row++) {
+                    for (var col = startCol; col < endCol; col++) {
+                        Grid[row][col].Draw(batch, camera, 0, true);
+                    }
+                }
+            } else {
+                for (var layer = 0; layer < 4; layer++) {
+                    for (var row = startRow; row < endRow; row++) {
+                        for (var col = startCol; col < endCol; col++) {
+                            Grid[row][col].Draw(batch, camera, layer / 5f);
+                        }
                     }
                 }
             }
@@ -167,7 +197,7 @@ namespace Mono_Ether {
                             Debug.WriteLine(line);
                         }
                     }
-                        
+
                     return path;
                 }
 
@@ -230,6 +260,8 @@ namespace Mono_Ether {
     }
     public class Tile {
         private static Texture2D[] _textures;
+        private static Texture2D[] _collisionWallTextures;
+        private static Texture2D[] _collisionCornerTextures;
         public static Vector2 Size => _textures[0].Size();
         public static float Length => Size.X;
         public int Id;
@@ -237,7 +269,6 @@ namespace Mono_Ether {
         public Vector2 WorldPos => Pos * Length;
         public bool[] SolidWalls = new bool[4]; // Left, Top, Right, Bottom
         public bool[] SolidCorners = new bool[4]; // TopLeft, TopRight, BottomRight, BottomLeft
-
         public Tile(Vector2 mapPos, int id) {
             Pos = mapPos;
             Id = id;
@@ -251,20 +282,35 @@ namespace Mono_Ether {
                 content.Load<Texture2D>("Textures/GameScreen/Tiles/RedNeon"),
                 content.Load<Texture2D>("Textures/GameScreen/Tiles/PurpleNeon")
             };
-            //textureList.Add(content.Load<Texture2D>("Textures/GameScreen/Tiles/ASDFASDF"));
             _textures = textureList.ToArray();
+            List<Texture2D> collisionWallTextureList = new List<Texture2D>
+            {
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/Left"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/Up"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/Right"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/Down")
+            };
+            _collisionWallTextures = collisionWallTextureList.ToArray();
+            List<Texture2D> collisionCornerTextureList = new List<Texture2D>
+            {
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/TopLeft"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/TopRight"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/BottomRight"),
+                content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/BottomLeft")
+            };
+            _collisionCornerTextures = collisionCornerTextureList.ToArray();
         }
         public static void UnloadContent() {
             _textures = null;
         }
         public Vector2 TopLeft { get => Pos * Length; }
-        public Vector2 Top { get => new Vector2(TopLeft.X +Length / 2f, TopLeft.Y); }
-        public Vector2 TopRight { get => new Vector2(TopLeft.X +Length, TopLeft.Y); }
-        public Vector2 Right { get => new Vector2(TopLeft.X +Length, TopLeft.Y +Length / 2f); }
-        public Vector2 BottomRight { get => new Vector2(TopLeft.X +Length, TopLeft.Y +Length); }
-        public Vector2 Bottom { get => new Vector2(TopLeft.X +Length / 2f, TopLeft.Y +Length); }
-        public Vector2 BottomLeft { get => new Vector2(TopLeft.X, TopLeft.Y +Length); }
-        public Vector2 Left { get => new Vector2(TopLeft.X, TopLeft.Y +Length / 2f); }
+        public Vector2 Top { get => new Vector2(TopLeft.X + Length / 2f, TopLeft.Y); }
+        public Vector2 TopRight { get => new Vector2(TopLeft.X + Length, TopLeft.Y); }
+        public Vector2 Right { get => new Vector2(TopLeft.X + Length, TopLeft.Y + Length / 2f); }
+        public Vector2 BottomRight { get => new Vector2(TopLeft.X + Length, TopLeft.Y + Length); }
+        public Vector2 Bottom { get => new Vector2(TopLeft.X + Length / 2f, TopLeft.Y + Length); }
+        public Vector2 BottomLeft { get => new Vector2(TopLeft.X, TopLeft.Y + Length); }
+        public Vector2 Left { get => new Vector2(TopLeft.X, TopLeft.Y + Length / 2f); }
         public void UpdateWalls() {
             if (Id <= 0) {
                 SolidWalls = new bool[4];
@@ -303,12 +349,18 @@ namespace Mono_Ether {
             batch.Draw(_textures[Id - 1], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
         }
-        public void Draw(SpriteBatch batch, Camera camera, float parallax) {
+        public void Draw(SpriteBatch batch, Camera camera, float parallax, bool editorMode = false) {
             if (Id == 0) return;
             float zoom = 1f - parallax / 10;
             float transparency = 1 - parallax;
             batch.Draw(_textures[Id - 1], (camera.WorldToScreen(TileMap.MapToWorld(Pos)) - camera.ScreenSize / 2f) * zoom + camera.ScreenSize / 2f, null, Color.White * transparency, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
+            if (editorMode) {
+                for (int i = 0; i < 4; i++) {
+                    if (SolidWalls[i]) batch.Draw(_collisionWallTextures[i], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation, Vector2.Zero, camera.Zoom, 0, 0);
+                    if (SolidCorners[i]) batch.Draw(_collisionCornerTextures[i], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation, Vector2.Zero, camera.Zoom, 0, 0);
+                }
+            }
         }
     }
 }
