@@ -11,16 +11,14 @@ namespace Mono_Ether {
         public List<PlayerShip> Players = new List<PlayerShip>();
         public List<Enemy> Enemies = new List<Enemy>();
         public List<Bullet> Bullets = new List<Bullet>();
-
+        public List<Drone> Drones = new List<Drone>();
+        public List<Geom> Geoms = new List<Geom>();
 
         private bool _isUpdating;
         private readonly List<Entity> _addedEntities = new List<Entity>();
         public EntityManager() {
             Instance = this;
         }
-
-        public IEnumerable<Geom> Geoms { get; set; }
-
         public void Add(Entity entity) {
             if (!_isUpdating)
                 AddEntity(entity);
@@ -44,17 +42,17 @@ namespace Mono_Ether {
                 Bullets.Add(bullet);
             //else if (entity is PowerPack powerPack)
             //PowerPacks.Add(powerPack);
-            //else if (entity is Geom geom)
-            //Geoms.Add(geom);
-            //else if (entity is Drone drone)
-            //Drones.Add(drone);
+            else if (entity is Geom geom)
+                Geoms.Add(geom);
+            else if (entity is Drone drone)
+                Drones.Add(drone);
         }
         public void Update(GameTime gameTime) {
             _isUpdating = true;
 
             HandleCollisions();
 
-            foreach (Entity entity in Entities)
+            foreach (var entity in Entities)
                 entity.Update(gameTime);
 
             _isUpdating = false;
@@ -63,12 +61,12 @@ namespace Mono_Ether {
             _addedEntities.Clear();
 
             Entities = Entities.Where(x => !x.IsExpired).ToList();
-            //Geoms = Geoms.Where(x => !x.IsExpired).ToList();
-            //Bullets = Bullets.Where(x => !x.IsExpired).ToList();
+            Geoms = Geoms.Where(x => !x.IsExpired).ToList();
+            Bullets = Bullets.Where(x => !x.IsExpired).ToList();
             Enemies = Enemies.Where(x => !x.IsExpired).ToList();
             //PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
         }
-        private bool IsColliding(Entity a, Entity b) => !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < Math.Pow(a.Radius + b.Radius, 2);
+        private static bool IsColliding(Entity a, Entity b) => !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < Math.Pow(a.Radius + b.Radius, 2);
         private void HandleCollisions() {
             #region Enemies <-> Enemies
             var i = 0;
@@ -83,12 +81,9 @@ namespace Mono_Ether {
             #endregion
             #region Enemies <-> Bullets
 
-            foreach (var enemy in Enemies)
-            {
-                foreach (var bullet in Bullets)
-                {
-                    if (IsColliding(enemy, bullet))
-                    {
+            foreach (var enemy in Enemies) {
+                foreach (var bullet in Bullets) {
+                    if (IsColliding(enemy, bullet)) {
                         // TODO check invincible
                         bullet.Expire();
                         enemy.WasShot(bullet.ParentPlayerIndex);
@@ -144,32 +139,29 @@ namespace Mono_Ether {
                     }
             }
             #endregion Handle collisions between powerpacks and the player
-            #region Handle players and geoms
+            */
+            #region Players <-> Geoms
             foreach (Geom geom in Geoms) {
-                for (int i = 0; i < Players.Count; i++) {
-                    PlayerShip player = Players[i];
+                foreach (var player in Players) {
                     if (IsColliding(geom, player)) {
-                        geom.Pickup(i);
+                        geom.Pickup(player.Index);
                     }
                     if (Vector2.DistanceSquared(player.Position, geom.Position) < 150f * 150f)
                         geom.Velocity += (player.Position - geom.Position).ScaleTo(1.3f);
                 }
             }
             #endregion  Handle players and geoms
-            #region Handle geom drones and geoms
-            List<Drone> geomDrones = Drones.Where(drone => drone.Type == "geomCollector").ToList();
-            foreach (Geom geom in Geoms) {
-                for (int i = 0; i < geomDrones.Count; i++) {
-                    Drone drone = geomDrones[i];
+            #region Geom drones <-> Geoms
+            foreach (var geom in Geoms) {
+                foreach (var drone in Drones.Where(drone => drone.Type == DroneType.Collector)) {
                     if (IsColliding(geom, drone)) {
-                        geom.Pickup(drone.PlayerIndex);
+                        geom.Pickup(drone.OwnerPlayerIndex);
                     }
                     if (Vector2.DistanceSquared(drone.Position, geom.Position) < 150f * 150f)
                         geom.Velocity += (drone.Position - geom.Position).ScaleTo(1.3f);
                 }
             }
             #endregion  Handle players and geoms
-            */
         }
         public void Draw(SpriteBatch batch, Camera camera) {
             foreach (Entity entity in Entities)

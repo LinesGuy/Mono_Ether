@@ -47,24 +47,26 @@ namespace Mono_Ether {
 
         }
         public override void LoadContent(ContentManager content) {
+            _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
             PlayerShip.LoadContent(content);
             Bullet.LoadContent(content);
             Starburst.LoadContent(content);
-            Particle.PointParticle = content.Load<Texture2D>("Textures/GameScreen/Particles/Point");
-            _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
+            Particle.LoadContent(content);
             Tile.LoadContent(content);
             Enemy.LoadContent(content);
             Drone.LoadContent(content);
+            Geom.LoadContent(content);
         }
         public override void UnloadContent() {
+            _gameCursor = null;
             PlayerShip.UnloadContent();
             Bullet.UnloadContent();
             Starburst.UnloadContent();
-            Particle.PointParticle = null;
-            _gameCursor = null;
+            Particle.UnloadContent();
             Tile.UnloadContent();
             Enemy.UnloadContent();
             Drone.UnloadContent();
+            Geom.UnloadContent();
         }
         public override void Update(GameTime gameTime) {
             /* Update cursor rotation */

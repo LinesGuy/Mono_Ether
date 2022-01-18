@@ -211,5 +211,10 @@ namespace Mono_Ether {
             // Saves the score to the highscore file, note that this does not check the saved score is greater than the new score.
             File.WriteAllText(HighScoreFilename, score.ToString());
         }
+
+        public void AddGeoms(int amount)
+        {
+            Geoms += amount;
+        }
     }
 }

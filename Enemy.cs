@@ -22,7 +22,6 @@ namespace Mono_Ether {
             Type = type;
             Position = position;
             Health = 1; // TODO difficulty
-            Radius = Image.Width / 2f;
             EntityColor = Color.Transparent; // TODO remove this?
         }
         public static Enemy CreateEnemy(EnemyType type, Vector2 position) {
@@ -175,7 +174,7 @@ namespace Mono_Ether {
             IsExpired = true;
             /* Add score to player */
             //EntityManager.Instance.Players[playerIndex].Score += Worth;
-            // TODO summon geom
+            EntityManager.Instance.Add(new Geom(Position));
             // TODO floating text (worth)
             // TODO play sound
             /* Summon particles */

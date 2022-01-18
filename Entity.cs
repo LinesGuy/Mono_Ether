@@ -8,7 +8,7 @@ namespace Mono_Ether {
         public Vector2 Position = Vector2.Zero;
         public Vector2 Velocity = Vector2.Zero;
         public float Orientation = 0f;
-        public float Radius;
+        public float Radius => Image.Width / 2f;
         public bool IsExpired = false;
         private Vector2 Size => Image.Size();
         public abstract void Update(GameTime gameTime);

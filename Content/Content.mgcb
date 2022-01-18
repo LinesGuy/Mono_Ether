@@ -45,6 +45,12 @@
 /processorParam:Quality=Best
 /build:SoundEffects/Click.wav
 
+#begin SoundEffects/GeomPickup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/GeomPickup.wav
+
 #begin SoundEffects/PlayerShoot/Shoot-01.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -164,6 +170,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/GameScreen/GameCursor.png
+
+#begin Textures/GameScreen/Geom.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/Geom.png
 
 #begin Textures/GameScreen/Particles/Laser.png
 /importer:TextureImporter

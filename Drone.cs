@@ -33,7 +33,6 @@ namespace Mono_Ether {
                     Image = _defenderTexture;
                     break;
             }
-            Radius = Image.Width / 2f;
         }
         public static void LoadContent(ContentManager content) {
             _shooterTexture = content.Load<Texture2D>("Textures/GameScreen/Drones/Shooter");

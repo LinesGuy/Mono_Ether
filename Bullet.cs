@@ -17,7 +17,6 @@ namespace Mono_Ether {
             EntityColor = color;
             ParentPlayerIndex = playerIndex;
             Orientation = Velocity.ToAngle();
-            Radius = 9; // Min(image width, image height)
         }
         public void Expire() {
             IsExpired = true;

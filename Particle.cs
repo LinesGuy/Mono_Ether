@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
 namespace Mono_Ether {
     public abstract class Particle {
-        public static Texture2D PointParticle;
+        protected static Texture2D PointParticle;
         protected Vector2 Position;
         protected Color Color;
 
@@ -22,6 +23,13 @@ namespace Mono_Ether {
             Velocity *= Friction;
         }
 
+        public static void LoadContent(ContentManager content) {
+            PointParticle = content.Load<Texture2D>("Textures/GameScreen/Particles/Point");
+        }
+
+        public static void UnloadContent() {
+            PointParticle = null;
+        }
         public abstract void Draw(SpriteBatch batch, Camera camera);
     }
 
