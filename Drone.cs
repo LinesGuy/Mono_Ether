@@ -106,7 +106,7 @@ namespace Mono_Ether {
             drone.AddBehaviour(ShootWhenPlayerShoots());
             return drone;
         }
-        public static Drone CreateGeomCollector(PlayerIndex ownerPlayerIndex) {
+        public static Drone CreateCollector(PlayerIndex ownerPlayerIndex) {
             var drone = new Drone(ownerPlayerIndex, DroneType.Collector);
             drone.AddBehaviour(drone.DroneFacesVelocity());
             IEnumerable<int> CollectGeomsAStar() {

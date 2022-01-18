@@ -38,7 +38,11 @@ namespace Mono_Ether {
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(0f, 100f), MyUtils.ViewportF(0, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
             /* Give each player a shooter drone */
             foreach (var player in EntityManager.Instance.Players)
+            {
                 EntityManager.Instance.Add(Drone.CreateShooter(player.Index));
+                EntityManager.Instance.Add(Drone.CreateCollector(player.Index));
+            }
+                
         }
         public override void Suspend() {
 

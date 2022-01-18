@@ -56,7 +56,7 @@ namespace Mono_Ether.Ether {
                 Hud.bossBarEnabled = true;
             }
             // ADD DRONES
-            EntityManager.Add(Drone.CreateGeomCollector(0));
+            EntityManager.Add(Drone.CreateCollector(0));
             EntityManager.Add(Drone.CreateShooter(0));
             // ADD PLAYER TWO (currently disabled)
             //EntityManager.Add(new PlayerShip());
