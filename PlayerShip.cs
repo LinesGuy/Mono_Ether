@@ -10,13 +10,13 @@ namespace Mono_Ether {
     public class PlayerShip : Entity {
         private static Texture2D _shipTexture;
         public static SoundEffect ShotSoundEffect; // TODO array, also move to bullet.cs?
-        private const string HighScoreFilename = "highscore.txt";
         public PlayerIndex Index;
         public int Lives = 3;
         public readonly Camera PlayerCamera;
         private int _shotCooldownRemaining;
         private const int ShotCooldown = 6;
         public float Multiplier = 1;
+        public int Score;
         public int Geoms;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
         private int _framesUntilRespawn;
@@ -203,15 +203,6 @@ namespace Mono_Ether {
                 return;
             base.Draw(batch, camera);
         }
-        private int LoadHighScore() {
-            // Return saved score if it exists, or return 0 if there is none
-            return File.Exists(HighScoreFilename) && int.TryParse(File.ReadAllText(HighScoreFilename), out int score) ? score : 0;
-        }
-        private void SaveHighScore(int score) {
-            // Saves the score to the highscore file, note that this does not check the saved score is greater than the new score.
-            File.WriteAllText(HighScoreFilename, score.ToString());
-        }
-
         public void AddGeoms(int amount)
         {
             Geoms += amount;
