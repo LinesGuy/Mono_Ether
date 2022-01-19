@@ -78,7 +78,7 @@ namespace Mono_Ether.Ether {
             foreach (var entity in Entities) {
                 entity.Draw(spriteBatch);
                 if (entity is Enemy enemy)
-                    if (enemy.Type == "Snake" || enemy.Type == "BossTwoHead")
+                    if (enemy.Type == "SnakeHead" || enemy.Type == "BossTwoHead")
                         for (int i = 1; i < enemy.tail.Count; i++) {
                             Enemy tail = enemy.tail[i];
                             tail.Draw(spriteBatch);
@@ -115,7 +115,7 @@ namespace Mono_Ether.Ether {
                         bullet.Expire();
                     }
                     // If bullet collides with snake body, destroy bullet but not snake
-                    if (Enemies[i].Type == "Snake" || Enemies[i].Type == "BossTwoHead") {
+                    if (Enemies[i].Type == "SnakeHead" || Enemies[i].Type == "BossTwoHead") {
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
                             Enemy tail = Enemies[i].tail[j];
                             if (IsColliding(tail, bullet))
@@ -140,7 +140,7 @@ namespace Mono_Ether.Ether {
                         Entities = Entities.Where(e => !(e is Enemy enemy && !enemy.IsBoss)).ToList();
                         break;
                     }
-                    if (Enemies[i].Type == "Snake" || Enemies[i].Type == "BossTwoHead")
+                    if (Enemies[i].Type == "SnakeHead" || Enemies[i].Type == "BossTwoHead")
                         for (int j = 1; j < Enemies[i].tail.Count; j++) {
                             Enemy tail = Enemies[i].tail[j];
                             if (IsColliding(tail, player)) {
@@ -160,7 +160,7 @@ namespace Mono_Ether.Ether {
             #region Handle collisions between walls and enemies
             for (var i = 0; i < Enemies.Count; i++) {
                 Enemies[i].HandleTilemapCollision();
-                if (Enemies[i].Type == "Snake" || Enemies[i].Type == "BossTwoHead") {
+                if (Enemies[i].Type == "SnakeHead" || Enemies[i].Type == "BossTwoHead") {
                     for (int j = 1; j < Enemies[i].tail.Count; j++) {
                         Enemies[i].tail[j].HandleTilemapCollision();
                     }

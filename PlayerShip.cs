@@ -90,7 +90,7 @@ namespace Mono_Ether {
                 _exhaustFireBuffer -= TimeSpan.FromMilliseconds(16);
                 if (direction.LengthSquared() >= 0.1f) {
                     for (int i = 0; i < 3; i++)
-                        ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI);
+                        ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI, new Color(0.2f, 0.8f, 1f));
                 }
             }
 
@@ -195,6 +195,8 @@ namespace Mono_Ether {
                 _framesUntilRespawn = 99999;
                 // transition to death
             }
+            /* Reset velocity */
+            Velocity = Vector2.Zero;
             // reset powerpacks
             // save highscore
         }

@@ -3,22 +3,36 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Mono_Ether {
-    public enum EnemyType { BlueSeeker, PurpleWanderer }
+    public enum EnemyType { BlueSeeker, PurpleWanderer, GreenSeeker, BackAndForther, PinkSeeker, PinkSeekerChild, PinkWanderer, SnakeHead, SnakeTail, BossOne, BossOneChild, BossTwo, BossTwoTail, BossThree }
+    [SuppressMessage("ReSharper", "IteratorNeverReturns")]
     public class Enemy : Entity {
         private static Texture2D _blueSeeker;
         private static Texture2D _purpleWanderer;
+        private static Texture2D _greenSeeker;
+        private static Texture2D _backAndForther;
+        private static Texture2D _pinkSeeker;
+        private static Texture2D _pinkWanderer;
+        protected static Texture2D SnakeHead;
+        protected static Texture2D SnakeTail;
+        protected static Texture2D BossOne;
+        protected static Texture2D BossTwoHead;
+        protected static Texture2D BossTwoTail;
+        protected static Texture2D BossThree;
+        protected static Texture2D PinkSeekerChild;
 
         public int TimeUntilStart = 60;
         public int Health;
         public int Worth;
+        public bool Invincible;
         public EnemyType Type;
-        private readonly List<IEnumerator<int>> _behaviors = new List<IEnumerator<int>>();
-        private static readonly Random Rand = new Random();
+        protected internal readonly List<IEnumerator<int>> Behaviors = new List<IEnumerator<int>>();
+        protected static readonly Random Rand = new Random();
         public bool IsActive => TimeUntilStart == 0;
-        private Enemy(EnemyType type, Vector2 position) {
+        protected Enemy(EnemyType type, Vector2 position) {
             Type = type;
             Position = position;
             Health = 1; // TODO difficulty
@@ -38,6 +52,40 @@ namespace Mono_Ether {
                     enemy.AddBehaviour(enemy.MoveRandomly());
                     enemy.AddBehaviour(enemy.RotateOrientationConstantly());
                     break;
+                case EnemyType.BackAndForther:
+                    enemy.Image = _backAndForther;
+                    enemy.AddBehaviour(enemy.BounceOffWalls(enemy.Orientation + MathF.PI));
+                    enemy.AddBehaviour(enemy.ExhaustFire());
+                    enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+                    break;
+                case EnemyType.GreenSeeker:
+                    enemy.Image = _greenSeeker;
+                    enemy.AddBehaviour(enemy.FollowPlayerAStar(1.2f));
+                    enemy.AddBehaviour(enemy.DodgeBullets(100f, 1.5f));
+                    enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+                    break;
+                case EnemyType.PinkSeeker:
+                    enemy.Image = _pinkSeeker;
+                    enemy.AddBehaviour(enemy.FollowPlayerAStar(1.2f));
+                    enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+                    break;
+                case EnemyType.PinkWanderer:
+                    enemy.Image = _pinkWanderer;
+                    enemy.AddBehaviour(enemy.MoveOrthonallyOccasionally());
+                    enemy.AddBehaviour(enemy.EnemyFacesVelocity());
+                    break;
+                case EnemyType.SnakeHead:
+                    return new SnakeHead(position);
+                case EnemyType.BossOne:
+                    break;
+                case EnemyType.BossTwo:
+                    break;
+                case EnemyType.BossThree:
+                    break;
+                case EnemyType.BossOneChild:
+                case EnemyType.BossTwoTail:
+                case EnemyType.PinkSeekerChild:
+                case EnemyType.SnakeTail:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -48,8 +96,8 @@ namespace Mono_Ether {
             /* Push current enemy away from other enemy. The closer they are, the harder the push */
             Velocity += 10 * delta / (delta.LengthSquared() + 1);
         }
-        private void AddBehaviour(IEnumerable<int> behaviour) {
-            _behaviors.Add(behaviour.GetEnumerator());
+        protected void AddBehaviour(IEnumerable<int> behaviour) {
+            Behaviors.Add(behaviour.GetEnumerator());
         }
         public override void Update(GameTime gameTime) {
             if (TimeUntilStart > 0) {
@@ -58,10 +106,9 @@ namespace Mono_Ether {
                 return;
             }
             /* Apply enemy behaviors */
-            for (int i = 0; i < _behaviors.Count; i++)
-                if (!_behaviors[i].MoveNext())
-                    _behaviors.RemoveAt(i--);
-
+            for (var i = 0; i < Behaviors.Count; i++)
+                if (!Behaviors[i].MoveNext())
+                    Behaviors.RemoveAt(i--);
             Position += Velocity;
             Velocity *= 0.8f;
             HandleTilemapCollision();
@@ -69,12 +116,72 @@ namespace Mono_Ether {
         public static void LoadContent(ContentManager content) {
             _blueSeeker = content.Load<Texture2D>("Textures/GameScreen/Enemies/BlueSeeker");
             _purpleWanderer = content.Load<Texture2D>("Textures/GameScreen/Enemies/PurpleWanderer");
+            _greenSeeker = content.Load<Texture2D>("Textures/GameScreen/Enemies/GreenSeeker");
+            _backAndForther = content.Load<Texture2D>("Textures/GameScreen/Enemies/BackAndForther");
+            _pinkSeeker = content.Load<Texture2D>("Textures/GameScreen/Enemies/PinkSeeker");
+            _pinkWanderer = content.Load<Texture2D>("Textures/GameScreen/Enemies/PinkWanderer");
+            SnakeHead = content.Load<Texture2D>("Textures/GameScreen/Enemies/SnakeHead");
+            SnakeTail = content.Load<Texture2D>("Textures/GameScreen/Enemies/SnakeTail");
+            BossOne = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossOne");
+            BossTwoHead = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossTwoHead");
+            BossTwoTail = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossTwoTail");
+            BossThree = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossThree");
+            PinkSeekerChild = content.Load<Texture2D>("Textures/GameScreen/Enemies/PinkSeekerChild");
         }
         public static void UnloadContent() {
             _blueSeeker = null;
             _purpleWanderer = null;
+            _greenSeeker = null;
+            _backAndForther = null;
+            _pinkSeeker = null;
+            _pinkWanderer = null;
+            SnakeHead = null;
+            SnakeTail = null;
+            BossOne = null;
+            BossTwoHead = null;
+            BossTwoTail = null;
+            BossThree = null;
+            PinkSeekerChild = null;
         }
-        private IEnumerable<int> FollowPlayerAStar(float acceleration) {
+        protected IEnumerable<int> EnemyFacesVelocity() {
+            var lastPos = Position;
+            while (true) {
+                var delta = Position - lastPos;
+                if (delta != Vector2.Zero)
+                    Orientation = delta.ToAngle();
+                lastPos = Position;
+                yield return 0;
+            }
+        }
+        protected IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f) {
+            while (true) {
+                foreach (var bullet in EntityManager.Instance.Bullets.Where(bullet => Vector2.DistanceSquared(bullet.Position, Position) < distance * distance))
+                    Velocity -= (bullet.Position - Position).ScaleTo(acceleration);
+                yield return 0;
+            }
+        }
+        protected IEnumerable<int> BounceOffWalls(float angle, float speed = 1.7f) {
+            var lastPos = Position;
+            var acceleration = MyUtils.FromPolar(angle, speed);
+            while (true) {
+                if (Math.Abs(Position.X - lastPos.X) < 0.001)
+                    acceleration.X = -acceleration.X;
+                if (Math.Abs(Position.Y - lastPos.Y) < 0.001)
+                    acceleration.Y = -acceleration.Y;
+                lastPos = Position;
+                Velocity += acceleration;
+                yield return 0;
+            }
+        }
+        protected IEnumerable<int> ExhaustFire() {
+            while (true) {
+                if (Velocity.LengthSquared() > 0.1f) {
+                    ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI, new Color(1f, 0.5f, 0.2f));
+                }
+                yield return 0;
+            }
+        }
+        protected IEnumerable<int> FollowPlayerAStar(float acceleration) {
             while (true) {
                 /* Get nearest player from current position */
                 var players = EntityManager.Instance.Players;
@@ -129,7 +236,7 @@ namespace Mono_Ether {
                 }
             }
         }
-        private IEnumerable<int> MoveRandomly(float speed = 0.4f, float rotationSpeed = 0.1f, float bounds = 0.1f) {
+        protected IEnumerable<int> MoveRandomly(float speed = 0.4f, float rotationSpeed = 0.1f, float bounds = 0.1f) {
             var direction = Rand.NextFloat(0, MathHelper.TwoPi);
             var acceleration = MyUtils.FromPolar(direction, speed);
             var rotationDelta = 0f;
@@ -156,13 +263,24 @@ namespace Mono_Ether {
                 yield return 0;
             }
         }
-        private IEnumerable<int> RotateOrientationConstantly(float speed = 0.1f) {
+        protected IEnumerable<int> RotateOrientationConstantly(float speed = 0.1f) {
             while (true) {
                 Orientation += speed;
                 yield return 0;
             }
         }
-
+        protected IEnumerable<int> MoveOrthonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
+            var velocity = MyUtils.FromPolar(Rand.Next(4) * MathF.PI / 2f, speed);
+            while (true) {
+                for (var i = 0; i < activeFrames; i++) {
+                    Position += velocity;
+                    yield return 0;
+                }
+                for (var i = 0; i < sleepFrames; i++) {
+                    yield return 0;
+                }
+            }
+        }
         public void WasShot(PlayerIndex playerIndex) {
             Health--;
             if (Health <= 0)
@@ -180,9 +298,17 @@ namespace Mono_Ether {
             // TODO play sound
             /* Summon particles */
             ParticleTemplates.Explosion(Position, 5f, 10f, 30);
+            /* If enemy was pink seeker, summon two pink seeker children */
+            if (Type == EnemyType.PinkSeeker)
+                for (var i = 0; i < 2; i++)
+                    EntityManager.Instance.Add(new PinkSeekerChild(Position) {
+                        Velocity = MyUtils.FromPolar(Rand.NextFloat(0, MathF.PI * 2), 10f),
+                        TimeUntilStart = 0,
+                        EntityColor = Color.White,
+                        Invincible = true
+                    });
         }
-        public void Suicide()
-        {
+        public void Suicide() {
             IsExpired = true;
             ParticleTemplates.Explosion(Position, 5f, 10f, 30);
         }

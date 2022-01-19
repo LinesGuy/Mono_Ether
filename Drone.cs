@@ -44,6 +44,7 @@ namespace Mono_Ether {
             _collectorTexture2D = null;
             _defenderTexture = null;
         }
+
         public override void Update(GameTime gameTime) {
             /* Apply enemy behaviors */
             for (var i = 0; i < _behaviors.Count; i++)
@@ -51,12 +52,18 @@ namespace Mono_Ether {
                     _behaviors.RemoveAt(i--);
             Position += Velocity;
             Velocity *= 0.8f;
-            HandleTilemapCollision();
         }
+
         private void AddBehaviour(IEnumerable<int> behaviour) {
             _behaviors.Add(behaviour.GetEnumerator());
         }
         #region IEnumerables
+        private IEnumerable<int> CollideWithTilemap() {
+            while (true) {
+                HandleTilemapCollision();
+                yield return 0;
+            }
+        }
         private IEnumerable<int> CirclePlayer(float rotationSpeed = 0.07f) {
             const float radius = 80f;
             var radians = 0f;
@@ -165,6 +172,7 @@ namespace Mono_Ether {
                 }
             }
             drone.AddBehaviour(CollectGeomsAStar());
+            drone.AddBehaviour(drone.CollideWithTilemap());
             return drone;
         }
         #endregion CreateDrones

@@ -111,7 +111,7 @@ namespace Mono_Ether {
             #region Handle collisions between walls and enemies
             for (var i = 0; i < Enemies.Count; i++) {
                 Enemies[i].HandleTilemapCollision();
-                if (Enemies[i].Type == "Snake" || Enemies[i].Type == "BossTwoHead") {
+                if (Enemies[i].Type == "SnakeHead" || Enemies[i].Type == "BossTwoHead") {
                     for (int j = 1; j < Enemies[i].tail.Count; j++) {
                         Enemies[i].tail[j].HandleTilemapCollision();
                     }
@@ -164,7 +164,7 @@ namespace Mono_Ether {
             #endregion  Handle players and geoms
         }
         public void Draw(SpriteBatch batch, Camera camera) {
-            foreach (Entity entity in Entities)
+            foreach (var entity in Entities)
                 entity.Draw(batch, camera);
         }
     }

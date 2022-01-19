@@ -119,10 +119,10 @@ namespace Mono_Ether {
     }
     public static class ParticleTemplates {
         private static readonly Random Random = new Random();
-        public static void ExhaustFire(Vector2 position, float orientation) { // TODO add count parameter
+        public static void ExhaustFire(Vector2 position, float orientation, Color baseColor) { // TODO add count parameter
             var orientationOffset = Random.NextFloat(-0.3f, 0.3f);
             var positionOffset = Random.NextVector2(0f, 10f);
-            var color = new Color(0.2f, 0.8f - MathF.Abs(orientationOffset), 1f);
+            var color = new Color(baseColor.R / 255f - MathF.Abs(orientationOffset), baseColor.G / 255f - MathF.Abs(orientationOffset), baseColor.B / 255f - MathF.Abs(orientationOffset));
             ParticleManager.Instance.Add(new BigParticle(
                 position + positionOffset, color,
                 MyUtils.FromPolar(orientation + orientationOffset, Random.NextFloat(1f, 6f)), 0.99f));

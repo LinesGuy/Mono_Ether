@@ -11,6 +11,7 @@ namespace Mono_Ether {
         private static readonly Random Rand = new Random();
         public static float InverseSpawnChance = 30;
         public static bool Enabled = true;
+        private static readonly EnemyType[] SpawnableEnemyTypes = new EnemyType[] { EnemyType.BlueSeeker, EnemyType.PurpleWanderer, EnemyType.GreenSeeker, EnemyType.BackAndForther, EnemyType.PinkSeeker, EnemyType.PinkWanderer, EnemyType.SnakeHead };
         public void Update(EntityManager entityManager, TileMap tileMap)
         {
             /* Return if enemy spawning is disabled */
@@ -40,8 +41,7 @@ namespace Mono_Ether {
                 return;
             }
 
-            var enemyTypes = Enum.GetValues(typeof(EnemyType));
-            var enemyType = (EnemyType)enemyTypes.GetValue(Rand.Next(enemyTypes.Length))!;
+            var enemyType = SpawnableEnemyTypes[Rand.Next(SpawnableEnemyTypes.Length)];
             entityManager.Add(Enemy.CreateEnemy(enemyType, spawnPos));
         }
     }

@@ -252,7 +252,7 @@ namespace Mono_Ether.Ether {
             return enemy;
         }
         public static Enemy CreateSnake(Vector2 position) {
-            var enemy = new Enemy(GlobalAssets.SnakeHead, position, "Snake");
+            var enemy = new Enemy(GlobalAssets.SnakeHead, position, "SnakeHead");
 
             enemy.AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             enemy.AddBehaviour(enemy.EnemyFacesVelocity());
