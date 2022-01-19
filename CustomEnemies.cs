@@ -36,6 +36,14 @@ namespace Mono_Ether {
                 yield return 0;
             }
         }
+
+        public override void Update(GameTime gameTime) {
+            base.Update(gameTime);
+            /* Update tail */
+            foreach (var tail in Tail)
+                tail.HandleTilemapCollision();
+        }
+
         public override void Draw(SpriteBatch batch, Camera camera) {
             base.Draw(batch, camera);
             /* Draw tail */

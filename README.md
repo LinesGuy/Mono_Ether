@@ -1,23 +1,6 @@
 # Mono_Ether
 Full rewrite of Mono Ether
 
-
-- Enemies should produce particle effects upon being killed 
-
-- Program should detect if enemies collide with walls and bounce the enemies back 
-
-- Enemies that use A* pathfinding should navigate around walls (as opposed to trying to move through walls) 
-
-- A* pathfinding should be used sparingly, not every frame. E.g twice per second when close to the player, and every few seconds when far from the player 
-
-- Enemies that use A* pathfinding should be able to store its current path in a queue and follow its path smoothly 
-
-- Some enemy types should set their sprite orientation towards the direction it's moving (i.e enemies should "face forwards" when moving) 
-
-- Some enemy types should be able to dodge bullets 
-
-- Some enemy types should have a "tail"; a chain of smaller entities that follows the enemy (like a snake with its head and tail) 
-
 - Level with a boss should have a "boss bar"; an indication of how much health the current boss has 
 
 - Main levels should have a unique boss enemy with unique attack and movement patterns 

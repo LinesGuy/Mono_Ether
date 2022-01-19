@@ -108,21 +108,6 @@ namespace Mono_Ether {
             }
             #endregion Handle collisions between the players and enemies
             /*
-            #region Handle collisions between walls and enemies
-            for (var i = 0; i < Enemies.Count; i++) {
-                Enemies[i].HandleTilemapCollision();
-                if (Enemies[i].Type == "SnakeHead" || Enemies[i].Type == "BossTwoHead") {
-                    for (int j = 1; j < Enemies[i].tail.Count; j++) {
-                        Enemies[i].tail[j].HandleTilemapCollision();
-                    }
-                }
-            }
-
-            #endregion Handle collisions between walls and enemies + the player
-            #region Handle collisions walls and bullets
-            for (var i = 0; i < Bullets.Count; i++)
-                Bullets[i].HandleTilemapCollision();
-            #endregion Same as above but for bullets
             #region Handle collisions between powerpacks and the player
             foreach (PlayerShip player in Players) {
                 for (var i = 0; i < PowerPacks.Count; i++)
