@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace Mono_Ether {
     public enum GameMode { Playing, Paused, Editor }
+    public enum Level { Debug, Level1, Level2, Level3, Secret, Tutorial }
     public class GameScreen : GameState {
         private static Texture2D _gameCursor;
         private float _cursorRotation;
@@ -18,9 +19,9 @@ namespace Mono_Ether {
         private readonly StarField _starField = new StarField();
         private readonly TileMap _tileMap;
         public GameMode Mode = GameMode.Playing;
-        public GameScreen(GraphicsDevice graphicsDevice, string mapFileName) : base(graphicsDevice) {
+        public GameScreen(GraphicsDevice graphicsDevice, Level level) : base(graphicsDevice) {
             /* Load tile map data from filename */
-            _tileMap = new TileMap(mapFileName);
+            _tileMap = new TileMap(level);
         }
         public override void Initialize() {
             Instance = this;

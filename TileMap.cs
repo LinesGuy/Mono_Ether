@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework.Input;
 
 namespace Mono_Ether {
     public class TileMap {
@@ -15,9 +15,20 @@ namespace Mono_Ether {
         private static int _selectedTileId = 1;
         public Vector2 GridSize => new Vector2(Grid[0].Length, Grid.Length);
         public Vector2 WorldSize => GridSize * Tile.Length;
-        public TileMap(string fileName) {
+        private string _filenameFromLevel(Level level) {
+            return level switch {
+                Level.Debug => "DebugMap.txt",
+                Level.Level1 => "LevelOne.txt",
+                Level.Level2 => "LevelTwo.txt",
+                Level.Level3 => "LevelThree.txt",
+                Level.Secret => "Secret.txt",
+                Level.Tutorial => "Tutorial.txt",
+                _ => throw new ArgumentOutOfRangeException(nameof(level), level, null)
+            };
+        }
+        public TileMap(Level level) {
             Instance = this;
-            var lines = File.ReadAllLines(@"Content/TileMapData/" + fileName).Where(l => l != "").ToArray();
+            var lines = File.ReadAllLines(@"Content/TileMapData/" + _filenameFromLevel(level)).Where(l => l != "").ToArray();
             var gridList = new List<List<Tile>>();
             var y = 0;
             foreach (var line in lines) {

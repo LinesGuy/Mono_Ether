@@ -334,22 +334,22 @@ namespace Mono_Ether {
             _carouselButtonManager.Buttons.ForEach(b => b.Update(gameTime));
             switch (_carouselButtonManager.PressedButton) {
                 case "Debug":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "DebugMap.txt"));
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Debug));
                     break;
                 case "Level One":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "LevelOne.txt"));
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Level1));
                     break;
                 case "Level Two":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "LevelTwo.txt"));
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Level2));
                     break;
                 case "Level Three":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "LevelThree.txt"));
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Level3));
                     break;
                 case "Secret":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "Secret.txt"));
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Secret));
                     break;
                 case "Tutorial":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "Tutorial.txt"));
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Tutorial));
                     break;
             }
             /* Update carousel offset */
