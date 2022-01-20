@@ -52,7 +52,7 @@ namespace Mono_Ether {
             /* Add Level selection screen button */
             _levelButtonManager.Buttons.Add(new Button(new Vector2(200f, ScreenSize.Y - 100f), new Vector2(200, 120), "Back"));
             /* Add carousel buttons */
-            List<string> levels = new List<string> { "Level One", "Level Two", "Level Three", "Level Four", "Level Five", "Level Six", "Level Seven ", "Level Eight", "Level Nine", "Level Ten" };
+            List<string> levels = new List<string> { "Debug", "Level One", "Level Two", "Level Three", "Secret", "Tutorial" };
             for (int i = 0; i < levels.Count; i++)
                 _carouselButtonManager.Buttons.Add(new Button(new Vector2(ScreenSize.X - 300f * MathF.Exp(-i * i / 25f), ScreenSize.Y / 2f + i * 120f), new Vector2(500, 120), levels[i]));
             /* Add settings window buttons, sliders and switchers */
@@ -333,11 +333,24 @@ namespace Mono_Ether {
             /* Handle Carousel Button Presses */
             _carouselButtonManager.Buttons.ForEach(b => b.Update(gameTime));
             switch (_carouselButtonManager.PressedButton) {
-                case "Level One":
-                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "debugMap.txt")); // TODO replace with level one
-                    GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
+                case "Debug":
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "DebugMap.txt"));
                     break;
-                    // TODO other levels
+                case "Level One":
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "LevelOne.txt"));
+                    break;
+                case "Level Two":
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "LevelTwo.txt"));
+                    break;
+                case "Level Three":
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "LevelThree.txt"));
+                    break;
+                case "Secret":
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "Secret.txt"));
+                    break;
+                case "Tutorial":
+                    ScreenManager.AddScreen(new GameScreen(GraphicsDevice, "Tutorial.txt"));
+                    break;
             }
             /* Update carousel offset */
             var numButtons = _carouselButtonManager.Buttons.Count;
