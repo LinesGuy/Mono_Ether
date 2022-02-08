@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mono_Ether {
     public class PlayerShip : Entity {
@@ -13,13 +14,15 @@ namespace Mono_Ether {
         public PlayerIndex Index;
         public int Lives = 3;
         public readonly Camera PlayerCamera;
-        private int _shotCooldownRemaining;
-        private const int ShotCooldown = 6;
+        private TimeSpan _shotCooldownRemaining = TimeSpan.Zero;
+        private readonly TimeSpan _shotCooldown = TimeSpan.FromSeconds(0.1);
         public float Multiplier = 1;
         public int Score;
         public int Geoms;
+        public bool DoomMode;
         private TimeSpan _exhaustFireBuffer = TimeSpan.Zero;
         private int _framesUntilRespawn;
+        public List<PowerPack> ActivePowerPacks = new List<PowerPack>();
         private static readonly Random Rand = new Random();
         public bool IsDead => _framesUntilRespawn > 0;
         public PlayerShip(GraphicsDevice graphicsDevice, Vector2 position, Viewport cameraViewport) {
@@ -41,36 +44,53 @@ namespace Mono_Ether {
                 return;
             }
             #region Movement
-            const float acceleration = 3f;
-            // TODO apply speed powerpacks
             var direction = Vector2.Zero;
-            switch (Index) {
-                case PlayerIndex.One: {
-                        if (Input.Keyboard.IsKeyDown(Keys.A))
-                            direction.X -= 1;
-                        if (Input.Keyboard.IsKeyDown(Keys.D))
-                            direction.X += 1;
-                        if (Input.Keyboard.IsKeyDown(Keys.W))
-                            direction.Y -= 1;
-                        if (Input.Keyboard.IsKeyDown(Keys.S))
-                            direction.Y += 1;
-                        break;
-                    }
-                case PlayerIndex.Two: {
-                        direction += Input.GamePad.ThumbSticks.Left;
-                        direction.Y = -direction.Y; // Joystick up = negative Y
-                        if (Input.GamePad.DPad.Left == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.J))
-                            direction.X -= 1;
-                        if (Input.GamePad.DPad.Right == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.L))
-                            direction.X += 1;
-                        if (Input.GamePad.DPad.Up == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.I))
-                            direction.Y -= 1;
-                        if (Input.GamePad.DPad.Down == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.K))
-                            direction.Y += 1;
-                        break;
-                    }
-            }
+            var acceleration = 3f;
+            if (DoomMode) {
+                // TODO switch index
+                if (Input.Keyboard.IsKeyDown(Keys.A))
+                    Orientation -= 0.1f;
+                if (Input.Keyboard.IsKeyDown(Keys.D))
+                    Orientation += 0.1f;
+                if (Input.Keyboard.IsKeyDown(Keys.W))
+                    direction += Vector2.UnitX.Rotate(Orientation);
+                if (Input.Keyboard.IsKeyDown(Keys.S))
+                    direction -= Vector2.UnitX.Rotate(Orientation);
+            } else {
+                foreach (var power in ActivePowerPacks) {
+                    if (power.Type == PowerPackType.MoveSpeedIncrease)
+                        acceleration *= 3f;
+                    else if (power.Type == PowerPackType.MoveSpeedDecrease)
+                        acceleration /= 3f;
+                }
 
+                switch (Index) {
+                    case PlayerIndex.One: {
+                            if (Input.Keyboard.IsKeyDown(Keys.A))
+                                direction.X -= 1;
+                            if (Input.Keyboard.IsKeyDown(Keys.D))
+                                direction.X += 1;
+                            if (Input.Keyboard.IsKeyDown(Keys.W))
+                                direction.Y -= 1;
+                            if (Input.Keyboard.IsKeyDown(Keys.S))
+                                direction.Y += 1;
+                            break;
+                        }
+                    case PlayerIndex.Two: {
+                            direction += Input.GamePad.ThumbSticks.Left;
+                            direction.Y = -direction.Y; // Joystick up = negative Y
+                            if (Input.GamePad.DPad.Left == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.J))
+                                direction.X -= 1;
+                            if (Input.GamePad.DPad.Right == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.L))
+                                direction.X += 1;
+                            if (Input.GamePad.DPad.Up == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.I))
+                                direction.Y -= 1;
+                            if (Input.GamePad.DPad.Down == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.K))
+                                direction.Y += 1;
+                            break;
+                        }
+                }
+            }
             if (direction.LengthSquared() > 1)
                 direction.Normalize();
             direction = direction.Rotate(-PlayerCamera.Orientation);
@@ -80,7 +100,7 @@ namespace Mono_Ether {
             Velocity /= 1f + 0.05f * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             Position += Velocity * (float)(gameTime.ElapsedGameTime / TimeSpan.FromMilliseconds(16.67));
             /* Update entity orientation if velocity is non-zero */
-            if (Velocity.LengthSquared() > 0)
+            if (!DoomMode && Velocity.LengthSquared() > 0)
                 Orientation = Velocity.ToAngle();
             HandleTilemapCollision();
             #endregion
@@ -93,57 +113,14 @@ namespace Mono_Ether {
                         ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI, new Color(0.2f, 0.8f, 1f));
                 }
             }
-
-            /* TODO add exhaust fire
-            if (Velocity.LengthSquared() > 0.1f) {
-                float orientation = Velocity.ToAngle();
-                double t = EtherRoot.CurrentGameTime.TotalGameTime.TotalSeconds;
-                Vector2 baseVel = Velocity.ScaleTo(-3);
-                Vector2 perpVel = new Vector2(baseVel.Y, -baseVel.X) * (0.6f * (float)Math.Sin(t * 10));
-                Color sideColor = new Color(200, 38, 9);   // Deep red
-                Color midColor = new Color(255, 187, 30);  // Orange-yellow
-                Vector2 pos = Position + MathUtil.FromPolar(orientation, -25);
-                const float alpha = 0.7f;
-
-                // Middle particle stream
-                Vector2 velMid = baseVel + Rand.NextVector2(0, 1);
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
-                    new ParticleState(velMid, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LaserGlow, pos, midColor * alpha, 60f, new Vector2(0.5f, 1),
-                    new ParticleState(velMid, ParticleType.Enemy));
-
-                // Side particle streams
-                Vector2 vel1 = baseVel + perpVel + Rand.NextVector2(0, 0.3f);
-                Vector2 vel2 = baseVel - perpVel + Rand.NextVector2(0, 0.3f);
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
-                    new ParticleState(vel1, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LineParticle, pos, Color.White * alpha, 60f, new Vector2(0.5f, 1),
-                    new ParticleState(vel2, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LaserGlow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
-                    new ParticleState(vel1, ParticleType.Enemy));
-                EtherRoot.ParticleManager.CreateParticle(GlobalAssets.LaserGlow, pos, sideColor * alpha, 60f, new Vector2(0.5f, 1),
-                    new ParticleState(vel2, ParticleType.Enemy));
-            }
-            */
             #endregion
             #region Shooting
             if (GameScreen.Instance.Mode == GameMode.Playing) {
-                var aim = PlayerCamera.MouseWorldCoords() - Position; // ARBITRARY MAGNITUDE, scale later
-                if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && _shotCooldownRemaining == 0) {
+                var aim = PlayerCamera.MouseWorldCoords() - Position; // Arbitrary magnitude
+                if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && _shotCooldownRemaining <= TimeSpan.Zero) {
                     /* Play shooting sound */
                     ShotSoundEffect.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
-                    /* TODO Cooldown calculations
-                    float cooldownRemainingMultiplier = 1f;
-                    foreach (var power in activePowerPacks) {
-                        if (power.PowerType == "ShootSpeedIncrease")
-                            cooldownRemainingMultiplier /= 1.3f;
-                        else if (power.PowerType == "ShootSpeedDecrease")
-                            cooldownRemainingMultiplier *= 1.3f;
-                    }
-                    cooldownRemaining = (int)((float)CooldownFrames * cooldownRemainingMultiplier);
-                    */
-                    _shotCooldownRemaining = ShotCooldown; // TODO replace with above
-                    _shotCooldownRemaining--;
+                    _shotCooldownRemaining = _shotCooldown;
                     var aimAngle = aim.ToAngle();
                     const int bulletCount = 3;
                     for (var i = 0; i < bulletCount; i++) {
@@ -166,29 +143,34 @@ namespace Mono_Ether {
                     //Camera.CameraPosition += MathUtil.FromPolar(aimangle + MathF.PI, 5f);
                 }
                 /* Decrement cooldown */
-                if (_shotCooldownRemaining > 0)
-                    _shotCooldownRemaining--;
+                if (_shotCooldownRemaining > TimeSpan.Zero) {
+                    var cooldownRemainingMultiplier = 1f;
+                    foreach (var power in ActivePowerPacks) {
+                        if (power.Type == PowerPackType.ShootSpeedIncrease)
+                            cooldownRemainingMultiplier *= 1.3f;
+                        else if (power.Type == PowerPackType.ShootSpeedDecrease)
+                            cooldownRemainingMultiplier /= 1.3f;
+                    }
+                    _shotCooldownRemaining -= gameTime.ElapsedGameTime * cooldownRemainingMultiplier;
+                }
                 /* Right click to summon a starburst */
                 if (Input.WasRightMouseJustDown)
                     EntityManager.Instance.Add(new Starburst(Position, PlayerCamera.MouseWorldCoords(), Index));
             }
             #endregion Shooting
             #region Power packs
-            /* TODO add powerpacks
-            foreach (var powerPack in activePowerPacks) {
-                powerPack.framesRemaining--;
-                if (powerPack.framesRemaining <= 0)
-                    powerPack.isExpended = true;
+            foreach (var powerPack in ActivePowerPacks) {
+                powerPack.TimeRemaining -= gameTime.ElapsedGameTime;
+                if (powerPack.TimeRemaining <= TimeSpan.Zero)
+                    powerPack.IsExpended = true;
             }
-            activePowerPacks = activePowerPacks.Where(x => !x.isExpended).ToList();
-            */
+            ActivePowerPacks = ActivePowerPacks.Where(x => !x.IsExpended).ToList();
             #endregion Power packs
             /* Update player camera */
             PlayerCamera.Update(gameTime, Position, Index);
         }
-
         public void Kill() {
-            ParticleTemplates.Explosion(Position, 5f, 20f, 100);
+            ParticleTemplates.Explosion(Position, 5f, 25f, 300, Color.White, true);
             _framesUntilRespawn = 60;
             Lives--;
             if (Lives < 0) {
@@ -197,7 +179,7 @@ namespace Mono_Ether {
             }
             /* Reset velocity */
             Velocity = Vector2.Zero;
-            // reset powerpacks
+            ActivePowerPacks.Clear();
             // save highscore
         }
         public override void Draw(SpriteBatch batch, Camera camera) {
@@ -205,8 +187,38 @@ namespace Mono_Ether {
                 return;
             base.Draw(batch, camera);
         }
-        public void AddGeoms(int amount)
-        {
+        public void DrawHud(SpriteBatch batch) {
+            // TODO top left debug texts
+            for (int i = 0; i < ActivePowerPacks.Count; i++) {
+                var pos = new Vector2(PlayerCamera.ScreenSize.X - 100 - i * 100, PlayerCamera.ScreenSize.Y - 100);
+                var powerPack = ActivePowerPacks[i];
+                var icon = powerPack.Type switch {
+                    PowerPackType.ShootSpeedIncrease => PowerPack._shootSpeedIncreaseTexture,
+                    PowerPackType.ShootSpeedDecrease => PowerPack._shootSpeedDecreaseTexture,
+                    PowerPackType.MoveSpeedIncrease => PowerPack._moveSpeedIncreaseTexture,
+                    PowerPackType.MoveSpeedDecrease => PowerPack._moveSpeedIncreaseTexture,
+                    PowerPackType.Doom => PowerPack._doomTexture,
+                    _ => GlobalAssets.Default,
+                };
+                // Draw time remaining colored background
+                var backgroundColor = new Color(60, 214, 91);
+                if (!powerPack.IsGood)
+                    backgroundColor = new Color(214, 60, 60);
+                var remaining = (float)(powerPack.TimeRemaining / powerPack.InitialTime);
+                batch.Draw(GlobalAssets.Pixel, new Rectangle((int)pos.X, (int)(pos.Y + 96 * (1 - remaining)), 96, (int)(96 - 96 * (1 - remaining))), backgroundColor);
+                // Draw icon
+                batch.Draw(icon, pos, Color.White);
+            }
+            // TODO bottom left lives remaining
+            // TODO top right score, geoms, highscore, multiplier,
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Score: {Score}", new Vector2(PlayerCamera.ScreenSize.X - 200, 30), Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Multi: {Multiplier}", new Vector2(PlayerCamera.ScreenSize.X - 200, 60), Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Geoms: {Geoms}", new Vector2(PlayerCamera.ScreenSize.X - 200, 90), Color.White);
+            // TODO you died
+            // TODO screen transitions
+            // TODO boss bar
+        }
+        public void AddGeoms(int amount) {
             Geoms += amount;
         }
     }

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Mono_Ether.Ether;
 
 namespace Mono_Ether {
     public class GameRoot : Game {
@@ -38,10 +39,11 @@ namespace Mono_Ether {
             GlobalAssets.LoadContent(Content);
             /* Add Title screen to screen stack */
             ScreenManager.AddScreen(new TitleScreen(GraphicsDevice));
-            /* If debug mode is enabled, skip straight to the testing stage */
+            /* If debug mode is Enabled, skip straight to the testing stage */
             if (GameSettings.DebugMode) {
                 MediaPlayer.Stop();
                 ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Debug));
+                ScreenManager.AddScreen(new DoomScreen(GraphicsDevice));
             }
         }
 
@@ -69,7 +71,7 @@ namespace Mono_Ether {
             ScreenManager.CurrentScreen.Draw(_batch);
             _drawStopwatch.Stop();
             _drawHistory[_historyIndex] = _drawStopwatch.ElapsedTicks / 167000f;
-            /* Draw FPS (if enabled) */
+            /* Draw FPS (if Enabled) */
             if (GameSettings.ShowFps) {
                 _batch.Begin();
                 var Font = GlobalAssets.NovaSquare24;

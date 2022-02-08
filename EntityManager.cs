@@ -13,6 +13,7 @@ namespace Mono_Ether {
         public List<Bullet> Bullets = new List<Bullet>();
         public List<Drone> Drones = new List<Drone>();
         public List<Geom> Geoms = new List<Geom>();
+        public List<PowerPack> PowerPacks = new List<PowerPack>();
 
         private bool _isUpdating;
         private readonly List<Entity> _addedEntities = new List<Entity>();
@@ -40,8 +41,8 @@ namespace Mono_Ether {
                 Enemies.Add(enemy);
             else if (entity is Bullet bullet)
                 Bullets.Add(bullet);
-            //else if (entity is PowerPack powerPack)
-            //PowerPacks.Add(powerPack);
+            else if (entity is PowerPack powerPack)
+                PowerPacks.Add(powerPack);
             else if (entity is Geom geom)
                 Geoms.Add(geom);
             else if (entity is Drone drone)
@@ -64,9 +65,18 @@ namespace Mono_Ether {
             Geoms = Geoms.Where(x => !x.IsExpired).ToList();
             Bullets = Bullets.Where(x => !x.IsExpired).ToList();
             Enemies = Enemies.Where(x => !x.IsExpired).ToList();
-            //PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
+            PowerPacks = PowerPacks.Where(x => !x.IsExpired).ToList();
         }
         private static bool IsColliding(Entity a, Entity b) => !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < Math.Pow(a.Radius + b.Radius, 2);
+
+        private void KillAll(bool includeBosses) {
+            if (includeBosses)
+                foreach (var enemy in Enemies)
+                    enemy.Suicide();
+            else
+                foreach (var enemy in Enemies.Where(e => !e.IsBoss))
+                    enemy.Suicide();
+        }
         private void HandleCollisions() {
             #region Enemies <-> Enemies
             var i = 0;
@@ -80,7 +90,6 @@ namespace Mono_Ether {
             }
             #endregion
             #region Enemies <-> Bullets
-
             foreach (var enemy in Enemies) {
                 foreach (var bullet in Bullets) {
                     if (IsColliding(enemy, bullet)) {
@@ -90,7 +99,6 @@ namespace Mono_Ether {
                     }
                 }
             }
-
             #endregion
             #region Players <-> Enemies
             foreach (PlayerShip player in Players) {
@@ -99,32 +107,31 @@ namespace Mono_Ether {
                 foreach (var enemy in Enemies) {
                     if (enemy.IsActive && IsColliding(player, enemy)) {
                         player.Kill();
-                        foreach (var enemy2 in Enemies) {
-                            enemy2.Suicide();
-                        }
+                        KillAll(false);
                         break;
                     }
                 }
             }
             #endregion Handle collisions between the players and enemies
-            /*
             #region Handle collisions between powerpacks and the player
-            foreach (PlayerShip player in Players) {
-                for (var i = 0; i < PowerPacks.Count; i++)
-                    if (IsColliding(PowerPacks[i], player)) {
-                        PowerPacks[i].WasPickedUp();
-                        PowerPacks[i].IsExpired = true;
+            foreach (var player in Players) {
+                foreach (var powerPack in PowerPacks)
+                    if (IsColliding(powerPack, player)) {
+                        powerPack.WasPickedUp(); // TODO doom exception
+                        powerPack.IsExpired = true;
+                        /*
                         if (PowerPacks[i].PowerType == "Doom") {
-                            ScreenManager.TransitionScreen(new DoomRoot(GameRoot.Instance.myGraphics, "Secret.txt"));
-                            player.activePowerPacks.Add(new PowerPack(Art.PowerMoveSpeedIncrease, Vector2.Zero, "MoveSpeedIncrease", 3600));
-                            player.activePowerPacks.Add(new PowerPack(Art.PowerShootSpeedIncrease, Vector2.Zero, "ShootSpeedIncrease", 3600));
+                            ScreenManager.TransitionScreen(new DoomScreen(GameRoot.Instance.myGraphics, "Secret.txt"));
+                            player.ActivePowerPacks.Add(new PowerPack(Art.PowerMoveSpeedIncrease, Vector2.Zero, "MoveSpeedIncrease", 3600));
+                            player.ActivePowerPacks.Add(new PowerPack(Art.PowerShootSpeedIncrease, Vector2.Zero, "ShootSpeedIncrease", 3600));
                             continue;
                         }
-                        player.activePowerPacks.Add(PowerPacks[i]);
+                        */
+                        player.ActivePowerPacks.Add(powerPack);
                     }
             }
             #endregion Handle collisions between powerpacks and the player
-            */
+
             #region Players <-> Geoms
             foreach (Geom geom in Geoms) {
                 foreach (var player in Players) {

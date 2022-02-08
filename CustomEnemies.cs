@@ -84,19 +84,75 @@ namespace Mono_Ether {
             }
         }
     }
-    /*
     public class BossOne : Enemy {
-
+        public BossOne(Vector2 position) : base(EnemyType.BossOne, position) {
+            Image = BossOne;
+            Health = 10; // TODO affected by health multiplier and set to 1000
+            AddBehaviour(UpdateBossBar());
+            AddBehaviour(RotateOrientationConstantly());
+            for (var i = 0; i < 3; i++) {
+                EntityManager.Instance.Add(new BossOneChild(position, MathF.PI * 2 * i / 3));
+            }
+            IsBoss = true;
+        }
+        protected override void WasKilled(PlayerIndex playerIndex) {
+            IsExpired = true;
+            /* Add score to player */
+            EntityManager.Instance.Players[(int)playerIndex].Score += Worth;
+            /* Summon particles */
+            ParticleTemplates.Explosion(Position, 0f, 20f, 1000, Color.White, true);
+            /* Trigger win screen */
+            // TODO
+        }
     }
-    public class BossTwoHead : Enemy {
-
+    public class BossOneChild : Enemy {
+        public BossOneChild(Vector2 position, float radians) : base(EnemyType.BossOneChild, position) {
+            Image = BossOneChild;
+            IsBoss = true;
+            IsInvincible = true;
+            AddBehaviour(BossChildOneAI(position, radians));
+        }
+        private IEnumerable<int> BossChildOneAI(Vector2 centre, float radians) {
+            var dist = 600f;
+            while (true) {
+                for (var i = 0; i < 180; i++) { // Idle rotate
+                    radians += 0.05f;
+                    Position = centre + new Vector2(dist, 0).Rotate(radians);
+                    yield return 0;
+                }
+                for (var i = 0; i < 60; i++) { // Extend
+                    radians += 0.05f;
+                    dist += 20f;
+                    Position = centre + new Vector2(dist, 0).Rotate(radians);
+                    yield return 0;
+                }
+                for (var i = 0; i < 180; i++) { // Idle rotate
+                    radians += 0.05f;
+                    Position = centre + new Vector2(dist, 0).Rotate(radians);
+                    yield return 0;
+                }
+                for (var i = 0; i < 60; i++) { // Reduce
+                    radians += 0.05f;
+                    dist -= 20f;
+                    Position = centre + new Vector2(dist, 0).Rotate(radians);
+                    yield return 0;
+                }
+            }
+        }
+    }
+    public class BossTwo : Enemy {
+        public BossTwo(Vector2 position) : base(EnemyType.BossTwo, position) {
+            IsBoss = true;
+        }
     }
     public class BossTwoTail : Enemy {
-
+        public BossTwoTail(Vector2 position) : base(EnemyType.BossTwoTail, position) {
+            IsBoss = true;
+        }
     }
     public class BossThree : Enemy {
-
+        public BossThree(Vector2 position) : base(EnemyType.BossThree, position) {
+            IsBoss = true;
+        }
     }
-    */
-
 }

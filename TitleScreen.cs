@@ -76,7 +76,6 @@ namespace Mono_Ether {
             for (var i = 0; i < 10; i++)
                 _mouseHistory.Add(Input.Mouse.Position.ToVector2());
         }
-
         public override void Suspend() {
             MediaPlayer.Stop();
         }
@@ -115,7 +114,6 @@ namespace Mono_Ether {
             _titleMusic = null;
             _menuCursor = null;
         }
-
         public override void Update(GameTime gameTime) {
             /* Reset scene if user pressed R */
             if (Input.WasKeyJustUp(Keys.R))
@@ -268,6 +266,10 @@ namespace Mono_Ether {
                     GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
                     LoadSettings();
                     //ScreenManager.AddScreen(new SettingsScreen(GraphicsDevice));
+                    break;
+                case "Credits":
+                    GlobalAssets.Click.Play(SoundEffectVolume, 0f, 0f);
+                    ScreenManager.AddScreen(new CreditsScreen(GraphicsDevice));
                     break;
                 case "Exit":
                     ScreenManager.RemoveScreen();

@@ -19,6 +19,7 @@ namespace Mono_Ether {
         protected static Texture2D SnakeHead;
         protected static Texture2D SnakeTail;
         protected static Texture2D BossOne;
+        protected static Texture2D BossOneChild;
         protected static Texture2D BossTwoHead;
         protected static Texture2D BossTwoTail;
         protected static Texture2D BossThree;
@@ -28,6 +29,8 @@ namespace Mono_Ether {
         public int Health;
         public int Worth;
         public bool Invincible;
+        public bool IsBoss;
+        public bool IsInvincible;
         public EnemyType Type;
         protected internal readonly List<IEnumerator<int>> Behaviors = new List<IEnumerator<int>>();
         protected static readonly Random Rand = new Random();
@@ -71,7 +74,7 @@ namespace Mono_Ether {
                     break;
                 case EnemyType.PinkWanderer:
                     enemy.Image = _pinkWanderer;
-                    enemy.AddBehaviour(enemy.MoveOrthonallyOccasionally());
+                    enemy.AddBehaviour(enemy.MoveOrthogonallyOccasionally());
                     enemy.AddBehaviour(enemy.EnemyFacesVelocity());
                     break;
                 case EnemyType.SnakeHead:
@@ -123,6 +126,7 @@ namespace Mono_Ether {
             SnakeHead = content.Load<Texture2D>("Textures/GameScreen/Enemies/SnakeHead");
             SnakeTail = content.Load<Texture2D>("Textures/GameScreen/Enemies/SnakeTail");
             BossOne = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossOne");
+            BossOneChild = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossOneChild");
             BossTwoHead = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossTwoHead");
             BossTwoTail = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossTwoTail");
             BossThree = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossThree");
@@ -138,6 +142,7 @@ namespace Mono_Ether {
             SnakeHead = null;
             SnakeTail = null;
             BossOne = null;
+            BossOneChild = null;
             BossTwoHead = null;
             BossTwoTail = null;
             BossThree = null;
@@ -269,7 +274,15 @@ namespace Mono_Ether {
                 yield return 0;
             }
         }
-        protected IEnumerable<int> MoveOrthonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
+
+        protected IEnumerable<int> UpdateBossBar() {
+            float maxHealth = Health;
+            while (true) {
+                Hud.Instance.BossBarValue = Health / maxHealth;
+                yield return 0;
+            }
+        }
+        protected IEnumerable<int> MoveOrthogonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
             var velocity = MyUtils.FromPolar(Rand.Next(4) * MathF.PI / 2f, speed);
             while (true) {
                 for (var i = 0; i < activeFrames; i++) {
@@ -282,6 +295,7 @@ namespace Mono_Ether {
             }
         }
         public void WasShot(PlayerIndex playerIndex) {
+            if (IsInvincible) return;
             Health--;
             if (Health <= 0)
                 WasKilled(playerIndex);
@@ -289,7 +303,7 @@ namespace Mono_Ether {
             // TODO was shot sound (if not killed)
         }
 
-        private void WasKilled(PlayerIndex playerIndex) {
+        protected virtual void WasKilled(PlayerIndex playerIndex) {
             IsExpired = true;
             /* Add score to player */
             EntityManager.Instance.Players[(int)playerIndex].Score += Worth;
@@ -297,7 +311,7 @@ namespace Mono_Ether {
             // TODO floating text (worth)
             // TODO play sound
             /* Summon particles */
-            ParticleTemplates.Explosion(Position, 5f, 10f, 30);
+            ParticleTemplates.Explosion(Position, 5f, 10f, 30, Color.CornflowerBlue);
             /* If enemy was pink seeker, summon two pink seeker children */
             if (Type == EnemyType.PinkSeeker)
                 for (var i = 0; i < 2; i++)
@@ -310,7 +324,7 @@ namespace Mono_Ether {
         }
         public void Suicide() {
             IsExpired = true;
-            ParticleTemplates.Explosion(Position, 5f, 10f, 30);
+            ParticleTemplates.Explosion(Position, 5f, 10f, 30, Color.CornflowerBlue);
         }
     }
 }

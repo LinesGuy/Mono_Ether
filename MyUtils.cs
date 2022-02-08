@@ -11,6 +11,7 @@ namespace Mono_Ether {
         public static void DrawStringCentered(this SpriteBatch batch, SpriteFont font, string text, Vector2 position, Color color) => batch.DrawString(font, text, position, color, 0f, font.MeasureString(text) / 2f, 1f, 0, 0);
         public static Vector2 EInterpolate(Vector2 start, Vector2 end, float frames, float slowness = 60f) => new Vector2(start.X + (end.X - start.X) * (1 - MathF.Exp(-frames / slowness)), start.Y + (end.Y - start.Y) * (1 - MathF.Exp(-frames / slowness)));
         public static Vector2 Rotate(this Vector2 vector, float radians) => new Vector2(MathF.Cos(radians) * vector.X - MathF.Sin(radians) * vector.Y, MathF.Sin(radians) * vector.X + MathF.Cos(radians) * vector.Y);
+        public static float Interpolate(float start, float end, float value) => start + (end - start) * value;
         public static float ToAngle(this Vector2 vector) => (float)Math.Atan2(vector.Y, vector.X);
         public static float NextFloat(this Random rand, float minValue, float maxValue) => (float)rand.NextDouble() * (maxValue - minValue) + minValue;
         public static Vector2 ScaleTo(this Vector2 vector, float length) => vector * (length / vector.Length());

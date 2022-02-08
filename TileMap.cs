@@ -26,8 +26,9 @@ namespace Mono_Ether {
                 _ => throw new ArgumentOutOfRangeException(nameof(level), level, null)
             };
         }
-        public TileMap(Level level) {
-            Instance = this;
+        public TileMap(Level level, bool overwriteInstance=true) {
+            if (overwriteInstance)
+                Instance = this;
             var lines = File.ReadAllLines(@"Content/TileMapData/" + _filenameFromLevel(level)).Where(l => l != "").ToArray();
             var gridList = new List<List<Tile>>();
             var y = 0;
@@ -48,7 +49,7 @@ namespace Mono_Ether {
                 foreach (var tile in row)
                     tile.UpdateWalls();
         }
-        public void Update(bool editorMode) {
+        public void Update(bool editorMode=false) {
             if (!editorMode) return;
             /* TODO press r to save map */
             var tile = GetTileFromWorld(EntityManager.Instance.Players[0].PlayerCamera.MouseWorldCoords());
@@ -270,10 +271,10 @@ namespace Mono_Ether {
         }
     }
     public class Tile {
-        private static Texture2D[] _textures;
+        public static Texture2D[] Textures;
         private static Texture2D[] _collisionWallTextures;
         private static Texture2D[] _collisionCornerTextures;
-        public static Vector2 Size => _textures[0].Size();
+        public static Vector2 Size => Textures[0].Size();
         public static float Length => Size.X;
         public int Id;
         public readonly Vector2 Pos;
@@ -293,7 +294,7 @@ namespace Mono_Ether {
                 content.Load<Texture2D>("Textures/GameScreen/Tiles/RedNeon"),
                 content.Load<Texture2D>("Textures/GameScreen/Tiles/PurpleNeon")
             };
-            _textures = textureList.ToArray();
+            Textures = textureList.ToArray();
             List<Texture2D> collisionWallTextureList = new List<Texture2D>
             {
                 content.Load<Texture2D>("Textures/GameScreen/Tiles/Collisions/Left"),
@@ -312,7 +313,7 @@ namespace Mono_Ether {
             _collisionCornerTextures = collisionCornerTextureList.ToArray();
         }
         public static void UnloadContent() {
-            _textures = null;
+            Textures = null;
         }
         public Vector2 TopLeft { get => Pos * Length; }
         public Vector2 Top { get => new Vector2(TopLeft.X + Length / 2f, TopLeft.Y); }
@@ -357,14 +358,14 @@ namespace Mono_Ether {
         }
         public void Draw(SpriteBatch batch, Camera camera) {
             if (Id == 0) return;
-            batch.Draw(_textures[Id - 1], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation,
+            batch.Draw(Textures[Id - 1], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
         }
         public void Draw(SpriteBatch batch, Camera camera, float parallax, bool editorMode = false) {
             if (Id == 0) return;
             float zoom = 1f - parallax / 10;
             float transparency = 1 - parallax;
-            batch.Draw(_textures[Id - 1], (camera.WorldToScreen(TileMap.MapToWorld(Pos)) - camera.ScreenSize / 2f) * zoom + camera.ScreenSize / 2f, null, Color.White * transparency, camera.Orientation,
+            batch.Draw(Textures[Id - 1], (camera.WorldToScreen(TileMap.MapToWorld(Pos)) - camera.ScreenSize / 2f) * zoom + camera.ScreenSize / 2f, null, Color.White * transparency, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
             if (editorMode) {
                 for (int i = 0; i < 4; i++) {

@@ -10,7 +10,7 @@ namespace Mono_Ether {
 
         public const string SettingsFilename = "settings.txt"; // TODO rename to Settings.txt
         public static Vector2 ScreenSize = new Vector2(1800, 900); // TODO allow this to change
-        public static bool DebugMode = false;
+        public static bool DebugMode = true;
         //public static bool VSync = true;
         public static bool ShowFps = true;
         public static bool AllowWindowResizing = false;

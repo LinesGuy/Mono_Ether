@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Diagnostics;
-
-namespace Mono_Ether.Ether {
+﻿namespace Mono_Ether.Ether {
     /*
     class PowerPack : Entity {
         private int timeUntilStart = 60;

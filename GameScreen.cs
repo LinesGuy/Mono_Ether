@@ -9,17 +9,23 @@ namespace Mono_Ether {
     public enum GameMode { Playing, Paused, Editor }
     public enum Level { Debug, Level1, Level2, Level3, Secret, Tutorial }
     public class GameScreen : GameState {
-        private static Texture2D _gameCursor;
+        public static Texture2D GameCursor;
         private float _cursorRotation;
         public static GameScreen Instance;
         private readonly EntityManager _entityManager = new EntityManager();
         private readonly ParticleManager _particleManager = new ParticleManager();
         private readonly EnemySpawner _enemySpawner = new EnemySpawner();
+        private readonly PowerPackSpawner _powerPackSpawner = new PowerPackSpawner(); 
         private readonly PauseWindow _pauseWindow = new PauseWindow();
         private readonly StarField _starField = new StarField();
         private readonly TileMap _tileMap;
+        private TimeSpan _timeSinceTransition;
+        private string _state = "FadeIn";
+        private Hud _hud;
+        public Level CurrentLevel;
         public GameMode Mode = GameMode.Playing;
         public GameScreen(GraphicsDevice graphicsDevice, Level level) : base(graphicsDevice) {
+            CurrentLevel = level;
             /* Load tile map data from filename */
             _tileMap = new TileMap(level);
         }
@@ -38,12 +44,20 @@ namespace Mono_Ether {
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(100f, 100f), MyUtils.ViewportF(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
             //_entityManager.Add(new PlayerShip(GraphicsDevice, _tileMap.WorldSize / 2 + new Vector2(0f, 100f), MyUtils.ViewportF(0, GameSettings.ScreenSize.Y / 2f, GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 2f)));
             /* Give each player a shooter drone */
-            foreach (var player in EntityManager.Instance.Players)
-            {
+            foreach (var player in EntityManager.Instance.Players) {
                 EntityManager.Instance.Add(Drone.CreateShooter(player.Index));
                 EntityManager.Instance.Add(Drone.CreateCollector(player.Index));
             }
-                
+            /* If level is level one, two or three, summon a boss and enable the boss bar */
+            if (CurrentLevel == Level.Level1 || CurrentLevel == Level.Level2 || CurrentLevel == Level.Level3) {
+                _hud = new Hud(true);
+                if (CurrentLevel == Level.Level1) _entityManager.Add(new BossOne(_tileMap.WorldSize / 2f));
+                if (CurrentLevel == Level.Level2) _entityManager.Add(new BossTwo(_tileMap.WorldSize / 2f));
+                if (CurrentLevel == Level.Level3) _entityManager.Add(new BossThree(_tileMap.WorldSize / 2f));
+                foreach (var player in _entityManager.Players)
+                    player.Position = new Vector2(128f, 128f);
+            } else
+                _hud = new Hud();
         }
         public override void Suspend() {
 
@@ -52,7 +66,7 @@ namespace Mono_Ether {
 
         }
         public override void LoadContent(ContentManager content) {
-            _gameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
+            GameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
             PlayerShip.LoadContent(content);
             Bullet.LoadContent(content);
             Starburst.LoadContent(content);
@@ -61,9 +75,10 @@ namespace Mono_Ether {
             Enemy.LoadContent(content);
             Drone.LoadContent(content);
             Geom.LoadContent(content);
+            PowerPack.LoadContent(content);
         }
         public override void UnloadContent() {
-            _gameCursor = null;
+            GameCursor = null;
             PlayerShip.UnloadContent();
             Bullet.UnloadContent();
             Starburst.UnloadContent();
@@ -72,8 +87,31 @@ namespace Mono_Ether {
             Enemy.UnloadContent();
             Drone.UnloadContent();
             Geom.UnloadContent();
+            PowerPack.UnloadContent();
+        }
+        private void SetState(string state) {
+            _state = state;
+            _timeSinceTransition = TimeSpan.Zero;
         }
         public override void Update(GameTime gameTime) {
+            if (!GameRoot.Instance.IsActive)
+                return;
+            _timeSinceTransition += gameTime.ElapsedGameTime;
+            switch (_state) {
+                case "FadeIn":
+                    if (_timeSinceTransition > TimeSpan.FromSeconds(0.5)) SetState("normal");
+                    // TODO camera zoom out
+                    // TODO player invincibility ring remove
+                    break;
+                case "Normal":
+                    break;
+                case "Win":
+                    if (_timeSinceTransition > TimeSpan.FromSeconds(3)) ScreenManager.RemoveScreen();
+                    break;
+                case "Lose":
+                    if (_timeSinceTransition > TimeSpan.FromSeconds(3)) ScreenManager.RemoveScreen();
+                    break;
+            }
             /* Update cursor rotation */
             _cursorRotation += 0.05f;
             if (Input.WasKeyJustDown(Keys.Escape)) {
@@ -89,10 +127,8 @@ namespace Mono_Ether {
                 }
             }
 
-            if (Input.WasKeyJustDown(Keys.P))
-            {
-                switch (Mode)
-                {
+            if (Input.WasKeyJustDown(Keys.P)) {
+                switch (Mode) {
                     case GameMode.Playing:
                         Mode = GameMode.Editor;
                         EnemySpawner.Enabled = false;
@@ -114,6 +150,7 @@ namespace Mono_Ether {
             _entityManager.Update(gameTime);
             _particleManager.Update(gameTime);
             _enemySpawner.Update(_entityManager, _tileMap);
+            _powerPackSpawner.Update(gameTime);
             _tileMap.Update(Mode == GameMode.Editor);
         }
         public override void Draw(SpriteBatch batch) {
@@ -134,13 +171,17 @@ namespace Mono_Ether {
             _starField.Draw(batch, player.PlayerCamera);
             _tileMap.Draw(batch, player.PlayerCamera, Mode == GameMode.Editor); /* Draw tilemap with tile boundaries if in editor mode */
             _particleManager.Draw(batch, player.PlayerCamera);
+            _hud.Draw(batch);
+            player.DrawHud(batch);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
             if (_pauseWindow.Visible)
                 _pauseWindow.Draw(batch);
             /* Draw cursor */
-            batch.Draw(_gameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
-                _gameCursor.Size() / 2f, 1f, 0, 0);
+            batch.Draw(GameCursor, Input.Mouse.Position.ToVector2(), null, Color.White, _cursorRotation,
+                GameCursor.Size() / 2f, 1f, 0, 0);
+            if (!GameRoot.Instance.IsActive)
+                batch.DrawString(GlobalAssets.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameSettings.ScreenSize / 4f, Color.White);
             batch.End();
             //}
             /*GraphicsDevice.SetRenderTarget(null);
@@ -150,6 +191,8 @@ namespace Mono_Ether {
             }
             batch.End();*/
             // TODO enable splitscreen?
+            // TODO fade in on load
+            // TODO win/lose screen
         }
     }
 }

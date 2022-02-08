@@ -127,11 +127,11 @@ namespace Mono_Ether {
                 position + positionOffset, color,
                 MyUtils.FromPolar(orientation + orientationOffset, Random.NextFloat(1f, 6f)), 0.99f));
         }
-        public static void Explosion(Vector2 position, float minSpeed, float maxSpeed, int count) { // TODO add color parameter
+        public static void Explosion(Vector2 position, float minSpeed, float maxSpeed, int count, Color color, bool rainbow=false) { // TODO add color parameter
             for (var i = 0; i < count; i++) {
                 var orientation = Random.NextFloat(0f, MathF.PI * 2f);
                 var speed = Random.NextFloat(minSpeed, maxSpeed);
-                var color = new Color(255, 255, 0); // TODO
+                if (rainbow) color = new Color(Random.Next(255), Random.Next(255), Random.Next(255));
                 ParticleManager.Instance.Add(new BigParticle(
                     position, color, MyUtils.FromPolar(orientation, speed), 0.99f));
             }

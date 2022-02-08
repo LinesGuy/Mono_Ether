@@ -75,6 +75,18 @@
 /processorParam:Quality=Best
 /build:SoundEffects/PlayerShoot/Shoot-04.wav
 
+#begin SoundEffects/PowerPacks/PickupBadSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PowerPacks/PickupBadSound.wav
+
+#begin SoundEffects/PowerPacks/PickupGoodSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PowerPacks/PickupGoodSound.wav
+
 #begin Textures/GameScreen/Bullet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -374,6 +386,66 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/GameScreen/PlayerShip.png
+
+#begin Textures/GameScreen/PowerPacks/Doom.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/PowerPacks/Doom.png
+
+#begin Textures/GameScreen/PowerPacks/MoveSpeedDecrease.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/PowerPacks/MoveSpeedDecrease.png
+
+#begin Textures/GameScreen/PowerPacks/MoveSpeedIncrease.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/PowerPacks/MoveSpeedIncrease.png
+
+#begin Textures/GameScreen/PowerPacks/ShootSpeedDecrease.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/PowerPacks/ShootSpeedDecrease.png
+
+#begin Textures/GameScreen/PowerPacks/ShootSpeedIncrease.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/PowerPacks/ShootSpeedIncrease.png
 
 #begin Textures/GameScreen/StarBurst.png
 /importer:TextureImporter

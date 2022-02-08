@@ -32,7 +32,7 @@ namespace Mono_Ether {
             /* Delete bullet if collided with a wall */
             if (TileMap.Instance.GetTileFromWorld(Position).Id <= 0) return;
             IsExpired = true;
-            ParticleTemplates.Explosion(Position, 1f, 2f, 20);
+            ParticleTemplates.Explosion(Position, 1f, 2f, 20, new Color(255, 255, 0));
         }
         public static void LoadContent(ContentManager content) {
             _bulletTexture = content.Load<Texture2D>("Textures/GameScreen/Bullet");

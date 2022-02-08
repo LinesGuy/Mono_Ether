@@ -14,6 +14,7 @@ namespace Mono_Ether {
         public Geom(Vector2 position) {
             Position = position;
             Image = _geomTexture;
+            Velocity = new Vector2(Rand.Next(-10, 10), Rand.Next(-10, 10));
         }
         public static void LoadContent(ContentManager content) {
             _geomTexture = content.Load<Texture2D>("Textures/GameScreen/Geom");
