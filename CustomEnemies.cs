@@ -11,9 +11,8 @@ namespace Mono_Ether {
             AddBehaviour(MoveRandomly(1f, 0.3f, 0.3f));
             AddBehaviour(EnemyFacesVelocity());
             var tailLength = Rand.Next(5, 15);
-            for (var i = 0; i <= tailLength; i++) {
+            for (var i = 0; i <= tailLength; i++)
                 Tail.Add(new SnakeTail(position));
-            }
             AddBehaviour(UpdateTail());
         }
         private IEnumerable<int> UpdateTail(float distance = 20f) {
@@ -87,7 +86,9 @@ namespace Mono_Ether {
     public class BossOne : Enemy {
         public BossOne(Vector2 position) : base(EnemyType.BossOne, position) {
             Image = BossOne;
-            Health = 10; // TODO affected by health multiplier and set to 1000
+            Health = 100; // TODO affected by health multiplier and set to 1000
+            TimeUntilStart = 0;
+            EntityColor = Color.White;
             AddBehaviour(UpdateBossBar());
             AddBehaviour(RotateOrientationConstantly());
             for (var i = 0; i < 3; i++) {
@@ -109,6 +110,8 @@ namespace Mono_Ether {
         public BossOneChild(Vector2 position, float radians) : base(EnemyType.BossOneChild, position) {
             Image = BossOneChild;
             IsBoss = true;
+            TimeUntilStart = 0;
+            EntityColor = Color.White;
             IsInvincible = true;
             AddBehaviour(BossChildOneAI(position, radians));
         }
@@ -141,18 +144,76 @@ namespace Mono_Ether {
         }
     }
     public class BossTwo : Enemy {
+        public List<BossTwoTail> Tail = new List<BossTwoTail>();
         public BossTwo(Vector2 position) : base(EnemyType.BossTwo, position) {
+            Image = BossTwoHead;
             IsBoss = true;
+            TimeUntilStart = 0;
+            EntityColor = Color.White;
+            Health = 300;
+            AddBehaviour(_followCursor());
+            AddBehaviour(UpdateBossBar());
+            //AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
+            AddBehaviour(EnemyFacesVelocity());
+            for (var i = 0; i <= 40; i++)
+                Tail.Add(new BossTwoTail(position));
+            AddBehaviour(UpdateTail(40));
+        }
+        private IEnumerable<int> _followCursor() {
+            while (true) {
+                Vector2 delta = (EntityManager.Instance.Players[0].PlayerCamera.MouseWorldCoords() - Position).ScaleTo(3f);
+                Velocity += delta;
+                yield return 0;
+            }
+        }
+        private IEnumerable<int> UpdateTail(float distance = 20f) {
+            while (true) {
+                Tail[0].Position = Position;
+                for (var i = 1; i < Tail.Count; i++) {
+                    var bodyTail = Tail[i];
+                    if (bodyTail.TimeUntilStart > 0) {
+                        bodyTail.TimeUntilStart--;
+                        bodyTail.EntityColor = Color.White * (1 - TimeUntilStart / 60f);
+                    }
+                    if (Vector2.DistanceSquared(bodyTail.Position, Tail[i - 1].Position) > distance * distance) {
+                        bodyTail.Position = Tail[i - 1].Position + (bodyTail.Position - Tail[i - 1].Position).ScaleTo(distance);
+                    }
+                    /* Apply enemy behaviors */
+                    for (var j = 0; j < bodyTail.Behaviors.Count; j++)
+                        if (!bodyTail.Behaviors[j].MoveNext())
+                            bodyTail.Behaviors.RemoveAt(i--);
+                }
+                yield return 0;
+            }
+        }
+        public override void Update(GameTime gameTime) {
+            base.Update(gameTime);
+            /* Update tail */
+            foreach (var tail in Tail)
+                tail.HandleTilemapCollision();
+        }
+        public override void Draw(SpriteBatch batch, Camera camera) {
+            base.Draw(batch, camera);
+            /* Draw tail */
+            foreach (var tail in Tail)
+                tail.Draw(batch, camera);
         }
     }
     public class BossTwoTail : Enemy {
         public BossTwoTail(Vector2 position) : base(EnemyType.BossTwoTail, position) {
             IsBoss = true;
+            TimeUntilStart = 0;
+            EntityColor = Color.White;
+            Image = BossTwoTail;
+            AddBehaviour(EnemyFacesVelocity());
         }
     }
     public class BossThree : Enemy {
         public BossThree(Vector2 position) : base(EnemyType.BossThree, position) {
             IsBoss = true;
+            Image = BossThree;
+            TimeUntilStart = 0;
+            EntityColor = Color.White;
         }
     }
 }
