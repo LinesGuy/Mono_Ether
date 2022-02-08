@@ -43,7 +43,7 @@ namespace Mono_Ether {
             if (GameSettings.DebugMode) {
                 MediaPlayer.Stop();
                 ScreenManager.AddScreen(new GameScreen(GraphicsDevice, Level.Debug));
-                ScreenManager.AddScreen(new DoomScreen(GraphicsDevice));
+                //ScreenManager.AddScreen(new DoomScreen(GraphicsDevice));
             }
         }
 
