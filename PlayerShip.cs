@@ -41,6 +41,11 @@ namespace Mono_Ether {
         public override void Update(GameTime gameTime) {
             if (IsDead) {
                 _framesUntilRespawn--;
+                if (_framesUntilRespawn == 0)
+                    if (GameScreen.Instance.CurrentLevel == Level.Level1 ||
+                        GameScreen.Instance.CurrentLevel == Level.Level2 ||
+                        GameScreen.Instance.CurrentLevel == Level.Level3)
+                        Position = new Vector2(128f, 128f);
                 return;
             }
             #region Movement
