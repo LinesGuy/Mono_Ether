@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
+using Microsoft.Xna.Framework.Media;
 
 namespace Mono_Ether {
     public enum GameMode { Playing, Paused, Editor }
@@ -24,6 +25,7 @@ namespace Mono_Ether {
         private Hud _hud;
         public Level CurrentLevel;
         public GameMode Mode = GameMode.Playing;
+        private Song _gameMusic;
         public GameScreen(GraphicsDevice graphicsDevice, Level level) : base(graphicsDevice) {
             CurrentLevel = level;
             /* Load tile map data from filename */
@@ -58,6 +60,9 @@ namespace Mono_Ether {
                     player.Position = new Vector2(128f, 128f);
             } else
                 _hud = new Hud();
+            /* Play music */
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(_gameMusic);
         }
         public override void Suspend() {
 
@@ -67,6 +72,7 @@ namespace Mono_Ether {
         }
         public override void LoadContent(ContentManager content) {
             GameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
+            _gameMusic = content.Load<Song>("Songs/GameScreen");
             PlayerShip.LoadContent(content);
             Bullet.LoadContent(content);
             Starburst.LoadContent(content);
