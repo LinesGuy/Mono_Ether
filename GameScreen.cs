@@ -50,7 +50,7 @@ namespace Mono_Ether {
                 EntityManager.Instance.Add(Drone.CreateShooter(player.Index));
                 EntityManager.Instance.Add(Drone.CreateCollector(player.Index));
             }
-            /* If level is level one, two or three, summon a boss and enable the boss bar */
+            /* If level is level one, two or three, summon a boss and enable the boss bar, and move player to top left */
             if (CurrentLevel == Level.Level1 || CurrentLevel == Level.Level2 || CurrentLevel == Level.Level3) {
                 _hud = new Hud(true);
                 if (CurrentLevel == Level.Level1) _entityManager.Add(new BossOne(_tileMap.WorldSize / 2f));
@@ -60,6 +60,11 @@ namespace Mono_Ether {
                     player.Position = new Vector2(128f, 128f);
             } else
                 _hud = new Hud();
+            /* Move all player cameras to player */
+            foreach (var player in _entityManager.Players)
+            {
+                player.PlayerCamera.Position = player.Position;
+            }
             /* Play music */
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_gameMusic);
