@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether {
     public enum EnemyType { BlueSeeker, PurpleWanderer, GreenSeeker, BackAndForther, PinkSeeker, PinkSeekerChild, PinkWanderer, SnakeHead, SnakeTail, BossOne, BossOneChild, BossTwo, BossTwoTail, BossThree }
@@ -23,9 +23,10 @@ namespace Mono_Ether {
         protected static Texture2D BossOneChild;
         protected static Texture2D BossTwoHead;
         protected static Texture2D BossTwoTail;
-        protected static Texture2D BossThree;
+        protected static Texture2D[] BossThree;
         protected static Texture2D PinkSeekerChild;
         protected static SoundEffect DeathSound;
+        protected float _friction = 0.8f;
         public int TimeUntilStart = 60;
         public int Health;
         public int Worth;
@@ -114,7 +115,7 @@ namespace Mono_Ether {
                 if (!Behaviors[i].MoveNext())
                     Behaviors.RemoveAt(i--);
             Position += Velocity;
-            Velocity *= 0.8f;
+            Velocity *= _friction;
             HandleTilemapCollision();
         }
         public static void LoadContent(ContentManager content) {
@@ -130,7 +131,10 @@ namespace Mono_Ether {
             BossOneChild = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossOneChild");
             BossTwoHead = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossTwoHead");
             BossTwoTail = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossTwoTail");
-            BossThree = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossThree");
+            var bossThreeList = new List<Texture2D>();
+            for (var i = 0; i < 8; i++)
+                bossThreeList.Add(content.Load<Texture2D>($"Textures/GameScreen/Enemies/BossThree/{i}"));
+            BossThree = bossThreeList.ToArray();
             PinkSeekerChild = content.Load<Texture2D>("Textures/GameScreen/Enemies/PinkSeekerChild");
             DeathSound = content.Load<SoundEffect>("SoundEffects/EnemyDeath");
         }
@@ -212,7 +216,8 @@ namespace Mono_Ether {
                         break;
                     }
                 }
-                if (dash) continue;
+                if (dash)
+                    continue;
                 if (players.TrueForAll(player => TileMap.Instance.GetTileFromWorld(player.Position).Id > 0)) {
                     /* All players are in solid tiles, do nothing */
                     yield return 0;
@@ -222,10 +227,14 @@ namespace Mono_Ether {
                     /* Instead of calculating a new path every frame or whatever, we will calculate a new path
                      * based on how far the enemy is from the player: */
                     var timeUntilNextCalculation = 240;
-                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 2500 * 2500) timeUntilNextCalculation = 120;
-                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 1500 * 1500) timeUntilNextCalculation = 60;
-                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 750 * 750) timeUntilNextCalculation = 20;
-                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 300 * 300) timeUntilNextCalculation = 10;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 2500 * 2500)
+                        timeUntilNextCalculation = 120;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 1500 * 1500)
+                        timeUntilNextCalculation = 60;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 750 * 750)
+                        timeUntilNextCalculation = 20;
+                    if (Vector2.DistanceSquared(Position, nearestPlayer.Position) < 300 * 300)
+                        timeUntilNextCalculation = 10;
                     for (var i = 0; i < timeUntilNextCalculation; i++) {
                         if (path is null) {
                             yield return 0;
@@ -235,7 +244,8 @@ namespace Mono_Ether {
                         if (Vector2.DistanceSquared(Position, path[0]) <= Math.Pow(Tile.Length * 0.8f, 2))
                             path.RemoveAt(0);
                         /* If path is empty, make a new path */
-                        if (path.Count <= 0) break;
+                        if (path.Count <= 0)
+                            break;
                         /* Move towards player */
                         Velocity += (path[0] - Position).ScaleTo(acceleration);
 
@@ -298,7 +308,8 @@ namespace Mono_Ether {
             }
         }
         public void WasShot(PlayerIndex playerIndex) {
-            if (IsInvincible) return;
+            if (IsInvincible)
+                return;
             Health--;
             if (Health <= 0)
                 WasKilled(playerIndex);

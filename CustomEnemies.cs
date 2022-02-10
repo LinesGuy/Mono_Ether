@@ -209,11 +209,25 @@ namespace Mono_Ether {
         }
     }
     public class BossThree : Enemy {
-        public BossThree(Vector2 position) : base(EnemyType.BossThree, position) {
+        private readonly int _size;
+        public BossThree(Vector2 position, int size) : base(EnemyType.BossThree, position) {
             IsBoss = true;
-            Image = BossThree;
+            _size = size;
+            Image = BossThree[size];
+            _friction = 0.95f;
             TimeUntilStart = 0;
             EntityColor = Color.White;
+            Health = (int) MyUtils.Interpolate(10, 100, size / 7f);
+            AddBehaviour(MoveRandomly(0.4f));
+            AddBehaviour(RotateOrientationConstantly());
+        }
+        protected override void WasKilled(PlayerIndex playerIndex) {
+            base.WasKilled(playerIndex);
+            if (_size <= 0)
+                return;
+            /* summon two smaller clones of this boss */
+            for (var i = 0; i < 2; i++)
+                EntityManager.Instance.Add(new BossThree(Position, _size - 1));
         }
     }
 }

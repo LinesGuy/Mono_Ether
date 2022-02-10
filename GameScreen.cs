@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Linq;
-using Microsoft.Xna.Framework.Media;
 
 namespace Mono_Ether {
     public enum GameMode { Playing, Paused, Editor }
@@ -16,7 +16,7 @@ namespace Mono_Ether {
         private readonly EntityManager _entityManager = new EntityManager();
         private readonly ParticleManager _particleManager = new ParticleManager();
         private readonly EnemySpawner _enemySpawner = new EnemySpawner();
-        private readonly PowerPackSpawner _powerPackSpawner = new PowerPackSpawner(); 
+        private readonly PowerPackSpawner _powerPackSpawner = new PowerPackSpawner();
         private readonly PauseWindow _pauseWindow = new PauseWindow();
         private readonly StarField _starField = new StarField();
         private readonly TileMap _tileMap;
@@ -53,9 +53,14 @@ namespace Mono_Ether {
             /* If level is level one, two or three, summon a boss and enable the boss bar, and move player to top left */
             if (CurrentLevel == Level.Level1 || CurrentLevel == Level.Level2 || CurrentLevel == Level.Level3) {
                 _hud = new Hud(true);
-                if (CurrentLevel == Level.Level1) _entityManager.Add(new BossOne(_tileMap.WorldSize / 2f));
-                if (CurrentLevel == Level.Level2) _entityManager.Add(new BossTwo(_tileMap.WorldSize / 2f));
-                if (CurrentLevel == Level.Level3) _entityManager.Add(new BossThree(_tileMap.WorldSize / 2f));
+                if (CurrentLevel == Level.Level1)
+                    _entityManager.Add(new BossOne(_tileMap.WorldSize / 2f));
+                if (CurrentLevel == Level.Level2)
+                    _entityManager.Add(new BossTwo(_tileMap.WorldSize / 2f));
+                if (CurrentLevel == Level.Level3) {
+                    _entityManager.Add(new BossThree(_tileMap.WorldSize / 2f, 7));
+                    EnemySpawner.Enabled = false;
+                }
                 foreach (var player in _entityManager.Players)
                     player.Position = new Vector2(128f, 128f);
             } else
@@ -107,17 +112,20 @@ namespace Mono_Ether {
             _timeSinceTransition += gameTime.ElapsedGameTime;
             switch (_state) {
                 case "FadeIn":
-                    if (_timeSinceTransition > TimeSpan.FromSeconds(0.5)) SetState("normal");
+                    if (_timeSinceTransition > TimeSpan.FromSeconds(0.5))
+                        SetState("normal");
                     // TODO camera zoom out
                     // TODO player invincibility ring remove
                     break;
                 case "Normal":
                     break;
                 case "Win":
-                    if (_timeSinceTransition > TimeSpan.FromSeconds(3)) ScreenManager.RemoveScreen();
+                    if (_timeSinceTransition > TimeSpan.FromSeconds(3))
+                        ScreenManager.RemoveScreen();
                     break;
                 case "Lose":
-                    if (_timeSinceTransition > TimeSpan.FromSeconds(3)) ScreenManager.RemoveScreen();
+                    if (_timeSinceTransition > TimeSpan.FromSeconds(3))
+                        ScreenManager.RemoveScreen();
                     break;
             }
             /* Update cursor rotation */
