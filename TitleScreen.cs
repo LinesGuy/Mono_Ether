@@ -61,7 +61,7 @@ namespace Mono_Ether {
             _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-325f, -50f), 400f, "SFX volume", SoundEffectVolume));
             _settingsSliderManager.Sliders.Add(new Slider(ScreenSize / 2f + new Vector2(-325f, 100f), 400f, "Music volume", MusicVolume));
             _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, -200f), DebugMode, "Debug mode"));
-            //_settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, -100f), VSync, "VSync"));
+            _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, -100f), VSync, "VSync"));
             _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, 0f), ShowFps, "Show FPS"));
             _settingsSwitcherManager.Switchers.Add(new Switcher(ScreenSize / 2f + new Vector2(150, 100f), AllowWindowResizing, "Allow window resizing"));
             /* Create lists of small/big stars with random positions */
@@ -310,7 +310,7 @@ namespace Mono_Ether {
                         DebugMode = !DebugMode;
                         break;
                     case "VSync":
-                        //VSync = !VSync;
+                        VSync = !VSync;
                         break;
                     case "Show FPS":
                         ShowFps = !ShowFps;

@@ -10,10 +10,10 @@ namespace Mono_Ether {
 
         public const string SettingsFilename = "settings.txt"; // TODO rename to Settings.txt
         public static Vector2 ScreenSize = new Vector2(1800, 900); // TODO allow this to change
-        public static bool DebugMode = true;
-        //public static bool VSync = true;
-        public static bool ShowFps = true;
-        public static bool AllowWindowResizing = false;
+        public static bool DebugMode;
+        public static bool VSync;
+        public static bool ShowFps;
+        public static bool AllowWindowResizing;
         public static float MasterVolume;
         public static float MusicVolume;
         public static float SoundEffectVolume;
@@ -22,8 +22,8 @@ namespace Mono_Ether {
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
 
-            //GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = VSync;
-            //GameRoot.Instance.IsFixedTimeStep = VSync;
+            GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = VSync;
+            GameRoot.Instance.IsFixedTimeStep = VSync;
 
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
             GameRoot.Instance.Graphics.ApplyChanges();
@@ -40,16 +40,26 @@ namespace Mono_Ether {
                 float.TryParse(lines[0], out MasterVolume);
                 float.TryParse(lines[1], out MusicVolume);
                 float.TryParse(lines[2], out SoundEffectVolume);
+                DebugMode = lines[3] == "true";
+                VSync = lines[4] == "true";
+                ShowFps = lines[5] == "true";
+                AllowWindowResizing = lines[6] == "true";
             } else {
                 // Default settings
-                File.WriteAllText(SettingsFilename, "0.05\n0.05\n0.8");
+                File.WriteAllText(SettingsFilename, "0.05\n0.05\n0.8\ntrue\ntrue\ntrue\nfalse");
                 LoadSettings();
             }
             ApplyChanges();
         }
         public static void SaveSettings() {
             // TODO Use for-loop and dictionary to save settings
-            File.WriteAllText(SettingsFilename, $"{MasterVolume}\n{MusicVolume}\n{SoundEffectVolume}");
+            File.WriteAllText(SettingsFilename, $"{MasterVolume}\n" +
+                                                $"{MusicVolume}\n" +
+                                                $"{SoundEffectVolume}\n" +
+                                                (DebugMode ? "true" : "false") + "\n" +
+                                                (VSync ? "true" : "false") + "\n" +
+                                                (ShowFps ? "true" : "false") + "\n" +
+                                                (AllowWindowResizing ? "true" : "false"));
         }
         public static void OnScreenResize(object sender, EventArgs e) {
             ScreenSize.X = GameRoot.Instance.Window.ClientBounds.Width;
