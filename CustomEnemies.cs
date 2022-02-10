@@ -91,19 +91,20 @@ namespace Mono_Ether {
             EntityColor = Color.White;
             AddBehaviour(UpdateBossBar());
             AddBehaviour(RotateOrientationConstantly());
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < 3; i++)
                 EntityManager.Instance.Add(new BossOneChild(position, MathF.PI * 2 * i / 3));
-            }
             IsBoss = true;
         }
         protected override void WasKilled(PlayerIndex playerIndex) {
             IsExpired = true;
-            /* Add score to player */
-            EntityManager.Instance.Players[(int)playerIndex].Score += Worth;
-            /* Summon particles */
-            ParticleTemplates.Explosion(Position, 0f, 20f, 1000, Color.White, true);
-            /* Trigger win screen */
-            // TODO
+            EntityManager.Instance.Players[(int)playerIndex].Score += Worth; // Add score to player
+            ParticleTemplates.Explosion(Position, 0f, 20f, 1000, Color.White, true); // Summon particles
+            EntityManager.Instance.Enemies.ForEach(e => e.Suicide());
+            EntityManager.Instance.PowerPacks.Clear();
+            PowerPackSpawner.Instance.Enabled = false;
+            EnemySpawner.Enabled = false;
+            // TODO trigger win screen
+
         }
     }
     public class BossOneChild : Enemy {
@@ -214,7 +215,7 @@ namespace Mono_Ether {
             IsBoss = true;
             _size = size;
             Image = BossThree[size];
-            _friction = 0.95f;
+            Friction = 0.95f;
             TimeUntilStart = 0;
             EntityColor = Color.White;
             Health = (int) MyUtils.Interpolate(10, 100, size / 7f);

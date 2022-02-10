@@ -26,7 +26,7 @@ namespace Mono_Ether {
         protected static Texture2D[] BossThree;
         protected static Texture2D PinkSeekerChild;
         protected static SoundEffect DeathSound;
-        protected float _friction = 0.8f;
+        protected float Friction = 0.8f;
         public int TimeUntilStart = 60;
         public int Health;
         public int Worth;
@@ -115,7 +115,7 @@ namespace Mono_Ether {
                 if (!Behaviors[i].MoveNext())
                     Behaviors.RemoveAt(i--);
             Position += Velocity;
-            Velocity *= _friction;
+            Velocity *= Friction;
             HandleTilemapCollision();
         }
         public static void LoadContent(ContentManager content) {

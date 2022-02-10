@@ -1,31 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Mono_Ether {
-    public class EnemySpawner
-    {
+    public class EnemySpawner {
         private static readonly Random Rand = new Random();
         public static float InverseSpawnChance = 30;
         public static bool Enabled = true;
         private static readonly EnemyType[] SpawnableEnemyTypes = new EnemyType[] { EnemyType.BlueSeeker, EnemyType.PurpleWanderer, EnemyType.GreenSeeker, EnemyType.BackAndForther, EnemyType.PinkSeeker, EnemyType.PinkWanderer, EnemyType.SnakeHead };
-        public void Update(EntityManager entityManager, TileMap tileMap)
-        {
+        public void Update(EntityManager entityManager, TileMap tileMap) {
             /* Return if enemy spawning is disabled */
-            if (!Enabled) return;
+            if (!Enabled)
+                return;
             /* Spawn every InverseSpawnChance frames */
-            if (Rand.Next((int)InverseSpawnChance) != 0) return;
+            if (Rand.Next((int)InverseSpawnChance) != 0)
+                return;
             /* Get valid spawn position */
             Vector2 spawnPos;
             var playerIndex = Rand.Next(entityManager.Players.Count);
             var playerPos = entityManager.Players[playerIndex].Position;
             var remainingAttempts = 10;
             const float radius = 500f;
-            do
-            {
+            do {
                 spawnPos = new Vector2(Rand.NextFloat(playerPos.X - radius, playerPos.X + radius),
                     Rand.NextFloat(playerPos.Y - radius, playerPos.Y + radius));
                 remainingAttempts -= 1;
@@ -35,8 +31,7 @@ namespace Mono_Ether {
                      || spawnPos.X < 0 || spawnPos.Y < 0 || spawnPos.X > tileMap.WorldSize.X || spawnPos.Y > tileMap.WorldSize.Y)
                     && remainingAttempts > 0);
 
-            if (remainingAttempts == 0)
-            {
+            if (remainingAttempts == 0) {
                 Debug.WriteLine("Skipping enemy spawn");
                 return;
             }
