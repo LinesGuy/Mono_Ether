@@ -11,6 +11,7 @@ namespace Mono_Ether {
     public class PlayerShip : Entity {
         private static Texture2D _shipTexture;
         public static SoundEffect ShotSoundEffect; // TODO array, also move to bullet.cs?
+        private static SoundEffect _deathSound;
         public PlayerIndex Index;
         public int Lives = 3;
         public readonly Camera PlayerCamera;
@@ -33,10 +34,12 @@ namespace Mono_Ether {
         public static void LoadContent(ContentManager content) {
             _shipTexture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
             ShotSoundEffect = content.Load<SoundEffect>("SoundEffects/PlayerShoot/Shoot-01");
+            _deathSound = content.Load<SoundEffect>("SoundEffects/PlayerDeath");
         }
         public static void UnloadContent() {
             _shipTexture = null;
             ShotSoundEffect = null;
+            _deathSound = null;
         }
         public override void Update(GameTime gameTime) {
             if (IsDead) {
@@ -180,12 +183,15 @@ namespace Mono_Ether {
             Lives--;
             if (Lives < 0) {
                 _framesUntilRespawn = 99999;
-                // transition to death
+                // transition to death TODO
             }
             /* Reset velocity */
             Velocity = Vector2.Zero;
             ActivePowerPacks.Clear();
-            // save highscore
+            // save highscore TODO
+            // Play death sound
+            _deathSound.Play(GameSettings.SoundEffectVolume, 0f, 0f);
+
         }
         public override void Draw(SpriteBatch batch, Camera camera) {
             if (IsDead)

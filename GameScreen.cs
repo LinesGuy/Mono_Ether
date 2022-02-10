@@ -85,6 +85,7 @@ namespace Mono_Ether {
         }
         public override void UnloadContent() {
             GameCursor = null;
+            _gameMusic = null;
             PlayerShip.UnloadContent();
             Bullet.UnloadContent();
             Starburst.UnloadContent();

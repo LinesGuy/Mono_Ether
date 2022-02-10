@@ -51,6 +51,12 @@
 /processorParam:Quality=Best
 /build:SoundEffects/GeomPickup.wav
 
+#begin SoundEffects/PlayerDeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PlayerDeath.wav
+
 #begin SoundEffects/PlayerShoot/Shoot-01.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
