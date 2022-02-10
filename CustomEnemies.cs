@@ -199,6 +199,17 @@ namespace Mono_Ether {
             foreach (var tail in Tail)
                 tail.Draw(batch, camera);
         }
+        protected override void WasKilled(PlayerIndex playerIndex) {
+            IsExpired = true;
+            EntityManager.Instance.Players[(int)playerIndex].Score += Worth; // Add score to player
+            ParticleTemplates.Explosion(Position, 0f, 20f, 1000, Color.White, true); // Summon particles
+            EntityManager.Instance.Enemies.ForEach(e => e.Suicide());
+            EntityManager.Instance.PowerPacks.Clear();
+            PowerPackSpawner.Instance.Enabled = false;
+            EnemySpawner.Enabled = false;
+            // TODO trigger win screen
+
+        }
     }
     public class BossTwoTail : Enemy {
         public BossTwoTail(Vector2 position) : base(EnemyType.BossTwoTail, position) {
@@ -214,11 +225,12 @@ namespace Mono_Ether {
         public BossThree(Vector2 position, int size) : base(EnemyType.BossThree, position) {
             IsBoss = true;
             _size = size;
+            if (size == 7) Hud.Instance.BossBarValue = 1f;
             Image = BossThree[size];
             Friction = 0.95f;
             TimeUntilStart = 0;
             EntityColor = Color.White;
-            Health = (int) MyUtils.Interpolate(10, 100, size / 7f);
+            Health = (int) MyUtils.Interpolate(1, 10, size / 7f);
             AddBehaviour(MoveRandomly(0.4f));
             AddBehaviour(RotateOrientationConstantly());
         }
@@ -226,9 +238,9 @@ namespace Mono_Ether {
             base.WasKilled(playerIndex);
             if (_size <= 0)
                 return;
-            /* summon two smaller clones of this boss */
-            for (var i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++) // Summon two smaller clones of this boss
                 EntityManager.Instance.Add(new BossThree(Position, _size - 1));
+            Hud.Instance.BossBarValue -= 1f / 127f;
         }
     }
 }
