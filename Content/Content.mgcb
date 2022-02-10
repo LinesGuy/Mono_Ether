@@ -45,6 +45,18 @@
 /processorParam:Quality=Best
 /build:SoundEffects/Click.wav
 
+#begin SoundEffects/EnemyDeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/EnemyDeath.wav
+
+#begin SoundEffects/GeomPickup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/GeomPickup.wav
+
 #begin SoundEffects/GeomPickup.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

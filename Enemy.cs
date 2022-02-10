@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Mono_Ether {
     public enum EnemyType { BlueSeeker, PurpleWanderer, GreenSeeker, BackAndForther, PinkSeeker, PinkSeekerChild, PinkWanderer, SnakeHead, SnakeTail, BossOne, BossOneChild, BossTwo, BossTwoTail, BossThree }
@@ -24,7 +25,7 @@ namespace Mono_Ether {
         protected static Texture2D BossTwoTail;
         protected static Texture2D BossThree;
         protected static Texture2D PinkSeekerChild;
-
+        protected static SoundEffect DeathSound;
         public int TimeUntilStart = 60;
         public int Health;
         public int Worth;
@@ -131,6 +132,7 @@ namespace Mono_Ether {
             BossTwoTail = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossTwoTail");
             BossThree = content.Load<Texture2D>("Textures/GameScreen/Enemies/BossThree");
             PinkSeekerChild = content.Load<Texture2D>("Textures/GameScreen/Enemies/PinkSeekerChild");
+            DeathSound = content.Load<SoundEffect>("SoundEffects/EnemyDeath");
         }
         public static void UnloadContent() {
             _blueSeeker = null;
@@ -147,6 +149,7 @@ namespace Mono_Ether {
             BossTwoTail = null;
             BossThree = null;
             PinkSeekerChild = null;
+            DeathSound = null;
         }
         protected IEnumerable<int> EnemyFacesVelocity() {
             var lastPos = Position;
@@ -309,7 +312,7 @@ namespace Mono_Ether {
             EntityManager.Instance.Players[(int)playerIndex].Score += Worth;
             EntityManager.Instance.Add(new Geom(Position));
             // TODO floating text (worth)
-            // TODO play sound
+            DeathSound.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
             /* Summon particles */
             ParticleTemplates.Explosion(Position, 5f, 10f, 30, Color.CornflowerBlue);
             /* If enemy was pink seeker, summon two pink seeker children */
