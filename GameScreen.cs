@@ -62,18 +62,14 @@ namespace Mono_Ether {
                 _hud = new Hud();
             /* Move all player cameras to player */
             foreach (var player in _entityManager.Players)
-            {
                 player.PlayerCamera.Position = player.Position;
-            }
             /* Play music */
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(_gameMusic);
         }
         public override void Suspend() {
-
         }
         public override void Resume() {
-
         }
         public override void LoadContent(ContentManager content) {
             GameCursor = content.Load<Texture2D>("Textures/GameScreen/GameCursor");
