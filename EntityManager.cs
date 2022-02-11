@@ -93,7 +93,8 @@ namespace Mono_Ether {
             foreach (var enemy in Enemies) {
                 foreach (var bullet in Bullets) {
                     if (IsColliding(enemy, bullet)) {
-                        // TODO check invincible
+                        if (enemy.Invincible)
+                            continue;
                         bullet.Expire();
                         enemy.WasShot(bullet.ParentPlayerIndex);
                     }
