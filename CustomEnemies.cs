@@ -103,7 +103,7 @@ namespace Mono_Ether {
             EntityManager.Instance.PowerPacks.Clear();
             PowerPackSpawner.Instance.Enabled = false;
             EnemySpawner.Enabled = false;
-            // TODO trigger win screen
+            Hud.Instance.ChangeStatus(HudStatus.Win);
 
         }
     }
@@ -207,8 +207,7 @@ namespace Mono_Ether {
             EntityManager.Instance.PowerPacks.Clear();
             PowerPackSpawner.Instance.Enabled = false;
             EnemySpawner.Enabled = false;
-            // TODO trigger win screen
-
+            Hud.Instance.ChangeStatus(HudStatus.Win);
         }
     }
     public class BossTwoTail : Enemy {
@@ -241,6 +240,8 @@ namespace Mono_Ether {
             for (var i = 0; i < 2; i++) // Summon two smaller clones of this boss
                 EntityManager.Instance.Add(new BossThree(Position, _size - 1));
             Hud.Instance.BossBarValue -= 1f / 127f;
+            if (Hud.Instance.BossBarValue <= 0.01f)
+                Hud.Instance.ChangeStatus(HudStatus.Win);
         }
     }
 }

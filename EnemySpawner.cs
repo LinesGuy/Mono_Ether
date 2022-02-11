@@ -8,6 +8,9 @@ namespace Mono_Ether {
         public static float InverseSpawnChance = 30;
         public static bool Enabled = true;
         private static readonly EnemyType[] SpawnableEnemyTypes = new EnemyType[] { EnemyType.BlueSeeker, EnemyType.PurpleWanderer, EnemyType.GreenSeeker, EnemyType.BackAndForther, EnemyType.PinkSeeker, EnemyType.PinkWanderer, EnemyType.SnakeHead };
+        public EnemySpawner() {
+            Enabled = true;
+        }
         public void Update(EntityManager entityManager, TileMap tileMap) {
             /* Return if enemy spawning is disabled */
             if (!Enabled)

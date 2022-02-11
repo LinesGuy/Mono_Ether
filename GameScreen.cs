@@ -50,9 +50,11 @@ namespace Mono_Ether {
                 EntityManager.Instance.Add(Drone.CreateShooter(player.Index));
                 EntityManager.Instance.Add(Drone.CreateCollector(player.Index));
             }
+            _hud = new Hud();
             /* If level is level one, two or three, summon a boss and enable the boss bar, and move player to top left */
-            if (CurrentLevel == Level.Level1 || CurrentLevel == Level.Level2 || CurrentLevel == Level.Level3) {
-                _hud = new Hud(true);
+            if (CurrentLevel == Level.Level1 || CurrentLevel == Level.Level2 || CurrentLevel == Level.Level3)
+            {
+                _hud.Status = HudStatus.BossBar;
                 if (CurrentLevel == Level.Level1)
                     _entityManager.Add(new BossOne(_tileMap.WorldSize / 2f));
                 if (CurrentLevel == Level.Level2)
@@ -63,8 +65,7 @@ namespace Mono_Ether {
                 }
                 foreach (var player in _entityManager.Players)
                     player.Position = new Vector2(128f, 128f);
-            } else
-                _hud = new Hud();
+            }
             /* Move all player cameras to player */
             foreach (var player in _entityManager.Players)
                 player.PlayerCamera.Position = player.Position;
@@ -88,6 +89,7 @@ namespace Mono_Ether {
             Drone.LoadContent(content);
             Geom.LoadContent(content);
             PowerPack.LoadContent(content);
+            Hud.LoadContent(content);
         }
         public override void UnloadContent() {
             GameCursor = null;
@@ -101,6 +103,7 @@ namespace Mono_Ether {
             Drone.UnloadContent();
             Geom.UnloadContent();
             PowerPack.UnloadContent();
+            Hud.UnloadContent();
         }
         private void SetState(string state) {
             _state = state;
@@ -168,6 +171,7 @@ namespace Mono_Ether {
             _enemySpawner.Update(_entityManager, _tileMap);
             _powerPackSpawner.Update(gameTime);
             _tileMap.Update(Mode == GameMode.Editor);
+            _hud.Update(gameTime);
         }
         public override void Draw(SpriteBatch batch) {
             //GraphicsDevice.Clear(Color.Black); // TODO remove

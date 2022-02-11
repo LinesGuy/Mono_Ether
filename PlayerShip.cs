@@ -183,7 +183,7 @@ namespace Mono_Ether {
             Lives--;
             if (Lives < 0) {
                 _framesUntilRespawn = 99999;
-                // transition to death TODO
+                Hud.Instance.ChangeStatus(HudStatus.Lose);
             }
             /* Reset velocity */
             Velocity = Vector2.Zero;
