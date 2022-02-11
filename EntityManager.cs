@@ -69,7 +69,7 @@ namespace Mono_Ether {
         }
         private static bool IsColliding(Entity a, Entity b) => !a.IsExpired && !b.IsExpired && Vector2.DistanceSquared(a.Position, b.Position) < Math.Pow(a.Radius + b.Radius, 2);
 
-        private void KillAll(bool includeBosses) {
+        private void KillAll(bool includeBosses = false) {
             if (includeBosses)
                 foreach (var enemy in Enemies)
                     enemy.Suicide();
@@ -101,15 +101,19 @@ namespace Mono_Ether {
             }
             #endregion
             #region Players <-> Enemies
-            foreach (PlayerShip player in Players) {
-                if (player.IsDead)
-                    continue;
-                foreach (var enemy in Enemies) {
-                    if (enemy.IsActive && IsColliding(player, enemy)) {
+            foreach (var player in Players.Where(player => !player.IsDead)) {
+                foreach (var enemy in Enemies.Where(enemy => enemy.IsActive)) {
+                    if (IsColliding(player, enemy)) {
                         player.Kill();
-                        KillAll(false);
+                        KillAll();
                         break;
                     }
+                    if (!(enemy is SnakeHead snake))
+                        continue;
+                    if (!snake.Tail.Any(tail => IsColliding(player, tail)))
+                        continue;
+                    player.Kill();
+                    KillAll();
                 }
             }
             #endregion Handle collisions between the players and enemies
@@ -131,7 +135,6 @@ namespace Mono_Ether {
                     }
             }
             #endregion Handle collisions between powerpacks and the player
-
             #region Players <-> Geoms
             foreach (Geom geom in Geoms) {
                 foreach (var player in Players) {
