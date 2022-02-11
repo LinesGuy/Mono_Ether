@@ -97,6 +97,11 @@ namespace Mono_Ether {
                         bullet.Expire();
                         enemy.WasShot(bullet.ParentPlayerIndex);
                     }
+                    if (!(enemy is SnakeHead snake))
+                        continue;
+                    if (!snake.Tail.Any(tail => IsColliding(bullet, tail)))
+                        continue;
+                    bullet.Expire();
                 }
             }
             #endregion
