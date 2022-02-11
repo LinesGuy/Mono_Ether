@@ -6,7 +6,6 @@ using System;
 namespace Mono_Ether {
     public class Bullet : Entity {
         private static Texture2D _bulletTexture;
-        private static Texture2D _bulletGlowTexture; // TODO add bullet glow
         public PlayerIndex ParentPlayerIndex;
         private int _age;
         private const int Lifespan = 120;
@@ -20,37 +19,34 @@ namespace Mono_Ether {
         }
         public void Expire() {
             IsExpired = true;
-            /* TODO Summon particles */
-            //ParticleTemplates.Explosion(Position, 1f, 2f, 20);
+            ParticleTemplates.Explosion(Position, 1f, 2f, 20, Color.Yellow);
         }
         public override void Update(GameTime gameTime) {
             Position += Velocity;
-            /* Delete bullet after lifespan reached */
             _age++;
-            if (_age > Lifespan)
+            if (_age > Lifespan) // Delete bullet after lifespan reached
                 IsExpired = true;
             /* Delete bullet if collided with a wall */
-            if (TileMap.Instance.GetTileFromWorld(Position).Id <= 0) return;
+            if (TileMap.Instance.GetTileFromWorld(Position).Id <= 0)
+                return;
             IsExpired = true;
             ParticleTemplates.Explosion(Position, 1f, 2f, 20, new Color(255, 255, 0));
         }
         public static void LoadContent(ContentManager content) {
             _bulletTexture = content.Load<Texture2D>("Textures/GameScreen/Bullet");
-            _bulletGlowTexture = content.Load<Texture2D>("Textures/GameScreen/BulletGlow");
         }
         public static void UnloadContent() {
             _bulletTexture = null;
-            _bulletGlowTexture = null;
         }
     }
-    public class Starburst : Entity {
+    public class StarBurst : Entity {
         private static Texture2D _starBurstTexture;
         private int _age;
         private readonly int _lifespan;
         private readonly PlayerIndex _parentPlayerIndex;
         private static readonly Random Random = new Random();
         private const float BulletSpeed = 15f;
-        public Starburst(Vector2 position, Vector2 destination, PlayerIndex playerIndex) {
+        public StarBurst(Vector2 position, Vector2 destination, PlayerIndex playerIndex) {
             Image = _starBurstTexture;
             Position = position;
             _parentPlayerIndex = playerIndex;
@@ -68,7 +64,8 @@ namespace Mono_Ether {
             Position += Velocity;
             Orientation += 0.3f;
             _age++;
-            if (_age <= _lifespan && TileMap.Instance.GetTileFromWorld(Position).Id <= 0) return;
+            if (_age <= _lifespan && TileMap.Instance.GetTileFromWorld(Position).Id <= 0)
+                return;
             Position -= Velocity;
             IsExpired = true;
             for (var i = 0; i < 50; i++) {

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+// ReSharper disable All
 
 namespace Mono_Ether {
     public class SnakeHead : Enemy {
@@ -62,7 +63,6 @@ namespace Mono_Ether {
             AddBehaviour(WalkInCircles());
             AddBehaviour(EnemyFacesVelocity());
             AddBehaviour(InvincibleForTime(6)); // This enemy will only spawn when the parent enemy dies, so we wait 6 frames so any bullets have passed by
-            // TODO modify texture so radius is 10f
         }
         private IEnumerable<int> WalkInCircles() {
             var orientation = Rand.NextFloat(0, MathF.PI * 2f);
@@ -156,13 +156,13 @@ namespace Mono_Ether {
             AddBehaviour(UpdateBossBar());
             //AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
             AddBehaviour(EnemyFacesVelocity());
-            for (var i = 0; i <= 40; i++)
+            for (var i = 0; i <= 100; i++)
                 Tail.Add(new BossTwoTail(position));
             AddBehaviour(UpdateTail(40));
         }
         private IEnumerable<int> _followCursor() {
             while (true) {
-                Vector2 delta = (EntityManager.Instance.Players[0].PlayerCamera.MouseWorldCoords() - Position).ScaleTo(3f);
+                var delta = (EntityManager.Instance.Players[0].PlayerCamera.MouseWorldCoords() - Position).ScaleTo(3f);
                 Velocity += delta;
                 yield return 0;
             }

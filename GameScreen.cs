@@ -82,7 +82,7 @@ namespace Mono_Ether {
             _gameMusic = content.Load<Song>("Songs/GameScreen");
             PlayerShip.LoadContent(content);
             Bullet.LoadContent(content);
-            Starburst.LoadContent(content);
+            StarBurst.LoadContent(content);
             Particle.LoadContent(content);
             Tile.LoadContent(content);
             Enemy.LoadContent(content);
@@ -96,7 +96,7 @@ namespace Mono_Ether {
             _gameMusic = null;
             PlayerShip.UnloadContent();
             Bullet.UnloadContent();
-            Starburst.UnloadContent();
+            StarBurst.UnloadContent();
             Particle.UnloadContent();
             Tile.UnloadContent();
             Enemy.UnloadContent();

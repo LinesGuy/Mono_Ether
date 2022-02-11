@@ -163,7 +163,7 @@ namespace Mono_Ether {
                 }
                 /* Right click to summon a starburst */
                 if (Input.WasRightMouseJustDown)
-                    EntityManager.Instance.Add(new Starburst(Position, PlayerCamera.MouseWorldCoords(), Index));
+                    EntityManager.Instance.Add(new StarBurst(Position, PlayerCamera.MouseWorldCoords(), Index));
             }
             #endregion Shooting
             #region Power packs
