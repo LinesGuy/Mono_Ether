@@ -146,7 +146,7 @@ namespace Mono_Ether {
                 }
             }
 
-            if (Input.WasKeyJustDown(Keys.P)) {
+            if (Input.WasKeyJustDown(Keys.P) && GameSettings.DebugMode) {
                 switch (Mode) {
                     case GameMode.Playing:
                         Mode = GameMode.Editor;
@@ -195,6 +195,7 @@ namespace Mono_Ether {
             player.DrawHud(batch);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"GameScreen.Mode: {Mode}", new Vector2(0f, 64f), Color.White);
             if (_pauseWindow.Visible)
                 _pauseWindow.Draw(batch);
             /* Draw cursor */
