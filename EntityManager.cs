@@ -114,12 +114,17 @@ namespace Mono_Ether {
                         KillAll();
                         break;
                     }
-                    if (!(enemy is SnakeHead snake))
-                        continue;
-                    if (!snake.Tail.Any(tail => IsColliding(player, tail)))
-                        continue;
-                    player.Kill();
-                    KillAll();
+
+                    switch (enemy) {
+                        case SnakeHead snake when !snake.Tail.Any(tail => IsColliding(player, tail)):
+                        case BossTwo bossTwo when !bossTwo.Tail.Any(tail => IsColliding(player, tail)):
+                            continue;
+                        case SnakeHead snake:
+                        case BossTwo bossTwo:
+                            player.Kill();
+                            KillAll();
+                            break;
+                    }
                 }
             }
             #endregion Handle collisions between the players and enemies
