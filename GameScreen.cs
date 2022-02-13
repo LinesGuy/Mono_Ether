@@ -151,14 +151,14 @@ namespace Mono_Ether {
                     case GameMode.Playing:
                         Mode = GameMode.Editor;
                         EnemySpawner.Enabled = false;
-                        // disable power pack spawner TODO
+                        PowerPackSpawner.Instance.Enabled = false;
                         _entityManager.Enemies.ForEach(e => e.IsExpired = true);
-                        // Clear powerpacks TODO
+                        _entityManager.PowerPacks.ForEach(p => p.IsExpired = true);
                         break;
                     case GameMode.Editor:
                         Mode = GameMode.Playing;
                         EnemySpawner.Enabled = true;
-                        // enable power pack spanwer TODO
+                        PowerPackSpawner.Instance.Enabled = true;
                         break;
                 }
             }
