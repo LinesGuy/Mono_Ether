@@ -74,10 +74,12 @@ namespace Mono_Ether {
                     batch.Draw(GlobalAssets.Pixel, ScreenSize / 2f + offset, null,
                         new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
                     _pauseButtonManager.Draw(batch, offset);
+                    batch.DrawStringCentered(GlobalAssets.NovaSquare48, "GAME PAUSED", ScreenSize / 2f + offset, Color.White);
                     break;
                 case "Normal":
                     batch.Draw(GlobalAssets.Pixel, ScreenSize / 2f, null, new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
                     _pauseButtonManager.Draw(batch);
+                    batch.DrawStringCentered(GlobalAssets.NovaSquare48, "GAME PAUSED", ScreenSize / 2f, Color.White);
                     break;
                 case "SlideOut":
                     offset = MyUtils.EInterpolate(Vector2.Zero, new Vector2(0f, ScreenSize.Y),
@@ -86,6 +88,7 @@ namespace Mono_Ether {
                         new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0); batch.Draw(GlobalAssets.Pixel, ScreenSize / 2f + offset, null,
                          new Color(0.25f, 0.25f, 0.25f, 0.95f), 0f, new Vector2(0.5f), new Vector2(1190f, 670f), 0, 0);
                     _pauseButtonManager.Draw(batch, offset);
+                    batch.DrawStringCentered(GlobalAssets.NovaSquare48, "GAME PAUSED", ScreenSize / 2f + offset, Color.White);
                     break;
                 case "Hidden":
                     break;
