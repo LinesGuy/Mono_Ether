@@ -26,7 +26,7 @@ namespace Mono_Ether {
                 _ => throw new ArgumentOutOfRangeException(nameof(level), level, null)
             };
         }
-        public TileMap(Level level, bool overwriteInstance=true) {
+        public TileMap(Level level, bool overwriteInstance = true) {
             if (overwriteInstance)
                 Instance = this;
             var lines = File.ReadAllLines(@"Content/TileMapData/" + _filenameFromLevel(level)).Where(l => l != "").ToArray();
@@ -49,9 +49,24 @@ namespace Mono_Ether {
                 foreach (var tile in row)
                     tile.UpdateWalls();
         }
-        public void Update(bool editorMode=false) {
-            if (!editorMode) return;
-            /* TODO press r to save map */
+        public void Update(bool editorMode = false) {
+            if (!editorMode)
+                return;
+            if (Input.WasKeyJustDown(Keys.R)) { // Press 'R' to save map
+                const string filename = "SavedMap.txt";
+                Debug.WriteLine("Wrote to Content/TileMapData/" + filename);
+                var lines = new List<string>();
+                for (var row = 0; row < GridSize.Y; row++) {
+                    var line = "";
+                    for (var col = 0; col < GridSize.X; col++) {
+                        var cell = Grid[row][col];
+                        line += $"{cell.Id},";
+                    }
+                    line = line.Remove(line.Length - 1);
+                    lines.Add(line);
+                }
+                File.WriteAllLines(@"Content/TileMapData/" + filename, lines.ToArray());
+            }
             var tile = GetTileFromWorld(EntityManager.Instance.Players[0].PlayerCamera.MouseWorldCoords());
             // Set Tile ID
             if (Input.Keyboard.IsKeyDown(Keys.D1))
@@ -235,9 +250,11 @@ namespace Mono_Ether {
                         index += 1;
                     }
                     /* If it does exist, move to the next child node */
-                    if (found) continue;
+                    if (found)
+                        continue;
                     /* Ensure this node is not on a solid tile */
-                    if (GetTileFromWorld(nodePosition).Id > 0) continue;
+                    if (GetTileFromWorld(nodePosition).Id > 0)
+                        continue;
                     /* Create and append new node */
                     var newNode = new Node(parent: currentNode, position: nodePosition);
                     childNodes.Add(newNode);
@@ -357,20 +374,24 @@ namespace Mono_Ether {
             }
         }
         public void Draw(SpriteBatch batch, Camera camera) {
-            if (Id == 0) return;
+            if (Id == 0)
+                return;
             batch.Draw(Textures[Id - 1], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
         }
         public void Draw(SpriteBatch batch, Camera camera, float parallax, bool editorMode = false) {
-            if (Id == 0) return;
+            if (Id == 0)
+                return;
             float zoom = 1f - parallax / 10;
             float transparency = 1 - parallax;
             batch.Draw(Textures[Id - 1], (camera.WorldToScreen(TileMap.MapToWorld(Pos)) - camera.ScreenSize / 2f) * zoom + camera.ScreenSize / 2f, null, Color.White * transparency, camera.Orientation,
                 Vector2.Zero, camera.Zoom, 0, 0);
             if (editorMode) {
                 for (int i = 0; i < 4; i++) {
-                    if (SolidWalls[i]) batch.Draw(_collisionWallTextures[i], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation, Vector2.Zero, camera.Zoom, 0, 0);
-                    if (SolidCorners[i]) batch.Draw(_collisionCornerTextures[i], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation, Vector2.Zero, camera.Zoom, 0, 0);
+                    if (SolidWalls[i])
+                        batch.Draw(_collisionWallTextures[i], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation, Vector2.Zero, camera.Zoom, 0, 0);
+                    if (SolidCorners[i])
+                        batch.Draw(_collisionCornerTextures[i], TileMap.MapToScreen(Pos, camera), null, Color.White, camera.Orientation, Vector2.Zero, camera.Zoom, 0, 0);
                 }
             }
         }
