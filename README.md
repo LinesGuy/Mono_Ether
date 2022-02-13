@@ -1,5 +1,3 @@
-- Main levels should have a unique boss enemy with unique attack and movement patterns 
-- Upon a boss' health hitting zero, the level should end with a "you won" screen 
 - The interval between enemy spawns should decrease as the game time increases, effectively increasing the number of enemies over time 
 - The program should determine which "level" the user selected from the level selection screen and load the correct level data and settings accordingly 
 - Program should have music playing in the background during gameplay, which loops upon ending 

@@ -41,6 +41,8 @@ namespace Mono_Ether {
 
             var enemyType = SpawnableEnemyTypes[Rand.Next(SpawnableEnemyTypes.Length)];
             entityManager.Add(Enemy.CreateEnemy(enemyType, spawnPos));
+            if (InverseSpawnChance > 15)
+                InverseSpawnChance -= 0.005f; // Slowly increase spawn rate as time progresses
         }
     }
 }
