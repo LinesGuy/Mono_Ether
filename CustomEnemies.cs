@@ -152,9 +152,9 @@ namespace Mono_Ether {
             TimeUntilStart = 0;
             EntityColor = Color.White;
             Health = 300;
-            AddBehaviour(_followCursor());
+            //AddBehaviour(_followCursor());
             AddBehaviour(UpdateBossBar());
-            //AddBehaviour(enemy.MoveRandomly(1f, 0.3f, 0.3f));
+            AddBehaviour(MoveRandomly(1f, 0.3f, 0.3f));
             AddBehaviour(EnemyFacesVelocity());
             for (var i = 0; i <= 100; i++)
                 Tail.Add(new BossTwoTail(position));
@@ -210,8 +210,8 @@ namespace Mono_Ether {
             Hud.Instance.ChangeStatus(HudStatus.Win);
         }
     }
-    public class BossTwoTail : Enemy {
-        public BossTwoTail(Vector2 position) : base(EnemyType.BossTwoTail, position) {
+    public class BossTwoTail : SnakeTail {
+        public BossTwoTail(Vector2 position) : base(position) {
             IsBoss = true;
             TimeUntilStart = 0;
             EntityColor = Color.White;
