@@ -86,7 +86,7 @@ namespace Mono_Ether {
     public class BossOne : Enemy {
         public BossOne(Vector2 position) : base(EnemyType.BossOne, position) {
             Image = BossOne;
-            Health = 100; // TODO affected by health multiplier and set to 1000
+            Health = 1000;
             TimeUntilStart = 0;
             EntityColor = Color.White;
             AddBehaviour(UpdateBossBar());

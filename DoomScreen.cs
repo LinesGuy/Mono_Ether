@@ -30,7 +30,6 @@ namespace Mono_Ether.Ether {
         public override void LoadContent(ContentManager content) {
         }
         public override void UnloadContent() {
-            // TODO MediaPlayer.Stop();
             EntityManager.Instance.Players.ForEach(p => p.DoomMode = false);
         }
         public override void Update(GameTime gameTime) {
@@ -62,7 +61,6 @@ namespace Mono_Ether.Ether {
         }
         public override void Draw(SpriteBatch batch) {
             GraphicsDevice.Clear(Color.Black);
-            // TODO time remaining
             batch.Begin();
             Doom.Draw(batch, _players[0]);
             batch.DrawStringCentered(GlobalAssets.NovaSquare24, "Find a red block to continue", new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 3f), Color.White);

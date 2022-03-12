@@ -99,7 +99,7 @@ namespace Mono_Ether {
                 _clickSfxDelay++;
                 if (_clickSfxDelay >= 6) {
                     _clickSfxDelay = 0;
-                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 1f, 0); // TODO replace Click with PlayerShoot
+                    GlobalAssets.Click.Play(GameSettings.SoundEffectVolume, 1f, 0);
                 }
             }
         }

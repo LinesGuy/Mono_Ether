@@ -11,7 +11,7 @@ namespace Mono_Ether {
     public class PlayerShip : Entity {
         private static Texture2D _heart;
         private static Texture2D _shipTexture;
-        public static SoundEffect ShotSoundEffect; // TODO array, also move to bullet.cs?
+        public static SoundEffect ShotSoundEffect;
         private static SoundEffect _deathSound;
         public PlayerIndex Index;
         public int Lives = 3;
@@ -140,18 +140,8 @@ namespace Mono_Ether {
                         var offset = MyUtils.FromPolar(offsetAngle, Rand.NextFloat(15f, 40f));
                         var vel = MyUtils.FromPolar(aimAngle + randomSpread, 18f);
                         var bulletColor = new Color(239, 247, 74);
-                        /* TODO base bullet color from cooldown remaining multiplier
-                        if (cooldownRemainingMultiplier < 1f)
-                            bulletColor = new Color(3, 252, 252); // Baby blue
-                        else if (cooldownRemainingMultiplier > 1f)
-                            bulletColor = new Color(252, 123, 3); // Orange
-                        else
-                            bulletColor = new Color(239, 247, 74); // Yellow
-                        */
                         EntityManager.Instance.Add(new Bullet(Position + offset, vel, bulletColor, Index));
                     }
-                    // Knockback (dumb)
-                    //Camera.CameraPosition += MathUtil.FromPolar(aimangle + MathF.PI, 5f);
                 }
                 /* Decrement cooldown */
                 if (_shotCooldownRemaining > TimeSpan.Zero) {
@@ -202,7 +192,6 @@ namespace Mono_Ether {
             base.Draw(batch, camera);
         }
         public void DrawHud(SpriteBatch batch) {
-            // TODO top left debug texts
             for (int i = 0; i < ActivePowerPacks.Count; i++) {
                 var pos = new Vector2(PlayerCamera.ScreenSize.X - 100 - i * 100, PlayerCamera.ScreenSize.Y - 100);
                 var powerPack = ActivePowerPacks[i];
@@ -228,13 +217,9 @@ namespace Mono_Ether {
                 var pos = new Vector2(0 + i * 100, PlayerCamera.ScreenSize.Y - 100);
                 batch.Draw(_heart, pos, Color.White);
             }
-            // TODO top right score, geoms, highscore, multiplier,
             batch.DrawString(GlobalAssets.NovaSquare24, $"Score: {Score}", new Vector2(PlayerCamera.ScreenSize.X - 200, 30), Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Multi: {Multiplier}", new Vector2(PlayerCamera.ScreenSize.X - 200, 60), Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Geoms: {Geoms}", new Vector2(PlayerCamera.ScreenSize.X - 200, 90), Color.White);
-            // TODO you died
-            // TODO screen transitions
-            // TODO boss bar
         }
         public void AddGeoms(int amount) {
             Geoms += amount;

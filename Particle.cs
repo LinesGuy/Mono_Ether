@@ -95,7 +95,6 @@ namespace Mono_Ether {
         }
         public void Update(GameTime gameTime) {
             _isUpdating = true;
-            // TODO remove particles inside walls?
             foreach (var particle in BigParticles)
                 particle?.Update(gameTime);
             foreach (var particle in SmallParticles)
@@ -119,7 +118,7 @@ namespace Mono_Ether {
     }
     public static class ParticleTemplates {
         private static readonly Random Random = new Random();
-        public static void ExhaustFire(Vector2 position, float orientation, Color baseColor) { // TODO add count parameter
+        public static void ExhaustFire(Vector2 position, float orientation, Color baseColor) {
             var orientationOffset = Random.NextFloat(-0.3f, 0.3f);
             var positionOffset = Random.NextVector2(0f, 10f);
             var color = new Color(baseColor.R / 255f - MathF.Abs(orientationOffset), baseColor.G / 255f - MathF.Abs(orientationOffset), baseColor.B / 255f - MathF.Abs(orientationOffset));
@@ -127,7 +126,7 @@ namespace Mono_Ether {
                 position + positionOffset, color,
                 MyUtils.FromPolar(orientation + orientationOffset, Random.NextFloat(1f, 6f)), 0.99f));
         }
-        public static void Explosion(Vector2 position, float minSpeed, float maxSpeed, int count, Color color, bool rainbow=false) { // TODO add color parameter
+        public static void Explosion(Vector2 position, float minSpeed, float maxSpeed, int count, Color color, bool rainbow=false) {
             for (var i = 0; i < count; i++) {
                 var orientation = Random.NextFloat(0f, MathF.PI * 2f);
                 var speed = Random.NextFloat(minSpeed, maxSpeed);

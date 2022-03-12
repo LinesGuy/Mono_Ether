@@ -125,7 +125,7 @@ namespace Mono_Ether {
                     }
                 }
             }
-            /* TODO probably working but verify
+            /*
             // Draw tile cursor is in if in editor mode
             if (editorMode) {
                 var screenCoords = MapToScreen(Vector2.Floor(camera.MouseWorldCoords() / Tile.Length), camera);
@@ -208,7 +208,7 @@ namespace Mono_Ether {
                 var path = new List<Vector2> { endNode.Position };
                 if (Vector2.DistanceSquared(currentNode.Position, endNode.Position) <= MathF.Pow(Tile.Length * 1.5f, 2)) {
                     /* Start from the end node and keep adding the parent node to a list until we are at the start node */
-                    var current = currentNode; // TODO can current be replaced with currentNode?
+                    var current = currentNode;
                     while (current != null) {
                         path.Add(current.Position);
                         current = current.Parent;

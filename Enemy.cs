@@ -40,9 +40,9 @@ namespace Mono_Ether {
         protected Enemy(EnemyType type, Vector2 position) {
             Type = type;
             Position = position;
-            Health = 1; // TODO difficulty
+            Health = 1;
             Worth = Rand.Next(50, 100);
-            EntityColor = Color.Transparent; // TODO remove this?
+            EntityColor = Color.Transparent;
         }
         public static Enemy CreateEnemy(EnemyType type, Vector2 position) {
             var enemy = new Enemy(type, position);
@@ -50,7 +50,7 @@ namespace Mono_Ether {
                 case (EnemyType.BlueSeeker):
                     enemy.Image = _blueSeeker;
                     enemy.AddBehaviour(enemy.FollowPlayerAStar(0.8f));
-                    // TODO face velocity
+                    enemy.AddBehaviour(enemy.EnemyFacesVelocity());
                     break;
                 case EnemyType.PurpleWanderer:
                     enemy.Image = _purpleWanderer;
@@ -313,8 +313,6 @@ namespace Mono_Ether {
             Health--;
             if (Health <= 0)
                 WasKilled(playerIndex);
-            // TODO floating text (damage)
-            // TODO was shot sound (if not killed)
         }
 
         protected virtual void WasKilled(PlayerIndex playerIndex) {
@@ -322,7 +320,6 @@ namespace Mono_Ether {
             /* Add score to player */
             EntityManager.Instance.Players[(int)playerIndex].Score += Worth;
             EntityManager.Instance.Add(new Geom(Position));
-            // TODO floating text (worth)
             DeathSound.Play(GameSettings.SoundEffectVolume, Rand.NextFloat(-0.2f, 0.2f), 0);
             /* Summon particles */
             ParticleTemplates.Explosion(Position, 5f, 10f, 30, Color.CornflowerBlue);

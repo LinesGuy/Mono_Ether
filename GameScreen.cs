@@ -117,8 +117,6 @@ namespace Mono_Ether {
                 case "FadeIn":
                     if (_timeSinceTransition > TimeSpan.FromSeconds(0.5))
                         SetState("normal");
-                    // TODO camera zoom out
-                    // TODO player invincibility ring remove
                     break;
                 case "Normal":
                     break;
@@ -211,9 +209,6 @@ namespace Mono_Ether {
                 batch.Draw(player.PlayerCamera.Screen, player.PlayerCamera.CameraViewport.Bounds, Color.White);
             }
             batch.End();*/
-            // TODO enable splitscreen?
-            // TODO fade in on load
-            // TODO win/lose screen
         }
     }
 }

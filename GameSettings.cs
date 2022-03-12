@@ -8,8 +8,8 @@ using System.IO;
 namespace Mono_Ether {
     public static class GameSettings {
 
-        public const string SettingsFilename = "settings.txt"; // TODO rename to Settings.txt
-        public static Vector2 ScreenSize = new Vector2(1800, 900); // TODO allow this to change
+        public const string SettingsFilename = "Settings.txt";
+        public static Vector2 ScreenSize = new Vector2(1800, 900);
         public static bool DebugMode;
         public static bool VSync;
         public static bool ShowFps;
@@ -33,8 +33,6 @@ namespace Mono_Ether {
             MediaPlayer.Volume = MasterVolume * MusicVolume * multiplier;
         }
         public static void LoadSettings() {
-            // TODO Use for-loop and dictionary to read settings
-            // TODO add ScreenSize to settings.txt
             if (File.Exists(SettingsFilename)) {
                 string[] lines = File.ReadAllText(SettingsFilename).Split("\n");
                 float.TryParse(lines[0], out MasterVolume);
@@ -52,7 +50,6 @@ namespace Mono_Ether {
             ApplyChanges();
         }
         public static void SaveSettings() {
-            // TODO Use for-loop and dictionary to save settings
             File.WriteAllText(SettingsFilename, $"{MasterVolume}\n" +
                                                 $"{MusicVolume}\n" +
                                                 $"{SoundEffectVolume}\n" +

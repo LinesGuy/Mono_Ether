@@ -30,8 +30,8 @@ namespace Mono_Ether {
         }
         public override void Draw(SpriteBatch batch) {
             batch.Begin();
-            GraphicsDevice.Clear(Color.Black); // TODO remove
-            batch.DrawString(GlobalAssets.NovaSquare24, "everything by me", Vector2.Zero, Color.White);
+            GraphicsDevice.Clear(Color.Black);
+            batch.DrawString(GlobalAssets.NovaSquare24, "everything by me, press ESC to return to main menu", Vector2.Zero, Color.White);
             batch.End();
         }
     }
