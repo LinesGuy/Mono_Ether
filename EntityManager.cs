@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
+using Mono_Ether.Ether;
 
 namespace Mono_Ether {
     public class EntityManager {
@@ -132,16 +134,16 @@ namespace Mono_Ether {
             foreach (var player in Players) {
                 foreach (var powerPack in PowerPacks)
                     if (IsColliding(powerPack, player)) {
-                        powerPack.WasPickedUp(); // TODO doom exception
-                        powerPack.IsExpired = true;
-                        /*
-                        if (PowerPacks[i].PowerType == "Doom") {
-                            ScreenManager.TransitionScreen(new DoomScreen(GameRoot.Instance.myGraphics, "Secret.txt"));
-                            player.ActivePowerPacks.Add(new PowerPack(Art.PowerMoveSpeedIncrease, Vector2.Zero, "MoveSpeedIncrease", 3600));
-                            player.ActivePowerPacks.Add(new PowerPack(Art.PowerShootSpeedIncrease, Vector2.Zero, "ShootSpeedIncrease", 3600));
+                        if (powerPack.Type == PowerPackType.Doom)
+                        {
+                            powerPack.IsExpired = true;
+                            ScreenManager.AddScreen(new DoomScreen(GameRoot.Instance.GraphicsDevice));
+                            player.ActivePowerPacks.Add(new PowerPack(PowerPackType.MoveSpeedIncrease, Vector2.Zero, TimeSpan.FromSeconds(60)));
+                            player.ActivePowerPacks.Add(new PowerPack(PowerPackType.ShootSpeedIncrease, Vector2.Zero, TimeSpan.FromSeconds(60)));
                             continue;
                         }
-                        */
+                        powerPack.WasPickedUp();
+                        powerPack.IsExpired = true;
                         player.ActivePowerPacks.Add(powerPack);
                     }
             }

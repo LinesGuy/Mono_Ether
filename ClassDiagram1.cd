@@ -1,0 +1,565 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Mono_Ether.Bullet">
+    <Position X="3" Y="1.25" Width="2" />
+    <InheritanceLine Type="Mono_Ether.Entity" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.625" Y="1.25" />
+        <Point X="1.625" Y="0.875" />
+        <Point X="3.938" Y="0.875" />
+        <Point X="3.938" Y="1.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>BAQAEAQAAAAAAAAAAAAQAAAAAAAAAAwAAAAAAAAAAAQ=</HashCode>
+      <FileName>Bullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.StarBurst">
+    <Position X="5.25" Y="1.25" Width="2" />
+    <InheritanceLine Type="Mono_Ether.Entity" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.625" Y="1.25" />
+        <Point X="1.625" Y="0.875" />
+        <Point X="6.25" Y="0.875" />
+        <Point X="6.25" Y="1.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAEAAAAgAAAAAAAAAAgAABBgAAAAAAAAAAAQ=</HashCode>
+      <FileName>Bullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Button">
+    <Position X="9.75" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAggAAAABAAAAAAACAAAAAAAAACAAACAE=</HashCode>
+      <FileName>Buttons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.ButtonManager">
+    <Position X="9.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAgAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buttons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Slider">
+    <Position X="11.25" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQIAAAAAAAAAgIAAABAQEEAAAAAAAAAAAAgCAAAAAA=</HashCode>
+      <FileName>Buttons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.SliderManager">
+    <Position X="11.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buttons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Switcher">
+    <Position X="12.75" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAggAAAABAAAAAAACAAAAAAAAADAAAAAA=</HashCode>
+      <FileName>Buttons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.SwitcherManager">
+    <Position X="12.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Buttons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Camera">
+    <Position X="41.25" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAYAQAAABYAAAAAgFAIACAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.CreditsScreen">
+    <Position X="60.25" Y="10.25" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.GameState" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="57.062" Y="10.25" />
+        <Point X="57.062" Y="10.005" />
+        <Point X="61" Y="10.005" />
+        <Point X="61" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAwAAAAAAAAAAAAAAACAAAAAAAAgAAAQ=</HashCode>
+      <FileName>CreditsScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.SnakeHead">
+    <Position X="17.75" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Enemy" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="16.5" Y="2" />
+        <Point X="16.5" Y="1.846" />
+        <Point X="18.438" Y="1.846" />
+        <Point X="18.438" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.SnakeTail">
+    <Position X="20" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Enemy" FixedToPoint="true">
+      <Path>
+        <Point X="17.062" Y="2" />
+        <Point X="17.062" Y="1.846" />
+        <Point X="20.75" Y="1.846" />
+        <Point X="20.75" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.PinkSeekerChild">
+    <Position X="24.5" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Enemy" FixedToPoint="true">
+      <Path>
+        <Point X="16.148" Y="2" />
+        <Point X="16.148" Y="1.846" />
+        <Point X="25.25" Y="1.846" />
+        <Point X="25.25" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.BossOne">
+    <Position X="26.75" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Enemy" FixedToPoint="true">
+      <Path>
+        <Point X="16.844" Y="2" />
+        <Point X="16.844" Y="1.846" />
+        <Point X="27.438" Y="1.846" />
+        <Point X="27.438" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.BossOneChild">
+    <Position X="29" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Enemy" FixedToPoint="true">
+      <Path>
+        <Point X="15.918" Y="2" />
+        <Point X="15.918" Y="1.846" />
+        <Point X="29.75" Y="1.846" />
+        <Point X="29.75" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.BossTwo">
+    <Position X="31.25" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Enemy" FixedToPoint="true">
+      <Path>
+        <Point X="16.324" Y="2" />
+        <Point X="16.324" Y="1.846" />
+        <Point X="32" Y="1.846" />
+        <Point X="32" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAABACAAAAAgAAAAAAAAAAAAAAAAAACAACAAAAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.BossTwoTail">
+    <Position X="20" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.BossThree">
+    <Position X="22.25" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Enemy" FixedToPoint="true">
+      <Path>
+        <Point X="16.672" Y="2" />
+        <Point X="16.672" Y="1.846" />
+        <Point X="23" Y="1.846" />
+        <Point X="23" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAIAAAA=</HashCode>
+      <FileName>CustomEnemies.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Drone">
+    <Position X="9.5" Y="1.25" Width="1.75" />
+    <InheritanceLine Type="Mono_Ether.Entity" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.625" Y="1.25" />
+        <Point X="1.625" Y="0.834" />
+        <Point X="10.375" Y="0.834" />
+        <Point X="10.375" Y="1.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>kAQAECAABAAAAAEAAAAAAAAYACCABAAQAQAAAAAIAAQ=</HashCode>
+      <FileName>Drone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Enemy" Collapsed="true">
+    <Position X="15.75" Y="2" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Entity" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.625" Y="1.25" />
+        <Point X="1.625" Y="0.875" />
+        <Point X="15.51" Y="0.875" />
+        <Point X="15.51" Y="2.312" />
+        <Point X="15.75" Y="2.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gCQRGAARBUIAAgAAGAAgAAAMEQAYgE2CCTAAwMgAAhQ=</HashCode>
+      <FileName>Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.EnemySpawner">
+    <Position X="39.5" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>gAQAAAAAAAAAAIAAAIAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>EnemySpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Entity">
+    <Position X="0.5" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAQIAAAIAQAAggAgAAAAAAAAIAAAgBAAAAAAAAAEAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.EntityManager">
+    <Position X="43.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAgAIAAAAAAgAAAAAiAAAAgAEgAICAQIEAAAJAAAA=</HashCode>
+      <FileName>EntityManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.GameRoot">
+    <Position X="56.25" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAwFAAAAAACAACAAAACDAQAAAAAAAAIQ=</HashCode>
+      <FileName>GameRoot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.GameScreen">
+    <Position X="62.25" Y="10.25" Width="1.75" />
+    <InheritanceLine Type="Mono_Ether.GameState" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="57" Y="10.25" />
+        <Point X="57" Y="10.005" />
+        <Point X="63.125" Y="10.005" />
+        <Point X="63.125" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQQVAABAIAAAwAAAAAAGAAAEAgEACAAQAACCAgIAAQ=</HashCode>
+      <FileName>GameScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.GameSettings">
+    <Position X="37.5" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAABAAcQgAAKAAACAAABAAAAAIAAAAAABAAQ=</HashCode>
+      <FileName>GameSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.GameState">
+    <Position X="56.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAwAAAAAAAAAAAAAAACAAAAAEAAgAAAQ=</HashCode>
+      <FileName>GameState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Geom">
+    <Position X="11.5" Y="1.25" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.Entity" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.625" Y="1.25" />
+        <Point X="1.625" Y="0.86" />
+        <Point X="12.25" Y="0.86" />
+        <Point X="12.25" Y="1.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAQAEAQAIAAEAgAAAAAAACAAAAAAAAgAAAAAAAAAAAQ=</HashCode>
+      <FileName>Geom.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.GlobalAssets">
+    <Position X="41.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAQACABAAAAAAABIAAAIAEAAAAAACAAAAABggQ=</HashCode>
+      <FileName>GlobalAssets.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.HighScore">
+    <Position X="37.5" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAgAAAgAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>HighScore.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Hud">
+    <Position X="49" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAUAAEAAACAgAAAAAAAAAAABQAAAAAQAAAAAIAAAQ=</HashCode>
+      <FileName>Hud.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Ether.DoomScreen">
+    <Position X="64.5" Y="10.25" Width="1.5" />
+    <InheritanceLine Type="Mono_Ether.GameState" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="57" Y="10.25" />
+        <Point X="57" Y="10.005" />
+        <Point X="65.375" Y="10.005" />
+        <Point X="65.375" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAwAAAgAAEAAAABAgACAAAAAAAAgIAAQ=</HashCode>
+      <FileName>DoomScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Ether.Doom">
+    <Position X="64.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAIAAAAAAAAAAABIAAAAQ=</HashCode>
+      <FileName>DoomScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Input">
+    <Position X="45" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IZxAAAAAAAAAAAAEUAAAAAAAAAgAAIAAAAAAAgAAAAA=</HashCode>
+      <FileName>Input.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.MyUtils">
+    <Position X="45" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>EQAAYABAAAAEgAAAQAAAAAYAEAAAAAAAIEAIAAAAAAA=</HashCode>
+      <FileName>MyUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Particle">
+    <Position X="1" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAEAIIAAAAAgAgAAAAAAAAAAAAAAEAAAAAgAAEAAQ=</HashCode>
+      <FileName>Particle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.SmallParticle">
+    <Position X="3.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAggAAEAAAAAACCAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Particle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.BigParticle">
+    <Position X="3.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Particle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.ParticleManager">
+    <Position X="1" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAACAAAAgAAAAAgAAAABAAAABEAQAAgAAAAAAA=</HashCode>
+      <FileName>Particle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.ParticleTemplates">
+    <Position X="3" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Particle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.PauseWindow">
+    <Position X="47" Y="7.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQgRAACAAAAAgAAAAAACAAAAEAAAAAIAAAAAAAEAAA=</HashCode>
+      <FileName>PauseWindow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.PlayerShip">
+    <Position X="7.5" Y="1.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ggQAkAAAAEAEAggAAAAAECBABABAAAASAQEAgABgEQQ=</HashCode>
+      <FileName>PlayerShip.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.PowerPack">
+    <Position X="13.25" Y="1.25" Width="2" />
+    <InheritanceLine Type="Mono_Ether.Entity" FixedToPoint="true">
+      <Path>
+        <Point X="1.625" Y="1.25" />
+        <Point X="1.625" Y="0.875" />
+        <Point X="13.127" Y="0.875" />
+        <Point X="13.127" Y="1.25" />
+        <Point X="13.25" Y="1.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gBQgEQAAAwAAAAgAAIAAAYAAAAIAAAgADQAAQAAAAAQ=</HashCode>
+      <FileName>PowerPack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Program">
+    <Position X="54.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PowerPackSpawner">
+    <Position X="13.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAAAAAAAAAIAAAAAAAAAAAAAAAAQAQAAAAAAAAAA=</HashCode>
+      <FileName>PowerPack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.ScreenManager">
+    <Position X="39.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAACCAABAAAAAAAAAA=</HashCode>
+      <FileName>ScreenManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.StarField">
+    <Position X="43.25" Y="7.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Mono_Ether.StarField.Star">
+        <TypeIdentifier>
+          <NewMemberFileName>StarField.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CEAAAAAAAAAAAgAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StarField.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.TileMap">
+    <Position X="19.75" Y="13" Width="1.75" />
+    <NestedTypes>
+      <Class Name="Mono_Ether.TileMap.Node" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TileMap.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQBAgAAAAAAIgACIgAAAAAAAAAAAAAAQAAAgIIQgAA=</HashCode>
+      <FileName>TileMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Tile">
+    <Position X="17.25" Y="13" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgICEAAIAAAAghBIAAAQAQBAAACIAAAACACAQAQCAEQ=</HashCode>
+      <FileName>TileMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.TitleScreen">
+    <Position X="58" Y="10.25" Width="2" />
+    <InheritanceLine Type="Mono_Ether.GameState" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="57" Y="10.25" />
+        <Point X="57" Y="10" />
+        <Point X="59" Y="10" />
+        <Point X="59" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>QAQgXAAIhAATAwCAAEAAqCiQCAATGGAQCkAAAAoIAIQ=</HashCode>
+      <FileName>TitleScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mono_Ether.Tutorial">
+    <Position X="47.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAQAEAAAAAAAAAAA=</HashCode>
+      <FileName>Tutorial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Mono_Ether.DroneType">
+    <Position X="9.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAgAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Drone.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Mono_Ether.EnemyType">
+    <Position X="17.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAAAAAAAAAJAgIAAACAAAEARAAAACAACAAAIgAAAA=</HashCode>
+      <FileName>Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Mono_Ether.GameMode">
+    <Position X="62.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAQAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameScreen.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Mono_Ether.Level">
+    <Position X="62.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAgAAAABAAAAIAAAAAA=</HashCode>
+      <FileName>GameScreen.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Mono_Ether.HudStatus">
+    <Position X="49" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Hud.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Mono_Ether.PowerPackType">
+    <Position X="13.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAARAAkEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PowerPack.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Mono_Ether.TutorialState">
+    <Position X="47.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJCAAAAAAAAAAgQBAACAAAAgAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Tutorial.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

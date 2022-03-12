@@ -9,6 +9,7 @@ using System.Linq;
 
 namespace Mono_Ether {
     public class PlayerShip : Entity {
+        private static Texture2D _heart;
         private static Texture2D _shipTexture;
         public static SoundEffect ShotSoundEffect; // TODO array, also move to bullet.cs?
         private static SoundEffect _deathSound;
@@ -32,11 +33,13 @@ namespace Mono_Ether {
             Image = _shipTexture;
         }
         public static void LoadContent(ContentManager content) {
+            _heart = content.Load<Texture2D>("Textures/GameScreen/Heart");
             _shipTexture = content.Load<Texture2D>("Textures/GameScreen/PlayerShip");
             ShotSoundEffect = content.Load<SoundEffect>("SoundEffects/PlayerShoot/Shoot-01");
             _deathSound = content.Load<SoundEffect>("SoundEffects/PlayerDeath");
         }
         public static void UnloadContent() {
+            _heart = null;
             _shipTexture = null;
             ShotSoundEffect = null;
             _deathSound = null;
@@ -55,15 +58,15 @@ namespace Mono_Ether {
             var direction = Vector2.Zero;
             var acceleration = 3f;
             if (DoomMode) {
-                // TODO switch index
                 if (Input.Keyboard.IsKeyDown(Keys.A))
-                    Orientation -= 0.1f;
+                    Orientation -= 0.05f;
                 if (Input.Keyboard.IsKeyDown(Keys.D))
-                    Orientation += 0.1f;
+                    Orientation += 0.05f;
                 if (Input.Keyboard.IsKeyDown(Keys.W))
-                    direction += Vector2.UnitX.Rotate(Orientation);
+                    Position += Vector2.UnitX.Rotate(Orientation) * 5f;
                 if (Input.Keyboard.IsKeyDown(Keys.S))
-                    direction -= Vector2.UnitX.Rotate(Orientation);
+                    Position -= Vector2.UnitX.Rotate(Orientation) * 5f;
+                if (TileMap.Instance.GetTileFromWorld(Position).Id == 4) ScreenManager.RemoveScreen();
             } else {
                 foreach (var power in ActivePowerPacks) {
                     if (power.Type == PowerPackType.MoveSpeedIncrease)
@@ -207,7 +210,7 @@ namespace Mono_Ether {
                     PowerPackType.ShootSpeedIncrease => PowerPack._shootSpeedIncreaseTexture,
                     PowerPackType.ShootSpeedDecrease => PowerPack._shootSpeedDecreaseTexture,
                     PowerPackType.MoveSpeedIncrease => PowerPack._moveSpeedIncreaseTexture,
-                    PowerPackType.MoveSpeedDecrease => PowerPack._moveSpeedIncreaseTexture,
+                    PowerPackType.MoveSpeedDecrease => PowerPack._moveSpeedDecreaseTexture,
                     PowerPackType.Doom => PowerPack._doomTexture,
                     _ => GlobalAssets.Default,
                 };
@@ -220,7 +223,11 @@ namespace Mono_Ether {
                 // Draw icon
                 batch.Draw(icon, pos, Color.White);
             }
-            // TODO bottom left lives remaining
+            // Bottom-left hearts
+            for (var i = 0; i < Lives; i++) {
+                var pos = new Vector2(0 + i * 100, PlayerCamera.ScreenSize.Y - 100);
+                batch.Draw(_heart, pos, Color.White);
+            }
             // TODO top right score, geoms, highscore, multiplier,
             batch.DrawString(GlobalAssets.NovaSquare24, $"Score: {Score}", new Vector2(PlayerCamera.ScreenSize.X - 200, 30), Color.White);
             batch.DrawString(GlobalAssets.NovaSquare24, $"Multi: {Multiplier}", new Vector2(PlayerCamera.ScreenSize.X - 200, 60), Color.White);

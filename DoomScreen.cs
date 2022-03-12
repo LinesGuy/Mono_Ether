@@ -12,6 +12,7 @@ namespace Mono_Ether.Ether {
         private List<PlayerShip> _players = EntityManager.Instance.Players;
         private readonly PauseWindow _pauseWindow = new PauseWindow();
         private readonly TileMap _tileMap = new TileMap(Level.Secret, false);
+        private TimeSpan _timeRemaining = TimeSpan.FromSeconds(60);
         public DoomScreen(GraphicsDevice graphicsDevice) : base(graphicsDevice) {
         }
         public override void Initialize() {
@@ -30,11 +31,16 @@ namespace Mono_Ether.Ether {
         }
         public override void UnloadContent() {
             // TODO MediaPlayer.Stop();
+            EntityManager.Instance.Players.ForEach(p => p.DoomMode = false);
         }
         public override void Update(GameTime gameTime) {
             if (!GameRoot.Instance.IsActive)
                 return;
             // Esc to toggle pause
+            _timeRemaining -= gameTime.ElapsedGameTime;
+            if (_timeRemaining <= TimeSpan.Zero) {
+                ScreenManager.RemoveScreen();
+            }
             if (Input.WasKeyJustDown(Keys.Escape)) {
                 switch (_mode) {
                     case GameMode.Playing:
@@ -59,10 +65,10 @@ namespace Mono_Ether.Ether {
             // TODO time remaining
             batch.Begin();
             Doom.Draw(batch, _players[0]);
-            batch.DrawStringCentered(GlobalAssets.NovaSquare24, "Find a yellow block to continue", new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 3f), Color.White);
-            batch.Draw(GameScreen.GameCursor, Input.Mouse.Position.ToVector2() - GameScreen.GameCursor.Size() / 2f, Color.White);
+            batch.DrawStringCentered(GlobalAssets.NovaSquare24, "Find a red block to continue", new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 3f), Color.White);
             if (_pauseWindow.Visible)
                 _pauseWindow.Draw(batch);
+            batch.Draw(GameScreen.GameCursor, Input.Mouse.Position.ToVector2() - GameScreen.GameCursor.Size() / 2f, Color.White);
             if (!GameRoot.Instance.IsActive)
                 batch.DrawString(GlobalAssets.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameSettings.ScreenSize / 4f, Color.White);
             batch.End();

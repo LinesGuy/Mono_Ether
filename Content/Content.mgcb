@@ -423,6 +423,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/GameScreen/Geom.png
 
+#begin Textures/GameScreen/Heart.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GameScreen/Heart.png
+
 #begin Textures/GameScreen/Particles/Laser.png
 /importer:TextureImporter
 /processor:TextureProcessor
