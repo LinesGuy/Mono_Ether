@@ -35,11 +35,11 @@ namespace Mono_Ether.Ether {
         public override void Update(GameTime gameTime) {
             if (!GameRoot.Instance.IsActive)
                 return;
-            // Esc to toggle pause
             _timeRemaining -= gameTime.ElapsedGameTime;
             if (_timeRemaining <= TimeSpan.Zero) {
                 ScreenManager.RemoveScreen();
             }
+            // Esc to toggle pause
             if (Input.WasKeyJustDown(Keys.Escape)) {
                 switch (_mode) {
                     case GameMode.Playing:
@@ -63,10 +63,14 @@ namespace Mono_Ether.Ether {
             GraphicsDevice.Clear(Color.Black);
             batch.Begin();
             Doom.Draw(batch, _players[0]);
+            // Draw instruction text
             batch.DrawStringCentered(GlobalAssets.NovaSquare24, "Find a red block to continue", new Vector2(GameSettings.ScreenSize.X / 2f, GameSettings.ScreenSize.Y / 3f), Color.White);
+            // Draw pause menu if set to visible
             if (_pauseWindow.Visible)
                 _pauseWindow.Draw(batch);
+            // Draw cursor
             batch.Draw(GameScreen.GameCursor, Input.Mouse.Position.ToVector2() - GameScreen.GameCursor.Size() / 2f, Color.White);
+            // If the window is not active, draw text telling user to click on the window to focus
             if (!GameRoot.Instance.IsActive)
                 batch.DrawString(GlobalAssets.NovaSquare24, "GAME IS UNFOCUSED, CLICK ANYWHERE TO FOCUS WINDOW", GameSettings.ScreenSize / 4f, Color.White);
             batch.End();
@@ -78,53 +82,63 @@ namespace Mono_Ether.Ether {
         private const int MaxSteps = 512;
         private const float MaxDist = StepDist * MaxSteps;
         public static void Draw(SpriteBatch spriteBatch, PlayerShip player) {
+            // Draw sky (blue)
             spriteBatch.Draw(GlobalAssets.Pixel, new Rectangle(0, 0, (int)(player.PlayerCamera.ScreenSize.X), (int)(player.PlayerCamera.ScreenSize.Y / 2f)), Color.CornflowerBlue);
+            // Draw floor (green)
             spriteBatch.Draw(GlobalAssets.Pixel, new Rectangle(0, (int)(player.PlayerCamera.ScreenSize.Y / 2f), (int)(player.PlayerCamera.ScreenSize.X), (int)(player.PlayerCamera.ScreenSize.Y / 2f)), new Color(32, 128, 32));
+            // Get player position and orientation
             Vector2 p1Pos = player.Position;
             float p1Angle = player.Orientation;
+            // Create empty list of distances, texture x coordinate and tile Id's for each horizontal line on the screen
             List<float> dists = new List<float>();
             List<float> texXs = new List<float>();
             List<int> Ids = new List<int>();
+            // Populate the lists so we can use a parallel for loop next
             for (int i = 0; i < (int)player.PlayerCamera.ScreenSize.X; i++) {
                 dists.Add(0);
                 texXs.Add(-1f);
                 Ids.Add(0);
             }
             Parallel.For(0, (int)player.PlayerCamera.ScreenSize.X, i => {
+                // Get the angle of the ray relative to the player orientation
                 float deltaAngle = MyUtils.Interpolate(-Fov / 2f, Fov / 2f, (player.PlayerCamera.ScreenSize.X - i) / player.PlayerCamera.ScreenSize.X);
                 float rayAngle = p1Angle - deltaAngle;
                 int Id = -1;
                 int step;
+                // Initialize the current ray position to the player position
                 Vector2 currentRayPos = p1Pos;
+                // Set the step vector equal to the ray angle with magnitude step distance
                 Vector2 stepVector = MyUtils.FromPolar(rayAngle, StepDist);
-                float dist = 0f;
+                float dist = 0f; // Current distance travelled so far
                 for (step = 0; step <= MaxSteps; step++) {
-
+                    // Get the Id of the tile we are currently inside
                     Id = TileMap.Instance.GetTileFromWorld(currentRayPos).Id;
-                    if (Id > 0) {
+                    if (Id > 0) { // Check if the tile is solid
                         // Collision! Let's find the nearest intersection between the ray and tile
                         var tile = TileMap.Instance.GetTileFromWorld(currentRayPos);
                         Vector2 nearestCollision = Vector2.Zero;
+                        // Initialize to an arbitrarily large number such that any other number is less than this
                         float nearestDistSquared = float.MaxValue;
-
+                        // The gradient is equal to the change in Y over change in X
                         float gradient = stepVector.Y / stepVector.X;
+                        // Our m value for y = mx + c is negative of this gradient
                         float m = -gradient;
+                        // Our c value is the negative of the current ray position (as y coordinates in math and computing are inverted) plus the gradient times the x coordinate of the ray position
                         float c = -currentRayPos.Y + gradient * currentRayPos.X;
-
                         // Left wall
-                        float ty = -c - m * tile.Left.X;
-                        Tile upperTile = TileMap.Instance.GetTileFromMap(tile.Pos - new Vector2(0, 1));
-                        Tile lowerTile = TileMap.Instance.GetTileFromMap(tile.Pos + new Vector2(0, 1));
-                        if (upperTile.SolidWalls[0] && ty < tile.Top.Y) {
-
-                            Vector2 collision = new Vector2(upperTile.Left.X, ty);
-                            float distSquared = Vector2.DistanceSquared(p1Pos, collision);
+                        float ty = -c - m * tile.Left.X; // temporary y
+                        Tile upperTile = TileMap.Instance.GetTileFromMap(tile.Pos - new Vector2(0, 1)); // Tile above current tile
+                        Tile lowerTile = TileMap.Instance.GetTileFromMap(tile.Pos + new Vector2(0, 1)); // Tile below current tile
+                        if (upperTile.SolidWalls[0] && ty < tile.Top.Y) { // If the tile's left wall is solid and the temporary y coordinate is less than the tile's top edge y-coordinate...
+                            Vector2 collision = new Vector2(upperTile.Left.X, ty); // The coordinates of the collision is the left wall x coordinate and the temporary y value
+                            float distSquared = Vector2.DistanceSquared(p1Pos, collision); // Comparing squared distances is perfectly valid and more performant as you don't need to calculate square roots
                             if (distSquared < nearestDistSquared) {
                                 nearestCollision = collision;
                                 nearestDistSquared = distSquared;
-                                texXs[(int)i] = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y);
-                                Id = upperTile.Id;
+                                texXs[(int)i] = (collision.Y - upperTile.Top.Y) / (upperTile.Bottom.Y - upperTile.Top.Y); // Get the x-coordinate of the texture where the ray hit it
+                                Id = upperTile.Id; // Get the tile id (used when drawing to get the texture)
                             }
+                        // Now we more or less repeat this for several variations of the tile and wall. I won't comment the rest of the code as it's almost exactly the same.
                         } else if (tile.SolidWalls[0] && tile.Bottom.Y > ty && ty > tile.Top.Y) {
                             Vector2 collision = new Vector2(tile.Left.X, ty);
                             float distSquared = Vector2.DistanceSquared(p1Pos, collision);
@@ -241,20 +255,24 @@ namespace Mono_Ether.Ether {
                                 Id = rightTile.Id;
                             }
                         }
-                        dist = MathF.Sqrt(nearestDistSquared);
-                        dists[(int)i] = dist;
-                        Ids[(int)i] = Id;
+                        dist = MathF.Sqrt(nearestDistSquared); // Square root the distance squared to get the actual distance.
+                        dists[(int)i] = dist; // Add this value to the array
+                        Ids[(int)i] = Id; // Repeat for tile id
                         break;
                     }
-                    currentRayPos += stepVector;
+                    currentRayPos += stepVector; // Step the ray position by the step vector
                 }
             });
+            // Now we have all the distances, texture x coordinates and tile id's calculated, iterate over each horizontal line on the screen *again* and draw each line.
+            // We cannot use a parallel for loop because spriteBatch gets ANGRY, luckily the bulk of the calculations have already been done so there is little performance loss.
             for (int i = 0; i < (int)player.PlayerCamera.ScreenSize.X; i++) {
+                // Grab the distance, texture x coordinate and id of the current horizontal line
                 float dist = dists[i];
                 float texX = texXs[i];
                 int Id = Ids[i];
-                float ed = dist / 32f;
+                float ed = dist / 32f; // The distance value is probably very large (in the hundreds, thousands or even more) so we divide it by 32 to make it more usable. ed = "effective distance"
                 if (texX >= 0) {
+                    // Grab the texture object based off the tile id
                     Texture2D img = Tile.Textures[0];
                     if (Id == 2)
                         img = Tile.Textures[1];
@@ -262,6 +280,9 @@ namespace Mono_Ether.Ether {
                         img = Tile.Textures[2];
                     if (Id == 4)
                         img = Tile.Textures[3];
+                    // The brightness of the colour is 255 (maximum brightness) multiplied by 1 - the distance over the max distance.
+                    // The effect of this is that as the distance increases, the brightness decreases, so walls farther away appear darker, up to a maximum distance.
+                    // If the distance is greater than the max distance, the brightness goes into the negatives which luckily defaults to just brightness 0 (black).
                     int c = (int)(255f * (1 - dist / MaxDist));
                     spriteBatch.Draw(img, new Vector2(i, player.PlayerCamera.ScreenSize.Y / 2f), new Rectangle((int)(Tile.Textures[0].Width * texX), 0, 1, Tile.Textures[0].Height), new Color(255, 255, 255, c), 0f, new Vector2(32f, 32f), new Vector2(1, 16f / ed), 0, 0);
                 }

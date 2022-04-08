@@ -22,15 +22,14 @@ namespace Mono_Ether {
             ParticleTemplates.Explosion(Position, 1f, 2f, 20, Color.Yellow);
         }
         public override void Update(GameTime gameTime) {
-            Position += Velocity;
+            Position += Velocity; // Update position
             _age++;
             if (_age > Lifespan) // Delete bullet after lifespan reached
                 IsExpired = true;
-            /* Delete bullet if collided with a wall */
-            if (TileMap.Instance.GetTileFromWorld(Position).Id <= 0)
+            if (TileMap.Instance.GetTileFromWorld(Position).Id <= 0) // Delete bullet if collided with a wall
                 return;
             IsExpired = true;
-            ParticleTemplates.Explosion(Position, 1f, 2f, 20, new Color(255, 255, 0));
+            ParticleTemplates.Explosion(Position, 1f, 2f, 20, new Color(255, 255, 0)); // Summon explosion effect upon expiring
         }
         public static void LoadContent(ContentManager content) {
             _bulletTexture = content.Load<Texture2D>("Textures/GameScreen/Bullet");
@@ -61,14 +60,17 @@ namespace Mono_Ether {
             _starBurstTexture = null;
         }
         public override void Update(GameTime gameTime) {
-            Position += Velocity;
-            Orientation += 0.3f;
+            Position += Velocity; // Update position based on velocity
+            Orientation += 0.3f; // Rotate projectile slightly
             _age++;
+            // Return if the age is less than the lifespan and the bullet hasn't hit a wall yet
             if (_age <= _lifespan && TileMap.Instance.GetTileFromWorld(Position).Id <= 0)
                 return;
+            // Move the bullet backwards one unit in case the bullet collided with a wall, so the summoned bullets don't spawn inside the wall
             Position -= Velocity;
             IsExpired = true;
             for (var i = 0; i < 50; i++) {
+                // Summon bullet in random direction
                 var bulletVelocity = MyUtils.FromPolar(Random.NextFloat((float)-Math.PI, (float)Math.PI), Random.NextFloat(8f, 16f));
                 EntityManager.Instance.Add(new Bullet(Position, bulletVelocity, new Color(128, 128, 0), _parentPlayerIndex));
             }

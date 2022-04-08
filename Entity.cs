@@ -14,6 +14,7 @@ namespace Mono_Ether {
         public abstract void Update(GameTime gameTime);
         public virtual void Draw(SpriteBatch batch, Camera camera) {
             Vector2 screenPos = camera.WorldToScreen(Position);
+            // The draw function used to draw pretty much every entity you'll ever see.
             batch.Draw(Image, screenPos, null, EntityColor, Orientation + camera.Orientation, Size / 2f, camera.Zoom, 0, 0);
         }
         public virtual void HandleTilemapCollision() {

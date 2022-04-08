@@ -31,6 +31,7 @@ namespace Mono_Ether {
         private void AddEntity(Entity entity) {
             Entities.Add(entity);
             if (entity is PlayerShip player) {
+                // Determine player index depending on how many players are in the players list currently
                 player.Index = Players.Count switch {
                     0 => PlayerIndex.One,
                     1 => PlayerIndex.Two,

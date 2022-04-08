@@ -46,6 +46,9 @@ namespace Mono_Ether {
         }
         public static Enemy CreateEnemy(EnemyType type, Vector2 position) {
             var enemy = new Enemy(type, position);
+            // Depending on the type of the enemy, we will add different behaviors
+            // e.g BlueSeekers will simply follow the player,
+            // GreenSeekers will follow the player but also dodge bullets, etc etc
             switch (type) {
                 case (EnemyType.BlueSeeker):
                     enemy.Image = _blueSeeker;
@@ -81,41 +84,47 @@ namespace Mono_Ether {
                     break;
                 case EnemyType.SnakeHead:
                     return new SnakeHead(position);
-                case EnemyType.BossOne:
-                    break;
                 case EnemyType.BossTwo:
-                    break;
                 case EnemyType.BossThree:
+                case EnemyType.BossOne:
+                    // These enemies are significantly different so we use a different method to summon them
                     break;
                 case EnemyType.BossOneChild:
                 case EnemyType.BossTwoTail:
                 case EnemyType.PinkSeekerChild:
                 case EnemyType.SnakeTail:
                 default:
+                    // These enemies should not be spawned manually and will likely break the game if done so, so we throw an error
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
             return enemy;
         }
         public void HandleCollision(Enemy other) {
+            // Get the direction to push this entity towards
             var delta = Position - other.Position;
-            /* Push current enemy away from other enemy. The closer they are, the harder the push */
+            // Push current enemy away from other enemy. The closer they are, the harder the push
             Velocity += 10 * delta / (delta.LengthSquared() + 1);
         }
         protected void AddBehaviour(IEnumerable<int> behaviour) {
             Behaviors.Add(behaviour.GetEnumerator());
         }
         public override void Update(GameTime gameTime) {
+            // Enemies will not be active for the first few moments upon spawning
+            // This is to prevent enemies from spawning, for example, on top of the player
+            // or directly in front of the player, killing them before the player even gets
+            // a chance to react
             if (TimeUntilStart > 0) {
                 TimeUntilStart--;
                 EntityColor = Color.White * (1 - TimeUntilStart / 60f);
                 return;
             }
-            /* Apply enemy behaviors */
+            // Apply each enemy behavior in the order they were added
             for (var i = 0; i < Behaviors.Count; i++)
                 if (!Behaviors[i].MoveNext())
                     Behaviors.RemoveAt(i--);
             Position += Velocity;
             Velocity *= Friction;
+            // Check if the enemy is inside a wall and push them outside if so
             HandleTilemapCollision();
         }
         public static void LoadContent(ContentManager content) {
@@ -158,8 +167,11 @@ namespace Mono_Ether {
         protected IEnumerable<int> EnemyFacesVelocity() {
             var lastPos = Position;
             while (true) {
+                // Find the direction the enemy is moving
                 var delta = Position - lastPos;
+                // Check that the enemy is actually moving (otherwise, converting a zero vector to an angle would throw an error)
                 if (delta != Vector2.Zero)
+                    // Convert the direction to an angle, where rightwards is zero radians, and set this as the enemy orientation
                     Orientation = delta.ToAngle();
                 lastPos = Position;
                 yield return 0;
@@ -167,7 +179,9 @@ namespace Mono_Ether {
         }
         protected IEnumerable<int> DodgeBullets(float distance = 100f, float acceleration = 1f) {
             while (true) {
+                // Iterate over each bullet in the list of bullets, but only where the distance between the bullet and the enemy is less than a certain threshold (default 100 units)
                 foreach (var bullet in EntityManager.Instance.Bullets.Where(bullet => Vector2.DistanceSquared(bullet.Position, Position) < distance * distance))
+                    // Push the enemy away from the bullet with a certain amount of acceleration (default 1 unit/f)
                     Velocity -= (bullet.Position - Position).ScaleTo(acceleration);
                 yield return 0;
             }
@@ -176,8 +190,11 @@ namespace Mono_Ether {
             var lastPos = Position;
             var acceleration = MyUtils.FromPolar(angle, speed);
             while (true) {
+                // If the enemy X position hasn't changed since the last movement update, it is very likely
+                // that the enemy has hit a vertical wall, so we invert the horizontal acceleration
                 if (Math.Abs(Position.X - lastPos.X) < 0.001)
                     acceleration.X = -acceleration.X;
+                // Repeat for Y position and vertical acceleration
                 if (Math.Abs(Position.Y - lastPos.Y) < 0.001)
                     acceleration.Y = -acceleration.Y;
                 lastPos = Position;
@@ -187,7 +204,9 @@ namespace Mono_Ether {
         }
         protected IEnumerable<int> ExhaustFire() {
             while (true) {
+                // If the enemy is moving at least a certain speed...
                 if (Velocity.LengthSquared() > 0.1f) {
+                    // Create an exhaust fire particle using the ExhaustFire particle template
                     ParticleTemplates.ExhaustFire(Position, Velocity.ToAngle() + MathF.PI, new Color(1f, 0.5f, 0.2f));
                 }
                 yield return 0;
@@ -255,24 +274,30 @@ namespace Mono_Ether {
             }
         }
         protected IEnumerable<int> MoveRandomly(float speed = 0.4f, float rotationSpeed = 0.1f, float bounds = 0.1f) {
+            // Despite the name, the movement is not quite random
+            // Pick a random direction to start with:
             var direction = Rand.NextFloat(0, MathHelper.TwoPi);
+            // Create an acceleration direction from the direction and given speed
             var acceleration = MyUtils.FromPolar(direction, speed);
             var rotationDelta = 0f;
             var lastPos = Position;
             while (true) {
+                // Copy of the BounceOffWalls function from earlier
                 if (Math.Abs(Position.X - lastPos.X) < 0.001)
                     acceleration.X = -acceleration.X;
                 if (Math.Abs(Position.Y - lastPos.Y) < 0.001)
                     acceleration.Y = -acceleration.Y;
 
                 lastPos = Position;
+                // Change the direction we are moving slightly
                 rotationDelta += Rand.NextFloat(-rotationSpeed, rotationSpeed);
                 if (rotationDelta < -bounds)
                     rotationDelta = -bounds;
                 if (rotationDelta > bounds)
                     rotationDelta = bounds;
                 acceleration = acceleration.Rotate(rotationDelta);
-
+                // Add the velocity onto the acceleration 6 times before changing the rotation delta again
+                // This way, the rotation changes are less frequent and therefore appears less "jittery"
                 for (var i = 0; i < 6; i++) {
                     Velocity += acceleration;
                     yield return 0;
@@ -283,6 +308,7 @@ namespace Mono_Ether {
         }
         protected IEnumerable<int> RotateOrientationConstantly(float speed = 0.1f) {
             while (true) {
+                // Just rotate the enemy by some constant amount each frame
                 Orientation += speed;
                 yield return 0;
             }
@@ -291,11 +317,15 @@ namespace Mono_Ether {
         protected IEnumerable<int> UpdateBossBar() {
             float maxHealth = Health;
             while (true) {
+                // Probably self explanatory code but I might get a mark if I put a comment here saying what this line of code does
+                // This line of code sets the current instance of the hud's boss bar value to the boss health divided by the boss max health
                 Hud.Instance.BossBarValue = Health / maxHealth;
                 yield return 0;
             }
         }
         protected IEnumerable<int> MoveOrthogonallyOccasionally(int activeFrames = 30, int sleepFrames = 60, float speed = 2f) {
+            // Is orthogonally the right word here? Well, this just picks one of four directions: directly upwards, downwards, left or right
+            // Then moves in that direction for some number of frames, does nothing for some number of frames, and repeats
             var velocity = MyUtils.FromPolar(Rand.Next(4) * MathF.PI / 2f, speed);
             while (true) {
                 for (var i = 0; i < activeFrames; i++) {

@@ -21,7 +21,9 @@ namespace Mono_Ether {
         public Drone(PlayerIndex ownerPlayerIndex, DroneType type) {
             OwnerPlayerIndex = ownerPlayerIndex;
             Type = type;
+            // Drone position is initially equal to owner position
             Position = EntityManager.Instance.Players[(int)ownerPlayerIndex].Position;
+            // Change drone texture based on the drone type
             switch (type) {
                 case DroneType.Collector:
                     Image = _collectorTexture2D;
@@ -50,7 +52,9 @@ namespace Mono_Ether {
             for (var i = 0; i < _behaviors.Count; i++)
                 if (!_behaviors[i].MoveNext())
                     _behaviors.RemoveAt(i--);
+            // Update position based on velocity
             Position += Velocity;
+            // Friction
             Velocity *= 0.8f;
         }
 
@@ -65,6 +69,7 @@ namespace Mono_Ether {
             }
         }
         private IEnumerable<int> CirclePlayer(float rotationSpeed = 0.07f) {
+            // Follow the player, and if within range of the player, move in circles around the player
             const float radius = 80f;
             var radians = 0f;
             while (true) {
@@ -92,19 +97,24 @@ namespace Mono_Ether {
             drone.AddBehaviour(drone.DroneFacesVelocity());
             IEnumerable<int> ShootWhenPlayerShoots() {
                 var cooldownRemaining = 0;
+                // Only shoot every cooldownFrames number
                 const int cooldownFrames = 7;
                 while (true) {
+                    // Get the player with index of the stored owner player index
                     var player = EntityManager.Instance.Players[(int)ownerPlayerIndex];
+                    // Get the direction to shoot (mouse position minus drone position)
                     var aim = player.PlayerCamera.MouseWorldCoords() - drone.Position;
                     if (cooldownRemaining > 0)
                         cooldownRemaining--;
                     if (Input.Mouse.LeftButton == ButtonState.Pressed && aim.LengthSquared() > 0 && cooldownRemaining <= 0 && !player.IsDead && GameScreen.Instance.Mode != GameMode.Editor) {
-                        /* Sound */
+                        // Play a sound effect of random pitch
                         PlayerShip.ShotSoundEffect.Play(GameSettings.SoundEffectVolume / 3f, Rand.NextFloat(-0.2f, 0.2f), 0);
+                        // Reset cooldown
                         cooldownRemaining = cooldownFrames;
                         var aimAngle = aim.ToAngle();
                         var offset = MyUtils.FromPolar(aimAngle, 32f);
                         var vel = MyUtils.FromPolar(aimAngle, 18f);
+                        // Add this bullet to the list of bullets
                         EntityManager.Instance.Add(new Bullet(drone.Position + offset, vel, Color.HotPink, drone.OwnerPlayerIndex));
                     }
                     yield return 0;
@@ -116,6 +126,9 @@ namespace Mono_Ether {
         public static Drone CreateCollector(PlayerIndex ownerPlayerIndex) {
             var drone = new Drone(ownerPlayerIndex, DroneType.Collector);
             drone.AddBehaviour(drone.DroneFacesVelocity());
+            // The AStar algorithm used here is almost identical to the AStar used in the enemy pathfinding,
+            // the main difference is that instead of having just one goal, there are multiple goals (one for
+            // each geom), and the algorithm simply finds the path to the nearest one.
             IEnumerable<int> CollectGeomsAStar() {
                 // Also follow player when no geoms are to be found
                 const float acceleration = 1.5f;

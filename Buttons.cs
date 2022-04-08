@@ -25,14 +25,16 @@ namespace Mono_Ether {
         }
 
         public void Draw(SpriteBatch batch, Vector2 offset) {
+            // Draw three boxes of different colors to create a fancy effect
             DrawBox(batch, offset + new Vector2(0f, 6f).Rotate(_rotOffset + MathF.PI * 4f / 3), Color.LightGreen);
             DrawBox(batch, offset + new Vector2(0f, 6f).Rotate(_rotOffset), Color.CornflowerBlue);
             DrawBox(batch, offset + new Vector2(0f, 6f).Rotate(_rotOffset + MathF.PI * 2f / 3), Color.Violet);
-            batch.DrawStringCentered(GlobalAssets.NovaSquare48, Text, Pos + offset, Color.White);
+            batch.DrawStringCentered(GlobalAssets.NovaSquare48, Text, Pos + offset, Color.White); // Draw text
         }
 
         private void DrawBox(SpriteBatch batch, Vector2 offset, Color color)
         {
+            // Draw box of arbitrary position, size and color by drawing the individual edges and corners
             batch.Draw(GlobalAssets.ButtonCorner1, MyUtils.RectangleF(Pos.X - Size.X / 2 - 4 + offset.X, Pos.Y - Size.Y / 2 - 4 + offset.Y, 7, 7), null, color, 0f, Vector2.Zero, SpriteEffects.None, 0); // Top left
             batch.Draw(GlobalAssets.ButtonTop, MyUtils.RectangleF(Pos.X - Size.X / 2 + 3 + offset.X, Pos.Y - Size.Y / 2 - 4 + offset.Y, Size.X - 6, 7), color); // Top
             batch.Draw(GlobalAssets.ButtonCorner1, MyUtils.RectangleF(Pos.X + Size.X / 2 - 3 + offset.X, Pos.Y - Size.Y / 2 - 4 + offset.Y, 7, 7), null, color, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0); // Top right
@@ -57,7 +59,7 @@ namespace Mono_Ether {
             foreach (Button button in Buttons)
                 button.Draw(batch, Vector2.Zero);
         }
-        public string PressedButton // null if no button is pressed
+        public string PressedButton // null if no button is pressed, returns button text if button is pressed
         {
             get
             {
@@ -88,14 +90,20 @@ namespace Mono_Ether {
             Value = value;
         }
         public void Update() {
+            // If the distance between the slider ball position and the mouse position is less than the radius, the mouse is hovering over the slider ball
             IsHovered = Vector2.DistanceSquared(Input.Mouse.Position.ToVector2(), SliderBallPos) < Radius * Radius;
             if (!IsBeingDragged && IsHovered && Input.WasLeftMouseJustDown)
+                // If the slider is not being dragged and the user is hovering over the slider ball and just pressed left clicked, the slider is being dragged
                 IsBeingDragged = true;
             if (IsBeingDragged) {
+                // If the slider is being dragged and the user just let go of the mouse button, the slider is no longer being dragged
                 if (Input.WasLeftMouseJustUp)
                     IsBeingDragged = false;
+                // Set the value of the slider based on the mouse position relative to the slider position
                 Value = (Input.Mouse.X - SliderPos.X + Width / 2f) / Width;
+                // Clamp the value between 0 and 1, in case the user tries to slide the ball beyond the edges of the slider
                 Value = Math.Clamp(Value, 0f, 1f);
+                // Play a sound effect every few frames (e.g 6 frames) to let the user know how loud the sfx volume is currently
                 _clickSfxDelay++;
                 if (_clickSfxDelay >= 6) {
                     _clickSfxDelay = 0;
@@ -104,9 +112,13 @@ namespace Mono_Ether {
             }
         }
         public void Draw(SpriteBatch batch, Vector2 offset) {
-            batch.Draw(GlobalAssets.Pixel, SliderPos + offset, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);  // Bar
-            batch.Draw(GlobalAssets.SliderBall, SliderBallPos + offset, null, IsHovered ? Color.LightCyan : Color.White, 0f, GlobalAssets.SliderBall.Size() / 2f, 1f, 0, 0); // Ball
+            // Draw the bar:
+            batch.Draw(GlobalAssets.Pixel, SliderPos + offset, null, Color.White, 0f, new Vector2(0.5f), new Vector2(Width, 10f), 0, 0);
+            // Draw the ball:
+            batch.Draw(GlobalAssets.SliderBall, SliderBallPos + offset, null, IsHovered ? Color.LightCyan : Color.White, 0f, GlobalAssets.SliderBall.Size() / 2f, 1f, 0, 0);
+            // Draw the slider text (above the bar)
             batch.DrawStringCentered(GlobalAssets.NovaSquare24, Text, SliderPos + new Vector2(0f, -50f) + offset, Color.White);
+            // Draw the current value of the slider (to the right of the bar)
             batch.DrawString(GlobalAssets.NovaSquare24, $"{Value:0.00}", SliderPos + new Vector2(Width / 2f + 50f, -GlobalAssets.NovaSquare24.MeasureString("a").Y / 2f) + offset,
                 Color.White);
         }

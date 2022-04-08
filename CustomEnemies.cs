@@ -91,18 +91,25 @@ namespace Mono_Ether {
             EntityColor = Color.White;
             AddBehaviour(UpdateBossBar());
             AddBehaviour(RotateOrientationConstantly());
+            // Summon three "child" bosses
             for (var i = 0; i < 3; i++)
                 EntityManager.Instance.Add(new BossOneChild(position, MathF.PI * 2 * i / 3));
             IsBoss = true;
         }
         protected override void WasKilled(PlayerIndex playerIndex) {
             IsExpired = true;
-            EntityManager.Instance.Players[(int)playerIndex].Score += Worth; // Add score to player
-            ParticleTemplates.Explosion(Position, 0f, 20f, 1000, Color.White, true); // Summon particles
+            // Add score to player
+            EntityManager.Instance.Players[(int)playerIndex].Score += Worth;
+            // Summon particles
+            ParticleTemplates.Explosion(Position, 0f, 20f, 1000, Color.White, true);
+            // Kill all other enemies on screen
             EntityManager.Instance.Enemies.ForEach(e => e.Suicide());
+            // Clear any existing powerpacks
             EntityManager.Instance.PowerPacks.Clear();
+            // Disable powerpack and enemy spawning
             PowerPackSpawner.Instance.Enabled = false;
             EnemySpawner.Enabled = false;
+            // Transition screen to winscreen
             Hud.Instance.ChangeStatus(HudStatus.Win);
 
         }
@@ -156,6 +163,7 @@ namespace Mono_Ether {
             AddBehaviour(UpdateBossBar());
             AddBehaviour(MoveRandomly(1f, 0.3f, 0.3f));
             AddBehaviour(EnemyFacesVelocity());
+            // Add tail entities
             for (var i = 0; i <= 100; i++)
                 Tail.Add(new BossTwoTail(position));
             AddBehaviour(UpdateTail(40));
@@ -172,10 +180,12 @@ namespace Mono_Ether {
                 Tail[0].Position = Position;
                 for (var i = 1; i < Tail.Count; i++) {
                     var bodyTail = Tail[i];
+                    // Fade-in sprite
                     if (bodyTail.TimeUntilStart > 0) {
                         bodyTail.TimeUntilStart--;
                         bodyTail.EntityColor = Color.White * (1 - TimeUntilStart / 60f);
                     }
+                    // If the distance between the current tail and the previous tail in the tail array, move the current tail in the direction towards the previous tail
                     if (Vector2.DistanceSquared(bodyTail.Position, Tail[i - 1].Position) > distance * distance) {
                         bodyTail.Position = Tail[i - 1].Position + (bodyTail.Position - Tail[i - 1].Position).ScaleTo(distance);
                     }
@@ -229,6 +239,7 @@ namespace Mono_Ether {
             Friction = 0.95f;
             TimeUntilStart = 0;
             EntityColor = Color.White;
+            // Base health off the size of the boss linearly
             Health = (int) MyUtils.Interpolate(1, 10, size / 7f);
             AddBehaviour(MoveRandomly(0.4f));
             AddBehaviour(RotateOrientationConstantly());
@@ -239,6 +250,7 @@ namespace Mono_Ether {
                 return;
             for (var i = 0; i < 2; i++) // Summon two smaller clones of this boss
                 EntityManager.Instance.Add(new BossThree(Position, _size - 1));
+            // Decrement the boss bar value slightly
             Hud.Instance.BossBarValue -= 1f / 127f;
             if (Hud.Instance.BossBarValue <= 0.01f)
                 Hud.Instance.ChangeStatus(HudStatus.Win);
