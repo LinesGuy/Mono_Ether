@@ -19,13 +19,15 @@ namespace Mono_Ether {
         public static float SoundEffectVolume;
         public static void ApplyChanges() {
             ApplyVolumeChanges();
+            // Set window size
             GameRoot.Instance.Graphics.PreferredBackBufferWidth = (int)ScreenSize.X;
             GameRoot.Instance.Graphics.PreferredBackBufferHeight = (int)ScreenSize.Y;
-
+            // Set vsync
             GameRoot.Instance.Graphics.SynchronizeWithVerticalRetrace = VSync;
             GameRoot.Instance.IsFixedTimeStep = VSync;
-
+            // Set window resizing
             GameRoot.Instance.Window.AllowUserResizing = AllowWindowResizing;
+            // Apply changes
             GameRoot.Instance.Graphics.ApplyChanges();
         }
         public static void ApplyVolumeChanges(float multiplier = 1f) {
@@ -33,6 +35,7 @@ namespace Mono_Ether {
             MediaPlayer.Volume = MasterVolume * MusicVolume * multiplier;
         }
         public static void LoadSettings() {
+            // Loads settings from the settings file if it exists, otherwise creates a new settings file.
             if (File.Exists(SettingsFilename)) {
                 string[] lines = File.ReadAllText(SettingsFilename).Split("\n");
                 float.TryParse(lines[0], out MasterVolume);
@@ -50,6 +53,7 @@ namespace Mono_Ether {
             ApplyChanges();
         }
         public static void SaveSettings() {
+            // Save settings to the settings file (if the file doesn't exist it will still create a new one)
             File.WriteAllText(SettingsFilename, $"{MasterVolume}\n" +
                                                 $"{MusicVolume}\n" +
                                                 $"{SoundEffectVolume}\n" +
@@ -59,6 +63,7 @@ namespace Mono_Ether {
                                                 (AllowWindowResizing ? "true" : "false"));
         }
         public static void OnScreenResize(object sender, EventArgs e) {
+            // If the user resizes the window, update the ScreenSize variable with the new screen size.
             ScreenSize.X = GameRoot.Instance.Window.ClientBounds.Width;
             ScreenSize.Y = GameRoot.Instance.Window.ClientBounds.Height;
         }

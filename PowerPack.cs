@@ -26,6 +26,7 @@ namespace Mono_Ether {
         public bool IsExpended;
         public bool IsGood; // true = speed increase etc, false = speed decrease etc
         private readonly Random Rand = new Random();
+        // Base the texture on the power pack type
         public PowerPack(PowerPackType type, Vector2 position, TimeSpan duration) {
             switch (type) {
                 case PowerPackType.MoveSpeedIncrease:

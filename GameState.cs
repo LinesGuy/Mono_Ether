@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether {
     public abstract class GameState {
+        // Abstract GameState class that all other gamestates (e.g main menu, game screen) will use.
         protected readonly GraphicsDevice GraphicsDevice;
         protected GameState(GraphicsDevice graphicsDevice) {
             GraphicsDevice = graphicsDevice;

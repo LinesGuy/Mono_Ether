@@ -28,6 +28,7 @@ namespace Mono_Ether {
             switch (Status) {
                 case HudStatus.Win:
                 case HudStatus.Lose:
+                    // Return the previous screen after a certain amount of time
                     if (_timeSinceTransition > TimeSpan.FromSeconds(3))
                         ScreenManager.RemoveScreen();
                     break;
@@ -46,6 +47,7 @@ namespace Mono_Ether {
                 case HudStatus.None:
                     break;
                 case HudStatus.BossBar:
+                    // The boss bar is esentially just two pixels stretched out really big (one red and green)
                     batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(50, 50, GameSettings.ScreenSize.X - 100, 70), Color.Red);
                     batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(50, 50, (GameSettings.ScreenSize.X - 100) * BossBarValue, 70), Color.Green);
                     break;

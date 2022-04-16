@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mono_Ether {
     public static class GlobalAssets {
+        // Assets that will be used across multiple parts of the program (as opposed to just one part of the program)
         public static Texture2D Default;
         public static Texture2D ButtonCorner1;
         public static Texture2D ButtonCorner2;

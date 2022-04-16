@@ -10,6 +10,7 @@ namespace Mono_Ether {
         public static string TutorialText = "";
         public static TimeSpan timer = TimeSpan.Zero;
         public static void Update(GameTime gameTime) {
+            // Check that the player has completed whatever the current task is
             switch (state) {
                 case TutorialState.Movement:
                     TutorialText = "Use WASD to move the player around";

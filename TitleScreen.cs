@@ -120,6 +120,7 @@ namespace Mono_Ether {
                 Initialize();
             _timeSinceStart += gameTime.ElapsedGameTime;
             _timeSinceTransition += gameTime.ElapsedGameTime;
+            // Only update certain parts of the program depending on the current title screen state, to save cpu
             switch (_state) {
                 case "Title press any key":
                     if (Input.Keyboard.GetPressedKeyCount() > 0 || Input.WasLeftMouseJustDown) {
@@ -169,6 +170,7 @@ namespace Mono_Ether {
         public override void Draw(SpriteBatch batch) {
             batch.Begin();
             Vector2 offset;
+            // Only draw what is visible on the screen depending on the screen state to save gpu
             switch (_state) {
                 case "Title press any key":
                     DrawBg(batch);
@@ -254,6 +256,7 @@ namespace Mono_Ether {
             _timeSinceTransition = TimeSpan.Zero;
         }
         private void HandleTitleButtons(GameTime gameTime) {
+            // Check each button to see if it was pressed and act accordingly
             _titleButtonManager.Buttons.ForEach(b => b.Update(gameTime));
             switch (_titleButtonManager.PressedButton) {
                 case "Start":

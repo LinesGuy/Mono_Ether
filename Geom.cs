@@ -14,6 +14,7 @@ namespace Mono_Ether {
         public Geom(Vector2 position) {
             Position = position;
             Image = _geomTexture;
+            // New geoms spawn with a random velocity, as if being ejected out of the enemy.
             Velocity = new Vector2(Rand.Next(-10, 10), Rand.Next(-10, 10));
         }
         public static void LoadContent(ContentManager content) {
@@ -31,7 +32,7 @@ namespace Mono_Ether {
 
             _age++;
             if (TileMap.Instance.GetTileFromWorld(Position).Id > 0)
-                /* If Geom is in solid tile, expire 5x as fast */
+                /* If Geom is in solid tile, expire 5x as fast as geoms inside tiles can mess with A* pathfinding. */
                 _age += 4;
             if (_age > Lifespan)
                 IsExpired = true;

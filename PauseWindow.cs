@@ -27,6 +27,7 @@ namespace Mono_Ether {
 
         public void Update(GameTime gameTime) {
             _timeSinceTransition += gameTime.ElapsedGameTime;
+            // If the pauuse window is sliding in or out, draw it at an offset
             switch (_state) {
                 case "SlideIn":
                     if (_timeSinceTransition > TimeSpan.FromSeconds(0.5)) SetState("Normal");
@@ -53,6 +54,7 @@ namespace Mono_Ether {
             switch (_pauseButtonManager.PressedButton)
             {
                 case "Back":
+                    // Return to previous screen (probably level selection screen)
                     ScreenManager.RemoveScreen();
                     break;
                 case "Resume":

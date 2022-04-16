@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace Mono_Ether {
     public static class HighScore {
         private const string HighScoreFilename = "highscore.txt";
-        public static int Score;
+
+        public static int Score {
+            get => LoadHighScore();
+            set => SaveHighScore(Score);
+            }
         private static int LoadHighScore() {
             // Return saved score if it exists, or return 0 if there is none
             return File.Exists(HighScoreFilename) && int.TryParse(File.ReadAllText(HighScoreFilename), out var score) ? score : 0;

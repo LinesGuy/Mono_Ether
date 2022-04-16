@@ -113,6 +113,7 @@ namespace Mono_Ether {
             if (!GameRoot.Instance.IsActive)
                 return;
             _timeSinceTransition += gameTime.ElapsedGameTime;
+            // If the game state is anything other than normal, draw a overlay
             switch (_state) {
                 case "FadeIn":
                     if (_timeSinceTransition > TimeSpan.FromSeconds(0.5))
@@ -143,7 +144,7 @@ namespace Mono_Ether {
                         break;
                 }
             }
-
+            // Press P to toggle editor mode (only if debug mode is enabled)
             if (Input.WasKeyJustDown(Keys.P) && GameSettings.DebugMode) {
                 switch (Mode) {
                     case GameMode.Playing:
@@ -177,6 +178,7 @@ namespace Mono_Ether {
             var player = _entityManager.Players.First();
             //GraphicsDevice.SetRenderTarget(player.PlayerCamera.Screen);
             batch.Begin(samplerState: SamplerState.PointClamp);
+            // If there are multiple players on screen, draw each background with a slightly different tint to make it easier to differentiate between them.
             Color backgroundColor = player.Index switch {
                 PlayerIndex.One => new Color(16, 0, 0),
                 PlayerIndex.Two => new Color(0, 16, 0),
@@ -186,6 +188,7 @@ namespace Mono_Ether {
             };
             batch.Draw(GlobalAssets.Pixel, MyUtils.RectangleF(0, 0, player.PlayerCamera.ScreenSize.X, player.PlayerCamera.ScreenSize.Y), backgroundColor);
             _entityManager.Draw(batch, player.PlayerCamera); /* Draw all entities (inc players, bullets, powerpacks etc) */
+            // Draw starfield
             _starField.Draw(batch, player.PlayerCamera);
             _tileMap.Draw(batch, player.PlayerCamera, Mode == GameMode.Editor); /* Draw tilemap with tile boundaries if in editor mode */
             _particleManager.Draw(batch, player.PlayerCamera);

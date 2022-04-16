@@ -82,6 +82,7 @@ namespace Mono_Ether {
         }
         private void HandleCollisions() {
             #region Enemies <-> Enemies
+            // If an enemy collides with another enemy, push the two enemies apart from each other.
             var i = 0;
             foreach (var enemyA in Enemies) {
                 foreach (var enemyB in Enemies.Skip(i + 1))
@@ -93,6 +94,7 @@ namespace Mono_Ether {
             }
             #endregion
             #region Enemies <-> Bullets
+            // If an enemy collides with a bullet, decrement the enemy health (if not invincible) and expire the bullet.
             foreach (var enemy in Enemies) {
                 foreach (var bullet in Bullets) {
                     if (IsColliding(enemy, bullet)) {
@@ -101,6 +103,7 @@ namespace Mono_Ether {
                         bullet.Expire();
                         enemy.WasShot(bullet.ParentPlayerIndex);
                     }
+                    // If the entity collided with a snake tail, don't decrement health but expire the bullet anyway.
                     if (!(enemy is SnakeHead snake))
                         continue;
                     if (!snake.Tail.Any(tail => IsColliding(bullet, tail)))
@@ -110,6 +113,7 @@ namespace Mono_Ether {
             }
             #endregion
             #region Players <-> Enemies
+            // If the player collided with an enemy, kill the player and kill all enemies on screen.
             foreach (var player in Players.Where(player => !player.IsDead)) {
                 foreach (var enemy in Enemies.Where(enemy => enemy.IsActive)) {
                     if (IsColliding(player, enemy)) {
@@ -132,6 +136,7 @@ namespace Mono_Ether {
             }
             #endregion Handle collisions between the players and enemies
             #region Handle collisions between powerpacks and the player
+            // If the player collides with a powerpack, apply the powerpack effect to the player and make the powerpack disappear
             foreach (var player in Players) {
                 foreach (var powerPack in PowerPacks)
                     if (IsColliding(powerPack, player)) {
@@ -150,6 +155,7 @@ namespace Mono_Ether {
             }
             #endregion Handle collisions between powerpacks and the player
             #region Players <-> Geoms
+            // If the player collides with a geom, make the geom disappear and increment the player geom count.
             foreach (Geom geom in Geoms) {
                 foreach (var player in Players) {
                     if (IsColliding(geom, player)) {
@@ -161,6 +167,7 @@ namespace Mono_Ether {
             }
             #endregion  Handle players and geoms
             #region Geom drones <-> Geoms
+            // Repeat above but for geom drones.
             foreach (var geom in Geoms) {
                 foreach (var drone in Drones.Where(drone => drone.Type == DroneType.Collector)) {
                     if (IsColliding(geom, drone)) {

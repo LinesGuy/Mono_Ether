@@ -54,6 +54,7 @@ namespace Mono_Ether {
         }
     }
     public class BigParticle : Particle {
+        // Big particles will summon small particles along the way
         public BigParticle(Vector2 position, Color color, Vector2 velocity, float friction) : base(position, color) {
             Velocity = velocity;
             Friction = friction;
@@ -71,8 +72,8 @@ namespace Mono_Ether {
 
     public class ParticleManager {
         public static ParticleManager Instance;
-        public BigParticle[] BigParticles = new BigParticle[10000];
-        public SmallParticle[] SmallParticles = new SmallParticle[10000];
+        public BigParticle[] BigParticles = new BigParticle[10000]; // Circular array
+        public SmallParticle[] SmallParticles = new SmallParticle[10000]; // Same as above
         private int _bigIndex;
         private int _smallIndex;
         private readonly List<Particle> _addedParticles = new List<Particle>();
@@ -118,6 +119,7 @@ namespace Mono_Ether {
     }
     public static class ParticleTemplates {
         private static readonly Random Random = new Random();
+        // The flames that appear behind the player and the back-and-forther enemy type
         public static void ExhaustFire(Vector2 position, float orientation, Color baseColor) {
             var orientationOffset = Random.NextFloat(-0.3f, 0.3f);
             var positionOffset = Random.NextVector2(0f, 10f);
@@ -126,6 +128,7 @@ namespace Mono_Ether {
                 position + positionOffset, color,
                 MyUtils.FromPolar(orientation + orientationOffset, Random.NextFloat(1f, 6f)), 0.99f));
         }
+        // The explosion that appears when the player or enemy dies or a bullet expires
         public static void Explosion(Vector2 position, float minSpeed, float maxSpeed, int count, Color color, bool rainbow=false) {
             for (var i = 0; i < count; i++) {
                 var orientation = Random.NextFloat(0f, MathF.PI * 2f);
