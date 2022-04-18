@@ -80,7 +80,7 @@ namespace Mono_Ether {
 
                 switch (Index) {
                     case PlayerIndex.One: {
-                        // Player one moves using WASD
+                            // Player one moves using WASD
                             if (Input.Keyboard.IsKeyDown(Keys.A))
                                 direction.X -= 1;
                             if (Input.Keyboard.IsKeyDown(Keys.D))
@@ -92,7 +92,7 @@ namespace Mono_Ether {
                             break;
                         }
                     case PlayerIndex.Two: {
-                        // Player two moves using IJKL or a controller
+                            // Player two moves using IJKL or a controller
                             direction += Input.GamePad.ThumbSticks.Left;
                             direction.Y = -direction.Y; // Joystick up = negative Y
                             if (Input.GamePad.DPad.Left == ButtonState.Pressed || Input.Keyboard.IsKeyDown(Keys.J))
@@ -178,7 +178,7 @@ namespace Mono_Ether {
                 }
                 /* Right click to summon a starburst */
                 if (Input.WasRightMouseJustDown)
-                    EntityManager.Instance.Add(new StarBurst(Position, PlayerCamera.MouseWorldCoords(), Index));
+                EntityManager.Instance.Add(new StarBurst(Position, PlayerCamera.MouseWorldCoords(), Index));
             }
             #endregion Shooting
             #region Power packs
@@ -241,14 +241,15 @@ namespace Mono_Ether {
                 // Draw icon
                 batch.Draw(icon, pos, Color.White);
             }
-            // Bottom-left hearts
-            for (var i = 0; i < Lives; i++) {
-                var pos = new Vector2(0 + i * 100, PlayerCamera.ScreenSize.Y - 100);
+
+            for (int i = 0; i < Lives; i++) {
+                var pos = new Vector2(25 + i * 100, PlayerCamera.ScreenSize.Y - 100);
                 batch.Draw(_heart, pos, Color.White);
             }
             batch.DrawString(GlobalAssets.NovaSquare24, $"Score: {Score}", new Vector2(PlayerCamera.ScreenSize.X - 200, 30), Color.White);
-            batch.DrawString(GlobalAssets.NovaSquare24, $"Multi: {Multiplier}", new Vector2(PlayerCamera.ScreenSize.X - 200, 60), Color.White);
-            batch.DrawString(GlobalAssets.NovaSquare24, $"Geoms: {Geoms}", new Vector2(PlayerCamera.ScreenSize.X - 200, 90), Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Highscore: {HighScore.Score}", new Vector2(PlayerCamera.ScreenSize.X - 300, 60), Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Multi: {Multiplier}", new Vector2(PlayerCamera.ScreenSize.X - 200, 90), Color.White);
+            batch.DrawString(GlobalAssets.NovaSquare24, $"Geoms: {Geoms}", new Vector2(PlayerCamera.ScreenSize.X - 200, 120), Color.White);
         }
         public void AddGeoms(int amount) {
             Geoms += amount;

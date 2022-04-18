@@ -52,6 +52,7 @@ namespace Mono_Ether {
         }
 
         protected override void Update(GameTime gameTime) {
+            EntityManager.Instance = EntityManager.Instance;
             _updateStopwatch = Stopwatch.StartNew();
             Input.Update();
             ScreenManager.CurrentScreen.Update(gameTime);

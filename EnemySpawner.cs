@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Mono_Ether {
     public class EnemySpawner {
         private static readonly Random Rand = new Random();
-        public static float InverseSpawnChance = 30;
+        public static float InverseSpawnChance = 30f;
         public static bool Enabled = true;
         private static readonly EnemyType[] SpawnableEnemyTypes = new EnemyType[] { EnemyType.BlueSeeker, EnemyType.PurpleWanderer, EnemyType.GreenSeeker, EnemyType.BackAndForther, EnemyType.PinkSeeker, EnemyType.PinkWanderer, EnemyType.SnakeHead };
         public EnemySpawner() {

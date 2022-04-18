@@ -52,8 +52,7 @@ namespace Mono_Ether {
             }
             _hud = new Hud();
             /* If level is level one, two or three, summon a boss and enable the boss bar, and move player to top left */
-            if (CurrentLevel == Level.Level1 || CurrentLevel == Level.Level2 || CurrentLevel == Level.Level3)
-            {
+            if (CurrentLevel == Level.Level1 || CurrentLevel == Level.Level2 || CurrentLevel == Level.Level3) {
                 _hud.Status = HudStatus.BossBar;
                 if (CurrentLevel == Level.Level1)
                     _entityManager.Add(new BossOne(_tileMap.WorldSize / 2f));
@@ -66,6 +65,9 @@ namespace Mono_Ether {
                 foreach (var player in _entityManager.Players)
                     player.Position = new Vector2(128f, 128f);
             }
+
+            if (CurrentLevel == Level.Tutorial)
+                Tutorial.state = TutorialState.Movement;
             /* Move all player cameras to player */
             foreach (var player in _entityManager.Players)
                 player.PlayerCamera.Position = player.Position;
@@ -104,6 +106,7 @@ namespace Mono_Ether {
             Geom.UnloadContent();
             PowerPack.UnloadContent();
             Hud.UnloadContent();
+            EntityManager.Instance = null;
         }
         private void SetState(string state) {
             _state = state;
@@ -145,7 +148,7 @@ namespace Mono_Ether {
                 }
             }
             // Press P to toggle editor mode (only if debug mode is enabled)
-            if (Input.WasKeyJustDown(Keys.P) && GameSettings.DebugMode) {
+            if (Input.WasKeyJustDown(Keys.P)) {
                 switch (Mode) {
                     case GameMode.Playing:
                         Mode = GameMode.Editor;
@@ -166,6 +169,7 @@ namespace Mono_Ether {
                 return;
             /* Update all entity positions and handle collisions */
             _entityManager.Update(gameTime);
+            Tutorial.Update(gameTime);
             _particleManager.Update(gameTime);
             _enemySpawner.Update(_entityManager, _tileMap);
             _powerPackSpawner.Update(gameTime);
@@ -194,9 +198,13 @@ namespace Mono_Ether {
             _particleManager.Draw(batch, player.PlayerCamera);
             _hud.Draw(batch);
             player.DrawHud(batch);
-            batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
-            batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
-            batch.DrawString(GlobalAssets.NovaSquare24, $"GameScreen.Mode: {Mode}", new Vector2(0f, 64f), Color.White);
+            if (GameSettings.DebugMode) {
+                batch.DrawString(GlobalAssets.NovaSquare24, $"Player pos: {player.Position}", Vector2.Zero, Color.White);
+                batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse world pos: {player.PlayerCamera.MouseWorldCoords()}", new Vector2(0f, 32f), Color.White);
+                batch.DrawString(GlobalAssets.NovaSquare24, $"Mouse screen pos: {Input.Mouse.Position}", new Vector2(0, 64f), Color.White);
+                batch.DrawString(GlobalAssets.NovaSquare24, $"GameScreen.Mode: {Mode}", new Vector2(0f, 96f), Color.White);
+            }
+            Tutorial.Draw(batch, player.PlayerCamera);
             if (_pauseWindow.Visible)
                 _pauseWindow.Draw(batch);
             /* Draw cursor */

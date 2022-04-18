@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Mono_Ether {
-    public enum HudStatus { None, BossBar, Win, Lose }
+    public enum HudStatus { None, BossBar, Win, Lose, Return }
     public class Hud {
         private static Texture2D _winScreen;
         private static Texture2D _loseScreen;
@@ -31,6 +31,9 @@ namespace Mono_Ether {
                     // Return the previous screen after a certain amount of time
                     if (_timeSinceTransition > TimeSpan.FromSeconds(3))
                         ScreenManager.RemoveScreen();
+                    break;
+                case HudStatus.Return:
+                    ScreenManager.RemoveScreen();
                     break;
                 case HudStatus.None:
                 case HudStatus.BossBar:

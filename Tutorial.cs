@@ -4,14 +4,16 @@ using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace Mono_Ether {
-    public enum TutorialState { Movement, Camera, Zooming, DisableLerp, Shooting, ShootingEnemies, PowerPacks, StarBurst, End }
+    public enum TutorialState { Disabled, Movement, Camera, Zooming, DisableLerp, Shooting, ShootingEnemies, PowerPacks, StarBurst, End }
     public static class Tutorial {
-        public static TutorialState state = TutorialState.Movement;
+        public static TutorialState state = TutorialState.Disabled;
         public static string TutorialText = "";
         public static TimeSpan timer = TimeSpan.Zero;
         public static void Update(GameTime gameTime) {
             // Check that the player has completed whatever the current task is
             switch (state) {
+                case TutorialState.Disabled:
+                    return;
                 case TutorialState.Movement:
                     TutorialText = "Use WASD to move the player around";
                     EnemySpawner.Enabled = false;

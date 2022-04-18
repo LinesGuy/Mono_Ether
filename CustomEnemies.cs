@@ -109,9 +109,8 @@ namespace Mono_Ether {
             // Disable powerpack and enemy spawning
             PowerPackSpawner.Instance.Enabled = false;
             EnemySpawner.Enabled = false;
-            // Transition screen to winscreen
+            // Return to level selection
             Hud.Instance.ChangeStatus(HudStatus.Win);
-
         }
     }
     public class BossOneChild : Enemy {

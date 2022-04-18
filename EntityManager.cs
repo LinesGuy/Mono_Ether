@@ -115,7 +115,8 @@ namespace Mono_Ether {
             #region Players <-> Enemies
             // If the player collided with an enemy, kill the player and kill all enemies on screen.
             foreach (var player in Players.Where(player => !player.IsDead)) {
-                foreach (var enemy in Enemies.Where(enemy => enemy.IsActive)) {
+                foreach (var enemy in Enemies.Where(enemy => enemy.IsActive))
+                {
                     if (IsColliding(player, enemy)) {
                         player.Kill();
                         KillAll();
